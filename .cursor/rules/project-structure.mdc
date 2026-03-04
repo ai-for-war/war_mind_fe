@@ -1,0 +1,133 @@
+---
+description: Defines Feature-First Architecture folder structure for AI Frontend project. Auto-invoked when implementing code or brainstorming frontend solutions.
+alwaysApply: false
+---
+# 📂 Project Structure Rules - Feature-First Architecture
+
+## Folder Structure Overview
+
+```
+src/
+├── app/                    # Application Layer (routing, providers, layouts)
+├── assets/                 # Static files (fonts, images, styles)
+├── components/             # GLOBAL Shared Components
+├── config/                 # Environment & Constants
+├── features/               # ⚡ CORE BUSINESS LOGIC (Feature modules)
+├── hooks/                  # Global custom hooks
+├── lib/                    # Infrastructure (API client, Socket, utilities)
+├── stores/                 # Global Zustand stores
+├── types/                  # Global TypeScript definitions
+└── widgets/                # 🧩 Large Composite UI Blocks (Header, Sidebar, CommandPalette)
+```
+
+## File Placement Rules by Directory
+
+### `src/app/` - Application Layer
+- `layouts/` - Layout components (MainLayout, AuthLayout)
+- `providers/` - Context Providers (ThemeProvider, QueryClientProvider)
+- `router.tsx` - Route definitions with Protected Routes
+
+### `src/assets/` - Static Files
+- `fonts/` - Custom font files
+- `images/` - Images, logos, illustrations
+- `styles/` - Global CSS/Tailwind styles
+
+### `src/components/` - Shared Components
+- `ui/` - shadcn/ui primitives ONLY (Button, Input, Card...)
+- `common/` - App-specific shared (LoadingSpinner, ErrorBoundary, Logo)
+- `icons/` - Custom SVG icon components
+- `form/` - Form wrappers (React Hook Form + Zod integration)
+
+### `src/features/` - Business Logic Modules
+Each feature is an independent module with the following structure:
+```
+features/{feature-name}/
+├── api/            # REST API calls for the feature
+├── components/     # UI components used ONLY in this feature
+├── hooks/          # Custom hooks for the feature
+├── stores/         # Zustand slice for the feature
+├── types/          # TypeScript interfaces for the feature
+├── schemas/        # Zod validation schemas (optional)
+└── index.ts        # Barrel export (public API)
+```
+
+### `src/widgets/` - Large Composite UI Blocks
+Widgets are large UI blocks that combine multiple components/features together.
+Unlike components (simple, reusable), widgets are **composite blocks with their own logic**.
+
+```
+widgets/{widget-name}/
+├── components/     # Internal sub-components
+├── hooks/          # Hooks specific to the widget
+├── types/          # TypeScript interfaces
+└── index.ts        # Barrel export
+```
+
+**Example widgets:**
+- `header/` - App header with navigation, user menu, notifications
+- `sidebar/` - Sidebar with menu items, collapse logic
+- `command-palette/` - Command palette with search, shortcuts
+- `battle-map/` - Composite tactical map (map + controls + overlays)
+
+**When to create a widget instead of a component?**
+- Combines 3+ sub-components together
+- Has complex state/logic of its own
+- Appears on multiple pages but does NOT belong to a single specific feature
+- Too large to place in `components/common/`
+
+### `src/config/` - Environment & Constants
+- `env.ts` - Environment variables typed wrapper
+- `constants.ts` - App-wide constants
+- `routes.ts` - Route path constants
+
+### `src/lib/` - Infrastructure
+- `api-client.ts` - Axios instance with Bearer Token interceptor
+- `socket-client.ts` - Socket.IO singleton instance
+- `storage.ts` - Typed localStorage wrapper
+- `utils.ts` - Helper functions (cn, formatters)
+
+### `src/stores/` - Global State
+- `use-auth-store.ts` - Authentication state
+- `use-app-store.ts` - UI state (sidebar, theme)
+- `use-socket-store.ts` - Socket connection status
+
+### `src/types/` - Global TypeScript Definitions
+- `api.ts` - API response/request types
+- `common.ts` - Shared utility types
+- `env.d.ts` - Environment type declarations
+
+## Colocation Rules (Keep Related Files Together)
+
+1. **Component used in only 1 feature** → Place in `features/{name}/components/`
+2. **Component used in 2+ features** → Place in `src/components/common/`
+3. **Large composite UI block, cross-feature** → Place in `src/widgets/{name}/`
+4. **Hook used in only 1 feature** → Place in `features/{name}/hooks/`
+5. **Hook used in multiple places** → Place in `src/hooks/`
+
+## Dependency Rules (Import Direction)
+
+```
+app/ → widgets/ → features/ → components/ → lib/
+                                           → stores/
+                                           → hooks/
+                                           → types/
+                                           → config/
+```
+
+- `app/` can import from anywhere
+- `widgets/` can import from features/, components/, lib/, stores/
+- `features/` can import from components/, lib/, stores/, types/ — DO NOT import from another feature
+- `components/` can only import from lib/, types/, config/
+- `lib/` must not import from any other layer (except types/, config/)
+
+## Import Rules
+
+```typescript
+// ✅ CORRECT - Import from barrel file
+import { ChatInput, MessageList } from '@/features/chat';
+import { AppHeader } from '@/widgets/header';
+
+// ❌ WRONG - Direct import into internal module
+import { ChatInput } from '@/features/chat/components/chat-input';
+import { NavMenu } from '@/widgets/header/components/nav-menu';
+```
