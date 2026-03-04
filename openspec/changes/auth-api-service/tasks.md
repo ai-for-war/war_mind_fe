@@ -1,7 +1,7 @@
 ## 1. Project Setup
 
-- [ ] 1.1 Install dependencies: `axios`, `zustand`
-- [ ] 1.2 Create `.env.example` with `VITE_API_URL=http://localhost:8000/api/v1`
+- [x] 1.1 Install dependencies: `axios`, `zustand`
+- [x] 1.2 Create `.env.example` with `VITE_API_URL=http://localhost:8000/api/v1`
 
 ## 2. Environment Config
 
