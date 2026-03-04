@@ -10,7 +10,7 @@
 
 ## 3. Auth Layout
 
-- [ ] 3.1 Create `AuthLayout` at `app/layouts/auth-layout.tsx` (full-viewport centered container with dark background)
+- [x] 3.1 Create `AuthLayout` at `app/layouts/auth-layout.tsx` (full-viewport centered container with dark background)
 
 ## 4. Login Page UI
 
