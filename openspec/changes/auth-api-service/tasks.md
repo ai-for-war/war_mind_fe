@@ -9,7 +9,7 @@
 
 ## 3. Storage Module
 
-- [ ] 3.1 Create `src/lib/storage.ts` â€” typed localStorage wrapper with `getToken()`, `setToken()`, `removeToken()` using key `access_token`
+- [x] 3.1 Create `src/lib/storage.ts` â€” typed localStorage wrapper with `getToken()`, `setToken()`, `removeToken()` using key `access_token`
 
 ## 4. Shared API Types
 
