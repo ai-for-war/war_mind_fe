@@ -13,7 +13,7 @@
 
 ## 4. Shared API Types
 
-- [ ] 4.1 Create `src/types/api.ts` â€” `ApiErrorResponse` (detail: string | ValidationError[]) and `ValidationError` interface
+- [x] 4.1 Create `src/types/api.ts` â€” `ApiErrorResponse` (detail: string | ValidationError[]) and `ValidationError` interface
 
 ## 5. HTTP Client
 
