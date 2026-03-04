@@ -34,11 +34,11 @@
 
 ## 8. Auth Store
 
-- [ ] 8.1 Create `src/stores/use-auth-store.ts` â€” Zustand store with `token`, `user`, `isAuthenticated` state
-- [ ] 8.2 Implement `setAuth(token, user)` â€” set state + call `storage.setToken()`
-- [ ] 8.3 Implement `setUser(user)` â€” update user state only
-- [ ] 8.4 Implement `logout()` â€” clear state + call `storage.removeToken()`
+- [x] 8.1 Create `src/stores/use-auth-store.ts` â€” Zustand store with `token`, `user`, `isAuthenticated` state
+- [x] 8.2 Implement `setAuth(token, user)` â€” set state + call `storage.setToken()`
+- [x] 8.3 Implement `setUser(user)` â€” update user state only
+- [x] 8.4 Implement `logout()` â€” clear state + call `storage.removeToken()`
 
 ## 9. Barrel Export
 
-- [ ] 9.1 Create `src/features/auth/index.ts` â€” re-export `authApi` functions and all auth types
+- [x] 9.1 Create `src/features/auth/index.ts` â€” re-export `authApi` functions and all auth types
