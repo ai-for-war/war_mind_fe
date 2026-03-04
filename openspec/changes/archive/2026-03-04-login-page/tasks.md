@@ -19,10 +19,10 @@
 
 ## 5. Routing
 
-- [ ] 5.1 Create `ProtectedRoute` guard component at `app/router.tsx` (redirects to `/login` if unauthenticated, preserves original path in location state)
-- [ ] 5.2 Create centralized router at `app/router.tsx` with public `/login` route, protected root route, and catch-all redirect
-- [ ] 5.3 Wire `RouterProvider` into the application entry point (`main.tsx`)
+- [x] 5.1 Create `ProtectedRoute` guard component at `app/router.tsx` (redirects to `/login` if unauthenticated, preserves original path in location state)
+- [x] 5.2 Create centralized router at `app/router.tsx` with public `/login` route, protected root route, and catch-all redirect
+- [x] 5.3 Wire `RouterProvider` into the application entry point (`main.tsx`)
 
 ## 6. Barrel Exports & Integration
 
-- [ ] 6.1 Update `features/auth/index.ts` barrel to export `LoginPage` and `useLogin`
+- [x] 6.1 Update `features/auth/index.ts` barrel to export `LoginPage` and `useLogin`
