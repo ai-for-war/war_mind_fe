@@ -17,9 +17,9 @@
 
 ## 5. HTTP Client
 
-- [ ] 5.1 Create `src/lib/api-client.ts` â€” Axios instance with `baseURL` from env config, default `Content-Type: application/json`
-- [ ] 5.2 Add request interceptor â€” attach `Authorization: Bearer <token>` from `storage.getToken()` when token exists
-- [ ] 5.3 Add response interceptor â€” on 401 (excluding `/auth/login`), call `storage.removeToken()` and redirect to `/login`
+- [x] 5.1 Create `src/lib/api-client.ts` â€” Axios instance with `baseURL` from env config, default `Content-Type: application/json`
+- [x] 5.2 Add request interceptor â€” attach `Authorization: Bearer <token>` from `storage.getToken()` when token exists
+- [x] 5.3 Add response interceptor â€” on 401 (excluding `/auth/login`), call `storage.removeToken()` and redirect to `/login`
 
 ## 6. Auth Feature Types
 
