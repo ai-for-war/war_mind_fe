@@ -14,8 +14,8 @@
 
 ## 4. Login Page UI
 
-- [ ] 4.1 Create `LoginForm` component at `features/auth/components/login-form.tsx` (email input, password input with visibility toggle, submit button with loading state, validation errors, API error display)
-- [ ] 4.2 Create `LoginPage` component at `features/auth/components/login-page.tsx` (composes AuthLayout + glass card + LoginForm, redirects if already authenticated)
+- [x] 4.1 Create `LoginForm` component at `features/auth/components/login-form.tsx` (email input, password input with visibility toggle, submit button with loading state, validation errors, API error display)
+- [x] 4.2 Create `LoginPage` component at `features/auth/components/login-page.tsx` (composes AuthLayout + glass card + LoginForm, redirects if already authenticated)
 
 ## 5. Routing
 
