@@ -23,7 +23,7 @@
 
 ## 6. Auth Feature Types
 
-- [ ] 6.1 Create `src/features/auth/types/auth.types.ts` â€” `LoginRequest`, `TokenResponse`, `UserResponse`, `ChangePasswordRequest`, `ChangePasswordResponse`
+- [x] 6.1 Create `src/features/auth/types/auth.types.ts` â€” `LoginRequest`, `TokenResponse`, `UserResponse`, `ChangePasswordRequest`, `ChangePasswordResponse`
 
 ## 7. Auth API Functions
 
