@@ -27,10 +27,10 @@
 
 ## 7. Auth API Functions
 
-- [ ] 7.1 Create `src/features/auth/api/auth-api.ts` â€” `login(data)` â†’ POST `/auth/login`
-- [ ] 7.2 Add `getMe()` â†’ GET `/users/me`
-- [ ] 7.3 Add `changePassword(data)` â†’ POST `/auth/change-password`
-- [ ] 7.4 Add composite `loginWithUser(data)` â€” login â†’ setToken â†’ getMe â†’ return { token, user }, rollback token on getMe failure
+- [x] 7.1 Create `src/features/auth/api/auth-api.ts` â€” `login(data)` â†’ POST `/auth/login`
+- [x] 7.2 Add `getMe()` â†’ GET `/users/me`
+- [x] 7.3 Add `changePassword(data)` â†’ POST `/auth/change-password`
+- [x] 7.4 Add composite `loginWithUser(data)` â€” login â†’ setToken â†’ getMe â†’ return { token, user }, rollback token on getMe failure
 
 ## 8. Auth Store
 
