@@ -1,7 +1,7 @@
 ## 1. Dependencies & Setup
 
-- [ ] 1.1 Install `react-router-dom`, `react-hook-form`, `@hookform/resolvers`, `zod`
-- [ ] 1.2 Install shadcn/ui components: `input`, `label`, `card`
+- [x] 1.1 Install `react-router-dom`, `react-hook-form`, `@hookform/resolvers`, `zod`
+- [x] 1.2 Install shadcn/ui components: `input`, `label`, `card`
 
 ## 2. Login Form Schema & Hook
 
