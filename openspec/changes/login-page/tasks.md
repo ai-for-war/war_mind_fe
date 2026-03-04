@@ -5,8 +5,8 @@
 
 ## 2. Login Form Schema & Hook
 
-- [ ] 2.1 Create Zod validation schema at `features/auth/schemas/login.schema.ts` (email: required + valid format, password: required)
-- [ ] 2.2 Create `useLogin` hook at `features/auth/hooks/use-login.ts` (calls `authApi.loginWithUser`, updates auth store, handles navigation with post-login redirect)
+- [x] 2.1 Create Zod validation schema at `features/auth/schemas/login.schema.ts` (email: required + valid format, password: required)
+- [x] 2.2 Create `useLogin` hook at `features/auth/hooks/use-login.ts` (calls `authApi.loginWithUser`, updates auth store, handles navigation with post-login redirect)
 
 ## 3. Auth Layout
 
