@@ -5,7 +5,7 @@
 
 ## 2. Organization Feature — Types
 
-- [ ] 2.1 Create `src/features/organization/types/organization.types.ts` with `OrganizationResponse` interface, `OrganizationRole` type (`"admin" | "user"`), and `UserOrganizationResponse` interface matching backend schemas
+- [x] 2.1 Create `src/features/organization/types/organization.types.ts` with `OrganizationResponse` interface, `OrganizationRole` type (`"admin" | "user"`), and `UserOrganizationResponse` interface matching backend schemas
 
 ## 3. Organization Feature — API
 
