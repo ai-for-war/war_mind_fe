@@ -2,6 +2,7 @@ import { create } from "zustand"
 
 import type { UserResponse } from "@/features/auth/types/auth.types"
 import { storage } from "@/lib/storage"
+import { useOrganizationStore } from "@/stores/use-organization-store"
 
 type AuthState = {
   token: string | null
@@ -31,6 +32,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   },
   logout: () => {
     storage.removeToken()
+    useOrganizationStore.getState().clear()
     set({
       token: null,
       user: null,

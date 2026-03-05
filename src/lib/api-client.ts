@@ -12,9 +12,14 @@ export const apiClient = axios.create({
 
 apiClient.interceptors.request.use((config) => {
   const token = storage.getToken()
+  const activeOrganizationId = storage.getActiveOrganizationId()
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`
+  }
+
+  if (activeOrganizationId) {
+    config.headers["X-Organization-Id"] = activeOrganizationId
   }
 
   return config
@@ -29,6 +34,7 @@ apiClient.interceptors.response.use(
 
     if (status === 401 && !isLoginEndpoint) {
       storage.removeToken()
+      storage.removeActiveOrganizationId()
 
       if (typeof window !== "undefined") {
         window.location.href = "/login"

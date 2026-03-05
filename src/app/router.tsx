@@ -2,9 +2,11 @@
 import { createBrowserRouter, Navigate, Outlet, useLocation } from "react-router-dom"
 
 import { MainLayout } from "@/app/layouts/main-layout"
+import { Spinner } from "@/components/ui/spinner"
 import { LoginPage } from "@/features/auth/components/login-page"
 import { MultiAgentPage } from "@/features/multi-agent"
 import { VoiceCloningPage } from "@/features/voice-cloning"
+import { useHydrateAuth } from "@/hooks/use-hydrate-auth"
 import { useAuthStore } from "@/stores/use-auth-store"
 
 type LocationState = {
@@ -13,6 +15,7 @@ type LocationState = {
 
 const ProtectedRoute = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
+  const { isHydrating, isHydrated } = useHydrateAuth()
   const location = useLocation()
 
   if (!isAuthenticated) {
@@ -20,6 +23,14 @@ const ProtectedRoute = () => {
     const state: LocationState = { from }
 
     return <Navigate to="/login" replace state={state} />
+  }
+
+  if (isHydrating || !isHydrated) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Spinner className="size-6 text-muted-foreground" />
+      </div>
+    )
   }
 
   return <Outlet />
