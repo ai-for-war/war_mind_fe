@@ -12,6 +12,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar"
 import { NavMain } from "@/widgets/sidebar/components/nav-main"
+import { OrgSwitcher } from "@/widgets/sidebar/components/org-switcher"
 
 export const AppSidebar = () => {
   return (
@@ -38,7 +39,9 @@ export const AppSidebar = () => {
       <SidebarContent>
         <NavMain />
       </SidebarContent>
-      <SidebarFooter />
+      <SidebarFooter>
+        <OrgSwitcher />
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   )
