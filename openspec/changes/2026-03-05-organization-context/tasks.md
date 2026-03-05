@@ -44,11 +44,11 @@
 
 ## 10. Auth Hydration Hook
 
-- [ ] 10.1 Create `src/hooks/use-hydrate-auth.ts` hook that checks if token exists but user or organizations are missing from stores
-- [ ] 10.2 If hydration needed: fetch `GET /users/me` and `GET /users/me/organizations` in parallel
-- [ ] 10.3 If organizations empty → call `logout()` and redirect to `/login`
-- [ ] 10.4 If OK → call `setUser()` on auth store, `setOrganizations()` on org store
-- [ ] 10.5 Return `{ isHydrating: boolean, isHydrated: boolean }`
+- [x] 10.1 Create `src/hooks/use-hydrate-auth.ts` hook that checks if token exists but user or organizations are missing from stores
+- [x] 10.2 If hydration needed: fetch `GET /users/me` and `GET /users/me/organizations` in parallel
+- [x] 10.3 If organizations empty → call `logout()` and redirect to `/login`
+- [x] 10.4 If OK → call `setUser()` on auth store, `setOrganizations()` on org store
+- [x] 10.5 Return `{ isHydrating: boolean, isHydrated: boolean }`
 
 ## 11. Router — Protected Route Hydration Guard
 
