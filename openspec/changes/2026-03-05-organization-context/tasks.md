@@ -24,8 +24,8 @@
 
 ## 6. Auth API — Three-Step Login Flow
 
-- [ ] 6.1 Import `organizationApi.getMyOrganizations` in `src/features/auth/api/auth-api.ts`
-- [ ] 6.2 Update `loginWithUser` to execute `getMe()` and `getMyOrganizations()` in parallel via `Promise.all` after obtaining token. Return `{ token, user, organizations }`. On failure of either: remove token and propagate error
+- [x] 6.1 Import `organizationApi.getMyOrganizations` in `src/features/auth/api/auth-api.ts`
+- [x] 6.2 Update `loginWithUser` to execute `getMe()` and `getMyOrganizations()` in parallel via `Promise.all` after obtaining token. Return `{ token, user, organizations }`. On failure of either: remove token and propagate error
 
 ## 7. Auth Store — Logout Clears Organization
 

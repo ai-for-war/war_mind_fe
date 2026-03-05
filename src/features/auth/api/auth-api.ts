@@ -8,6 +8,8 @@ import type {
   TokenResponse,
   UserResponse,
 } from "@/features/auth/types/auth.types"
+import { organizationApi } from "@/features/organization"
+import type { UserOrganizationResponse } from "@/features/organization"
 
 const login = async (data: LoginRequest): Promise<TokenResponse> => {
   const response = await apiClient.post<TokenResponse>("/auth/login", data)
@@ -31,13 +33,20 @@ const changePassword = async (
 
 const loginWithUser = async (
   data: LoginRequest,
-): Promise<{ token: TokenResponse; user: UserResponse }> => {
+): Promise<{
+  token: TokenResponse
+  user: UserResponse
+  organizations: UserOrganizationResponse[]
+}> => {
   const token = await login(data)
   storage.setToken(token.access_token)
 
   try {
-    const user = await getMe()
-    return { token, user }
+    const [user, organizations] = await Promise.all([
+      getMe(),
+      organizationApi.getMyOrganizations(),
+    ])
+    return { token, user, organizations }
   } catch (error) {
     storage.removeToken()
     throw error
