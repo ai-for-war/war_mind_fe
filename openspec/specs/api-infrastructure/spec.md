@@ -29,6 +29,28 @@ The system SHALL provide a `storage` module with functions to get, set, and remo
 - **WHEN** `removeToken()` is called
 - **THEN** the `access_token` key is removed from `localStorage`
 
+### Requirement: Active organization localStorage persistence
+The `storage` module SHALL provide three additional functions for active organization persistence:
+- `getActiveOrganizationId(): string | null` reads from localStorage key `active_organization`
+- `setActiveOrganizationId(orgId: string): void` writes to localStorage key `active_organization`
+- `removeActiveOrganizationId(): void` removes localStorage key `active_organization`
+
+#### Scenario: Store active organization id
+- **WHEN** `setActiveOrganizationId("org-123")` is called
+- **THEN** `localStorage` contains key `active_organization` with value `"org-123"`
+
+#### Scenario: Retrieve active organization id
+- **WHEN** `getActiveOrganizationId()` is called and `localStorage` has key `active_organization`
+- **THEN** the stored string value is returned
+
+#### Scenario: No active organization stored
+- **WHEN** `getActiveOrganizationId()` is called and `localStorage` has no `active_organization` key
+- **THEN** `null` is returned
+
+#### Scenario: Remove active organization id
+- **WHEN** `removeActiveOrganizationId()` is called
+- **THEN** the `active_organization` key is removed from `localStorage`
+
 ### Requirement: Axios HTTP client instance
 The system SHALL create a shared Axios instance configured with `baseURL` from env config and default header `Content-Type: application/json`.
 
@@ -36,23 +58,29 @@ The system SHALL create a shared Axios instance configured with `baseURL` from e
 - **WHEN** a request is made via the API client
 - **THEN** the request URL is prefixed with the value of `VITE_API_URL`
 
-### Requirement: Request interceptor attaches Bearer token
-The API client SHALL attach an `Authorization: Bearer <token>` header to every outgoing request when a token exists in localStorage. The client SHALL read the token from the `storage` module (not from Zustand store) to avoid circular dependencies between `lib/` and `stores/`.
+### Requirement: Request interceptor attaches Bearer token and Organization ID
+The API client request interceptor SHALL attach two headers to every outgoing request when their respective values exist in localStorage:
+1. `Authorization: Bearer <token>` when `storage.getToken()` returns a non-null value
+2. `X-Organization-Id: <orgId>` when `storage.getActiveOrganizationId()` returns a non-null value
 
-#### Scenario: Token exists in storage
-- **WHEN** a request is made and `storage.getToken()` returns a non-null value
-- **THEN** the request header includes `Authorization: Bearer <token>`
+#### Scenario: Token and active org exist in storage
+- **WHEN** a request is made, `storage.getToken()` returns a token, and `storage.getActiveOrganizationId()` returns an org id
+- **THEN** the request headers include both `Authorization: Bearer <token>` and `X-Organization-Id: <orgId>`
+
+#### Scenario: Token exists but no active org
+- **WHEN** a request is made, `storage.getToken()` returns a token, and `storage.getActiveOrganizationId()` returns `null`
+- **THEN** the request header includes `Authorization: Bearer <token>` but no `X-Organization-Id` header
 
 #### Scenario: No token in storage
 - **WHEN** a request is made and `storage.getToken()` returns `null`
-- **THEN** no `Authorization` header is added to the request
+- **THEN** no `Authorization` or `X-Organization-Id` headers are added
 
-### Requirement: Response interceptor handles 401 unauthorized
-The API client SHALL intercept 401 responses and trigger automatic logout (clear token from storage and redirect to `/login`). The interceptor SHALL exclude responses from the `/auth/login` endpoint to avoid false logout on login failure.
+### Requirement: Response interceptor clears organization data on 401
+The 401 response interceptor SHALL additionally clear organization data from localStorage by calling `storage.removeActiveOrganizationId()` alongside `storage.removeToken()`.
 
 #### Scenario: 401 from authenticated endpoint
 - **WHEN** a response with status 401 is received from any endpoint other than `/auth/login`
-- **THEN** the token is removed from localStorage and the user is redirected to `/login`
+- **THEN** both the token and active organization id are removed from localStorage, and the user is redirected to `/login`
 
 #### Scenario: 401 from login endpoint
 - **WHEN** a response with status 401 is received from `/auth/login`

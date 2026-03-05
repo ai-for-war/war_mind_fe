@@ -17,16 +17,37 @@ The router SHALL define a public route at path `/login` that renders the login p
 - **WHEN** a user navigates to `/login`
 - **THEN** the login page is rendered inside the `AuthLayout`
 
-### Requirement: Protected route guard
-The router SHALL provide a `ProtectedRoute` component that checks `useAuthStore.isAuthenticated`. If the user is not authenticated, they SHALL be redirected to `/login`. The redirect SHALL preserve the original requested path in location state for post-login navigation. The `ProtectedRoute` SHALL render its children within the `MainLayout` component, which provides the sidebar and header shell for all authenticated pages.
+### Requirement: Protected route guard with auth hydration
+The `ProtectedRoute` component SHALL check both authentication state and organization hydration before rendering protected content. If the user has a token but user or organization data is not yet loaded in memory (for example after page reload), the guard SHALL hydrate the data before rendering.
+
+The hydration logic SHALL be provided by a `useHydrateAuth` hook at `src/hooks/use-hydrate-auth.ts`:
+1. Check `token` exists AND (`user === null` OR `organizations.length === 0`)
+2. If hydration needed, fetch `GET /users/me` and `GET /users/me/organizations` in parallel
+3. If organizations empty, call `logout()` and redirect to `/login`
+4. If OK, set user via `setUser()`, set organizations via `setOrganizations()`
+5. Return `{ isHydrating: boolean, isHydrated: boolean }`
+
+The `ProtectedRoute` SHALL render a loading state while hydration is in progress.
 
 #### Scenario: Unauthenticated user accesses protected route
 - **WHEN** an unauthenticated user navigates to a protected route (e.g., `/voice-cloning`)
 - **THEN** they are redirected to `/login` with the original path stored in location state
 
-#### Scenario: Authenticated user accesses protected route
-- **WHEN** an authenticated user navigates to a protected route
-- **THEN** the route content renders within the `MainLayout` (sidebar + header + content area)
+#### Scenario: Page reload with valid token
+- **WHEN** the page reloads and a valid token exists in localStorage
+- **THEN** the ProtectedRoute shows a loading state, fetches user and organizations, sets stores, then renders the app
+
+#### Scenario: Page reload with expired token
+- **WHEN** the page reloads and the token in localStorage is expired
+- **THEN** the hydration fetch returns 401, the 401 interceptor triggers logout, and the user is redirected to `/login`
+
+#### Scenario: Page reload user has no organizations
+- **WHEN** the page reloads, user profile fetches successfully, but organizations returns empty
+- **THEN** `logout()` is called and the user is redirected to `/login`
+
+#### Scenario: Already hydrated (normal navigation)
+- **WHEN** user navigates between protected routes after initial load/login
+- **THEN** hydration is skipped (`isHydrated` is already `true`) and routes render immediately
 
 ### Requirement: Post-login redirect to originally requested path
 After successful login, the system SHALL redirect the user to the path stored in location state (if available), otherwise to `/`.

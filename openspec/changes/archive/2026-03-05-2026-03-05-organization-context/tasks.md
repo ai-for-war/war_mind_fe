@@ -58,4 +58,4 @@
 
 ## 12. Auth Types — Update loginWithUser Return Type
 
-- [ ] 12.1 Update `loginWithUser` return type in `src/features/auth/api/auth-api.ts` to include `organizations: UserOrganizationResponse[]`
+- [x] 12.1 Update `loginWithUser` return type in `src/features/auth/api/auth-api.ts` to include `organizations: UserOrganizationResponse[]`
