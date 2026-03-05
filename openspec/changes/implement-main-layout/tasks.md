@@ -9,10 +9,10 @@
 
 ## 3. Sidebar Widget
 
-- [ ] 3.1 Create `src/widgets/sidebar/` directory structure: `components/`, `index.ts`
-- [ ] 3.2 Implement `nav-main.tsx` — config-driven navigation menu rendering two items (Multi-Agent with `Bot` icon, Voice Cloning with `Mic` icon) using `SidebarMenu`, `SidebarMenuItem`, `SidebarMenuButton` with `isActive` derived from current route via `useLocation`
-- [ ] 3.3 Implement `app-sidebar.tsx` — compose `Sidebar` (`variant="sidebar"`, `collapsible="icon"`) with `SidebarHeader` (logo + "WAR MIND"), `SidebarContent` (renders `NavMain`), `SidebarFooter` (empty), and `SidebarRail`
-- [ ] 3.4 Create barrel export `src/widgets/sidebar/index.ts` exporting `AppSidebar`
+- [x] 3.1 Create `src/widgets/sidebar/` directory structure: `components/`, `index.ts`
+- [x] 3.2 Implement `nav-main.tsx` — config-driven navigation menu rendering two items (Multi-Agent with `Bot` icon, Voice Cloning with `Mic` icon) using `SidebarMenu`, `SidebarMenuItem`, `SidebarMenuButton` with `isActive` derived from current route via `useLocation`
+- [x] 3.3 Implement `app-sidebar.tsx` — compose `Sidebar` (`variant="sidebar"`, `collapsible="icon"`) with `SidebarHeader` (logo + "WAR MIND"), `SidebarContent` (renders `NavMain`), `SidebarFooter` (empty), and `SidebarRail`
+- [x] 3.4 Create barrel export `src/widgets/sidebar/index.ts` exporting `AppSidebar`
 
 ## 4. Header Widget
 
