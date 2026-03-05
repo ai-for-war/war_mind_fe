@@ -5,7 +5,7 @@
 
 ## 2. App UI State Store
 
-- [ ] 2.1 Create `src/stores/use-app-store.ts` Zustand store with `isSidebarOpen` (default `true`), `toggleSidebar`, and `setSidebarOpen` actions
+- [x] 2.1 Create `src/stores/use-app-store.ts` Zustand store with `isSidebarOpen` (default `true`), `toggleSidebar`, and `setSidebarOpen` actions
 
 ## 3. Sidebar Widget
 
