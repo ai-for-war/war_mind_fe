@@ -9,7 +9,7 @@
 
 ## 3. Organization Feature — API
 
-- [ ] 3.1 Create `src/features/organization/api/organization-api.ts` with `getMyOrganizations()` function calling `GET /users/me/organizations` returning `Promise<UserOrganizationResponse[]>`
+- [x] 3.1 Create `src/features/organization/api/organization-api.ts` with `getMyOrganizations()` function calling `GET /users/me/organizations` returning `Promise<UserOrganizationResponse[]>`
 
 ## 4. Organization Feature — Barrel Export
 
