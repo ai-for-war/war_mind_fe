@@ -33,9 +33,9 @@
 
 ## 8. Login Hook — Organization Logic
 
-- [ ] 8.1 Update `onSuccess` in `src/features/auth/hooks/use-login.ts` to receive `organizations` from `loginWithUser`
-- [ ] 8.2 Add zero-org check: if `organizations.length === 0` → call `logout()` and throw error with message "Your account is not associated with any organization"
-- [ ] 8.3 Add positive-org path: call `useOrganizationStore.setOrganizations(organizations)` before navigation
+- [x] 8.1 Update `onSuccess` in `src/features/auth/hooks/use-login.ts` to receive `organizations` from `loginWithUser`
+- [x] 8.2 Add zero-org check: if `organizations.length === 0` → call `logout()` and throw error with message "Your account is not associated with any organization"
+- [x] 8.3 Add positive-org path: call `useOrganizationStore.setOrganizations(organizations)` before navigation
 
 ## 9. API Client — X-Organization-Id Header
 
