@@ -16,10 +16,10 @@
 
 ## 4. Header Widget
 
-- [ ] 4.1 Create `src/widgets/header/` directory structure: `components/`, `index.ts`
-- [ ] 4.2 Implement `header-user-nav.tsx` — `Avatar` with fallback initials + `DropdownMenu` with "Profile" (placeholder, no action) and "Logout" (calls `useAuthStore.logout()` and navigates to `/login`)
-- [ ] 4.3 Implement `app-header.tsx` — horizontal header with `SidebarTrigger` on the left, flex spacer, and `HeaderUserNav` on the right
-- [ ] 4.4 Create barrel export `src/widgets/header/index.ts` exporting `AppHeader`
+- [x] 4.1 Create `src/widgets/header/` directory structure: `components/`, `index.ts`
+- [x] 4.2 Implement `header-user-nav.tsx` — `Avatar` with fallback initials + `DropdownMenu` with "Profile" (placeholder, no action) and "Logout" (calls `useAuthStore.logout()` and navigates to `/login`)
+- [x] 4.3 Implement `app-header.tsx` — horizontal header with `SidebarTrigger` on the left, flex spacer, and `HeaderUserNav` on the right
+- [x] 4.4 Create barrel export `src/widgets/header/index.ts` exporting `AppHeader`
 
 ## 5. Main Layout
 
