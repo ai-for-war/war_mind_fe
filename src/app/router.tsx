@@ -1,8 +1,10 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createBrowserRouter, Navigate, Outlet, useLocation } from "react-router-dom"
 
-import App from "@/App"
+import { MainLayout } from "@/app/layouts/main-layout"
 import { LoginPage } from "@/features/auth/components/login-page"
+import { MultiAgentPage } from "@/features/multi-agent"
+import { VoiceCloningPage } from "@/features/voice-cloning"
 import { useAuthStore } from "@/stores/use-auth-store"
 
 type LocationState = {
@@ -26,7 +28,7 @@ const ProtectedRoute = () => {
 const CatchAllRedirect = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
 
-  return <Navigate to={isAuthenticated ? "/" : "/login"} replace />
+  return <Navigate to={isAuthenticated ? "/voice-cloning" : "/login"} replace />
 }
 
 export const router = createBrowserRouter([
@@ -38,8 +40,21 @@ export const router = createBrowserRouter([
     element: <ProtectedRoute />,
     children: [
       {
-        path: "/",
-        element: <App />,
+        element: <MainLayout />,
+        children: [
+          {
+            path: "/",
+            element: <Navigate to="/voice-cloning" replace />,
+          },
+          {
+            path: "/voice-cloning",
+            element: <VoiceCloningPage />,
+          },
+          {
+            path: "/multi-agent",
+            element: <MultiAgentPage />,
+          },
+        ],
       },
     ],
   },
