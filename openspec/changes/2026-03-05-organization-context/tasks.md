@@ -29,7 +29,7 @@
 
 ## 7. Auth Store — Logout Clears Organization
 
-- [ ] 7.1 Update `logout()` in `src/stores/use-auth-store.ts` to call `useOrganizationStore.getState().clear()` after clearing auth state
+- [x] 7.1 Update `logout()` in `src/stores/use-auth-store.ts` to call `useOrganizationStore.getState().clear()` after clearing auth state
 
 ## 8. Login Hook — Organization Logic
 
