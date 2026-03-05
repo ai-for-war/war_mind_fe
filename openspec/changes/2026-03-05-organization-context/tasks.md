@@ -39,8 +39,8 @@
 
 ## 9. API Client — X-Organization-Id Header
 
-- [ ] 9.1 Update request interceptor in `src/lib/api-client.ts` to read `storage.getActiveOrganizationId()` and attach `X-Organization-Id` header when value is non-null
-- [ ] 9.2 Update 401 response interceptor to call `storage.removeActiveOrganizationId()` alongside `storage.removeToken()`
+- [x] 9.1 Update request interceptor in `src/lib/api-client.ts` to read `storage.getActiveOrganizationId()` and attach `X-Organization-Id` header when value is non-null
+- [x] 9.2 Update 401 response interceptor to call `storage.removeActiveOrganizationId()` alongside `storage.removeToken()`
 
 ## 10. Auth Hydration Hook
 
