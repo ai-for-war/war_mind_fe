@@ -33,8 +33,8 @@
 
 ## 7. Router Update
 
-- [ ] 7.1 Update `src/app/router.tsx` â€” wrap protected routes in `MainLayout`, add `/voice-cloning` and `/multi-agent` child routes, redirect `/` to `/voice-cloning`, update catch-all to redirect authenticated users to `/voice-cloning`
-- [ ] 7.2 Remove or repurpose `src/App.tsx` (no longer used as root page)
+- [x] 7.1 Update `src/app/router.tsx` â€” wrap protected routes in `MainLayout`, add `/voice-cloning` and `/multi-agent` child routes, redirect `/` to `/voice-cloning`, update catch-all to redirect authenticated users to `/voice-cloning`
+- [x] 7.2 Remove or repurpose `src/App.tsx` (no longer used as root page)
 
 ## 8. Verification
 
