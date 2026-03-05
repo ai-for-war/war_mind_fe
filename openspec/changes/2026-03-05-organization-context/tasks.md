@@ -13,7 +13,7 @@
 
 ## 4. Organization Feature — Barrel Export
 
-- [ ] 4.1 Create `src/features/organization/index.ts` re-exporting `organizationApi` and all organization types
+- [x] 4.1 Create `src/features/organization/index.ts` re-exporting `organizationApi` and all organization types
 
 ## 5. Organization Store
 
