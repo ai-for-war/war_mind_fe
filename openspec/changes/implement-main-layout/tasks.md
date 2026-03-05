@@ -1,7 +1,7 @@
 ## 1. Install shadcn/ui Dependencies
 
-- [ ] 1.1 Install shadcn components: `separator`, `skeleton`, `tooltip`, `sheet`, `scroll-area`, `collapsible`, `avatar`, `breadcrumb`, `dropdown-menu`, `sidebar`
-- [ ] 1.2 Verify all new component files exist in `src/components/ui/` and the `useIsMobile` hook is generated
+- [x] 1.1 Install shadcn components: `separator`, `skeleton`, `tooltip`, `sheet`, `scroll-area`, `collapsible`, `avatar`, `breadcrumb`, `dropdown-menu`, `sidebar`
+- [x] 1.2 Verify all new component files exist in `src/components/ui/` and the `useIsMobile` hook is generated
 
 ## 2. App UI State Store
 
