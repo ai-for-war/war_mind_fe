@@ -52,9 +52,9 @@
 
 ## 11. Router — Protected Route Hydration Guard
 
-- [ ] 11.1 Update `ProtectedRoute` in `src/app/router.tsx` to use `useHydrateAuth` hook
-- [ ] 11.2 While `isHydrating` is true → render loading state (spinner or skeleton)
-- [ ] 11.3 When `isHydrated` is true → render `<Outlet />` as before
+- [x] 11.1 Update `ProtectedRoute` in `src/app/router.tsx` to use `useHydrateAuth` hook
+- [x] 11.2 While `isHydrating` is true → render loading state (spinner or skeleton)
+- [x] 11.3 When `isHydrated` is true → render `<Outlet />` as before
 
 ## 12. Auth Types — Update loginWithUser Return Type
 
