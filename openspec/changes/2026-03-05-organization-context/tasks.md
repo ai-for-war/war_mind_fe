@@ -1,7 +1,7 @@
 ## 1. Storage Module — Active Organization Persistence
 
-- [ ] 1.1 Add `ACTIVE_ORGANIZATION_KEY = "active_organization"` constant to `src/lib/storage.ts`
-- [ ] 1.2 Add `getActiveOrganizationId()`, `setActiveOrganizationId()`, `removeActiveOrganizationId()` functions to the `storage` export object
+- [x] 1.1 Add `ACTIVE_ORGANIZATION_KEY = "active_organization"` constant to `src/lib/storage.ts`
+- [x] 1.2 Add `getActiveOrganizationId()`, `setActiveOrganizationId()`, `removeActiveOrganizationId()` functions to the `storage` export object
 
 ## 2. Organization Feature — Types
 
