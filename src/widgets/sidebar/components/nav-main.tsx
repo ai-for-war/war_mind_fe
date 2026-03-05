@@ -1,10 +1,8 @@
-import { Bot, ChevronDown, Mic } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Bot, Mic } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import {
   SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -12,7 +10,6 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { Collapsible, CollapsibleTrigger, CollapsibleContent } from "@/components/ui/collapsible";
 
 const navItems = [
   {
@@ -42,6 +39,7 @@ const navItems = [
 
 export const NavMain = () => {
   const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <SidebarGroup>
@@ -49,16 +47,16 @@ export const NavMain = () => {
       {navItems.map((item) => (
         <SidebarMenuItem key={item.title}>
           <SidebarMenuButton asChild>
-            <a href={item.url} className="font-medium">
+            <div onClick={() => navigate(item.url)} className="cursor-pointer font-medium">
               {item.title}
-            </a>
+            </div>
           </SidebarMenuButton>
           {item.items?.length ? (
             <SidebarMenuSub>
               {item.items.map((item) => (
                 <SidebarMenuSubItem key={item.title}>
                   <SidebarMenuSubButton asChild isActive={location.pathname === item.url}>
-                    <a href={item.url}>{item.title}</a>
+                    <div onClick={() => navigate(item.url)} className="cursor-pointer font-medium">{item.title}</div>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               ))}

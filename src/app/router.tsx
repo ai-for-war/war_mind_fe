@@ -15,7 +15,7 @@ type LocationState = {
 
 const ProtectedRoute = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
-  // const { isHydrating, isHydrated } = useHydrateAuth()
+  const { isHydrating, isHydrated } = useHydrateAuth()
   const location = useLocation()
 
   if (!isAuthenticated) {
@@ -25,13 +25,13 @@ const ProtectedRoute = () => {
     return <Navigate to="/login" replace state={state} />
   }
 
-  // if (isHydrating || !isHydrated) {
-  //   return (
-  //     <div className="flex h-screen items-center justify-center">
-  //       <Spinner className="size-6 text-muted-foreground" />
-  //     </div>
-  //   )
-  // }
+  if (isHydrating || !isHydrated) {
+    return (
+      <div className="flex h-screen items-center justify-center">
+        <Spinner className="size-6 text-muted-foreground" />
+      </div>
+    )
+  }
 
   return <Outlet />
 }
