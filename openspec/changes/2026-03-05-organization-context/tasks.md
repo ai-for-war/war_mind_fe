@@ -17,10 +17,10 @@
 
 ## 5. Organization Store
 
-- [ ] 5.1 Create `src/stores/use-organization-store.ts` Zustand store with `organizations`, `activeOrganization` state
-- [ ] 5.2 Implement `setOrganizations(orgs)` — set list + auto-select active org (prefer stored id from localStorage, fallback to first in list) + persist to localStorage
-- [ ] 5.3 Implement `setActiveOrganization(orgId)` — find org in list, set as active, persist to localStorage. No-op if orgId not found
-- [ ] 5.4 Implement `clear()` — reset state to defaults + call `storage.removeActiveOrganizationId()`
+- [x] 5.1 Create `src/stores/use-organization-store.ts` Zustand store with `organizations`, `activeOrganization` state
+- [x] 5.2 Implement `setOrganizations(orgs)` — set list + auto-select active org (prefer stored id from localStorage, fallback to first in list) + persist to localStorage
+- [x] 5.3 Implement `setActiveOrganization(orgId)` — find org in list, set as active, persist to localStorage. No-op if orgId not found
+- [x] 5.4 Implement `clear()` — reset state to defaults + call `storage.removeActiveOrganizationId()`
 
 ## 6. Auth API — Three-Step Login Flow
 
