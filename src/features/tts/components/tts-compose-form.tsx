@@ -145,6 +145,7 @@ export const TtsComposeForm = ({ onGenerateSuccess }: TtsComposeFormProps) => {
           id="tts-text"
           rows={6}
           maxLength={MAX_TEXT_LENGTH}
+          className="max-h-48 resize-y"
           placeholder="Enter the text you want to convert into speech..."
           disabled={generateMutation.isPending}
           aria-invalid={form.formState.errors.text ? "true" : "false"}

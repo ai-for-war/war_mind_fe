@@ -24,7 +24,7 @@ export const TtsPage = () => {
       </header>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,26rem)_minmax(0,1fr)]">
-        <div className="space-y-4 lg:sticky lg:top-6 lg:self-start">
+        <div className="space-y-4 lg:sticky lg:top-6 lg:max-h-[calc(100vh-3rem)] lg:self-start lg:overflow-y-auto">
           <Card className="gap-4 py-4">
             <CardHeader className="px-4">
               <CardTitle className="text-base">Compose</CardTitle>
