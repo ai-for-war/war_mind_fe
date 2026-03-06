@@ -35,10 +35,10 @@
 
 ## 7. TTS Hooks
 
-- [ ] 7.1 Create `src/features/tts/hooks/use-generate-audio.ts` — `useMutation` calling `ttsApi.generateAudio()`, invalidates `["tts", "audio"]` on success
-- [ ] 7.2 Create `src/features/tts/hooks/use-audio-list.ts` — `useQuery` with key `["tts", "audio", { skip, limit }]`, accepts `skip` and `limit` params with defaults (0, 20)
-- [ ] 7.3 Create `src/features/tts/hooks/use-audio-detail.ts` — `useQuery` with key `["tts", "audio", audioId]`, disabled when audioId is undefined/empty
-- [ ] 7.4 Create `src/features/tts/hooks/use-delete-audio.ts` — `useMutation` calling `ttsApi.deleteAudio()`, invalidates `["tts", "audio"]` on success
+- [x] 7.1 Create `src/features/tts/hooks/use-generate-audio.ts` — `useMutation` calling `ttsApi.generateAudio()`, invalidates `["tts", "audio"]` on success
+- [x] 7.2 Create `src/features/tts/hooks/use-audio-list.ts` — `useQuery` with key `["tts", "audio", { skip, limit }]`, accepts `skip` and `limit` params with defaults (0, 20)
+- [x] 7.3 Create `src/features/tts/hooks/use-audio-detail.ts` — `useQuery` with key `["tts", "audio", audioId]`, disabled when audioId is undefined/empty
+- [x] 7.4 Create `src/features/tts/hooks/use-delete-audio.ts` — `useMutation` calling `ttsApi.deleteAudio()`, invalidates `["tts", "audio"]` on success
 
 ## 8. TTS Page & Barrel Export
 
