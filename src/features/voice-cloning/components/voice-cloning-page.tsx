@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { CloneVoiceSheet } from "@/features/voice-cloning/components/clone-voice-sheet"
 import { SystemVoiceCard } from "@/features/voice-cloning/components/system-voice-card"
 import { VoiceCard } from "@/features/voice-cloning/components/voice-card"
@@ -68,58 +69,69 @@ export const VoiceCloningPage = () => {
         </div>
       ) : null}
 
-      <section className="space-y-4">
-        <h2 className="text-lg font-semibold">System Voices</h2>
-        {voicesQuery.isLoading ? (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 3 }).map((_, index) => (
-              <VoiceCardSkeleton key={`system-loading-${index}`} />
-            ))}
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {systemVoices.map((voice) => (
-              <SystemVoiceCard key={voice.voice_id} voice={voice} />
-            ))}
-          </div>
-        )}
-      </section>
+      <Tabs defaultValue="cloned" className="space-y-4">
+        <TabsList className="h-auto flex-wrap gap-1 p-1">
+          <TabsTrigger value="cloned" className="gap-1.5">
+            My Cloned Voices
+            <Badge variant="secondary" className="ml-0.5 shrink-0">
+              {totalClonedVoices}
+            </Badge>
+          </TabsTrigger>
+          <TabsTrigger value="system" className="gap-1.5">
+            System Voices
+            <Badge variant="outline" className="ml-0.5 shrink-0">
+              {systemVoices.length}
+            </Badge>
+          </TabsTrigger>
+        </TabsList>
 
-      <section className="space-y-4">
-        <div className="flex items-center gap-2">
-          <h2 className="text-lg font-semibold">My Cloned Voices</h2>
-          <Badge variant="secondary">{totalClonedVoices}</Badge>
-        </div>
+        <TabsContent value="cloned" className="mt-0 space-y-4">
+          {voicesQuery.isLoading ? (
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <VoiceCardSkeleton key={`cloned-loading-${index}`} />
+              ))}
+            </div>
+          ) : null}
 
-        {voicesQuery.isLoading ? (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 3 }).map((_, index) => (
-              <VoiceCardSkeleton key={`cloned-loading-${index}`} />
-            ))}
-          </div>
-        ) : null}
+          {!voicesQuery.isLoading && clonedVoices.length === 0 ? (
+            <div className="rounded-xl border border-dashed border-border bg-muted/20 p-8 text-center">
+              <h3 className="text-base font-medium">No cloned voices yet</h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Clone your first voice to start generating personalized speech.
+              </p>
+              <Button type="button" className="mt-4" onClick={() => setIsCloneSheetOpen(true)}>
+                <Plus className="size-4" />
+                Clone Your First Voice
+              </Button>
+            </div>
+          ) : null}
 
-        {!voicesQuery.isLoading && clonedVoices.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-border bg-muted/20 p-8 text-center">
-            <h3 className="text-base font-medium">No cloned voices yet</h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Clone your first voice to start generating personalized speech.
-            </p>
-            <Button type="button" className="mt-4" onClick={() => setIsCloneSheetOpen(true)}>
-              <Plus className="size-4" />
-              Clone Your First Voice
-            </Button>
-          </div>
-        ) : null}
+          {!voicesQuery.isLoading && clonedVoices.length > 0 ? (
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {clonedVoices.map((voice) => (
+                <VoiceCard key={voice.id} voice={voice} />
+              ))}
+            </div>
+          ) : null}
+        </TabsContent>
 
-        {!voicesQuery.isLoading && clonedVoices.length > 0 ? (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {clonedVoices.map((voice) => (
-              <VoiceCard key={voice.id} voice={voice} />
-            ))}
-          </div>
-        ) : null}
-      </section>
+        <TabsContent value="system" className="mt-0 space-y-4">
+          {voicesQuery.isLoading ? (
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <VoiceCardSkeleton key={`system-loading-${index}`} />
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {systemVoices.map((voice) => (
+                <SystemVoiceCard key={voice.voice_id} voice={voice} />
+              ))}
+            </div>
+          )}
+        </TabsContent>
+      </Tabs>
 
       <CloneVoiceSheet open={isCloneSheetOpen} onOpenChange={setIsCloneSheetOpen} />
     </section>
