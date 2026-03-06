@@ -87,7 +87,7 @@ export const VoiceCard = ({ voice }: VoiceCardProps) => {
         </CardHeader>
 
         <CardContent className="space-y-3 px-4 pt-0">
-          <div className="space-y-1 text-sm text-muted-foreground">
+          <div className="space-y-1 flex justify-between text-sm text-muted-foreground">
             <p className="inline-flex items-center gap-1.5">
               <Languages className="size-4" />
               <span>{voice.language?.trim() || "Unknown"}</span>
