@@ -27,11 +27,11 @@
 
 ## 6. TTS API
 
-- [ ] 6.1 Create `src/features/tts/api/tts-api.ts` — `generateAudio(request)` → POST `/tts/generate`, returns `GenerateAudioResponse`
-- [ ] 6.2 Add `listAudio(skip, limit)` → GET `/tts/audio?skip=X&limit=Y`, returns `AudioListResponse`
-- [ ] 6.3 Add `getAudio(audioId)` → GET `/tts/audio/{audio_id}`, returns `AudioDetailResponse`
-- [ ] 6.4 Add `deleteAudio(audioId)` → DELETE `/tts/audio/{audio_id}`, returns `void`
-- [ ] 6.5 Export `ttsApi` object with all 4 functions
+- [x] 6.1 Create `src/features/tts/api/tts-api.ts` — `generateAudio(request)` → POST `/tts/generate`, returns `GenerateAudioResponse`
+- [x] 6.2 Add `listAudio(skip, limit)` → GET `/tts/audio?skip=X&limit=Y`, returns `AudioListResponse`
+- [x] 6.3 Add `getAudio(audioId)` → GET `/tts/audio/{audio_id}`, returns `AudioDetailResponse`
+- [x] 6.4 Add `deleteAudio(audioId)` → DELETE `/tts/audio/{audio_id}`, returns `void`
+- [x] 6.5 Export `ttsApi` object with all 4 functions
 
 ## 7. TTS Hooks
 
