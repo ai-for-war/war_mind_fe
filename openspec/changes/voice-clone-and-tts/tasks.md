@@ -42,8 +42,8 @@
 
 ## 8. TTS Page & Barrel Export
 
-- [ ] 8.1 Create `src/features/tts/components/tts-page.tsx` — placeholder TTS page component
-- [ ] 8.2 Create `src/features/tts/index.ts` — re-export `ttsApi`, all TTS types, all hooks, and `TtsPage`
+- [x] 8.1 Create `src/features/tts/components/tts-page.tsx` — placeholder TTS page component
+- [x] 8.2 Create `src/features/tts/index.ts` — re-export `ttsApi`, all TTS types, all hooks, and `TtsPage`
 
 ## 9. Shared Audio Player Hook
 
