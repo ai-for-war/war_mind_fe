@@ -4,11 +4,11 @@
 
 ## 2. Voice Cloning API
 
-- [ ] 2.1 Create `src/features/voice-cloning/api/voices-api.ts` — `listVoices()` → GET `/voices`, returns `VoiceListResponse`
-- [ ] 2.2 Add `getVoice(voiceId)` → GET `/voices/{voice_id}`, returns `VoiceDetailResponse`
-- [ ] 2.3 Add `cloneVoice(file, name, voiceId)` → POST `/voices/clone` as multipart/form-data with `FormData`, returns `CloneVoiceResponse`
-- [ ] 2.4 Add `deleteVoice(voiceId)` → DELETE `/voices/{voice_id}`, returns `void`
-- [ ] 2.5 Export `voicesApi` object with all 4 functions
+- [x] 2.1 Create `src/features/voice-cloning/api/voices-api.ts` — `listVoices()` → GET `/voices`, returns `VoiceListResponse`
+- [x] 2.2 Add `getVoice(voiceId)` → GET `/voices/{voice_id}`, returns `VoiceDetailResponse`
+- [x] 2.3 Add `cloneVoice(file, name, voiceId)` → POST `/voices/clone` as multipart/form-data with `FormData`, returns `CloneVoiceResponse`
+- [x] 2.4 Add `deleteVoice(voiceId)` → DELETE `/voices/{voice_id}`, returns `void`
+- [x] 2.5 Export `voicesApi` object with all 4 functions
 
 ## 3. Voice Cloning Hooks
 
