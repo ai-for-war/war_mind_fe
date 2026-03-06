@@ -12,10 +12,10 @@
 
 ## 3. Voice Cloning Hooks
 
-- [ ] 3.1 Create `src/features/voice-cloning/hooks/use-voices.ts` — `useQuery` with key `["voices"]`, calls `voicesApi.listVoices()`
-- [ ] 3.2 Create `src/features/voice-cloning/hooks/use-voice-detail.ts` — `useQuery` with key `["voices", voiceId]`, disabled when voiceId is undefined/empty
-- [ ] 3.3 Create `src/features/voice-cloning/hooks/use-clone-voice.ts` — `useMutation` calling `voicesApi.cloneVoice()`, invalidates `["voices"]` on success
-- [ ] 3.4 Create `src/features/voice-cloning/hooks/use-delete-voice.ts` — `useMutation` calling `voicesApi.deleteVoice()`, invalidates `["voices"]` on success
+- [x] 3.1 Create `src/features/voice-cloning/hooks/use-voices.ts` — `useQuery` with key `["voices"]`, calls `voicesApi.listVoices()`
+- [x] 3.2 Create `src/features/voice-cloning/hooks/use-voice-detail.ts` — `useQuery` with key `["voices", voiceId]`, disabled when voiceId is undefined/empty
+- [x] 3.3 Create `src/features/voice-cloning/hooks/use-clone-voice.ts` — `useMutation` calling `voicesApi.cloneVoice()`, invalidates `["voices"]` on success
+- [x] 3.4 Create `src/features/voice-cloning/hooks/use-delete-voice.ts` — `useMutation` calling `voicesApi.deleteVoice()`, invalidates `["voices"]` on success
 
 ## 4. Voice Cloning Barrel Export
 
