@@ -1,13 +1,20 @@
 import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxLabel,
+  ComboboxList,
+  ComboboxSeparator,
+} from "@/components/ui/combobox"
 import { useVoices } from "@/features/voice-cloning"
+
+type VoiceOption = {
+  label: string
+  voiceId: string
+}
 
 type VoiceSelectorProps = {
   value?: string
@@ -24,36 +31,61 @@ export const VoiceSelector = ({
   const systemVoices = voicesQuery.data?.system_voices ?? []
   const clonedVoices = voicesQuery.data?.cloned_voices ?? []
 
+  const clonedOptions: VoiceOption[] = clonedVoices.map((v) => ({
+    label: v.name,
+    voiceId: v.voice_id,
+  }))
+
+  const systemOptions: VoiceOption[] = systemVoices.map((v) => ({
+    label: v.voice_name,
+    voiceId: v.voice_id,
+  }))
+
+  const allOptions = [...clonedOptions, ...systemOptions]
+
+  const selectedOption = allOptions.find((opt) => opt.voiceId === value) ?? null
+
   return (
-    <Select
-      value={value}
-      onValueChange={onValueChange}
+    <Combobox
+      items={allOptions}
+      itemToStringValue={(opt) => opt.label}
+      value={selectedOption}
+      onValueChange={(opt) => {
+        if (opt) onValueChange(opt.voiceId)
+      }}
       disabled={disabled || voicesQuery.isLoading}
     >
-      <SelectTrigger className="w-full">
-        <SelectValue placeholder={voicesQuery.isLoading ? "Loading voices..." : "Select a voice"} />
-      </SelectTrigger>
-      <SelectContent>
-        <SelectGroup>
-          <SelectLabel>System Voices</SelectLabel>
-          {systemVoices.map((voice) => (
-            <SelectItem key={`system-${voice.voice_id}`} value={voice.voice_id}>
-              {voice.voice_name}
-            </SelectItem>
-          ))}
-        </SelectGroup>
+      <ComboboxInput
+        className="w-full"
+        placeholder={voicesQuery.isLoading ? "Loading voices..." : "Select a voice"}
+      />
+      <ComboboxContent>
+        <ComboboxEmpty>No voice found.</ComboboxEmpty>
+        <ComboboxList>
+          {clonedOptions.length > 0 ? (
+            <>
+              <ComboboxGroup>
+                <ComboboxLabel>My Cloned Voices</ComboboxLabel>
+                {clonedOptions.map((opt) => (
+                  <ComboboxItem key={`cloned-${opt.voiceId}`} value={opt}>
+                    {opt.label}
+                  </ComboboxItem>
+                ))}
+              </ComboboxGroup>
+              <ComboboxSeparator />
+            </>
+          ) : null}
 
-        {clonedVoices.length > 0 ? (
-          <SelectGroup>
-            <SelectLabel>My Cloned Voices</SelectLabel>
-            {clonedVoices.map((voice) => (
-              <SelectItem key={`cloned-${voice.voice_id}`} value={voice.voice_id}>
-                {voice.name} (Cloned)
-              </SelectItem>
+          <ComboboxGroup>
+            <ComboboxLabel>System Voices</ComboboxLabel>
+            {systemOptions.map((opt) => (
+              <ComboboxItem key={`system-${opt.voiceId}`} value={opt}>
+                {opt.label}
+              </ComboboxItem>
             ))}
-          </SelectGroup>
-        ) : null}
-      </SelectContent>
-    </Select>
+          </ComboboxGroup>
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
   )
 }
