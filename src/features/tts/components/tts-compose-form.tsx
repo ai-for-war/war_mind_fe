@@ -10,14 +10,15 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
-import { Label } from "@/components/ui/label"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox"
+import { Label } from "@/components/ui/label"
 import { Slider } from "@/components/ui/slider"
 import { Textarea } from "@/components/ui/textarea"
 import { useGenerateAudio } from "@/features/tts/hooks/use-generate-audio"
@@ -31,7 +32,19 @@ import type { GenerateAudioResponse } from "@/features/tts/types/tts.types"
 import { VoiceSelector } from "./voice-selector"
 
 const MAX_TEXT_LENGTH = 5000
-const NONE_EMOTION_VALUE = "none"
+
+type EmotionOption = {
+  label: string
+  value: string | undefined
+}
+
+const EMOTION_OPTIONS: EmotionOption[] = [
+  { label: "None", value: undefined },
+  ...TTS_EMOTION_OPTIONS.map((e) => ({
+    label: e.charAt(0).toUpperCase() + e.slice(1),
+    value: e as string | undefined,
+  })),
+]
 
 type TtsComposeFormProps = {
   onGenerateSuccess: (response: GenerateAudioResponse) => void
@@ -236,33 +249,35 @@ export const TtsComposeForm = ({ onGenerateSuccess }: TtsComposeFormProps) => {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="tts-emotion">Emotion</Label>
-            <Select
-              value={emotionValue ?? NONE_EMOTION_VALUE}
-              onValueChange={(value) => {
+            <Label>Emotion</Label>
+            <Combobox
+              items={EMOTION_OPTIONS}
+              itemToStringValue={(opt) => opt.label}
+              value={
+                EMOTION_OPTIONS.find((opt) => opt.value === emotionValue) ??
+                EMOTION_OPTIONS[0]
+              }
+              onValueChange={(opt) => {
                 form.setValue(
                   "emotion",
-                  value === NONE_EMOTION_VALUE ? undefined : (value as TtsGenerateFormValues["emotion"]),
-                  {
-                    shouldDirty: true,
-                    shouldValidate: true,
-                  },
+                  (opt?.value ?? undefined) as TtsGenerateFormValues["emotion"],
+                  { shouldDirty: true, shouldValidate: true },
                 )
               }}
               disabled={generateMutation.isPending}
             >
-              <SelectTrigger id="tts-emotion" className="w-full">
-                <SelectValue placeholder="None" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={NONE_EMOTION_VALUE}>None</SelectItem>
-                {TTS_EMOTION_OPTIONS.map((emotion) => (
-                  <SelectItem key={emotion} value={emotion}>
-                    {emotion}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+              <ComboboxInput className="w-full" placeholder="None" />
+              <ComboboxContent>
+                <ComboboxEmpty>No emotion found.</ComboboxEmpty>
+                <ComboboxList>
+                  {EMOTION_OPTIONS.map((opt) => (
+                    <ComboboxItem key={opt.label} value={opt}>
+                      {opt.label}
+                    </ComboboxItem>
+                  ))}
+                </ComboboxList>
+              </ComboboxContent>
+            </Combobox>
           </div>
         </CollapsibleContent>
       </Collapsible>
