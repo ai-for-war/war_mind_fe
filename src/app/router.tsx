@@ -5,6 +5,7 @@ import { MainLayout } from "@/app/layouts/main-layout"
 import { Spinner } from "@/components/ui/spinner"
 import { LoginPage } from "@/features/auth/components/login-page"
 import { MultiAgentPage } from "@/features/multi-agent"
+import { TtsPage } from "@/features/tts"
 import { VoiceCloningPage } from "@/features/voice-cloning"
 import { useHydrateAuth } from "@/hooks/use-hydrate-auth"
 import { useAuthStore } from "@/stores/use-auth-store"
@@ -60,6 +61,10 @@ export const router = createBrowserRouter([
           {
             path: "/voice-cloning",
             element: <VoiceCloningPage />,
+          },
+          {
+            path: "/tts",
+            element: <TtsPage />,
           },
           {
             path: "/multi-agent",

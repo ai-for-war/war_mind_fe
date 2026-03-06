@@ -56,4 +56,4 @@
 
 ## 10. Router Update
 
-- [ ] 10.1 Update `src/app/router.tsx` — add protected route `/tts` rendering `TtsPage` inside `MainLayout`
+- [x] 10.1 Update `src/app/router.tsx` — add protected route `/tts` rendering `TtsPage` inside `MainLayout`
