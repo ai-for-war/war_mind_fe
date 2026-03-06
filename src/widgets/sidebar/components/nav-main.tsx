@@ -1,4 +1,4 @@
-import { Bot, Mic } from "lucide-react";
+import { AudioLines, Bot, Mic } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import {
@@ -32,6 +32,11 @@ const navItems = [
         url: "/voice-cloning",
         icon: Mic,
       },
+      {
+        title: "Text to Speech",
+        url: "/tts",
+        icon: AudioLines,
+      },
     ],
   },
 
@@ -56,7 +61,10 @@ export const NavMain = () => {
               {item.items.map((item) => (
                 <SidebarMenuSubItem key={item.title}>
                   <SidebarMenuSubButton asChild isActive={location.pathname === item.url}>
-                    <div onClick={() => navigate(item.url)} className="cursor-pointer font-medium">{item.title}</div>
+                    <div onClick={() => navigate(item.url)} className="flex cursor-pointer items-center gap-2 font-medium">
+                      <item.icon className="size-4" />
+                      {item.title}
+                    </div>
                   </SidebarMenuSubButton>
                 </SidebarMenuSubItem>
               ))}

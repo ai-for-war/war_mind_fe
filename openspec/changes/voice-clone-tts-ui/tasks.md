@@ -20,16 +20,16 @@
 
 ## 4. TTS — Schema & Components
 
-- [ ] 4.1 Create `src/features/tts/schemas/tts-generate.schema.ts` — Zod schema for TTS generate form (text, voice_id, speed, volume, pitch, emotion validation)
-- [ ] 4.2 Create `src/features/tts/components/voice-selector.tsx` — VoiceSelector with shadcn Select, grouped options (System Voices / My Cloned Voices), useVoices integration, loading state
-- [ ] 4.3 Create `src/features/tts/components/tts-compose-form.tsx` — TtsComposeForm with VoiceSelector, Textarea + character count, collapsible Advanced Options (speed/volume/pitch sliders, emotion select), Generate button, react-hook-form + zod, useGenerateAudio mutation
-- [ ] 4.4 Create `src/features/tts/components/tts-result-player.tsx` — TtsResultPlayer with inline WaveformPlayer for generated audio
-- [ ] 4.5 Create `src/features/tts/components/audio-history-item.tsx` — AudioHistoryItem with truncated text, voice ID, duration, date, compact WaveformPlayer, delete button
-- [ ] 4.6 Create `src/features/tts/components/audio-history-list.tsx` — AudioHistoryList with scrollable list, useAudioList hook, skeleton loading, empty state, load more button, error state
-- [ ] 4.7 Rewrite `src/features/tts/components/tts-page.tsx` — TtsPage with 2-column layout (sticky compose left, scrollable history right), responsive single column on mobile, page header
-- [ ] 4.8 Update `src/features/tts/index.ts` — re-export new components and schema
+- [x] 4.1 Create `src/features/tts/schemas/tts-generate.schema.ts` — Zod schema for TTS generate form (text, voice_id, speed, volume, pitch, emotion validation)
+- [x] 4.2 Create `src/features/tts/components/voice-selector.tsx` — VoiceSelector with shadcn Select, grouped options (System Voices / My Cloned Voices), useVoices integration, loading state
+- [x] 4.3 Create `src/features/tts/components/tts-compose-form.tsx` — TtsComposeForm with VoiceSelector, Textarea + character count, collapsible Advanced Options (speed/volume/pitch sliders, emotion select), Generate button, react-hook-form + zod, useGenerateAudio mutation
+- [x] 4.4 Create `src/features/tts/components/tts-result-player.tsx` — TtsResultPlayer with inline WaveformPlayer for generated audio
+- [x] 4.5 Create `src/features/tts/components/audio-history-item.tsx` — AudioHistoryItem with truncated text, voice ID, duration, date, compact WaveformPlayer, delete button
+- [x] 4.6 Create `src/features/tts/components/audio-history-list.tsx` — AudioHistoryList with scrollable list, useAudioList hook, skeleton loading, empty state, load more button, error state
+- [x] 4.7 Rewrite `src/features/tts/components/tts-page.tsx` — TtsPage with 2-column layout (sticky compose left, scrollable history right), responsive single column on mobile, page header
+- [x] 4.8 Update `src/features/tts/index.ts` — re-export new components and schema
 
 ## 5. Sidebar Navigation
 
-- [ ] 5.1 Update `src/widgets/sidebar/components/nav-main.tsx` — add "Text to Speech" nav item with `AudioLines` icon, path `/tts`
+- [x] 5.1 Update `src/widgets/sidebar/components/nav-main.tsx` — add "Text to Speech" nav item with `AudioLines` icon, path `/tts`
 
