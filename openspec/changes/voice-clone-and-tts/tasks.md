@@ -19,7 +19,7 @@
 
 ## 4. Voice Cloning Barrel Export
 
-- [ ] 4.1 Update `src/features/voice-cloning/index.ts` — re-export `voicesApi`, all voice types, all hooks (`useVoices`, `useVoiceDetail`, `useCloneVoice`, `useDeleteVoice`), and `VoiceCloningPage`
+- [x] 4.1 Update `src/features/voice-cloning/index.ts` — re-export `voicesApi`, all voice types, all hooks (`useVoices`, `useVoiceDetail`, `useCloneVoice`, `useDeleteVoice`), and `VoiceCloningPage`
 
 ## 5. TTS Types
 
