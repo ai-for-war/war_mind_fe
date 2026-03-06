@@ -23,7 +23,7 @@
 
 ## 5. TTS Types
 
-- [ ] 5.1 Create `src/features/tts/types/tts.types.ts` — `AudioFileRecord`, `GenerateAudioRequest`, `GenerateAudioResponse`, `AudioListResponse`, `AudioDetailResponse` interfaces matching backend schemas
+- [x] 5.1 Create `src/features/tts/types/tts.types.ts` — `AudioFileRecord`, `GenerateAudioRequest`, `GenerateAudioResponse`, `AudioListResponse`, `AudioDetailResponse` interfaces matching backend schemas
 
 ## 6. TTS API
 
