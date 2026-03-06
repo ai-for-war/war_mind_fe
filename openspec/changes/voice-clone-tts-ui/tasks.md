@@ -11,12 +11,12 @@
 
 ## 3. Voice Cloning — Schema & Components
 
-- [ ] 3.1 Create `src/features/voice-cloning/schemas/clone-voice.schema.ts` — Zod schema for clone voice form (name, voiceId, file validation)
-- [ ] 3.2 Create `src/features/voice-cloning/components/system-voice-card.tsx` — SystemVoiceCard displaying voice_name, description, "System" badge
-- [ ] 3.3 Create `src/features/voice-cloning/components/voice-card.tsx` — VoiceCard for cloned voices with name, language, date, "Cloned" badge, play source audio (WaveformPlayer), delete button (ConfirmDeleteDialog)
-- [ ] 3.4 Create `src/features/voice-cloning/components/clone-voice-sheet.tsx` — CloneVoiceSheet with Sheet panel, FileDropzone (audio preset), name + voiceId inputs, react-hook-form + zod validation, useCloneVoice mutation, success close + error display
-- [ ] 3.5 Rewrite `src/features/voice-cloning/components/voice-cloning-page.tsx` — VoiceCloningPage with page header + Clone button, System Voices grid, Cloned Voices grid with count, skeleton loading, empty state, error state, responsive grid (3-col desktop, 2-col tablet, 1-col mobile)
-- [ ] 3.6 Update `src/features/voice-cloning/index.ts` — re-export new components and schema
+- [x] 3.1 Create `src/features/voice-cloning/schemas/clone-voice.schema.ts` — Zod schema for clone voice form (name, voiceId, file validation)
+- [x] 3.2 Create `src/features/voice-cloning/components/system-voice-card.tsx` — SystemVoiceCard displaying voice_name, description, "System" badge
+- [x] 3.3 Create `src/features/voice-cloning/components/voice-card.tsx` — VoiceCard for cloned voices with name, language, date, "Cloned" badge, play source audio (WaveformPlayer), delete button (ConfirmDeleteDialog)
+- [x] 3.4 Create `src/features/voice-cloning/components/clone-voice-sheet.tsx` — CloneVoiceSheet with Sheet panel, FileDropzone (audio preset), name + voiceId inputs, react-hook-form + zod validation, useCloneVoice mutation, success close + error display
+- [x] 3.5 Rewrite `src/features/voice-cloning/components/voice-cloning-page.tsx` — VoiceCloningPage with page header + Clone button, System Voices grid, Cloned Voices grid with count, skeleton loading, empty state, error state, responsive grid (3-col desktop, 2-col tablet, 1-col mobile)
+- [x] 3.6 Update `src/features/voice-cloning/index.ts` — re-export new components and schema
 
 ## 4. TTS — Schema & Components
 
