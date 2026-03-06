@@ -5,9 +5,9 @@
 
 ## 2. Shared Components
 
-- [ ] 2.1 Create `src/components/common/waveform-player.tsx` — WaveformPlayer component wrapping `@wavesurfer/react` with play/pause, seek, time display, theme colors (amber progress, neutral-700 wave), default and compact variants, loading skeleton, cleanup on unmount
-- [ ] 2.2 Create `src/components/common/file-dropzone.tsx` — FileDropzone component wrapping `react-dropzone` with drag & drop zone, file info display, clear button, disabled state, audio preset defaults
-- [ ] 2.3 Create `src/components/common/confirm-delete-dialog.tsx` — ConfirmDeleteDialog component wrapping shadcn AlertDialog with configurable title/description, loading state, default text
+- [x] 2.1 Create `src/components/common/waveform-player.tsx` — WaveformPlayer component wrapping `@wavesurfer/react` with play/pause, seek, time display, theme colors (amber progress, neutral-700 wave), default and compact variants, loading skeleton, cleanup on unmount
+- [x] 2.2 Create `src/components/common/file-dropzone.tsx` — FileDropzone component wrapping `react-dropzone` with drag & drop zone, file info display, clear button, disabled state, audio preset defaults
+- [x] 2.3 Create `src/components/common/confirm-delete-dialog.tsx` — ConfirmDeleteDialog component wrapping shadcn AlertDialog with configurable title/description, loading state, default text
 
 ## 3. Voice Cloning — Schema & Components
 
@@ -32,3 +32,4 @@
 ## 5. Sidebar Navigation
 
 - [ ] 5.1 Update `src/widgets/sidebar/components/nav-main.tsx` — add "Text to Speech" nav item with `AudioLines` icon, path `/tts`
+
