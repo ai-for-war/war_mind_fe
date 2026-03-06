@@ -1,6 +1,6 @@
 ## 1. Voice Cloning Types
 
-- [ ] 1.1 Create `src/features/voice-cloning/types/voice.types.ts` — `VoiceRecord`, `SystemVoiceRecord`, `VoiceListResponse`, `VoiceDetailResponse`, `CloneVoiceResponse` interfaces matching backend schemas
+- [x] 1.1 Create `src/features/voice-cloning/types/voice.types.ts` — `VoiceRecord`, `SystemVoiceRecord`, `VoiceListResponse`, `VoiceDetailResponse`, `CloneVoiceResponse` interfaces matching backend schemas
 
 ## 2. Voice Cloning API
 
