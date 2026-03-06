@@ -1,7 +1,7 @@
 ## 1. Setup — Dependencies & shadcn Components
 
-- [ ] 1.1 Install npm packages: `wavesurfer.js`, `@wavesurfer/react`, `react-dropzone`
-- [ ] 1.2 Add shadcn/ui components via CLI: `select`, `textarea`, `slider`, `alert-dialog`, `badge`, `tabs`, `popover`, `command`
+- [x] 1.1 Install npm packages: `wavesurfer.js`, `@wavesurfer/react`, `react-dropzone`
+- [x] 1.2 Add shadcn/ui components via CLI: `select`, `textarea`, `slider`, `alert-dialog`, `badge`, `tabs`, `popover`, `command`
 
 ## 2. Shared Components
 
