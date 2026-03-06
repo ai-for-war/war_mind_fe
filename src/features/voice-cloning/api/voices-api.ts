@@ -26,7 +26,11 @@ const cloneVoice = async (
   formData.append("name", name)
   formData.append("voice_id", voiceId)
 
-  const response = await apiClient.post<CloneVoiceResponse>("/voices/clone", formData)
+  const response = await apiClient.post<CloneVoiceResponse>("/voices/clone", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  })
   return response.data
 }
 
