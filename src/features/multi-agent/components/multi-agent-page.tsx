@@ -1,6 +1,6 @@
-import { PanelLeft } from "lucide-react"
+// import { PanelLeft } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
+// import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet"
 import { ChatWorkspace } from "@/features/multi-agent/components/chat-workspace"
 import { ConversationRail } from "@/features/multi-agent/components/conversation-rail"
@@ -12,7 +12,7 @@ export const MultiAgentPage = () => {
 
   return (
     <section className="space-y-6">
-      <header className="flex items-end justify-between gap-3">
+      {/* <header className="flex items-end justify-between gap-3">
         <div className="space-y-1">
           <h1 className="text-2xl font-semibold tracking-tight">Multi-Agent</h1>
           <p className="text-sm text-muted-foreground">
@@ -30,7 +30,7 @@ export const MultiAgentPage = () => {
           <PanelLeft className="size-4" />
           Conversations
         </Button>
-      </header>
+      </header> */}
 
       <div className="flex min-h-[calc(100vh-12rem)] flex-col gap-4 lg:flex-row">
         <ConversationRail className="hidden lg:flex" />

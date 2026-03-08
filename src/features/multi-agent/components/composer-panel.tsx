@@ -8,8 +8,10 @@ import {
   PromptInputTextarea,
   PromptInputTools,
 } from "@/components/ai/prompt-input"
+import { cn } from "@/lib/utils"
 
 type ComposerPanelProps = {
+  className?: string
   draft: string
   isSubmitting: boolean
   onDraftChange: (value: string) => void
@@ -17,6 +19,7 @@ type ComposerPanelProps = {
 }
 
 export const ComposerPanel = ({
+  className,
   draft,
   isSubmitting,
   onDraftChange,
@@ -36,17 +39,16 @@ export const ComposerPanel = ({
   }
 
   return (
-    <div className="rounded-lg border bg-background p-3">
-      <p className="text-xs font-medium text-muted-foreground">Composer</p>
+    <div className={cn("shrink-0", className)}>
       <PromptInput
-        className="mt-2"
+        className="mt-0"
         onSubmit={() => {
           handleSubmit()
         }}
       >
         <PromptInputBody>
           <PromptInputTextarea
-            className="min-h-[5.5rem]"
+            className="min-h-0 h-11 max-h-20 py-2"
             disabled={isSubmitting}
             onChange={(event) => {
               if (validationError) {
@@ -59,20 +61,18 @@ export const ComposerPanel = ({
           />
         </PromptInputBody>
 
-        <PromptInputFooter className="mt-2">
+        <PromptInputFooter className="mt-1">
           <PromptInputTools />
           <PromptInputSubmit disabled={isSubmitting} status={isSubmitting ? "submitted" : "ready"} />
         </PromptInputFooter>
       </PromptInput>
 
-      <div className="mt-1 flex items-center justify-between gap-2">
+      <div className="mt-1 min-h-4 px-1">
         {validationError ? (
           <p role="alert" className="text-xs text-destructive">
             {validationError}
           </p>
-        ) : (
-          <p className="text-xs text-muted-foreground">Press Enter to send, Shift+Enter for newline.</p>
-        )}
+        ) : null}
       </div>
     </div>
   )

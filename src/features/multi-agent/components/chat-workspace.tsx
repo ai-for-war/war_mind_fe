@@ -2,7 +2,7 @@ import { AlertCircle, RefreshCw, Sparkles } from "lucide-react"
 import { useState } from "react"
 
 import { ConversationEmptyState } from "@/components/ai/conversation"
-import { Suggestion, Suggestions } from "@/components/ai/suggestion"
+import { Suggestion } from "@/components/ai/suggestion"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -97,16 +97,17 @@ const FreshChatState = ({ onSuggestionClick }: FreshChatStateProps) => (
         </p>
       </div>
 
-      <Suggestions>
+      <div className="grid w-full grid-cols-1 gap-2 md:grid-cols-2">
         {FRESH_CHAT_SUGGESTIONS.map((suggestion) => (
           <Suggestion
             key={suggestion}
+            className="h-auto w-full max-w-full justify-start whitespace-normal py-2 text-left break-words"
             onClick={onSuggestionClick}
             suggestion={suggestion}
             variant="secondary"
           />
         ))}
-      </Suggestions>
+      </div>
     </div>
   </ConversationEmptyState>
 )
@@ -219,8 +220,8 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   const activeThreadError = threadErrorByConversation[conversationKey] ?? null
 
   return (
-    <main className={cn("min-h-[24rem] flex-1", className)}>
-      <Card className="flex h-full min-h-[calc(100vh-16rem)] flex-col gap-0 lg:min-h-0">
+    <main className={cn("flex min-h-0 flex-1", className)}>
+      <Card className="flex h-[calc(100dvh-6rem)]  min-h-[34rem] w-full max-h-[calc(100dvh-6rem)] flex-col gap-0 overflow-hidden">
         <CardHeader className="border-b">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="space-y-1">
@@ -235,7 +236,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
           </div>
         </CardHeader>
 
-        <CardContent className="flex min-h-0 flex-1 flex-col gap-4 py-6">
+        <CardContent className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden py-2">
           {!activeConversationId && !freshChatOptimisticMessage ? (
             <FreshChatState onSuggestionClick={handleSuggestionClick} />
           ) : activeConversationId && messagesQuery.isPending ? (
@@ -244,7 +245,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
             <ChatWorkspaceError onRetry={() => void messagesQuery.refetch()} />
           ) : (
             <ChatThread
-              className="min-h-[20rem] flex-1"
+              className="min-h-0 flex-1"
               conversationId={activeConversationId ?? MULTI_AGENT_FRESH_CHAT_KEY}
               messages={threadMessages}
               streamingAssistant={activeStreamingAssistant}
@@ -253,6 +254,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
           )}
 
           <ComposerPanel
+            className="mt-1"
             draft={draft}
             isSubmitting={isSubmitting}
             onDraftChange={(value) => setComposerDraft(activeConversationId, value)}

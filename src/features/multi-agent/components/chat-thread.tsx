@@ -5,6 +5,7 @@ import {
   ConversationScrollButton,
 } from "@/components/ai/conversation"
 import { Message, MessageContent, MessageResponse } from "@/components/ai/message"
+import { Shimmer } from "@/components/ai/shimmer"
 import type {
   MultiAgentMessageRecord,
   MultiAgentStreamingAssistantState,
@@ -46,10 +47,10 @@ export const ChatThread = ({
 
   return (
     <Conversation
-      className={cn("h-full rounded-lg border bg-muted/10", className)}
+      className={cn("h-full min-h-0 overflow-hidden rounded-lg border bg-muted/10", className)}
       key={conversationId}
     >
-      <ConversationContent className="gap-4">
+      <ConversationContent className="gap-4 pb-4">
         {!hasMessages ? (
           <ConversationEmptyState
             className="min-h-[14rem] items-start justify-center text-left"
@@ -60,7 +61,7 @@ export const ChatThread = ({
           <>
             {orderedMessages.map((message) => (
               <Message from={toMessageAuthor(message.role)} key={message.id}>
-                <MessageContent>
+                <MessageContent className="bg-primary/10 p-5 rounded-lg">
                   <MessageResponse>{message.content}</MessageResponse>
                 </MessageContent>
               </Message>
@@ -68,10 +69,14 @@ export const ChatThread = ({
 
             {streamingAssistant ? (
               <Message from="assistant" key={`streaming-${conversationId}`}>
-                <MessageContent>
-                  <MessageResponse>
-                    {streamingAssistant.content || "Thinking..."}
-                  </MessageResponse>
+                <MessageContent className="bg-primary/10 p-5 rounded-lg">
+                  {streamingAssistant.content ? (
+                    <MessageResponse>{streamingAssistant.content}</MessageResponse>
+                  ) : (
+                    <Shimmer as="span" className="text-muted-foreground font-bold text-sm">
+                      Thinking...
+                    </Shimmer>
+                  )}
                 </MessageContent>
               </Message>
             ) : null}
