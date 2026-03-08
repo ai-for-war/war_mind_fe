@@ -1,7 +1,7 @@
 ## 1. Feature setup
 
-- [ ] 1.1 Create the `multi-agent` conversation rail module structure under `src/features/multi-agent/` for components, hooks, api, stores, and types
-- [ ] 1.2 Add or update feature-level types and query keys for conversation list fetching, filter state, and active conversation selection
+- [x] 1.1 Create the `multi-agent` conversation rail module structure under `src/features/multi-agent/` for components, hooks, api, stores, and types
+- [x] 1.2 Add or update feature-level types and query keys for conversation list fetching, filter state, and active conversation selection
 
 ## 2. Conversation data and state
 
