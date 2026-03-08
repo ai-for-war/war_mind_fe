@@ -18,14 +18,14 @@
 
 ## 4. Interaction and responsive behavior
 
-- [ ] 4.1 Wire conversation selection so clicking a row updates the active conversation context for the page
-- [ ] 4.2 Wire the `New chat` action so the page enters a fresh conversation-starting state without route navigation
-- [ ] 4.3 Add debounced search behavior and server-backed status filtering for at least `Active` and `Archived`
-- [ ] 4.4 Implement responsive rail behavior using a persistent desktop rail and a `Sheet` or drawer presentation on smaller viewports
+- [x] 4.1 Wire conversation selection so clicking a row updates the active conversation context for the page
+- [x] 4.2 Wire the `New chat` action so the page enters a fresh conversation-starting state without route navigation
+- [x] 4.3 Add debounced search behavior and server-backed status filtering for at least `Active` and `Archived`
+- [x] 4.4 Implement responsive rail behavior using a persistent desktop rail and a `Sheet` or drawer presentation on smaller viewports
 
 ## 5. Verification
 
-- [ ] 5.1 Verify the `Multi-Agent` page shows a usable conversation rail before any main thread implementation exists
-- [ ] 5.2 Verify search, filters, and `New chat` behave correctly across loading, empty, and error states
-- [ ] 5.3 Verify conversation selection remains visually clear and updates the active page context correctly
-- [ ] 5.4 Verify the rail remains accessible and functional on desktop, tablet, and mobile layouts
+- [x] 5.1 Verify the `Multi-Agent` page shows a usable conversation rail before any main thread implementation exists
+- [x] 5.2 Verify search, filters, and `New chat` behave correctly across loading, empty, and error states
+- [x] 5.3 Verify conversation selection remains visually clear and updates the active page context correctly
+- [x] 5.4 Verify the rail remains accessible and functional on desktop, tablet, and mobile layouts
