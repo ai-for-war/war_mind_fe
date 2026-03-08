@@ -1,7 +1,7 @@
 ## 1. Setup
 
-- [ ] 1.1 Add `socket.io-client` to `package.json`
-- [ ] 1.2 Create the shared socket module structure under `src/features/socket/`
+- [x] 1.1 Add `socket.io-client` to `package.json`
+- [x] 1.2 Create the shared socket module structure under `src/features/socket/`
 
 ## 2. Transport Foundation
 
