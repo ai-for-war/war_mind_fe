@@ -17,7 +17,7 @@ const useSocketSubscription = <TPayload>(
   const socket = useSocket()
 
   useEffect(() => {
-    if (!socket || options?.enabled === false) {
+    if (options?.enabled === false) {
       return
     }
 

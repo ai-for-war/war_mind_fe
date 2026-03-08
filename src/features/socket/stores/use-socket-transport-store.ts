@@ -8,25 +8,33 @@ export type SocketConnectionStatus =
   | "disconnected"
   | "error"
 
+export type SocketTransportError = {
+  message: string
+  name: string
+  timestamp: number
+}
+
 export type SocketTransportState = {
   status: SocketConnectionStatus
-  connectedAt: number | null
-  disconnectedAt: number | null
-  lastError: string | null
+  lastConnectedAt: number | null
+  lastDisconnectedAt: number | null
+  lastError: SocketTransportError | null
 }
 
 export type SocketTransportActions = {
-  setStatus: (status: SocketConnectionStatus) => void
-  setConnectedAt: (timestamp: number | null) => void
-  setDisconnectedAt: (timestamp: number | null) => void
-  setLastError: (error: string | null) => void
+  setIdle: () => void
+  setConnecting: () => void
+  setConnected: () => void
+  setReconnecting: () => void
+  setDisconnected: () => void
+  setError: (error: SocketTransportError) => void
   reset: () => void
 }
 
 const initialState: SocketTransportState = {
   status: "idle",
-  connectedAt: null,
-  disconnectedAt: null,
+  lastConnectedAt: null,
+  lastDisconnectedAt: null,
   lastError: null,
 }
 
@@ -34,9 +42,24 @@ export const useSocketTransportStore = create<
   SocketTransportState & SocketTransportActions
 >((set) => ({
   ...initialState,
-  setStatus: (status) => set({ status }),
-  setConnectedAt: (connectedAt) => set({ connectedAt }),
-  setDisconnectedAt: (disconnectedAt) => set({ disconnectedAt }),
-  setLastError: (lastError) => set({ lastError }),
+  setIdle: () => set({ status: "idle", lastError: null }),
+  setConnecting: () => set({ status: "connecting" }),
+  setConnected: () =>
+    set({
+      status: "connected",
+      lastConnectedAt: Date.now(),
+      lastError: null,
+    }),
+  setReconnecting: () => set({ status: "reconnecting" }),
+  setDisconnected: () =>
+    set({
+      status: "disconnected",
+      lastDisconnectedAt: Date.now(),
+    }),
+  setError: (lastError) =>
+    set({
+      status: "error",
+      lastError,
+    }),
   reset: () => set(initialState),
 }))

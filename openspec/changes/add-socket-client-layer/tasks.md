@@ -5,9 +5,9 @@
 
 ## 2. Transport Foundation
 
-- [ ] 2.1 Implement a singleton Socket.IO client configured with `autoConnect: false` and API-origin-based connection setup
-- [ ] 2.2 Implement token-aware connection/auth initialization using the existing storage module
-- [ ] 2.3 Implement a transport connection-state store with status, timestamps, and last error metadata
+- [x] 2.1 Implement a singleton Socket.IO client configured with `autoConnect: false` and API-origin-based connection setup
+- [x] 2.2 Implement token-aware connection/auth initialization using the existing storage module
+- [x] 2.3 Implement a transport connection-state store with status, timestamps, and last error metadata
 
 ## 3. React Integration
 

@@ -1,6 +1,6 @@
 import { getSocketClient, type SharedSocketClient } from "@/features/socket/client/socket-client"
 
-const useSocket = (): SharedSocketClient | null => {
+const useSocket = (): SharedSocketClient => {
   return getSocketClient()
 }
 

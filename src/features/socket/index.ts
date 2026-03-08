@@ -1,7 +1,8 @@
 export {
-  clearSocketClient,
+  connectSocketClient,
+  disconnectSocketClient,
   getSocketClient,
-  setSocketClient,
+  initializeSocketAuth,
   type SharedSocketClient,
 } from "@/features/socket/client/socket-client"
 export { useSocket } from "@/features/socket/hooks/use-socket"
@@ -14,5 +15,6 @@ export {
   useSocketTransportStore,
   type SocketConnectionStatus,
   type SocketTransportActions,
+  type SocketTransportError,
   type SocketTransportState,
 } from "@/features/socket/stores/use-socket-transport-store"
