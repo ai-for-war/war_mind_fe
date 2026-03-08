@@ -15,6 +15,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { ChatThread } from "@/features/multi-agent/components/chat-thread"
 import { ComposerPanel } from "@/features/multi-agent/components/composer-panel"
+import { useChatLifecycleSubscriptions } from "@/features/multi-agent/hooks/use-chat-lifecycle-subscriptions"
 import { useConversationMessages } from "@/features/multi-agent/hooks/use-conversation-messages"
 import { useSendMessage } from "@/features/multi-agent/hooks/use-send-message"
 import {
@@ -139,14 +140,21 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   const runStatusByConversation = useMultiAgentChatWorkspaceStore(
     (state) => state.runStatusByConversation,
   )
+  const streamingAssistantByConversation = useMultiAgentChatWorkspaceStore(
+    (state) => state.streamingAssistantByConversation,
+  )
   const setComposerDraft = useMultiAgentChatWorkspaceStore((state) => state.setComposerDraft)
   const setRunStatus = useMultiAgentChatWorkspaceStore((state) => state.setRunStatus)
   const setThreadError = useMultiAgentChatWorkspaceStore((state) => state.setThreadError)
+  const threadErrorByConversation = useMultiAgentChatWorkspaceStore(
+    (state) => state.threadErrorByConversation,
+  )
 
   const [freshChatOptimisticMessage, setFreshChatOptimisticMessage] =
     useState<MultiAgentMessageRecord | null>(null)
   const messagesQuery = useConversationMessages(activeConversationId)
   const sendMessageMutation = useSendMessage()
+  useChatLifecycleSubscriptions({ activeConversationId })
 
   const conversationKey = toMultiAgentConversationKey(activeConversationId)
   const draft = composerDraftByConversation[conversationKey] ?? ""
@@ -184,11 +192,15 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
 
       if (!activeConversationId) {
         setFreshChatOptimisticMessage(null)
+        setRunStatus(result.conversation_id, "submitting")
+        setThreadError(result.conversation_id, null)
+        setRunStatus(submitKey, "idle")
+        setThreadError(submitKey, null)
         setActiveConversationId(result.conversation_id)
+      } else {
+        setRunStatus(submitKey, "submitting")
+        setThreadError(submitKey, null)
       }
-
-      setRunStatus(submitKey, "idle")
-      setThreadError(submitKey, null)
     } catch (error) {
       setRunStatus(submitKey, "failed")
       setThreadError(submitKey, resolveErrorMessage(error))
@@ -201,6 +213,10 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
       : freshChatOptimisticMessage
         ? [freshChatOptimisticMessage]
         : []
+  const activeStreamingAssistant = activeConversationId
+    ? streamingAssistantByConversation[activeConversationId] ?? null
+    : null
+  const activeThreadError = threadErrorByConversation[conversationKey] ?? null
 
   return (
     <main className={cn("min-h-[24rem] flex-1", className)}>
@@ -231,6 +247,8 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
               className="min-h-[20rem] flex-1"
               conversationId={activeConversationId ?? MULTI_AGENT_FRESH_CHAT_KEY}
               messages={threadMessages}
+              streamingAssistant={activeStreamingAssistant}
+              threadError={activeThreadError}
             />
           )}
 

@@ -28,10 +28,10 @@
 
 ## 5. Streaming lifecycle integration
 
-- [ ] 5.1 Subscribe to chat Socket.IO lifecycle events with the existing `useSocketSubscription` hook and scope updates by conversation
-- [ ] 5.2 Create and update an ephemeral assistant row for `started` and `token` events so streaming content appears in the active thread immediately
-- [ ] 5.3 Handle `completed` and `failed` events by finalizing local run state, surfacing errors clearly, and reconciling thread content with server truth
-- [ ] 5.4 Refetch or invalidate active conversation history after completion and reconnect paths to prevent local streaming drift
+- [x] 5.1 Subscribe to chat Socket.IO lifecycle events with the existing `useSocketSubscription` hook and scope updates by conversation
+- [x] 5.2 Create and update an ephemeral assistant row for `started` and `token` events so streaming content appears in the active thread immediately
+- [x] 5.3 Handle `completed` and `failed` events by finalizing local run state, surfacing errors clearly, and reconciling thread content with server truth
+- [x] 5.4 Refetch or invalidate active conversation history after completion and reconnect paths to prevent local streaming drift
 
 ## 6. Polish and verification
 

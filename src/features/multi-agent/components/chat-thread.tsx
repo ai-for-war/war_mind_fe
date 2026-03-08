@@ -5,13 +5,18 @@ import {
   ConversationScrollButton,
 } from "@/components/ai/conversation"
 import { Message, MessageContent, MessageResponse } from "@/components/ai/message"
-import type { MultiAgentMessageRecord } from "@/features/multi-agent/types/chat-workspace.types"
+import type {
+  MultiAgentMessageRecord,
+  MultiAgentStreamingAssistantState,
+} from "@/features/multi-agent/types/chat-workspace.types"
 import { cn } from "@/lib/utils"
 
 type ChatThreadProps = {
   className?: string
   conversationId: string
   messages: MultiAgentMessageRecord[]
+  streamingAssistant: MultiAgentStreamingAssistantState | null
+  threadError: string | null
 }
 
 const toMessageAuthor = (role: MultiAgentMessageRecord["role"]): "assistant" | "user" =>
@@ -28,8 +33,16 @@ const byChronologicalOrder = (a: MultiAgentMessageRecord, b: MultiAgentMessageRe
   return aTime - bTime
 }
 
-export const ChatThread = ({ className, conversationId, messages }: ChatThreadProps) => {
+export const ChatThread = ({
+  className,
+  conversationId,
+  messages,
+  streamingAssistant,
+  threadError,
+}: ChatThreadProps) => {
   const orderedMessages = [...messages].sort(byChronologicalOrder)
+  const hasStreamingAssistant = Boolean(streamingAssistant)
+  const hasMessages = orderedMessages.length > 0 || hasStreamingAssistant
 
   return (
     <Conversation
@@ -37,21 +50,42 @@ export const ChatThread = ({ className, conversationId, messages }: ChatThreadPr
       key={conversationId}
     >
       <ConversationContent className="gap-4">
-        {orderedMessages.length === 0 ? (
+        {!hasMessages ? (
           <ConversationEmptyState
             className="min-h-[14rem] items-start justify-center text-left"
             description="Send the first prompt below to start this conversation."
             title="No messages in this conversation yet"
           />
         ) : (
-          orderedMessages.map((message) => (
-            <Message from={toMessageAuthor(message.role)} key={message.id}>
-              <MessageContent>
-                <MessageResponse>{message.content}</MessageResponse>
-              </MessageContent>
-            </Message>
-          ))
+          <>
+            {orderedMessages.map((message) => (
+              <Message from={toMessageAuthor(message.role)} key={message.id}>
+                <MessageContent>
+                  <MessageResponse>{message.content}</MessageResponse>
+                </MessageContent>
+              </Message>
+            ))}
+
+            {streamingAssistant ? (
+              <Message from="assistant" key={`streaming-${conversationId}`}>
+                <MessageContent>
+                  <MessageResponse>
+                    {streamingAssistant.content || "Thinking..."}
+                  </MessageResponse>
+                </MessageContent>
+              </Message>
+            ) : null}
+          </>
         )}
+
+        {threadError ? (
+          <div
+            role="alert"
+            className="rounded-md border border-destructive/40 bg-destructive/10 px-3 py-2 text-destructive text-xs"
+          >
+            {threadError}
+          </div>
+        ) : null}
       </ConversationContent>
       <ConversationScrollButton />
     </Conversation>
