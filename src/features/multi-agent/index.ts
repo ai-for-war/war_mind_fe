@@ -1,4 +1,5 @@
 export { MultiAgentPage } from "@/features/multi-agent/components/multi-agent-page"
+export { ConversationRail } from "@/features/multi-agent/components/conversation-rail"
 export { conversationsApi } from "@/features/multi-agent/api/conversations-api"
 export { useConversations } from "@/features/multi-agent/hooks/use-conversations"
 export { multiAgentQueryKeys } from "@/features/multi-agent/query-keys"

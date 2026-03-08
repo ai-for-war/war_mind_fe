@@ -11,10 +11,10 @@
 
 ## 3. Conversation rail UI
 
-- [ ] 3.1 Implement the feature-scoped conversation rail container as a left-side `aside` on the `Multi-Agent` page
-- [ ] 3.2 Implement the search field, lightweight filter controls, and `New chat` action using reusable `shadcn/ui` primitives
-- [ ] 3.3 Implement the conversation list and conversation row components with selected, default, loading, empty, and error visual states
-- [ ] 3.4 Render compact conversation metadata in each row, including title and recency, with optional preview support when data is available
+- [x] 3.1 Implement the feature-scoped conversation rail container as a left-side `aside` on the `Multi-Agent` page
+- [x] 3.2 Implement the search field, lightweight filter controls, and `New chat` action using reusable `shadcn/ui` primitives
+- [x] 3.3 Implement the conversation list and conversation row components with selected, default, loading, empty, and error visual states
+- [x] 3.4 Render compact conversation metadata in each row, including title and recency, with optional preview support when data is available
 
 ## 4. Interaction and responsive behavior
 
