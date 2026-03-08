@@ -7,10 +7,10 @@
 
 ## 2. Center workspace shell and static states
 
-- [ ] 2.1 Replace the center placeholder in `multi-agent-page.tsx` with a feature-scoped `ChatWorkspace` container that reads the active conversation from the rail store
-- [ ] 2.2 Implement the center workspace empty fresh-chat state with title, description, and suggestion chips for first prompt entry
-- [ ] 2.3 Implement the center workspace loading and error surfaces using `shadcn/ui` primitives such as `Skeleton` and `Alert`
-- [ ] 2.4 Ensure the center workspace remains the primary pane on tablet and mobile while preserving the existing rail sheet behavior
+- [x] 2.1 Replace the center placeholder in `multi-agent-page.tsx` with a feature-scoped `ChatWorkspace` container that reads the active conversation from the rail store
+- [x] 2.2 Implement the center workspace empty fresh-chat state with title, description, and suggestion chips for first prompt entry
+- [x] 2.3 Implement the center workspace loading and error surfaces using `shadcn/ui` primitives such as `Skeleton` and `Alert`
+- [x] 2.4 Ensure the center workspace remains the primary pane on tablet and mobile while preserving the existing rail sheet behavior
 
 ## 3. Thread rendering
 

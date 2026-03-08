@@ -1,6 +1,7 @@
 export { conversationsApi } from "@/features/multi-agent/api/conversations-api"
 export { messagesApi } from "@/features/multi-agent/api/messages-api"
 export { ConversationRail } from "@/features/multi-agent/components/conversation-rail"
+export { ChatWorkspace } from "@/features/multi-agent/components/chat-workspace"
 export { MultiAgentPage } from "@/features/multi-agent/components/multi-agent-page"
 export { useConversationMessages } from "@/features/multi-agent/hooks/use-conversation-messages"
 export { useConversations } from "@/features/multi-agent/hooks/use-conversations"

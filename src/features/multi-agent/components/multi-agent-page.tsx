@@ -2,11 +2,11 @@ import { PanelLeft } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet"
+import { ChatWorkspace } from "@/features/multi-agent/components/chat-workspace"
 import { ConversationRail } from "@/features/multi-agent/components/conversation-rail"
 import { useMultiAgentRailStore } from "@/features/multi-agent/stores/use-multi-agent-rail-store"
 
 export const MultiAgentPage = () => {
-  const activeConversationId = useMultiAgentRailStore((state) => state.activeConversationId)
   const isRailSheetOpen = useMultiAgentRailStore((state) => state.isRailSheetOpen)
   const setRailSheetOpen = useMultiAgentRailStore((state) => state.setRailSheetOpen)
 
@@ -49,13 +49,7 @@ export const MultiAgentPage = () => {
           </SheetContent>
         </Sheet>
 
-        <div className="flex min-h-[24rem] flex-1 items-center justify-center rounded-xl border border-dashed bg-muted/20 p-6">
-          <p className="text-sm text-muted-foreground">
-            {activeConversationId
-              ? `Active conversation: ${activeConversationId}`
-              : "Select a conversation or click New chat to begin."}
-          </p>
-        </div>
+        <ChatWorkspace />
       </div>
     </section>
   )
