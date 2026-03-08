@@ -18,12 +18,12 @@
 
 ## 4. App Wiring
 
-- [ ] 4.1 Integrate `SocketProvider` into the protected application tree without affecting public routes
-- [ ] 4.2 Ensure logout/unmount cleanly disconnects the shared socket and resets transport state
+- [x] 4.1 Integrate `SocketProvider` into the protected application tree without affecting public routes
+- [x] 4.2 Ensure logout/unmount cleanly disconnects the shared socket and resets transport state
 
 ## 5. Verification
 
-- [ ] 5.1 Verify the app creates only one socket connection per authenticated browser tab
-- [ ] 5.2 Verify page reload with a valid token reconnects only after auth hydration completes
-- [ ] 5.3 Verify organization-scoped subscriptions ignore mismatched or missing `organization_id` payloads
-- [ ] 5.4 Verify listener cleanup prevents duplicate handlers across mount/unmount cycles
+- [x] 5.1 Verify the app creates only one socket connection per authenticated browser tab
+- [x] 5.2 Verify page reload with a valid token reconnects only after auth hydration completes
+- [x] 5.3 Verify organization-scoped subscriptions ignore mismatched or missing `organization_id` payloads
+- [x] 5.4 Verify listener cleanup prevents duplicate handlers across mount/unmount cycles
