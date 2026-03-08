@@ -5,9 +5,9 @@
 
 ## 2. Conversation data and state
 
-- [ ] 2.1 Implement the conversation list API client against the existing backend endpoint with support for `search`, `status`, `skip`, and `limit`
-- [ ] 2.2 Implement a React Query hook for fetching conversations with loading, empty, and error state support
-- [ ] 2.3 Implement feature UI state for `activeConversationId`, search draft, selected filter, and responsive sheet open state
+- [x] 2.1 Implement the conversation list API client against the existing backend endpoint with support for `search`, `status`, `skip`, and `limit`
+- [x] 2.2 Implement a React Query hook for fetching conversations with loading, empty, and error state support
+- [x] 2.3 Implement feature UI state for `activeConversationId`, search draft, selected filter, and responsive sheet open state
 
 ## 3. Conversation rail UI
 

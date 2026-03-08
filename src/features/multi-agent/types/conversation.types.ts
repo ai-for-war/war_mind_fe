@@ -11,6 +11,7 @@ export interface ConversationListItem {
   id: string
   title: string
   status: ConversationStatusFilter | string
+  message_count: number
   created_at: string
   updated_at: string
   last_message_at: string | null
@@ -18,7 +19,7 @@ export interface ConversationListItem {
 }
 
 export interface ConversationListResponse {
-  conversations: ConversationListItem[]
+  items: ConversationListItem[]
   total: number
   skip: number
   limit: number
@@ -31,4 +32,8 @@ export interface ConversationRailFilterState {
 
 export interface ConversationSelectionState {
   activeConversationId: string | null
+}
+
+export interface ConversationRailResponsiveState {
+  isRailSheetOpen: boolean
 }
