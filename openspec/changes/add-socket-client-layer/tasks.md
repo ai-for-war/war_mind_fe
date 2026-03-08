@@ -11,10 +11,10 @@
 
 ## 3. React Integration
 
-- [ ] 3.1 Implement `SocketProvider` that mounts only in the authenticated app shell and connects after auth hydration
-- [ ] 3.2 Implement `useSocket()` for low-level shared client access
-- [ ] 3.3 Implement `useSocketSubscription()` with explicit listener registration and cleanup
-- [ ] 3.4 Add optional organization-scoped filtering to the subscription hook using the active organization store
+- [x] 3.1 Implement `SocketProvider` that mounts only in the authenticated app shell and connects after auth hydration
+- [x] 3.2 Implement `useSocket()` for low-level shared client access
+- [x] 3.3 Implement `useSocketSubscription()` with explicit listener registration and cleanup
+- [x] 3.4 Add optional organization-scoped filtering to the subscription hook using the active organization store
 
 ## 4. App Wiring
 
