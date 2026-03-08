@@ -1,2 +1,4 @@
 export { useDebouncedValue } from "@/features/multi-agent/hooks/use-debounced-value"
 export { useConversations } from "@/features/multi-agent/hooks/use-conversations"
+export { useConversationMessages } from "@/features/multi-agent/hooks/use-conversation-messages"
+export { useSendMessage } from "@/features/multi-agent/hooks/use-send-message"

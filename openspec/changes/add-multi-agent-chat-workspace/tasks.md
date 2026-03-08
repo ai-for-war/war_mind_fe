@@ -1,9 +1,9 @@
 ## 1. Data and state foundations
 
-- [ ] 1.1 Add multi-agent message history and send-message API helpers under `src/features/multi-agent/api/`
-- [ ] 1.2 Add React Query hooks for active conversation messages and prompt submission under `src/features/multi-agent/hooks/`
-- [ ] 1.3 Add feature types for message records, socket payloads, thread rows, and run statuses under `src/features/multi-agent/types/`
-- [ ] 1.4 Add a dedicated chat workspace store for composer drafts, ephemeral streaming assistant state, run status, and thread errors without overloading the existing rail store
+- [x] 1.1 Add multi-agent message history and send-message API helpers under `src/features/multi-agent/api/`
+- [x] 1.2 Add React Query hooks for active conversation messages and prompt submission under `src/features/multi-agent/hooks/`
+- [x] 1.3 Add feature types for message records, socket payloads, thread rows, and run statuses under `src/features/multi-agent/types/`
+- [x] 1.4 Add a dedicated chat workspace store for composer drafts, ephemeral streaming assistant state, run status, and thread errors without overloading the existing rail store
 
 ## 2. Center workspace shell and static states
 
