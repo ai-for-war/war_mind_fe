@@ -3,6 +3,7 @@ import { Search } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import type { ConversationStatusFilter } from "@/features/multi-agent/types/conversation.types"
+import { cn } from "@/lib/utils"
 
 type ConversationSearchProps = {
   onNewChat: () => void
@@ -35,7 +36,8 @@ export const ConversationSearch = ({
       <div className="flex items-center gap-2">
         <Button
           type="button"
-          variant={selectedStatus === "active" ? "secondary" : "outline"}
+          variant={selectedStatus === "active" ? "outline" : "secondary"}
+          className={cn("hover:cursor-pointer",selectedStatus === "active" ? "bg-primary/10 text-primary" : "")}
           size="sm"
           onClick={() => onStatusChange("active")}
         >
@@ -43,7 +45,8 @@ export const ConversationSearch = ({
         </Button>
         <Button
           type="button"
-          variant={selectedStatus === "archived" ? "secondary" : "outline"}
+          variant={selectedStatus === "archived" ? "outline" : "secondary"}
+          className={cn("hover:cursor-pointer",selectedStatus === "archived" ? "bg-primary/10 text-primary" : "")}
           size="sm"
           onClick={() => onStatusChange("archived")}
         >
@@ -51,7 +54,7 @@ export const ConversationSearch = ({
         </Button>
       </div>
 
-      <Button type="button" size="sm" onClick={onNewChat}>
+      <Button type="button" size="sm" className="hover:cursor-pointer" onClick={onNewChat}>
         New chat
       </Button>
     </div>
