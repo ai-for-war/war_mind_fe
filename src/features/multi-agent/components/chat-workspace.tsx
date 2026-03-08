@@ -1,4 +1,4 @@
-import { AlertCircle, Loader2, RefreshCw, Sparkles } from "lucide-react"
+import { AlertCircle, RefreshCw, Sparkles } from "lucide-react"
 
 import { ConversationEmptyState } from "@/components/ai/conversation"
 import { Suggestion, Suggestions } from "@/components/ai/suggestion"
@@ -12,6 +12,8 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Textarea } from "@/components/ui/textarea"
+import { ChatThread } from "@/features/multi-agent/components/chat-thread"
 import { useConversationMessages } from "@/features/multi-agent/hooks/use-conversation-messages"
 import { useMultiAgentRailStore } from "@/features/multi-agent/stores/use-multi-agent-rail-store"
 import { useMultiAgentChatWorkspaceStore } from "@/features/multi-agent/stores/use-multi-agent-chat-workspace-store"
@@ -139,15 +141,26 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
           ) : messagesQuery.isError ? (
             <ChatWorkspaceError onRetry={() => void messagesQuery.refetch()} />
           ) : (
-            <div className="rounded-lg border bg-muted/10 p-5">
-              <p className="text-sm font-medium">Conversation ready</p>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Loaded {messagesQuery.messages.length} message
-                {messagesQuery.messages.length === 1 ? "" : "s"} for the active conversation.
-              </p>
-              <div className="mt-4 inline-flex items-center gap-2 rounded-md border px-3 py-2 text-xs text-muted-foreground">
-                <Loader2 className="size-3.5" />
-                Thread rendering and composer submission are implemented in the next tasks.
+            <div className="flex min-h-0 flex-1 flex-col gap-4">
+              <ChatThread
+                className="min-h-[20rem] flex-1"
+                conversationId={activeConversationId}
+                messages={messagesQuery.messages}
+              />
+
+              <div className="rounded-lg border bg-background p-3">
+                <p className="text-xs font-medium text-muted-foreground">Composer</p>
+                <Textarea
+                  className="mt-2 min-h-[5.5rem]"
+                  placeholder="Type your next prompt..."
+                  readOnly
+                  value=""
+                />
+                <div className="mt-2 flex justify-end">
+                  <Button disabled size="sm" type="button">
+                    Send
+                  </Button>
+                </div>
               </div>
             </div>
           )}

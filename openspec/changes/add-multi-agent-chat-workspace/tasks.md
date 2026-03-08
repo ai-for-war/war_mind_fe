@@ -14,10 +14,10 @@
 
 ## 3. Thread rendering
 
-- [ ] 3.1 Implement a `ChatThread` component that renders the selected conversation history using the local AI-style `Conversation` and `Message` primitives
-- [ ] 3.2 Add chronological thread rendering for user and assistant messages with distinct visual treatment
-- [ ] 3.3 Add empty-conversation handling for selected conversations that contain no messages while keeping the composer available
-- [ ] 3.4 Add scroll-to-bottom behavior and prevent stale thread content from appearing when the active conversation changes
+- [x] 3.1 Implement a `ChatThread` component that renders the selected conversation history using the local AI-style `Conversation` and `Message` primitives
+- [x] 3.2 Add chronological thread rendering for user and assistant messages with distinct visual treatment
+- [x] 3.3 Add empty-conversation handling for selected conversations that contain no messages while keeping the composer available
+- [x] 3.4 Add scroll-to-bottom behavior and prevent stale thread content from appearing when the active conversation changes
 
 ## 4. Composer and prompt submission flow
 
