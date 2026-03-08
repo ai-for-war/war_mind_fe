@@ -1,4 +1,5 @@
 import { AlertCircle, RefreshCw, Sparkles } from "lucide-react"
+import { useState } from "react"
 
 import { ConversationEmptyState } from "@/components/ai/conversation"
 import { Suggestion, Suggestions } from "@/components/ai/suggestion"
@@ -12,11 +13,20 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { Textarea } from "@/components/ui/textarea"
 import { ChatThread } from "@/features/multi-agent/components/chat-thread"
+import { ComposerPanel } from "@/features/multi-agent/components/composer-panel"
 import { useConversationMessages } from "@/features/multi-agent/hooks/use-conversation-messages"
+import { useSendMessage } from "@/features/multi-agent/hooks/use-send-message"
+import {
+  MULTI_AGENT_FRESH_CHAT_KEY,
+  toMultiAgentConversationKey,
+  useMultiAgentChatWorkspaceStore,
+} from "@/features/multi-agent/stores/use-multi-agent-chat-workspace-store"
 import { useMultiAgentRailStore } from "@/features/multi-agent/stores/use-multi-agent-rail-store"
-import { useMultiAgentChatWorkspaceStore } from "@/features/multi-agent/stores/use-multi-agent-chat-workspace-store"
+import type {
+  MultiAgentMessageRecord,
+  MultiAgentRunStatus,
+} from "@/features/multi-agent/types/chat-workspace.types"
 import { cn } from "@/lib/utils"
 
 const FRESH_CHAT_SUGGESTIONS = [
@@ -100,19 +110,97 @@ const FreshChatState = ({ onSuggestionClick }: FreshChatStateProps) => (
   </ConversationEmptyState>
 )
 
+const resolveErrorMessage = (error: unknown): string => {
+  if (error instanceof Error && error.message.trim().length > 0) {
+    return error.message
+  }
+
+  return "Failed to submit prompt. Please try again."
+}
+
+const createOptimisticFreshMessage = (content: string): MultiAgentMessageRecord => ({
+  attachments: null,
+  content,
+  conversation_id: MULTI_AGENT_FRESH_CHAT_KEY,
+  created_at: new Date().toISOString(),
+  id: `optimistic-fresh-${Date.now()}`,
+  is_complete: true,
+  metadata: { optimistic: true },
+  role: "user",
+})
+
 export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   const activeConversationId = useMultiAgentRailStore((state) => state.activeConversationId)
-  const setComposerDraft = useMultiAgentChatWorkspaceStore((state) => state.setComposerDraft)
+  const setActiveConversationId = useMultiAgentRailStore((state) => state.setActiveConversationId)
+  const clearComposerDraft = useMultiAgentChatWorkspaceStore((state) => state.clearComposerDraft)
+  const composerDraftByConversation = useMultiAgentChatWorkspaceStore(
+    (state) => state.composerDraftByConversation,
+  )
   const runStatusByConversation = useMultiAgentChatWorkspaceStore(
     (state) => state.runStatusByConversation,
   )
-  const messagesQuery = useConversationMessages(activeConversationId)
+  const setComposerDraft = useMultiAgentChatWorkspaceStore((state) => state.setComposerDraft)
+  const setRunStatus = useMultiAgentChatWorkspaceStore((state) => state.setRunStatus)
+  const setThreadError = useMultiAgentChatWorkspaceStore((state) => state.setThreadError)
 
-  const runStatus = activeConversationId ? runStatusByConversation[activeConversationId] : "idle"
+  const [freshChatOptimisticMessage, setFreshChatOptimisticMessage] =
+    useState<MultiAgentMessageRecord | null>(null)
+  const messagesQuery = useConversationMessages(activeConversationId)
+  const sendMessageMutation = useSendMessage()
+
+  const conversationKey = toMultiAgentConversationKey(activeConversationId)
+  const draft = composerDraftByConversation[conversationKey] ?? ""
+  const runStatus = (runStatusByConversation[conversationKey] ?? "idle") satisfies MultiAgentRunStatus
+  const isSubmitting = runStatus === "submitting"
+
+  const badgeLabel =
+    activeConversationId || runStatus !== "idle" ? `Run: ${runStatus}` : "Fresh chat"
 
   const handleSuggestionClick = (value: string) => {
     setComposerDraft(null, value)
   }
+
+  const handleSubmitPrompt = async (inputText: string) => {
+    const prompt = inputText.trim()
+    if (prompt.length === 0) {
+      return
+    }
+
+    const submitKey = conversationKey
+    setRunStatus(submitKey, "submitting")
+    setThreadError(submitKey, null)
+
+    if (!activeConversationId) {
+      setFreshChatOptimisticMessage(createOptimisticFreshMessage(prompt))
+    }
+
+    try {
+      const result = await sendMessageMutation.mutateAsync({
+        content: prompt,
+        conversation_id: activeConversationId,
+      })
+
+      clearComposerDraft(activeConversationId)
+
+      if (!activeConversationId) {
+        setFreshChatOptimisticMessage(null)
+        setActiveConversationId(result.conversation_id)
+      }
+
+      setRunStatus(submitKey, "idle")
+      setThreadError(submitKey, null)
+    } catch (error) {
+      setRunStatus(submitKey, "failed")
+      setThreadError(submitKey, resolveErrorMessage(error))
+    }
+  }
+
+  const threadMessages =
+    activeConversationId && !messagesQuery.isError
+      ? messagesQuery.messages
+      : freshChatOptimisticMessage
+        ? [freshChatOptimisticMessage]
+        : []
 
   return (
     <main className={cn("min-h-[24rem] flex-1", className)}>
@@ -127,43 +215,31 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
                   : "No active conversation selected. Start a fresh chat from here."}
               </CardDescription>
             </div>
-            <Badge variant="secondary">
-              {activeConversationId ? `Run: ${runStatus ?? "idle"}` : "Fresh chat"}
-            </Badge>
+            <Badge variant="secondary">{badgeLabel}</Badge>
           </div>
         </CardHeader>
 
-        <CardContent className="flex min-h-0 flex-1 flex-col py-6">
-          {!activeConversationId ? (
+        <CardContent className="flex min-h-0 flex-1 flex-col gap-4 py-6">
+          {!activeConversationId && !freshChatOptimisticMessage ? (
             <FreshChatState onSuggestionClick={handleSuggestionClick} />
-          ) : messagesQuery.isPending ? (
+          ) : activeConversationId && messagesQuery.isPending ? (
             <ChatWorkspaceLoading />
-          ) : messagesQuery.isError ? (
+          ) : activeConversationId && messagesQuery.isError ? (
             <ChatWorkspaceError onRetry={() => void messagesQuery.refetch()} />
           ) : (
-            <div className="flex min-h-0 flex-1 flex-col gap-4">
-              <ChatThread
-                className="min-h-[20rem] flex-1"
-                conversationId={activeConversationId}
-                messages={messagesQuery.messages}
-              />
-
-              <div className="rounded-lg border bg-background p-3">
-                <p className="text-xs font-medium text-muted-foreground">Composer</p>
-                <Textarea
-                  className="mt-2 min-h-[5.5rem]"
-                  placeholder="Type your next prompt..."
-                  readOnly
-                  value=""
-                />
-                <div className="mt-2 flex justify-end">
-                  <Button disabled size="sm" type="button">
-                    Send
-                  </Button>
-                </div>
-              </div>
-            </div>
+            <ChatThread
+              className="min-h-[20rem] flex-1"
+              conversationId={activeConversationId ?? MULTI_AGENT_FRESH_CHAT_KEY}
+              messages={threadMessages}
+            />
           )}
+
+          <ComposerPanel
+            draft={draft}
+            isSubmitting={isSubmitting}
+            onDraftChange={(value) => setComposerDraft(activeConversationId, value)}
+            onSubmit={(text) => void handleSubmitPrompt(text)}
+          />
         </CardContent>
       </Card>
     </main>

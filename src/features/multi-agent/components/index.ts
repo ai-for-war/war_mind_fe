@@ -2,3 +2,4 @@ export { MultiAgentPage } from "@/features/multi-agent/components/multi-agent-pa
 export { ConversationRail } from "@/features/multi-agent/components/conversation-rail"
 export { ChatWorkspace } from "@/features/multi-agent/components/chat-workspace"
 export { ChatThread } from "@/features/multi-agent/components/chat-thread"
+export { ComposerPanel } from "@/features/multi-agent/components/composer-panel"

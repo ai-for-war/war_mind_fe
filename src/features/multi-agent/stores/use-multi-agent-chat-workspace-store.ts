@@ -1,14 +1,14 @@
 import { create } from "zustand"
 
-import type {
-  MultiAgentRunStatus,
-  MultiAgentStreamingAssistantState,
-} from "@/features/multi-agent/types/chat-workspace.types"
+import type { MultiAgentRunStatus, MultiAgentStreamingAssistantState } from "@/features/multi-agent/types/chat-workspace.types"
 
-const FRESH_CHAT_KEY = "__fresh_chat__"
+export const MULTI_AGENT_FRESH_CHAT_KEY = "__fresh_chat__"
+
+export const toMultiAgentConversationKey = (conversationId: string | null): string =>
+  conversationId && conversationId.length > 0 ? conversationId : MULTI_AGENT_FRESH_CHAT_KEY
 
 const toConversationKey = (conversationId: string | null): string =>
-  conversationId && conversationId.length > 0 ? conversationId : FRESH_CHAT_KEY
+  toMultiAgentConversationKey(conversationId)
 
 const omitKey = <TValue>(source: Record<string, TValue>, key: string): Record<string, TValue> => {
   const next = { ...source }

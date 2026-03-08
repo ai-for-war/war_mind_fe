@@ -21,10 +21,10 @@
 
 ## 4. Composer and prompt submission flow
 
-- [ ] 4.1 Implement a `ComposerPanel` with multiline input, submit button, and validation that blocks empty or whitespace-only prompts
-- [ ] 4.2 Support prompt submission from both fresh-chat and existing-conversation states using the existing chat send endpoint
-- [ ] 4.3 Add optimistic user-message handling and visible submission progress in the center workspace
-- [ ] 4.4 Reset the center workspace correctly after `New chat` while keeping the composer immediately usable
+- [x] 4.1 Implement a `ComposerPanel` with multiline input, submit button, and validation that blocks empty or whitespace-only prompts
+- [x] 4.2 Support prompt submission from both fresh-chat and existing-conversation states using the existing chat send endpoint
+- [x] 4.3 Add optimistic user-message handling and visible submission progress in the center workspace
+- [x] 4.4 Reset the center workspace correctly after `New chat` while keeping the composer immediately usable
 
 ## 5. Streaming lifecycle integration
 
