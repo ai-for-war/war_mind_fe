@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from "react";
 
 import {
   PromptInput,
@@ -7,16 +7,16 @@ import {
   PromptInputSubmit,
   PromptInputTextarea,
   PromptInputTools,
-} from "@/components/ai/prompt-input"
-import { cn } from "@/lib/utils"
+} from "@/components/ai/prompt-input";
+import { cn } from "@/lib/utils";
 
 type ComposerPanelProps = {
-  className?: string
-  draft: string
-  isSubmitting: boolean
-  onDraftChange: (value: string) => void
-  onSubmit: (text: string) => void
-}
+  className?: string;
+  draft: string;
+  isSubmitting: boolean;
+  onDraftChange: (value: string) => void;
+  onSubmit: (text: string) => void;
+};
 
 export const ComposerPanel = ({
   className,
@@ -25,25 +25,25 @@ export const ComposerPanel = ({
   onDraftChange,
   onSubmit,
 }: ComposerPanelProps) => {
-  const [validationError, setValidationError] = useState<string | null>(null)
+  const [validationError, setValidationError] = useState<string | null>(null);
 
   const handleSubmit = () => {
-    const normalizedPrompt = draft.trim()
+    const normalizedPrompt = draft.trim();
     if (normalizedPrompt.length === 0) {
-      setValidationError("Prompt cannot be empty.")
-      return
+      setValidationError("Prompt cannot be empty.");
+      return;
     }
 
-    setValidationError(null)
-    onSubmit(normalizedPrompt)
-  }
+    setValidationError(null);
+    onSubmit(normalizedPrompt);
+  };
 
   return (
     <div className={cn("shrink-0", className)}>
       <PromptInput
         className="mt-0"
         onSubmit={() => {
-          handleSubmit()
+          handleSubmit();
         }}
       >
         <PromptInputBody>
@@ -52,9 +52,9 @@ export const ComposerPanel = ({
             disabled={isSubmitting}
             onChange={(event) => {
               if (validationError) {
-                setValidationError(null)
+                setValidationError(null);
               }
-              onDraftChange(event.target.value)
+              onDraftChange(event.target.value);
             }}
             placeholder="Type your next prompt..."
             value={draft}
@@ -63,17 +63,20 @@ export const ComposerPanel = ({
 
         <PromptInputFooter className="mt-1">
           <PromptInputTools />
-          <PromptInputSubmit disabled={isSubmitting} status={isSubmitting ? "submitted" : "ready"} />
+          <PromptInputSubmit
+            disabled={isSubmitting}
+            status={isSubmitting ? "submitted" : "ready"}
+          />
         </PromptInputFooter>
       </PromptInput>
 
-      <div className="mt-1 min-h-4 px-1">
-        {validationError ? (
+      {validationError ? (
+        <div className="mt-1 min-h-4 px-1">
           <p role="alert" className="text-xs text-destructive">
             {validationError}
           </p>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
     </div>
-  )
-}
+  );
+};

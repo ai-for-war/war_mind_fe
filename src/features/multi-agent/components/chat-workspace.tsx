@@ -224,8 +224,8 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
 
   return (
     <main className={cn("flex min-h-0 flex-1", className)}>
-      <Card className="flex h-[calc(100dvh-6rem)]  min-h-[34rem] w-full max-h-[calc(100dvh-6rem)] flex-col gap-0 overflow-hidden">
-        <CardHeader className="border-b">
+      <Card className="flex h-[calc(100dvh-6rem)]  min-h-[34rem] w-full max-h-[calc(100dvh-6rem)] flex-col gap-0 overflow-hidden pb-0">
+        <CardHeader className="mb-2">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="space-y-1">
               <CardTitle>Chat Workspace</CardTitle>
@@ -241,7 +241,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
           </div>
         </CardHeader>
 
-        <CardContent className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden py-2">
+        <CardContent className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden px-0">
           {!activeConversationId && !freshChatOptimisticMessage ? (
             <FreshChatState onSuggestionClick={handleSuggestionClick} />
           ) : activeConversationId && messagesQuery.isPending ? (
@@ -259,7 +259,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
           )}
 
           <ComposerPanel
-            className="mt-1"
+            // className="mt-1"
             draft={draft}
             isSubmitting={isSubmitting}
             onDraftChange={(value) => setComposerDraft(activeConversationId, value)}
