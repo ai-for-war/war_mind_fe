@@ -29,6 +29,7 @@ import type {
   MultiAgentRunStatus,
 } from "@/features/multi-agent/types/chat-workspace.types"
 import { cn } from "@/lib/utils"
+import { getBadgeColor } from "@/common/badgeColor"
 
 const FRESH_CHAT_SUGGESTIONS = [
   "Summarize recent updates in this project",
@@ -163,7 +164,9 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   const isSubmitting = runStatus === "submitting"
 
   const badgeLabel =
-    activeConversationId || runStatus !== "idle" ? `Run: ${runStatus}` : "Fresh chat"
+    activeConversationId || runStatus !== "idle" ? `${runStatus}` : "Fresh chat"
+
+
 
   const handleSuggestionClick = (value: string) => {
     setComposerDraft(null, value)
@@ -232,7 +235,9 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
                   : "No active conversation selected. Start a fresh chat from here."}
               </CardDescription>
             </div>
-            <Badge variant="secondary">{badgeLabel}</Badge>
+            <Badge className={cn("font-mono", getBadgeColor(badgeLabel))} variant="default">
+              {badgeLabel}
+            </Badge>
           </div>
         </CardHeader>
 
