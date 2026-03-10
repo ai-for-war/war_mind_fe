@@ -62,12 +62,12 @@
 
 ## 8. Realtime lifecycle synchronization
 
-- [ ] 8.1 Implement a text-to-image lifecycle subscription hook using the existing socket subscription layer
-- [ ] 8.2 Handle `created` events by reconciling the current history page so newly created jobs appear promptly
-- [ ] 8.3 Handle `processing` events by updating or invalidating the selected detail and visible history entries
-- [ ] 8.4 Handle `succeeded` events by updating or invalidating selected detail so returned `output_images` can render in the preview panel
-- [ ] 8.5 Handle `failed` and `cancelled` events by reconciling visible history and selected detail state
-- [ ] 8.6 Invalidate selected detail and current history data on socket reconnect so REST truth is restored after missed events
+- [x] 8.1 Implement a text-to-image lifecycle subscription hook using the existing socket subscription layer
+- [x] 8.2 Handle `created` events by reconciling the current history page so newly created jobs appear promptly
+- [x] 8.3 Handle `processing` events by updating or invalidating the selected detail and visible history entries
+- [x] 8.4 Handle `succeeded` events by updating or invalidating selected detail so returned `output_images` can render in the preview panel
+- [x] 8.5 Handle `failed` and `cancelled` events by reconciling visible history and selected detail state
+- [x] 8.6 Invalidate selected detail and current history data on socket reconnect so REST truth is restored after missed events
 
 ## 9. Responsive and visual polish
 

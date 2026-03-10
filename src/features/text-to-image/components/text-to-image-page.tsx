@@ -3,7 +3,10 @@ import { useMemo, useState } from "react"
 import { TextToImageComposeForm } from "@/features/text-to-image/components/text-to-image-compose-form"
 import { TextToImageHistoryList } from "@/features/text-to-image/components/text-to-image-history-list"
 import { TextToImagePreviewPanel } from "@/features/text-to-image/components/text-to-image-preview-panel"
-import { useImageGenerationHistory } from "@/features/text-to-image/hooks"
+import {
+  useImageGenerationHistory,
+  useImageGenerationLifecycleSubscriptions,
+} from "@/features/text-to-image/hooks"
 import type { CreateTextToImageJobRequest, TextToImageGenerationJobRecord } from "@/features/text-to-image/types"
 
 export const TextToImagePage = () => {
@@ -33,6 +36,10 @@ export const TextToImagePage = () => {
   }, [historyQuery.data?.items])
 
   const activeSelectedJobId = selectedJobId ?? newestHistoryItemId
+
+  useImageGenerationLifecycleSubscriptions({
+    selectedJobId: activeSelectedJobId,
+  })
 
   const handleGenerateAgain = (job: TextToImageGenerationJobRecord): void => {
     setComposeInitialValues({
