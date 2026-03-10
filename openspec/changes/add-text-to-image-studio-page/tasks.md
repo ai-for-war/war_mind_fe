@@ -27,12 +27,12 @@
 
 ## 4. History rail
 
-- [ ] 4.1 Implement `TextToImageHistoryList` to fetch the current member's generation history with newest-first ordering
-- [ ] 4.2 Implement `TextToImageHistoryItem` to render prompt excerpt, aspect ratio, requested time, and status in a compact rail card
-- [ ] 4.3 Add status filter controls for `All`, `In progress`, `Succeeded`, `Failed`, and `Cancelled`
-- [ ] 4.4 Add empty, loading, and error states for the history rail
-- [ ] 4.5 Add pagination or `Load more` behavior for additional history items, using shadcn `pagination` if it improves the final rail UX over a simpler button
-- [ ] 4.6 Add selected-item highlighting and click handling so the rail controls the active preview selection
+- [x] 4.1 Implement `TextToImageHistoryList` to fetch the current member's generation history with newest-first ordering
+- [x] 4.2 Implement `TextToImageHistoryItem` to render prompt excerpt, aspect ratio, requested time, and status in a compact rail card
+- [x] 4.3 Add status filter controls for `All`, `In progress`, `Succeeded`, `Failed`, and `Cancelled`
+- [x] 4.4 Add empty, loading, and error states for the history rail
+- [x] 4.5 Add pagination or `Load more` behavior for additional history items, using shadcn `pagination` if it improves the final rail UX over a simpler button
+- [x] 4.6 Add selected-item highlighting and click handling so the rail controls the active preview selection
 
 ## 5. Preview and detail panel
 

@@ -1,5 +1,7 @@
 export { textToImageApi } from "@/features/text-to-image/api/text-to-image-api"
 export { TextToImageComposeForm } from "@/features/text-to-image/components/text-to-image-compose-form"
+export { TextToImageHistoryItem } from "@/features/text-to-image/components/text-to-image-history-item"
+export { TextToImageHistoryList } from "@/features/text-to-image/components/text-to-image-history-list"
 export { TextToImagePage } from "@/features/text-to-image/components/text-to-image-page"
 export {
   useCancelImageGenerationJob,

@@ -1,9 +1,10 @@
 import { useState } from "react"
 
 import { TextToImageComposeForm } from "@/features/text-to-image/components/text-to-image-compose-form"
+import { TextToImageHistoryList } from "@/features/text-to-image/components/text-to-image-history-list"
 
 export const TextToImagePage = () => {
-  const [latestCreatedJobId, setLatestCreatedJobId] = useState<string | null>(null)
+  const [selectedJobId, setSelectedJobId] = useState<string | null>(null)
 
   return (
     <section className="space-y-6">
@@ -14,13 +15,12 @@ export const TextToImagePage = () => {
         </p>
       </div>
 
-      <div className="max-w-xl space-y-3">
-        <TextToImageComposeForm onCreated={setLatestCreatedJobId} />
-        {latestCreatedJobId ? (
-          <p className="text-xs text-muted-foreground">
-            Latest job created: <span className="font-mono">{latestCreatedJobId}</span>
-          </p>
-        ) : null}
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,420px)_minmax(0,360px)]">
+        <TextToImageComposeForm onCreated={setSelectedJobId} />
+        <TextToImageHistoryList
+          selectedJobId={selectedJobId}
+          onSelectJob={setSelectedJobId}
+        />
       </div>
     </section>
   )
