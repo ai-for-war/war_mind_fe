@@ -55,10 +55,10 @@
 
 ## 7. Cancellation and prompt reuse flows
 
-- [ ] 7.1 Wire the preview panel cancel action to the cancel-job mutation for `pending` jobs only
-- [ ] 7.2 Remove or disable cancel affordances for `processing`, `succeeded`, `failed`, and `cancelled` states
-- [ ] 7.3 Handle cancel conflicts by refetching the selected job and reflecting that it is no longer cancellable
-- [ ] 7.4 Implement `Generate again` so it repopulates the compose form from the selected job's prompt and settings rather than implying backend retry semantics
+- [x] 7.1 Wire the preview panel cancel action to the cancel-job mutation for `pending` jobs only
+- [x] 7.2 Remove or disable cancel affordances for `processing`, `succeeded`, `failed`, and `cancelled` states
+- [x] 7.3 Handle cancel conflicts by refetching the selected job and reflecting that it is no longer cancellable
+- [x] 7.4 Implement `Generate again` so it repopulates the compose form from the selected job's prompt and settings rather than implying backend retry semantics
 
 ## 8. Realtime lifecycle synchronization
 

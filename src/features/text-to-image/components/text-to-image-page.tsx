@@ -4,8 +4,13 @@ import { TextToImageComposeForm } from "@/features/text-to-image/components/text
 import { TextToImageHistoryList } from "@/features/text-to-image/components/text-to-image-history-list"
 import { TextToImagePreviewPanel } from "@/features/text-to-image/components/text-to-image-preview-panel"
 import { useImageGenerationHistory } from "@/features/text-to-image/hooks"
+import type { CreateTextToImageJobRequest, TextToImageGenerationJobRecord } from "@/features/text-to-image/types"
 
 export const TextToImagePage = () => {
+  const [composeInitialValues, setComposeInitialValues] = useState<
+    Partial<CreateTextToImageJobRequest> | undefined
+  >(undefined)
+  const [composeResetKey, setComposeResetKey] = useState(0)
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null)
   const historyQuery = useImageGenerationHistory({
     limit: 20,
@@ -29,6 +34,16 @@ export const TextToImagePage = () => {
 
   const activeSelectedJobId = selectedJobId ?? newestHistoryItemId
 
+  const handleGenerateAgain = (job: TextToImageGenerationJobRecord): void => {
+    setComposeInitialValues({
+      aspect_ratio: job.aspect_ratio,
+      prompt: job.prompt,
+      prompt_optimizer: job.prompt_optimizer,
+      seed: job.seed ?? undefined,
+    })
+    setComposeResetKey((previous) => previous + 1)
+  }
+
   return (
     <section className="space-y-6">
       <div className="space-y-1">
@@ -39,8 +54,15 @@ export const TextToImagePage = () => {
       </div>
 
       <div className="grid gap-4 xl:grid-cols-[minmax(0,360px)_minmax(0,1fr)_minmax(0,340px)]">
-        <TextToImageComposeForm onCreated={setSelectedJobId} />
-        <TextToImagePreviewPanel selectedJobId={activeSelectedJobId} />
+        <TextToImageComposeForm
+          key={composeResetKey}
+          initialValues={composeInitialValues}
+          onCreated={setSelectedJobId}
+        />
+        <TextToImagePreviewPanel
+          selectedJobId={activeSelectedJobId}
+          onGenerateAgain={handleGenerateAgain}
+        />
         <TextToImageHistoryList
           selectedJobId={activeSelectedJobId}
           onSelectJob={setSelectedJobId}

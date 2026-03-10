@@ -10,12 +10,13 @@ import {
   RefreshCw,
   XCircle,
 } from "lucide-react"
+import { isAxiosError } from "axios"
 import { useMemo, useState } from "react"
 
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { useImageGenerationDetail } from "@/features/text-to-image/hooks"
+import { useCancelImageGenerationJob, useImageGenerationDetail } from "@/features/text-to-image/hooks"
 import { cn } from "@/lib/utils"
 
 import type { TextToImageGenerationJobRecord } from "@/features/text-to-image/types"
@@ -58,6 +59,7 @@ export const TextToImagePreviewPanel = ({
 }: TextToImagePreviewPanelProps) => {
   const [isCopyingPrompt, setIsCopyingPrompt] = useState(false)
   const detailQuery = useImageGenerationDetail(selectedJobId)
+  const cancelMutation = useCancelImageGenerationJob()
   const detail = detailQuery.data
   const job = detail?.job
   const outputImage = detail?.output_images[0]
@@ -89,6 +91,46 @@ export const TextToImagePreviewPanel = ({
     }
 
     onGenerateAgain?.(job)
+  }
+
+  const getCancelErrorMessage = (): string => {
+    if (!cancelMutation.error) {
+      return ""
+    }
+
+    if (isAxiosError(cancelMutation.error)) {
+      const responseMessage = cancelMutation.error.response?.data
+      if (typeof responseMessage === "string" && responseMessage.trim().length > 0) {
+        return responseMessage
+      }
+
+      if (
+        responseMessage &&
+        typeof responseMessage === "object" &&
+        "detail" in responseMessage &&
+        typeof responseMessage.detail === "string"
+      ) {
+        return responseMessage.detail
+      }
+    }
+
+    if (cancelMutation.error instanceof Error && cancelMutation.error.message.trim().length > 0) {
+      return cancelMutation.error.message
+    }
+
+    return "This job may already be processing and can no longer be cancelled."
+  }
+
+  const handleCancelJob = async (): Promise<void> => {
+    if (!job || job.status !== "pending") {
+      return
+    }
+
+    try {
+      await cancelMutation.mutateAsync(job.id)
+    } catch {
+      await detailQuery.refetch()
+    }
   }
 
   if (!selectedJobId) {
@@ -259,9 +301,29 @@ export const TextToImagePreviewPanel = ({
         </div>
 
         {isPending ? (
-          <Button type="button" variant="outline" className="w-full">
-            Cancel job
-          </Button>
+          <div className="space-y-2">
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => void handleCancelJob()}
+              disabled={cancelMutation.isPending}
+            >
+              {cancelMutation.isPending ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  Cancelling...
+                </>
+              ) : (
+                "Cancel job"
+              )}
+            </Button>
+            {cancelMutation.error ? (
+              <p role="alert" className="text-sm text-destructive">
+                {getCancelErrorMessage()}
+              </p>
+            ) : null}
+          </div>
         ) : null}
 
         {(isFailed || isCancelled) && !isPending ? (

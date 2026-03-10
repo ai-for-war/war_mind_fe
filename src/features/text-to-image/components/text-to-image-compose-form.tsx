@@ -25,6 +25,7 @@ import {
 } from "@/features/text-to-image/types"
 
 interface TextToImageComposeFormProps {
+  initialValues?: Partial<CreateTextToImageJobRequest>
   onCreated?: (jobId: string) => void
 }
 
@@ -40,6 +41,7 @@ const getCreateErrorMessage = (error: unknown): string => {
 }
 
 export const TextToImageComposeForm = ({
+  initialValues,
   onCreated,
 }: TextToImageComposeFormProps) => {
   const [isAdvancedOpen, setIsAdvancedOpen] = useState(false)
@@ -48,10 +50,10 @@ export const TextToImageComposeForm = ({
   const form = useForm<TextToImageFormInput, undefined, TextToImageFormOutput>({
     resolver: zodResolver(textToImageSchema),
     defaultValues: {
-      aspect_ratio: "1:1",
-      prompt: "",
-      prompt_optimizer: false,
-      seed: undefined,
+      aspect_ratio: initialValues?.aspect_ratio ?? "1:1",
+      prompt: initialValues?.prompt ?? "",
+      prompt_optimizer: initialValues?.prompt_optimizer ?? false,
+      seed: initialValues?.seed,
     },
   })
 
