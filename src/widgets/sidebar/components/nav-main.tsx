@@ -1,5 +1,5 @@
-import { Bot, Mic } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Bot, ImagePlus, Mic } from "lucide-react"
+import { Link, useLocation } from "react-router-dom"
 
 import {
   SidebarGroup,
@@ -9,12 +9,11 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar";
+} from "@/components/ui/sidebar"
 
 const navItems = [
   {
     title: "Agents",
-    url: "/multi-agent",
     items: [
       {
         title: "Multi-Agent",
@@ -25,64 +24,54 @@ const navItems = [
   },
   {
     title: "Confidential report",
-    url: "/voice-cloning",
     items: [
       {
         title: "Voice Cloning",
         url: "/voice-cloning",
         icon: Mic,
       },
+      {
+        title: "Text to Image",
+        url: "/text-to-image",
+        icon: ImagePlus,
+      },
     ],
   },
-
-];
+]
 
 export const NavMain = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const location = useLocation()
 
   return (
     <SidebarGroup>
-    <SidebarMenu>
-      {navItems.map((item) => (
-        <SidebarMenuItem key={item.title}>
-          <SidebarMenuButton asChild>
-            <div onClick={() => navigate(item.url)} className="cursor-pointer font-medium">
-              {item.title}
-            </div>
-          </SidebarMenuButton>
-          {item.items?.length ? (
-            <SidebarMenuSub>
-              {item.items.map((item) => (
-                <SidebarMenuSubItem key={item.title}>
-                  <SidebarMenuSubButton asChild isActive={location.pathname === item.url}>
-                    <div onClick={() => navigate(item.url)} className="cursor-pointer font-medium">{item.title}</div>
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-              ))}
-            </SidebarMenuSub>
-          ) : null}
-        </SidebarMenuItem>
-      ))}
-    </SidebarMenu>
-  </SidebarGroup>
+      <SidebarMenu>
+        {navItems.map((item) => {
+          return (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton asChild>
+                <div className="font-medium">{item.title}</div>
+              </SidebarMenuButton>
+              <SidebarMenuSub>
+                {item.items.map((subItem) => {
+                  const isActive = location.pathname === subItem.url
+                  const Icon = subItem.icon
 
-    // <SidebarMenu>
-    //   {navItems.map((item) => {
-    //     const isActive = location.pathname === item.url
-    //     const Icon = item.icon
-
-    //     return (
-    //       <SidebarMenuItem key={item.url}>
-    //         <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>
-    //           <Link to={item.url}>
-    //             <Icon />
-    //             <span>{item.title}</span>
-    //           </Link>
-    //         </SidebarMenuButton>
-    //       </SidebarMenuItem>
-    //     )
-    //   })}
-    // </SidebarMenu>
-  );
-};
+                  return (
+                    <SidebarMenuSubItem key={subItem.url}>
+                      <SidebarMenuSubButton asChild isActive={isActive}>
+                        <Link to={subItem.url}>
+                          <Icon />
+                          <span>{subItem.title}</span>
+                        </Link>
+                      </SidebarMenuSubButton>
+                    </SidebarMenuSubItem>
+                  )
+                })}
+              </SidebarMenuSub>
+            </SidebarMenuItem>
+          )
+        })}
+      </SidebarMenu>
+    </SidebarGroup>
+  )
+}

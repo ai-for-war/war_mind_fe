@@ -1,11 +1,11 @@
 ## 1. Routing and feature scaffolding
 
-- [ ] 1.1 Add the `Text to Image` route to the authenticated app router and point it to a new `TextToImagePage` entry component
-- [ ] 1.2 Update sidebar navigation configuration to include the `Text to Image` item with the `/text-to-image` path and a suitable Lucide icon
-- [ ] 1.3 Install the missing shadcn/ui primitives needed for the page, specifically `switch`, `toggle-group`, `aspect-ratio`, and `pagination` if the final history UX uses first-party pagination controls
-- [ ] 1.4 Verify which required shadcn/ui primitives are already present in `src/components/ui/` and plan to reuse them instead of creating custom equivalents
-- [ ] 1.5 Create the `src/features/text-to-image/` feature slice structure for `components`, `hooks`, `schemas`, `types`, and query-key utilities
-- [ ] 1.6 Add feature barrel exports or import paths needed for the new page to integrate cleanly with the existing app structure
+- [x] 1.1 Add the `Text to Image` route to the authenticated app router and point it to a new `TextToImagePage` entry component
+- [x] 1.2 Update sidebar navigation configuration to include the `Text to Image` item with the `/text-to-image` path and a suitable Lucide icon
+- [x] 1.3 Install the missing shadcn/ui primitives needed for the page, specifically `switch`, `toggle-group`, `aspect-ratio`, and `pagination` if the final history UX uses first-party pagination controls
+- [x] 1.4 Verify which required shadcn/ui primitives are already present in `src/components/ui/` and plan to reuse them instead of creating custom equivalents
+- [x] 1.5 Create the `src/features/text-to-image/` feature slice structure for `components`, `hooks`, `schemas`, `types`, and query-key utilities
+- [x] 1.6 Add feature barrel exports or import paths needed for the new page to integrate cleanly with the existing app structure
 
 ## 2. Types, schemas, and query primitives
 
