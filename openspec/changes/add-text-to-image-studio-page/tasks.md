@@ -36,14 +36,14 @@
 
 ## 5. Preview and detail panel
 
-- [ ] 5.1 Implement `TextToImagePreviewPanel` as a selected-job surface driven by the job detail query
-- [ ] 5.2 Add the empty-state presentation shown when no jobs exist or nothing is selected
-- [ ] 5.3 Add the `pending` state with queued copy, an `aspect-ratio`-backed placeholder stage, and a visible cancel action
-- [ ] 5.4 Add the `processing` state with a non-percentage loading treatment and no cancel affordance
-- [ ] 5.5 Add the `succeeded` state that renders the returned `output_images` signed URL in a stable ratio-aware frame and shows image-focused metadata
-- [ ] 5.6 Add the `failed` state that surfaces the persisted failure message and supports prompt reuse for a new generation
-- [ ] 5.7 Add the `cancelled` state that explains the job ended before processing started and supports prompt reuse
-- [ ] 5.8 Add post-success actions such as `Open full size`, `Download`, `Copy prompt`, and `Generate again` while preserving the generation-history mental model
+- [x] 5.1 Implement `TextToImagePreviewPanel` as a selected-job surface driven by the job detail query
+- [x] 5.2 Add the empty-state presentation shown when no jobs exist or nothing is selected
+- [x] 5.3 Add the `pending` state with queued copy, an `aspect-ratio`-backed placeholder stage, and a visible cancel action
+- [x] 5.4 Add the `processing` state with a non-percentage loading treatment and no cancel affordance
+- [x] 5.5 Add the `succeeded` state that renders the returned `output_images` signed URL in a stable ratio-aware frame and shows image-focused metadata
+- [x] 5.6 Add the `failed` state that surfaces the persisted failure message and supports prompt reuse for a new generation
+- [x] 5.7 Add the `cancelled` state that explains the job ended before processing started and supports prompt reuse
+- [x] 5.8 Add post-success actions such as `Open full size`, `Download`, `Copy prompt`, and `Generate again` while preserving the generation-history mental model
 
 ## 6. Page orchestration and selection behavior
 

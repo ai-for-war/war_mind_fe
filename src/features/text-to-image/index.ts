@@ -3,6 +3,7 @@ export { TextToImageComposeForm } from "@/features/text-to-image/components/text
 export { TextToImageHistoryItem } from "@/features/text-to-image/components/text-to-image-history-item"
 export { TextToImageHistoryList } from "@/features/text-to-image/components/text-to-image-history-list"
 export { TextToImagePage } from "@/features/text-to-image/components/text-to-image-page"
+export { TextToImagePreviewPanel } from "@/features/text-to-image/components/text-to-image-preview-panel"
 export {
   useCancelImageGenerationJob,
   useCreateTextToImageJob,
