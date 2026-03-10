@@ -17,13 +17,13 @@
 
 ## 3. Compose experience
 
-- [ ] 3.1 Implement `TextToImageComposeForm` with `react-hook-form` and the feature schema
-- [ ] 3.2 Add the prompt textarea with live character count and validation error rendering
-- [ ] 3.3 Add the aspect ratio selector that renders all backend-supported ratios in a visual single-select control, preferably using shadcn `toggle-group`
-- [ ] 3.4 Add the `prompt_optimizer` toggle with helper copy that explains its effect, using shadcn `switch`
-- [ ] 3.5 Add the collapsed advanced settings section containing the optional `seed` field
-- [ ] 3.6 Wire form submission to the create-job mutation and preserve form values after successful job creation
-- [ ] 3.7 Add create-request loading and failure states so submission is clearly communicated without clearing the draft
+- [x] 3.1 Implement `TextToImageComposeForm` with `react-hook-form` and the feature schema
+- [x] 3.2 Add the prompt textarea with live character count and validation error rendering
+- [x] 3.3 Add the aspect ratio selector that renders all backend-supported ratios in a visual single-select control, preferably using shadcn `toggle-group`
+- [x] 3.4 Add the `prompt_optimizer` toggle with helper copy that explains its effect, using shadcn `switch`
+- [x] 3.5 Add the collapsed advanced settings section containing the optional `seed` field
+- [x] 3.6 Wire form submission to the create-job mutation and preserve form values after successful job creation
+- [x] 3.7 Add create-request loading and failure states so submission is clearly communicated without clearing the draft
 
 ## 4. History rail
 

@@ -1,4 +1,5 @@
 export { textToImageApi } from "@/features/text-to-image/api/text-to-image-api"
+export { TextToImageComposeForm } from "@/features/text-to-image/components/text-to-image-compose-form"
 export { TextToImagePage } from "@/features/text-to-image/components/text-to-image-page"
 export {
   useCancelImageGenerationJob,
