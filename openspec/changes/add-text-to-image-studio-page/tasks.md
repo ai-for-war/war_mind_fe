@@ -47,11 +47,11 @@
 
 ## 6. Page orchestration and selection behavior
 
-- [ ] 6.1 Implement `TextToImagePage` to compose the form, preview panel, and history rail into the three-region studio layout
-- [ ] 6.2 Add page-level selected-job state so only one job is active in the preview panel at a time
-- [ ] 6.3 Auto-select the newly created job after create mutation success
-- [ ] 6.4 Auto-select the newest history item on initial load when history is non-empty and no job is currently selected
-- [ ] 6.5 Keep the preview panel in sync when the user changes the selected history item
+- [x] 6.1 Implement `TextToImagePage` to compose the form, preview panel, and history rail into the three-region studio layout
+- [x] 6.2 Add page-level selected-job state so only one job is active in the preview panel at a time
+- [x] 6.3 Auto-select the newly created job after create mutation success
+- [x] 6.4 Auto-select the newest history item on initial load when history is non-empty and no job is currently selected
+- [x] 6.5 Keep the preview panel in sync when the user changes the selected history item
 
 ## 7. Cancellation and prompt reuse flows
 
