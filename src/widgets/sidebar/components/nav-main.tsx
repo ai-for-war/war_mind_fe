@@ -1,4 +1,4 @@
-import { AudioLines, Bot, Mic } from "lucide-react";
+import { AudioLines, Bot, Mic, ImagePlus } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import {
@@ -9,12 +9,11 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar";
+} from "@/components/ui/sidebar"
 
 const navItems = [
   {
     title: "Agents",
-    url: "/multi-agent",
     items: [
       {
         title: "Multi-Agent",
@@ -25,12 +24,16 @@ const navItems = [
   },
   {
     title: "Confidential report",
-    url: "/voice-cloning",
     items: [
       {
         title: "Voice Cloning",
         url: "/voice-cloning",
         icon: Mic,
+      },
+      {
+        title: "Text to Image",
+        url: "/text-to-image",
+        icon: ImagePlus,
       },
       {
         title: "Text to Speech",
@@ -39,12 +42,11 @@ const navItems = [
       },
     ],
   },
-
-];
+]
 
 export const NavMain = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
+  const location = useLocation()
+  const navigate = useNavigate()
 
   return (
     <SidebarGroup>
@@ -52,7 +54,7 @@ export const NavMain = () => {
       {navItems.map((item) => (
         <SidebarMenuItem key={item.title}>
           <SidebarMenuButton asChild>
-            <div onClick={() => navigate(item.url)} className="cursor-pointer font-medium">
+            <div onClick={() => navigate(item.items[0].url)} className="cursor-pointer font-medium">
               {item.title}
             </div>
           </SidebarMenuButton>
@@ -74,23 +76,5 @@ export const NavMain = () => {
       ))}
     </SidebarMenu>
   </SidebarGroup>
-
-    // <SidebarMenu>
-    //   {navItems.map((item) => {
-    //     const isActive = location.pathname === item.url
-    //     const Icon = item.icon
-
-    //     return (
-    //       <SidebarMenuItem key={item.url}>
-    //         <SidebarMenuButton asChild isActive={isActive} tooltip={item.title}>
-    //           <Link to={item.url}>
-    //             <Icon />
-    //             <span>{item.title}</span>
-    //           </Link>
-    //         </SidebarMenuButton>
-    //       </SidebarMenuItem>
-    //     )
-    //   })}
-    // </SidebarMenu>
-  );
-};
+  )
+}
