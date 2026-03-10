@@ -152,7 +152,7 @@ export const TextToImageHistoryList = ({
                   : "No history items match the selected filter."}
               </div>
             ) : (
-              <ScrollArea className="h-[420px] rounded-md border border-border/60">
+              <ScrollArea className="h-80 rounded-md border border-border/60 sm:h-96 lg:h-128">
                 <div className="space-y-2 p-2">
                   {filteredItems.map((item) => (
                     <TextToImageHistoryItem

@@ -184,7 +184,7 @@ export const TextToImageComposeForm = ({
               value={aspectRatio}
               onValueChange={handleAspectRatioChange}
               variant="outline"
-              className="flex w-full flex-wrap gap-2"
+              className="flex w-full flex-wrap gap-2 rounded-lg border border-primary/20 bg-primary/5 p-2"
               disabled={createTextToImageJob.isPending}
               aria-label="Select aspect ratio"
             >
@@ -192,7 +192,7 @@ export const TextToImageComposeForm = ({
                 <ToggleGroupItem
                   key={ratio}
                   value={ratio}
-                  className="min-w-14 rounded-md text-xs"
+                  className="min-w-14 rounded-md text-xs transition-colors data-[state=on]:border-primary/70 data-[state=on]:bg-primary/20 data-[state=on]:text-primary-foreground"
                   aria-label={`Aspect ratio ${ratio}`}
                 >
                   {ratio}

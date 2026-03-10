@@ -71,11 +71,11 @@
 
 ## 9. Responsive and visual polish
 
-- [ ] 9.1 Implement the desktop three-column studio layout with the center preview region as the primary visual area
-- [ ] 9.2 Implement the mobile stacked layout order of compose, preview, then history
-- [ ] 9.3 Ensure the history rail remains usable without turning into a separate hidden workflow on smaller screens
-- [ ] 9.4 Apply styling that fits the existing dark app shell while adding subtle `Creative Studio` emphasis in the preview stage and aspect ratio controls
-- [ ] 9.5 Ensure loading, empty, failure, and terminal states remain visually distinct and honest without fake progress indicators
+- [x] 9.1 Implement the desktop three-column studio layout with the center preview region as the primary visual area
+- [x] 9.2 Implement the mobile stacked layout order of compose, preview, then history
+- [x] 9.3 Ensure the history rail remains usable without turning into a separate hidden workflow on smaller screens
+- [x] 9.4 Apply styling that fits the existing dark app shell while adding subtle `Creative Studio` emphasis in the preview stage and aspect ratio controls
+- [x] 9.5 Ensure loading, empty, failure, and terminal states remain visually distinct and honest without fake progress indicators
 
 ## 10. Verification and refinement
 

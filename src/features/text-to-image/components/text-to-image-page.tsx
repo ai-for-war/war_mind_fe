@@ -52,28 +52,34 @@ export const TextToImagePage = () => {
   }
 
   return (
-    <section className="space-y-6">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">Text to Image</h1>
+    <section className="space-y-5 lg:space-y-6">
+      {/* <div className="space-y-1">
+        <h1 className="text-2xl font-semibold tracking-tight lg:text-3xl">Text to Image</h1>
         <p className="text-sm text-muted-foreground">
           Creative Studio - turn prompts into generated visuals.
         </p>
-      </div>
+      </div> */}
 
-      <div className="grid gap-4 xl:grid-cols-[minmax(0,360px)_minmax(0,1fr)_minmax(0,340px)]">
-        <TextToImageComposeForm
-          key={composeResetKey}
-          initialValues={composeInitialValues}
-          onCreated={setSelectedJobId}
-        />
-        <TextToImagePreviewPanel
-          selectedJobId={activeSelectedJobId}
-          onGenerateAgain={handleGenerateAgain}
-        />
-        <TextToImageHistoryList
-          selectedJobId={activeSelectedJobId}
-          onSelectJob={setSelectedJobId}
-        />
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,340px)_minmax(0,1.2fr)_minmax(0,320px)]">
+        <div className="min-w-0">
+          <TextToImageComposeForm
+            key={composeResetKey}
+            initialValues={composeInitialValues}
+            onCreated={setSelectedJobId}
+          />
+        </div>
+        <div className="min-w-0">
+          <TextToImagePreviewPanel
+            selectedJobId={activeSelectedJobId}
+            onGenerateAgain={handleGenerateAgain}
+          />
+        </div>
+        <div className="min-w-0">
+          <TextToImageHistoryList
+            selectedJobId={activeSelectedJobId}
+            onSelectJob={setSelectedJobId}
+          />
+        </div>
       </div>
     </section>
   )

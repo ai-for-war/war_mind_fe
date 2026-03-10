@@ -209,6 +209,24 @@ export const TextToImagePreviewPanel = ({
   const isSucceeded = job.status === "succeeded"
   const isFailed = job.status === "failed"
   const isCancelled = job.status === "cancelled"
+  const stageToneClass = isPending
+    ? "border-amber-500/30 bg-amber-500/5 text-amber-100"
+    : isProcessing
+      ? "border-sky-500/30 bg-sky-500/5 text-sky-100"
+      : isFailed
+        ? "border-destructive/40 bg-destructive/10 text-destructive"
+        : isCancelled
+          ? "border-zinc-500/40 bg-zinc-500/10 text-zinc-300"
+          : "border-border/70 bg-muted/20 text-muted-foreground"
+  const statusToneClass = isPending
+    ? "border-amber-500/30 bg-amber-500/10 text-amber-300"
+    : isProcessing
+      ? "border-sky-500/30 bg-sky-500/10 text-sky-300"
+      : isSucceeded
+        ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-300"
+        : isFailed
+          ? "border-destructive/40 bg-destructive/10 text-destructive"
+          : "border-zinc-500/30 bg-zinc-500/15 text-zinc-300"
 
   return (
     <Card className="border-border/70 bg-card/95">
@@ -217,8 +235,18 @@ export const TextToImagePreviewPanel = ({
           <ImageIcon className="size-4 text-primary" />
           Generation preview
         </CardTitle>
-        <CardDescription className="break-all">
-          Job ID: <span className="font-mono text-xs">{job.id}</span>
+        <CardDescription className="flex flex-wrap items-center gap-2 break-all">
+          <span>
+            Job ID: <span className="font-mono text-xs">{job.id}</span>
+          </span>
+          <span
+            className={cn(
+              "inline-flex rounded-md border px-2 py-0.5 text-[11px] font-medium capitalize",
+              statusToneClass,
+            )}
+          >
+            {job.status}
+          </span>
         </CardDescription>
       </CardHeader>
 
@@ -229,7 +257,7 @@ export const TextToImagePreviewPanel = ({
               "flex h-full w-full items-center justify-center rounded-md border text-sm",
               isSucceeded && outputImage
                 ? "border-border/70 bg-black"
-                : "border-border/70 bg-muted/20 text-muted-foreground",
+                : stageToneClass,
             )}
           >
             {isSucceeded && outputImage ? (
