@@ -1,8 +1,6 @@
 ## Purpose
 Define centralized application routing with public and protected auth-aware flows.
-
 ## Requirements
-
 ### Requirement: Centralized router configuration
 The system SHALL provide a centralized router at `src/app/router.tsx` using `react-router-dom` `createBrowserRouter`. All route definitions SHALL be declared in this single file.
 
@@ -72,11 +70,11 @@ The router SHALL define a catch-all route (`*`) that redirects unauthenticated u
 - **THEN** they are redirected to `/voice-cloning`
 
 ### Requirement: Voice Cloning route
-The router SHALL define a protected route at path `/voice-cloning` that renders a placeholder Voice Cloning page component. This route SHALL be nested under the `MainLayout`.
+The router SHALL define a protected route at path `/voice-cloning` that renders the Voice Cloning page component from `@/features/voice-cloning`. This route SHALL be nested under the `MainLayout`.
 
 #### Scenario: Navigate to /voice-cloning
 - **WHEN** an authenticated user navigates to `/voice-cloning`
-- **THEN** the Voice Cloning placeholder page is rendered inside the `MainLayout`
+- **THEN** the Voice Cloning page is rendered inside the `MainLayout`
 
 ### Requirement: Multi-Agent route
 The router SHALL define a protected route at path `/multi-agent` that renders a placeholder Multi-Agent page component. This route SHALL be nested under the `MainLayout`.
@@ -98,3 +96,15 @@ The catch-all route (`*`) SHALL redirect authenticated users to `/voice-cloning`
 #### Scenario: Unknown route while authenticated
 - **WHEN** an authenticated user navigates to `/nonexistent`
 - **THEN** they are redirected to `/voice-cloning`
+
+### Requirement: TTS route
+The router SHALL define a protected route at path `/tts` that renders the TTS page component from `@/features/tts`. This route SHALL be nested under the `MainLayout`, alongside the existing `/voice-cloning` and `/multi-agent` routes.
+
+#### Scenario: Navigate to /tts
+- **WHEN** an authenticated user navigates to `/tts`
+- **THEN** the TTS page is rendered inside the `MainLayout`
+
+#### Scenario: Unauthenticated user accesses /tts
+- **WHEN** an unauthenticated user navigates to `/tts`
+- **THEN** they are redirected to `/login` with `/tts` stored in location state
+

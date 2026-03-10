@@ -1,5 +1,5 @@
-import { Bot, ImagePlus, Mic } from "lucide-react"
-import { Link, useLocation } from "react-router-dom"
+import { AudioLines, Bot, Mic, ImagePlus } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import {
   SidebarGroup,
@@ -35,43 +35,46 @@ const navItems = [
         url: "/text-to-image",
         icon: ImagePlus,
       },
+      {
+        title: "Text to Speech",
+        url: "/tts",
+        icon: AudioLines,
+      },
     ],
   },
 ]
 
 export const NavMain = () => {
   const location = useLocation()
+  const navigate = useNavigate()
 
   return (
     <SidebarGroup>
-      <SidebarMenu>
-        {navItems.map((item) => {
-          return (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild>
-                <div className="font-medium">{item.title}</div>
-              </SidebarMenuButton>
-              <SidebarMenuSub>
-                {item.items.map((subItem) => {
-                  const isActive = location.pathname === subItem.url
-                  const Icon = subItem.icon
-
-                  return (
-                    <SidebarMenuSubItem key={subItem.url}>
-                      <SidebarMenuSubButton asChild isActive={isActive}>
-                        <Link to={subItem.url}>
-                          <Icon />
-                          <span>{subItem.title}</span>
-                        </Link>
-                      </SidebarMenuSubButton>
-                    </SidebarMenuSubItem>
-                  )
-                })}
-              </SidebarMenuSub>
-            </SidebarMenuItem>
-          )
-        })}
-      </SidebarMenu>
-    </SidebarGroup>
+    <SidebarMenu>
+      {navItems.map((item) => (
+        <SidebarMenuItem key={item.title}>
+          <SidebarMenuButton asChild>
+            <div onClick={() => navigate(item.items[0].url)} className="cursor-pointer font-medium">
+              {item.title}
+            </div>
+          </SidebarMenuButton>
+          {item.items?.length ? (
+            <SidebarMenuSub>
+              {item.items.map((item) => (
+                <SidebarMenuSubItem key={item.title}>
+                  <SidebarMenuSubButton asChild isActive={location.pathname === item.url}>
+                    <div onClick={() => navigate(item.url)} className="flex cursor-pointer items-center gap-2 font-medium">
+                      <item.icon className="size-4" />
+                      {item.title}
+                    </div>
+                  </SidebarMenuSubButton>
+                </SidebarMenuSubItem>
+              ))}
+            </SidebarMenuSub>
+          ) : null}
+        </SidebarMenuItem>
+      ))}
+    </SidebarMenu>
+  </SidebarGroup>
   )
 }
