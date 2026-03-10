@@ -9,11 +9,11 @@
 
 ## 2. Types, schemas, and query primitives
 
-- [ ] 2.1 Add text-to-image TypeScript types for create request, history response, detail response, job statuses, lifecycle payloads, and output image access
-- [ ] 2.2 Add a `text-to-image.schema.ts` validation schema for `prompt`, `aspect_ratio`, optional `seed`, and `prompt_optimizer`
-- [ ] 2.3 Add query-key helpers for history, detail, and any lifecycle-related invalidation paths
-- [ ] 2.4 Add API-layer functions for create job, list history, get detail, and cancel job aligned to the backend endpoints
-- [ ] 2.5 Add React Query hooks for create, history, detail, and cancel flows using the new API-layer functions
+- [x] 2.1 Add text-to-image TypeScript types for create request, history response, detail response, job statuses, lifecycle payloads, and output image access
+- [x] 2.2 Add a `text-to-image.schema.ts` validation schema for `prompt`, `aspect_ratio`, optional `seed`, and `prompt_optimizer`
+- [x] 2.3 Add query-key helpers for history, detail, and any lifecycle-related invalidation paths
+- [x] 2.4 Add API-layer functions for create job, list history, get detail, and cancel job aligned to the backend endpoints
+- [x] 2.5 Add React Query hooks for create, history, detail, and cancel flows using the new API-layer functions
 
 ## 3. Compose experience
 
