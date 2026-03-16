@@ -30,12 +30,12 @@
 
 ## 5. Browser media capture and audio transformation
 
-- [ ] 5.1 Implement microphone capture management for the `user` lane with permission and track validation
-- [ ] 5.2 Implement Chromium tab capture management for the `interviewer` lane with audio-track validation for the selected Google Meet tab
-- [ ] 5.3 Add track-ended and source-failure listeners that escalate active-session dependency loss into hard-stop teardown
-- [ ] 5.4 Implement the `AudioContext` and `AudioWorklet` transform pipeline that normalizes each source into a mono lane
-- [ ] 5.5 Implement resampling, `PCM16` encoding, and `2-channel` interleaving so emitted binary frames match the backend contract
-- [ ] 5.6 Add fixed-duration frame chunk emission with monotonically increasing `sequence` values and correct metadata for each `stt:audio` event
+- [x] 5.1 Implement microphone capture management for the `user` lane with permission and track validation
+- [x] 5.2 Implement Chromium tab capture management for the `interviewer` lane with audio-track validation for the selected Google Meet tab
+- [x] 5.3 Add track-ended and source-failure listeners that escalate active-session dependency loss into hard-stop teardown
+- [x] 5.4 Implement the `AudioContext` and `AudioWorklet` transform pipeline that normalizes each source into a mono lane
+- [x] 5.5 Implement resampling, `PCM16` encoding, and `2-channel` interleaving so emitted binary frames match the backend contract
+- [x] 5.6 Add fixed-duration frame chunk emission with monotonically increasing `sequence` values and correct metadata for each `stt:audio` event
 
 ## 6. Page integration and runtime host hooks
 
