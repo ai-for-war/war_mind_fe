@@ -35,6 +35,7 @@ const ACTIVE_INTERVIEW_SESSION_STATUSES = new Set([
   "finalizing",
   "stopping",
 ])
+const INTERVIEW_SOURCE_ROLES = ["interviewer", "user"] as const
 
 type InterviewFrameEmitter = (frame: InterviewAudioFrame) => Promise<void> | void
 
@@ -112,6 +113,24 @@ const toErrorMessage = (error: unknown, fallbackMessage: string): string => {
   }
 
   return fallbackMessage
+}
+
+const isInterviewSessionError = (
+  error: unknown,
+): error is InterviewSessionError => {
+  if (!error || typeof error !== "object") {
+    return false
+  }
+
+  const candidate = error as Partial<InterviewSessionError>
+
+  return (
+    typeof candidate.code === "string" &&
+    typeof candidate.message === "string" &&
+    typeof candidate.retryable === "boolean" &&
+    typeof candidate.source === "string" &&
+    typeof candidate.timestamp === "number"
+  )
 }
 
 const toStartPayload = (
@@ -261,9 +280,32 @@ export const createInterviewSessionController = ({
   ): void => {
     const store = readStore()
 
-    ;(["interviewer", "user"] as const).forEach((role) => {
+    INTERVIEW_SOURCE_ROLES.forEach((role) => {
       store.setSourceReadiness(role, sourceReadiness[role])
     })
+  }
+
+  const applyStartupFailureSourceState = (
+    error: InterviewSessionError,
+  ): void => {
+    const store = readStore()
+
+    if (error.source === "microphone") {
+      store.setSourceReadiness("user", {
+        status: "failed",
+        isReady: false,
+        error: error.message,
+      })
+      return
+    }
+
+    if (error.source === "interviewer_tab") {
+      store.setSourceReadiness("interviewer", {
+        status: "failed",
+        isReady: false,
+        error: error.message,
+      })
+    }
   }
 
   const teardownSession = async ({
@@ -304,6 +346,8 @@ export const createInterviewSessionController = ({
       readStore().resetSession()
       return
     }
+
+    readStore().setIdentifiers(null)
 
     if (error !== undefined) {
       readStore().setSessionError(error)
@@ -431,7 +475,7 @@ export const createInterviewSessionController = ({
     store.setIdentifiers(identifiers)
     store.setStatus("preparing_media")
 
-    ;(["interviewer", "user"] as const).forEach((role) => {
+    INTERVIEW_SOURCE_ROLES.forEach((role) => {
       store.setSourceReadiness(role, {
         status: "requesting",
         isReady: false,
@@ -478,14 +522,18 @@ export const createInterviewSessionController = ({
         return
       }
 
-      const sessionError = buildControllerError(
-        "session_start_failed",
-        toErrorMessage(
-          error,
-          "Failed to prepare and start the interview session.",
-        ),
-        "runtime",
-      )
+      const sessionError = isInterviewSessionError(error)
+        ? error
+        : buildControllerError(
+            "session_start_failed",
+            toErrorMessage(
+              error,
+              "Failed to prepare and start the interview session.",
+            ),
+            "runtime",
+          )
+
+      applyStartupFailureSourceState(sessionError)
 
       await teardownSession({
         emitStop: false,
@@ -577,4 +625,3 @@ export type {
   InterviewSessionController,
   PreparedInterviewMediaSession,
 }
-

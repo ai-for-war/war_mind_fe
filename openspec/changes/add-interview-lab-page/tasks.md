@@ -47,10 +47,10 @@
 
 ## 7. Failure handling and recovery rules
 
-- [ ] 7.1 Surface startup failures for missing socket connection, missing tab audio, and microphone permission or track errors through the interview session store
-- [ ] 7.2 Implement hard-stop behavior for active-session loss of socket transport, interviewer tab audio, or user microphone input
-- [ ] 7.3 Distinguish user-initiated stop from runtime failure in session terminal state so the page can reset correctly
-- [ ] 7.4 Reject stale or delayed events after stop or fast restart so prior session data cannot mutate a newly started session
+- [x] 7.1 Surface startup failures for missing socket connection, missing tab audio, and microphone permission or track errors through the interview session store
+- [x] 7.2 Implement hard-stop behavior for active-session loss of socket transport, interviewer tab audio, or user microphone input
+- [x] 7.3 Distinguish user-initiated stop from runtime failure in session terminal state so the page can reset correctly
+- [x] 7.4 Reject stale or delayed events after stop or fast restart so prior session data cannot mutate a newly started session
 
 ## 8. Verification and refinement
 

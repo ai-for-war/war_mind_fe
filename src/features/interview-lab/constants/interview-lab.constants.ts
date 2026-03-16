@@ -42,7 +42,7 @@ export const INTERVIEW_CHANNEL_MAP = {
 } as const
 
 export const INTERVIEW_AUDIO_METADATA_DEFAULTS = {
-  language: "en",
+  language: "vi",
   encoding: "linear16",
   sampleRate: 16000,
   channels: 2,
@@ -51,4 +51,3 @@ export const INTERVIEW_AUDIO_METADATA_DEFAULTS = {
 
 export const INTERVIEW_CONVERSATION_ID_PREFIX = "interview"
 export const INTERVIEW_STREAM_ID_PREFIX = "stream"
-

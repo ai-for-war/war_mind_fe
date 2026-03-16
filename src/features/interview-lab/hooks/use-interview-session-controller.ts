@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useShallow } from "zustand/react/shallow"
 
 import {
@@ -30,6 +30,7 @@ export const useInterviewSessionController = () => {
       mediaRuntime: createBrowserInterviewMediaRuntime(),
     }),
   )
+  const pendingDisposeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const sessionState = useInterviewSessionStore(
     useShallow((state) => ({
       acceptedConfig: state.acceptedConfig,
@@ -55,8 +56,16 @@ export const useInterviewSessionController = () => {
   })
 
   useEffect(() => {
+    if (pendingDisposeTimeoutRef.current) {
+      clearTimeout(pendingDisposeTimeoutRef.current)
+      pendingDisposeTimeoutRef.current = null
+    }
+
     return () => {
-      void controller.dispose()
+      pendingDisposeTimeoutRef.current = setTimeout(() => {
+        pendingDisposeTimeoutRef.current = null
+        void controller.dispose()
+      }, 0)
     }
   }, [controller])
 

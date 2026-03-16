@@ -21,7 +21,6 @@ const INTERVIEWER_TAB_CAPTURE_OPTIONS: ChromiumDisplayMediaOptions = {
     noiseSuppression: false,
     sampleRate: 48_000,
   },
-  preferCurrentTab: true,
   selfBrowserSurface: "exclude",
   surfaceSwitching: "exclude",
   systemAudio: "include",
@@ -113,4 +112,3 @@ export const prepareInterviewerTabCapture = async ({
     throw error
   }
 }
-
