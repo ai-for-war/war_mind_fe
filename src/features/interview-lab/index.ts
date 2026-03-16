@@ -1,5 +1,6 @@
 export { InterviewLabPage } from "@/features/interview-lab/components"
 export * from "@/features/interview-lab/constants"
+export * from "@/features/interview-lab/hooks"
 export * from "@/features/interview-lab/reducers"
 export * from "@/features/interview-lab/services"
 export { useInterviewSessionStore, type InterviewSessionActions } from "@/features/interview-lab/stores"

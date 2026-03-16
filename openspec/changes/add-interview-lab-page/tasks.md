@@ -39,11 +39,11 @@
 
 ## 6. Page integration and runtime host hooks
 
-- [ ] 6.1 Implement the interview lab page component as a thin runtime host that reads normalized state from the interview store
-- [ ] 6.2 Implement the controller hook that exposes page-level commands for start, stop, reset, and current session status
-- [ ] 6.3 Implement the socket subscription hook(s) that register and clean up interview-specific event listeners without leaking handlers across rerenders
-- [ ] 6.4 Prevent the page from starting a second active interview session while one session is already active
-- [ ] 6.5 Ensure page unmount invokes runtime teardown so tracks, worklets, audio context resources, socket listeners, and transient session state do not leak
+- [x] 6.1 Implement the interview lab page component as a thin runtime host that reads normalized state from the interview store
+- [x] 6.2 Implement the controller hook that exposes page-level commands for start, stop, reset, and current session status
+- [x] 6.3 Implement the socket subscription hook(s) that register and clean up interview-specific event listeners without leaking handlers across rerenders
+- [x] 6.4 Prevent the page from starting a second active interview session while one session is already active
+- [x] 6.5 Ensure page unmount invokes runtime teardown so tracks, worklets, audio context resources, socket listeners, and transient session state do not leak
 
 ## 7. Failure handling and recovery rules
 
