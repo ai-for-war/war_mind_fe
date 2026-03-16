@@ -14,11 +14,11 @@
 
 ## 3. Transcript and answer reduction logic
 
-- [ ] 3.1 Implement the interview event reducer that normalizes `stt:*` and `interview:answer:*` events into store-safe actions
-- [ ] 3.2 Add reduction logic for `stt:partial` as open-utterance preview updates without timeline commit
-- [ ] 3.3 Add reduction logic for `stt:final` as stable-fragment updates without turn closure
-- [ ] 3.4 Add reduction logic for `stt:utterance_closed` as the authoritative committed transcript event that clears the matching open utterance
-- [ ] 3.5 Add streamed AI answer aggregation keyed by `utterance_id`, including duplicate final-event handling for `interview:answer:completed` and `interview:answer`
+- [x] 3.1 Implement the interview event reducer that normalizes `stt:*` and `interview:answer:*` events into store-safe actions
+- [x] 3.2 Add reduction logic for `stt:partial` as open-utterance preview updates without timeline commit
+- [x] 3.3 Add reduction logic for `stt:final` as stable-fragment updates without turn closure
+- [x] 3.4 Add reduction logic for `stt:utterance_closed` as the authoritative committed transcript event that clears the matching open utterance
+- [x] 3.5 Add streamed AI answer aggregation keyed by `utterance_id`, including duplicate final-event handling for `interview:answer:completed` and `interview:answer`
 
 ## 4. Socket adapter and session orchestration
 
