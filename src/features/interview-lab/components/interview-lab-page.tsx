@@ -1,15 +1,17 @@
 import {
   AlertCircle,
   AudioLines,
-  CheckCircle2,
-  LoaderCircle,
   Mic,
   RefreshCcw,
   Share2,
   Square,
-  Waves,
 } from "lucide-react"
 
+import {
+  Message,
+  MessageContent,
+  MessageResponse,
+} from "@/components/ai/message"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -362,6 +364,7 @@ export const InterviewLabPage = () => {
 
                 {interviewerClosedUtterances.map((utterance) => {
                   const answer = aiAnswers[utterance.utteranceId]
+                  const answerText = answer?.text || "Awaiting answer stream."
 
                   return (
                     <div
@@ -377,21 +380,14 @@ export const InterviewLabPage = () => {
                         </Badge>
                       </div>
                       <p className="mt-2 text-xs text-muted-foreground">{utterance.text}</p>
-                      <div className="mt-3 flex items-start gap-2 text-sm text-foreground">
-                        {answer?.status === "streaming" ? (
-                          <LoaderCircle className="mt-0.5 size-4 animate-spin text-emerald-300" />
-                        ) : answer?.status === "completed" ? (
-                          <CheckCircle2 className="mt-0.5 size-4 text-emerald-300" />
-                        ) : (
-                          <Waves className="mt-0.5 size-4 text-muted-foreground" />
-                        )}
-                        <div className="min-w-0">
-                          <p>{answer?.text || "Awaiting answer stream."}</p>
-                          {answer?.error ? (
-                            <p className="mt-2 text-xs text-destructive">{answer.error}</p>
-                          ) : null}
-                        </div>
-                      </div>
+                      <Message className="mt-3 max-w-full" from="assistant">
+                        <MessageContent className="w-full rounded-lg border border-border/60 bg-primary/10 p-4">
+                          <MessageResponse>{answerText}</MessageResponse>
+                        </MessageContent>
+                      </Message>
+                      {answer?.error ? (
+                        <p className="mt-2 text-xs text-destructive">{answer.error}</p>
+                      ) : null}
                     </div>
                   )
                 })}
