@@ -18,10 +18,14 @@ import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "@/components/ui/resizable"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { useInterviewSessionController } from "@/features/interview-lab/hooks"
@@ -113,6 +117,225 @@ export const InterviewLabPage = () => {
     (utterance) => utterance.source === "interviewer",
   )
 
+  const sessionControlPlaneCard = (
+    <Card className="flex h-full flex-col border-border/60 bg-card/70">
+      <CardHeader className="space-y-2">
+        <CardTitle>Session Control Plane</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              Conversation ID
+            </p>
+            <p className="mt-2 break-all text-sm text-foreground">
+              {identifiers?.conversationId ?? "Awaiting session start"}
+            </p>
+          </div>
+          <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              Stream ID
+            </p>
+            <p className="mt-2 break-all text-sm text-foreground">
+              {identifiers?.streamId ?? "Awaiting session start"}
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+          <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              Session status
+            </p>
+            <p className="mt-2 text-sm font-medium text-foreground">{statusLabels[status]}</p>
+          </div>
+          <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              Last event
+            </p>
+            <p className="mt-2 text-sm text-foreground">{formatDateTime(lastEventAt)}</p>
+          </div>
+          <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              Audio contract
+            </p>
+            <p className="mt-2 text-sm text-foreground">
+              {acceptedConfig
+                ? `${acceptedConfig.encoding} · ${acceptedConfig.sampleRate}Hz · ${acceptedConfig.channels}ch`
+                : "Awaiting stt:started"}
+            </p>
+          </div>
+        </div>
+
+        <Separator />
+
+        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          {(["interviewer", "user"] as const).map((role) => {
+            const metadata = readinessItemMetadata[role]
+            const readiness = sourceReadiness[role]
+
+            return (
+              <div
+                key={role}
+                className="rounded-xl border border-border/60 bg-muted/20 p-4"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-medium text-foreground">{metadata.title}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{metadata.description}</p>
+                  </div>
+                  <Badge
+                    variant={readiness.isReady ? "secondary" : "outline"}
+                    className="shrink-0"
+                  >
+                    {readinessLabels[readiness.status]}
+                  </Badge>
+                </div>
+                {readiness.error ? (
+                  <p className="mt-3 text-sm text-destructive">{readiness.error}</p>
+                ) : null}
+              </div>
+            )
+          })}
+        </div>
+      </CardContent>
+    </Card>
+  )
+
+  const transcriptMonitorCard = (
+    <Card className="flex h-full flex-col border-border/60 bg-card/70">
+      <CardHeader className="space-y-2">
+        <CardTitle>Transcript Monitor</CardTitle>
+      </CardHeader>
+      <CardContent className="flex min-h-0 flex-1 flex-col gap-6">
+        <div className="space-y-3">
+          <div className="space-y-1">
+            <h2 className="text-sm font-medium text-foreground">Open Utterances</h2>
+            <p className="text-sm text-muted-foreground">
+              Partial and stable fragments stay here until <code>stt:utterance_closed</code>.
+            </p>
+          </div>
+
+          {(["interviewer", "user"] as const).map((role) => {
+            const metadata = readinessItemMetadata[role]
+            const openUtterance = openUtterances[role]
+
+            return (
+              <div
+                key={role}
+                className="rounded-xl border border-border/60 bg-muted/20 p-4"
+              >
+                <div className="flex items-center gap-2">
+                  <metadata.icon className="size-4 text-emerald-300" />
+                  <h3 className="text-sm font-medium text-foreground">{metadata.title}</h3>
+                </div>
+                <p className="mt-3 text-sm text-foreground">
+                  {openUtterance?.combinedText ?? "No live utterance for this source."}
+                </p>
+                {openUtterance ? (
+                  <div className="mt-3 space-y-2 text-xs text-muted-foreground">
+                    <p>Stable: {openUtterance.stableText || "None yet"}</p>
+                    <p>Preview: {openUtterance.previewText || "None"}</p>
+                  </div>
+                ) : null}
+              </div>
+            )
+          })}
+        </div>
+
+        <Separator />
+
+        <div className="flex min-h-0 flex-1 flex-col gap-3">
+          <div className="space-y-1">
+            <h2 className="text-sm font-medium text-foreground">Committed Transcript</h2>
+            <p className="text-sm text-muted-foreground">
+              Only closed utterances appear here as the authoritative conversation timeline.
+            </p>
+          </div>
+
+          <ScrollArea className="min-h-0 flex-1 pr-4">
+            <div className="space-y-3">
+              {closedUtterances.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-border/60 bg-muted/10 p-6 text-sm text-muted-foreground">
+                  No committed transcript turns yet.
+                </div>
+              ) : null}
+
+              {closedUtterances.map((utterance) => (
+                <div
+                  key={utterance.utteranceId}
+                  className="rounded-xl border border-border/60 bg-muted/20 p-4"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline">{utterance.source}</Badge>
+                      <span className="text-xs text-muted-foreground">
+                        Channel {utterance.channel}
+                      </span>
+                    </div>
+                    <span className="text-xs text-muted-foreground">
+                      Closed {formatDateTime(utterance.turnClosedAt)}
+                    </span>
+                  </div>
+                  <p className="mt-3 text-sm text-foreground">{utterance.text}</p>
+                </div>
+              ))}
+            </div>
+          </ScrollArea>
+        </div>
+      </CardContent>
+    </Card>
+  )
+
+  const aiAnswersCard = (
+    <Card className="flex h-full flex-col border-border/60 bg-card/70">
+      <CardHeader className="space-y-2">
+        <CardTitle>AI Answers</CardTitle>
+      </CardHeader>
+      <CardContent className="min-h-0 flex-1">
+        <ScrollArea className="h-full pr-4">
+          <div className="space-y-3">
+            {interviewerClosedUtterances.length === 0 ? (
+              <div className="rounded-xl border border-dashed border-border/60 bg-muted/10 p-6 text-sm text-muted-foreground">
+                No interviewer turns have been closed yet.
+              </div>
+            ) : null}
+
+            {interviewerClosedUtterances.map((utterance) => {
+              const answer = aiAnswers[utterance.utteranceId]
+              const answerText = answer?.text || "Awaiting answer stream."
+
+              return (
+                <div
+                  key={utterance.utteranceId}
+                  className="rounded-xl border border-border/60 bg-muted/20 p-4"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-sm font-medium text-foreground">
+                      {utterance.utteranceId}
+                    </p>
+                    <Badge variant={answer?.status === "failed" ? "destructive" : "secondary"}>
+                      {answer?.status ?? "idle"}
+                    </Badge>
+                  </div>
+                  <p className="mt-2 text-xs text-muted-foreground">{utterance.text}</p>
+                  <Message className="mt-3 max-w-full" from="assistant">
+                    <MessageContent className="w-full rounded-lg border border-border/60 bg-primary/10 p-4">
+                      <MessageResponse>{answerText}</MessageResponse>
+                    </MessageContent>
+                  </Message>
+                  {answer?.error ? (
+                    <p className="mt-2 text-xs text-destructive">{answer.error}</p>
+                  ) : null}
+                </div>
+              )
+            })}
+          </div>
+        </ScrollArea>
+      </CardContent>
+    </Card>
+  )
+
   return (
     <section className="space-y-8">
       <header className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
@@ -177,224 +400,29 @@ export const InterviewLabPage = () => {
         </Alert>
       ) : null}
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
-        <Card className="border-border/60 bg-card/70">
-          <CardHeader className="space-y-2">
-            <CardTitle>Session Control Plane</CardTitle>
-            <CardDescription>
-              The page reads normalized runtime state from the interview store and keeps the
-              controller lifecycle bound to this browser tab instance.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-              <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Conversation ID
-                </p>
-                <p className="mt-2 break-all text-sm text-foreground">
-                  {identifiers?.conversationId ?? "Awaiting session start"}
-                </p>
-              </div>
-              <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Stream ID
-                </p>
-                <p className="mt-2 break-all text-sm text-foreground">
-                  {identifiers?.streamId ?? "Awaiting session start"}
-                </p>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-              <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Session status
-                </p>
-                <p className="mt-2 text-sm font-medium text-foreground">{statusLabels[status]}</p>
-              </div>
-              <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Last event
-                </p>
-                <p className="mt-2 text-sm text-foreground">{formatDateTime(lastEventAt)}</p>
-              </div>
-              <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
-                <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Audio contract
-                </p>
-                <p className="mt-2 text-sm text-foreground">
-                  {acceptedConfig
-                    ? `${acceptedConfig.encoding} · ${acceptedConfig.sampleRate}Hz · ${acceptedConfig.channels}ch`
-                    : "Awaiting stt:started"}
-                </p>
-              </div>
-            </div>
-
-            <Separator />
-
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-              {(["interviewer", "user"] as const).map((role) => {
-                const metadata = readinessItemMetadata[role]
-                const readiness = sourceReadiness[role]
-
-                return (
-                  <div
-                    key={role}
-                    className="rounded-xl border border-border/60 bg-muted/20 p-4"
-                  >
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="text-sm font-medium text-foreground">{metadata.title}</p>
-                        <p className="mt-1 text-sm text-muted-foreground">{metadata.description}</p>
-                      </div>
-                      <Badge
-                        variant={readiness.isReady ? "secondary" : "outline"}
-                        className="shrink-0"
-                      >
-                        {readinessLabels[readiness.status]}
-                      </Badge>
-                    </div>
-                    {readiness.error ? (
-                      <p className="mt-3 text-sm text-destructive">{readiness.error}</p>
-                    ) : null}
-                  </div>
-                )
-              })}
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-border/60 bg-card/70">
-          <CardHeader className="space-y-2">
-            <CardTitle>Open Utterances</CardTitle>
-            <CardDescription>
-              Partial and stable fragments stay in open utterance state until the backend emits
-              the authoritative <code>stt:utterance_closed</code> event.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {(["interviewer", "user"] as const).map((role) => {
-              const metadata = readinessItemMetadata[role]
-              const openUtterance = openUtterances[role]
-
-              return (
-                <div
-                  key={role}
-                  className="rounded-xl border border-border/60 bg-muted/20 p-4"
-                >
-                  <div className="flex items-center gap-2">
-                    <metadata.icon className="size-4 text-emerald-300" />
-                    <h2 className="text-sm font-medium text-foreground">{metadata.title}</h2>
-                  </div>
-                  <p className="mt-3 text-sm text-foreground">
-                    {openUtterance?.combinedText ?? "No live utterance for this source."}
-                  </p>
-                  {openUtterance ? (
-                    <div className="mt-3 space-y-2 text-xs text-muted-foreground">
-                      <p>Stable: {openUtterance.stableText || "None yet"}</p>
-                      <p>Preview: {openUtterance.previewText || "None"}</p>
-                    </div>
-                  ) : null}
-                </div>
-              )
-            })}
-          </CardContent>
-        </Card>
+      <div className="hidden xl:block">
+        <ResizablePanelGroup
+          className="min-h-[820px] rounded-2xl border border-border/60 bg-card/25 p-3"
+          orientation="horizontal"
+        >
+          <ResizablePanel defaultSize={31} minSize={24}>
+            <div className="h-full pr-3">{sessionControlPlaneCard}</div>
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize={36} minSize={26}>
+            <div className="h-full px-3">{transcriptMonitorCard}</div>
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize={33} minSize={24}>
+            <div className="h-full pl-3">{aiAnswersCard}</div>
+          </ResizablePanel>
+        </ResizablePanelGroup>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
-        <Card className="border-border/60 bg-card/70">
-          <CardHeader className="space-y-2">
-            <CardTitle>Committed Transcript</CardTitle>
-            <CardDescription>
-              Only closed utterances appear here. Open partial and final fragments remain out of
-              the timeline until turn closure is confirmed by the backend.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ScrollArea className="h-[360px] pr-4">
-              <div className="space-y-3">
-                {closedUtterances.length === 0 ? (
-                  <div className="rounded-xl border border-dashed border-border/60 bg-muted/10 p-6 text-sm text-muted-foreground">
-                    No committed transcript turns yet.
-                  </div>
-                ) : null}
-
-                {closedUtterances.map((utterance) => (
-                  <div
-                    key={utterance.utteranceId}
-                    className="rounded-xl border border-border/60 bg-muted/20 p-4"
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline">{utterance.source}</Badge>
-                        <span className="text-xs text-muted-foreground">
-                          Channel {utterance.channel}
-                        </span>
-                      </div>
-                      <span className="text-xs text-muted-foreground">
-                        Closed {formatDateTime(utterance.turnClosedAt)}
-                      </span>
-                    </div>
-                    <p className="mt-3 text-sm text-foreground">{utterance.text}</p>
-                  </div>
-                ))}
-              </div>
-            </ScrollArea>
-          </CardContent>
-        </Card>
-
-        <Card className="border-border/60 bg-card/70">
-          <CardHeader className="space-y-2">
-            <CardTitle>AI Answers</CardTitle>
-            <CardDescription>
-              Streamed answer state is keyed by interviewer <code>utterance_id</code> and
-              deduplicates repeated final answer events.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <ScrollArea className="h-[360px] pr-4">
-              <div className="space-y-3">
-                {interviewerClosedUtterances.length === 0 ? (
-                  <div className="rounded-xl border border-dashed border-border/60 bg-muted/10 p-6 text-sm text-muted-foreground">
-                    No interviewer turns have been closed yet.
-                  </div>
-                ) : null}
-
-                {interviewerClosedUtterances.map((utterance) => {
-                  const answer = aiAnswers[utterance.utteranceId]
-                  const answerText = answer?.text || "Awaiting answer stream."
-
-                  return (
-                    <div
-                      key={utterance.utteranceId}
-                      className="rounded-xl border border-border/60 bg-muted/20 p-4"
-                    >
-                      <div className="flex items-center justify-between gap-3">
-                        <p className="text-sm font-medium text-foreground">
-                          {utterance.utteranceId}
-                        </p>
-                        <Badge variant={answer?.status === "failed" ? "destructive" : "secondary"}>
-                          {answer?.status ?? "idle"}
-                        </Badge>
-                      </div>
-                      <p className="mt-2 text-xs text-muted-foreground">{utterance.text}</p>
-                      <Message className="mt-3 max-w-full" from="assistant">
-                        <MessageContent className="w-full rounded-lg border border-border/60 bg-primary/10 p-4">
-                          <MessageResponse>{answerText}</MessageResponse>
-                        </MessageContent>
-                      </Message>
-                      {answer?.error ? (
-                        <p className="mt-2 text-xs text-destructive">{answer.error}</p>
-                      ) : null}
-                    </div>
-                  )
-                })}
-              </div>
-            </ScrollArea>
-          </CardContent>
-        </Card>
+      <div className="space-y-4 xl:hidden">
+        {aiAnswersCard}
+        {transcriptMonitorCard}
+        {sessionControlPlaneCard}
       </div>
     </section>
   )
