@@ -22,11 +22,11 @@
 
 ## 4. Socket adapter and session orchestration
 
-- [ ] 4.1 Implement the interview socket adapter that wraps the shared Socket.IO client for `stt:start`, `stt:audio`, `stt:finalize`, and `stt:stop`
-- [ ] 4.2 Add inbound event filtering by active `conversation_id` and `stream_id` before reducer dispatch
-- [ ] 4.3 Implement the interview session controller that coordinates identifier generation, media preparation, session start, active streaming, stop, reset, and teardown
-- [ ] 4.4 Enforce the startup order so `stt:audio` emission begins only after the backend confirms the session with `stt:started`
-- [ ] 4.5 Add deterministic session teardown logic shared by user stop, dependency-loss failure, and page unmount flows
+- [x] 4.1 Implement the interview socket adapter that wraps the shared Socket.IO client for `stt:start`, `stt:audio`, `stt:finalize`, and `stt:stop`
+- [x] 4.2 Add inbound event filtering by active `conversation_id` and `stream_id` before reducer dispatch
+- [x] 4.3 Implement the interview session controller that coordinates identifier generation, media preparation, session start, active streaming, stop, reset, and teardown
+- [x] 4.4 Enforce the startup order so `stt:audio` emission begins only after the backend confirms the session with `stt:started`
+- [x] 4.5 Add deterministic session teardown logic shared by user stop, dependency-loss failure, and page unmount flows
 
 ## 5. Browser media capture and audio transformation
 

@@ -1,4 +1,3 @@
-import { INTERVIEW_CHANNEL_MAP } from "@/features/interview-lab/constants"
 import type { InterviewSessionActions } from "@/features/interview-lab/stores"
 import type {
   InterviewAcceptedSessionConfig,
@@ -536,4 +535,3 @@ export const applyInterviewSessionStoreActions = (
 }
 
 export type { InterviewReducerEvent, InterviewSessionStoreAction }
-
