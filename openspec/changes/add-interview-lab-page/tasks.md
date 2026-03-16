@@ -1,9 +1,9 @@
 ## 1. Feature scaffolding and entry points
 
-- [ ] 1.1 Create the `src/features/interview-lab/` feature slice with `components`, `hooks`, `stores`, `services`, `reducers`, `types`, `constants`, and `utils`
-- [ ] 1.2 Add the feature barrel exports needed for the interview lab page to integrate cleanly with the existing app structure
-- [ ] 1.3 Add the authenticated route and page entry component for the interview lab feature
-- [ ] 1.4 Update sidebar navigation or other authenticated entry points so the interview lab page is reachable from the app shell
+- [x] 1.1 Create the `src/features/interview-lab/` feature slice with `components`, `hooks`, `stores`, `services`, `reducers`, `types`, `constants`, and `utils`
+- [x] 1.2 Add the feature barrel exports needed for the interview lab page to integrate cleanly with the existing app structure
+- [x] 1.3 Add the authenticated route and page entry component for the interview lab feature
+- [x] 1.4 Update sidebar navigation or other authenticated entry points so the interview lab page is reachable from the app shell
 
 ## 2. Runtime types, constants, and store
 
