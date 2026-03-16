@@ -7,10 +7,10 @@
 
 ## 2. Runtime types, constants, and store
 
-- [ ] 2.1 Add interview session, transcript, socket payload, and audio pipeline TypeScript types under `src/features/interview-lab/types/`
-- [ ] 2.2 Add feature constants for session statuses, source roles, channel mapping, and audio metadata defaults under `src/features/interview-lab/constants/`
-- [ ] 2.3 Implement the Zustand interview session store for lifecycle status, source readiness, open utterances, closed utterances, AI answers, and session errors
-- [ ] 2.4 Add utility helpers for generating `conversation_id`, generating `stream_id`, guarding inbound events, and deduplicating final AI answer events
+- [x] 2.1 Add interview session, transcript, socket payload, and audio pipeline TypeScript types under `src/features/interview-lab/types/`
+- [x] 2.2 Add feature constants for session statuses, source roles, channel mapping, and audio metadata defaults under `src/features/interview-lab/constants/`
+- [x] 2.3 Implement the Zustand interview session store for lifecycle status, source readiness, open utterances, closed utterances, AI answers, and session errors
+- [x] 2.4 Add utility helpers for generating `conversation_id`, generating `stream_id`, guarding inbound events, and deduplicating final AI answer events
 
 ## 3. Transcript and answer reduction logic
 
