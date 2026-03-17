@@ -16,9 +16,9 @@ export const MainLayout = () => {
       className="dark min-h-svh bg-neutral-950 text-foreground"
     >
       <AppSidebar />
-      <SidebarInset className="bg-neutral-950">
+      <SidebarInset className="min-h-svh overflow-hidden bg-neutral-950">
         <AppHeader />
-        <div className="flex-1 p-4 md:p-6">
+        <div className="flex min-h-0 flex-1 flex-col overflow-hidden p-4 md:p-6">
           <Outlet />
         </div>
       </SidebarInset>

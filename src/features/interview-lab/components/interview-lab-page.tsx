@@ -118,11 +118,50 @@ export const InterviewLabPage = () => {
   )
 
   const sessionControlPlaneCard = (
-    <Card className="flex h-full flex-col border-border/60 bg-card/70">
-      <CardHeader className="space-y-2">
+    <Card className="flex h-[44rem] max-h-[44rem] flex-col border-border/60 bg-card/70">
+      <CardHeader className="">
         <CardTitle>Session Control Plane</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="flex min-h-0 flex-1 flex-col">
+        <ScrollArea className="min-h-0 flex-1">
+        <div className="space-y-4">
+        <div className="space-y-3">
+          <div className="space-y-1">
+            <h2 className="text-sm font-medium text-foreground">Open Utterances</h2>
+            <p className="text-sm text-muted-foreground">
+              Partial and stable fragments stay here until <code>stt:utterance_closed</code>.
+            </p>
+          </div>
+
+          {(["interviewer", "user"] as const).map((role) => {
+            const metadata = readinessItemMetadata[role]
+            const openUtterance = openUtterances[role]
+
+            return (
+              <div
+                key={role}
+                className="rounded-xl border border-border/60 bg-muted/20 p-4"
+              >
+                <div className="flex items-center gap-2">
+                  <metadata.icon className="size-4 text-emerald-300" />
+                  <h3 className="text-sm font-medium text-foreground">{metadata.title}</h3>
+                </div>
+                <p className="mt-3 text-sm text-foreground">
+                  {openUtterance?.combinedText ?? "No live utterance for this source."}
+                </p>
+                {openUtterance ? (
+                  <div className="mt-3 space-y-2 text-xs text-muted-foreground">
+                    <p>Stable: {openUtterance.stableText || "None yet"}</p>
+                    <p>Preview: {openUtterance.previewText || "None"}</p>
+                  </div>
+                ) : null}
+              </div>
+            )
+          })}
+        </div>
+
+        <Separator />
+
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
             <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
@@ -198,62 +237,27 @@ export const InterviewLabPage = () => {
             )
           })}
         </div>
+        </div>
+        </ScrollArea>
       </CardContent>
     </Card>
   )
 
   const transcriptMonitorCard = (
-    <Card className="flex h-full flex-col border-border/60 bg-card/70">
+    <Card className="flex h-[44rem] max-h-[44rem] flex-col border-border/60 bg-card/70">
       <CardHeader className="space-y-2">
         <CardTitle>Transcript Monitor</CardTitle>
       </CardHeader>
       <CardContent className="flex min-h-0 flex-1 flex-col gap-6">
-        <div className="space-y-3">
-          <div className="space-y-1">
-            <h2 className="text-sm font-medium text-foreground">Open Utterances</h2>
-            <p className="text-sm text-muted-foreground">
-              Partial and stable fragments stay here until <code>stt:utterance_closed</code>.
-            </p>
-          </div>
-
-          {(["interviewer", "user"] as const).map((role) => {
-            const metadata = readinessItemMetadata[role]
-            const openUtterance = openUtterances[role]
-
-            return (
-              <div
-                key={role}
-                className="rounded-xl border border-border/60 bg-muted/20 p-4"
-              >
-                <div className="flex items-center gap-2">
-                  <metadata.icon className="size-4 text-emerald-300" />
-                  <h3 className="text-sm font-medium text-foreground">{metadata.title}</h3>
-                </div>
-                <p className="mt-3 text-sm text-foreground">
-                  {openUtterance?.combinedText ?? "No live utterance for this source."}
-                </p>
-                {openUtterance ? (
-                  <div className="mt-3 space-y-2 text-xs text-muted-foreground">
-                    <p>Stable: {openUtterance.stableText || "None yet"}</p>
-                    <p>Preview: {openUtterance.previewText || "None"}</p>
-                  </div>
-                ) : null}
-              </div>
-            )
-          })}
-        </div>
-
-        <Separator />
-
         <div className="flex min-h-0 flex-1 flex-col gap-3">
-          <div className="space-y-1">
+          {/* <div className="space-y-1">
             <h2 className="text-sm font-medium text-foreground">Committed Transcript</h2>
             <p className="text-sm text-muted-foreground">
               Only closed utterances appear here as the authoritative conversation timeline.
             </p>
-          </div>
-
-          <ScrollArea className="min-h-0 flex-1 pr-4">
+          </div> */}
+      
+          <ScrollArea className="min-h-0 flex-1 ">     {/* //pr-4 */}
             <div className="space-y-3">
               {closedUtterances.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-border/60 bg-muted/10 p-6 text-sm text-muted-foreground">
@@ -288,12 +292,12 @@ export const InterviewLabPage = () => {
   )
 
   const aiAnswersCard = (
-    <Card className="flex h-full flex-col border-border/60 bg-card/70">
+    <Card className="flex h-[44rem] max-h-[44rem] flex-col border-border/60 bg-card/70">
       <CardHeader className="space-y-2">
         <CardTitle>AI Answers</CardTitle>
       </CardHeader>
-      <CardContent className="min-h-0 flex-1">
-        <ScrollArea className="h-full pr-4">
+      <CardContent className="flex min-h-0 flex-1 flex-col">
+        <ScrollArea className="min-h-0 flex-1 ">
           <div className="space-y-3">
             {interviewerClosedUtterances.length === 0 ? (
               <div className="rounded-xl border border-dashed border-border/60 bg-muted/10 p-6 text-sm text-muted-foreground">
@@ -337,7 +341,7 @@ export const InterviewLabPage = () => {
   )
 
   return (
-    <section className="space-y-8">
+    <section className="flex flex-col gap-8 xl:min-h-0 xl:flex-1 xl:overflow-hidden">
       <header className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
@@ -400,21 +404,21 @@ export const InterviewLabPage = () => {
         </Alert>
       ) : null}
 
-      <div className="hidden xl:block">
+      <div className="hidden min-h-0 flex-1 xl:block">
         <ResizablePanelGroup
-          className="min-h-[820px] rounded-2xl border border-border/60 bg-card/25 p-3"
+          className="h-full min-h-0 rounded-2xl border border-border/60 bg-card/25 p-3"
           orientation="horizontal"
         >
           <ResizablePanel defaultSize={31} minSize={24}>
-            <div className="h-full pr-3">{sessionControlPlaneCard}</div>
+            <div className="h-full min-h-0 pr-3">{sessionControlPlaneCard}</div>
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={36} minSize={26}>
-            <div className="h-full px-3">{transcriptMonitorCard}</div>
+            <div className="h-full min-h-0 px-3">{transcriptMonitorCard}</div>
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={33} minSize={24}>
-            <div className="h-full pl-3">{aiAnswersCard}</div>
+            <div className="h-full min-h-0 pl-3">{aiAnswersCard}</div>
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
