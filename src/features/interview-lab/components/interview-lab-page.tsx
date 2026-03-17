@@ -116,6 +116,8 @@ export const InterviewLabPage = () => {
   const interviewerClosedUtterances = closedUtterances.filter(
     (utterance) => utterance.source === "interviewer",
   )
+  const newestFirstClosedUtterances = [...closedUtterances].reverse()
+  const newestFirstInterviewerClosedUtterances = [...interviewerClosedUtterances].reverse()
 
   const sessionControlPlaneCard = (
     <Card className="flex h-[44rem] max-h-[44rem] flex-col border-border/60 bg-card/70">
@@ -259,13 +261,13 @@ export const InterviewLabPage = () => {
       
           <ScrollArea className="min-h-0 flex-1 ">     {/* //pr-4 */}
             <div className="space-y-3">
-              {closedUtterances.length === 0 ? (
+              {newestFirstClosedUtterances.length === 0 ? (
                 <div className="rounded-xl border border-dashed border-border/60 bg-muted/10 p-6 text-sm text-muted-foreground">
                   No committed transcript turns yet.
                 </div>
               ) : null}
 
-              {closedUtterances.map((utterance) => (
+              {newestFirstClosedUtterances.map((utterance) => (
                 <div
                   key={utterance.utteranceId}
                   className="rounded-xl border border-border/60 bg-muted/20 p-4"
@@ -299,13 +301,13 @@ export const InterviewLabPage = () => {
       <CardContent className="flex min-h-0 flex-1 flex-col">
         <ScrollArea className="min-h-0 flex-1 ">
           <div className="space-y-3">
-            {interviewerClosedUtterances.length === 0 ? (
+            {newestFirstInterviewerClosedUtterances.length === 0 ? (
               <div className="rounded-xl border border-dashed border-border/60 bg-muted/10 p-6 text-sm text-muted-foreground">
                 No interviewer turns have been closed yet.
               </div>
             ) : null}
 
-            {interviewerClosedUtterances.map((utterance) => {
+            {newestFirstInterviewerClosedUtterances.map((utterance) => {
               const answer = aiAnswers[utterance.utteranceId]
               const answerText = answer?.text || "Awaiting answer stream."
 
