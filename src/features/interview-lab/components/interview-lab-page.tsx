@@ -32,7 +32,7 @@ import { useInterviewSessionController } from "@/features/interview-lab/hooks"
 
 const readinessItemMetadata = {
   interviewer: {
-    description: "Google Meet tab audio",
+    description: "Meet tab audio",
     icon: Share2,
     title: "Interviewer lane",
   },
@@ -126,12 +126,12 @@ export const InterviewLabPage = () => {
         <ScrollArea className="min-h-0 flex-1">
         <div className="space-y-4">
         <div className="space-y-3">
-          <div className="space-y-1">
+          {/* <div className="space-y-1">
             <h2 className="text-sm font-medium text-foreground">Open Utterances</h2>
             <p className="text-sm text-muted-foreground">
               Partial and stable fragments stay here until <code>stt:utterance_closed</code>.
             </p>
-          </div>
+          </div> */}
 
           {(["interviewer", "user"] as const).map((role) => {
             const metadata = readinessItemMetadata[role]
