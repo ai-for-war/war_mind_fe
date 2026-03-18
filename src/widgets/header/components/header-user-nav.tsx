@@ -37,7 +37,7 @@ export const HeaderUserNav = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon-sm" className="rounded-full">
-          <Avatar size="sm">
+          <Avatar size="default">
             <AvatarFallback>{getInitials(user?.email)}</AvatarFallback>
           </Avatar>
           <span className="sr-only">Open user menu</span>
