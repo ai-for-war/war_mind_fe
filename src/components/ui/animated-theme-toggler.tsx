@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react"
+import { useCallback, useRef } from "react"
 import { Moon, Sun } from "lucide-react"
 import { useTheme } from "next-themes"
 import { flushSync } from "react-dom"
@@ -15,18 +15,11 @@ export const AnimatedThemeToggler = ({
   ...props
 }: AnimatedThemeTogglerProps) => {
   const { resolvedTheme, setTheme } = useTheme()
-  const [isMounted, setIsMounted] = useState(false)
   const buttonRef = useRef<HTMLButtonElement>(null)
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
-
-  const isDark = resolvedTheme === "dark"
+  const currentTheme = resolvedTheme ?? "dark"
+  const isDark = currentTheme === "dark"
 
   const toggleTheme = useCallback(() => {
-    if (!isMounted) return
-
     const button = buttonRef.current
     if (!button) return
 
@@ -73,7 +66,7 @@ export const AnimatedThemeToggler = ({
         )
       })
     }
-  }, [duration, isDark, isMounted, setTheme])
+  }, [duration, isDark, setTheme])
 
   return (
     <button
