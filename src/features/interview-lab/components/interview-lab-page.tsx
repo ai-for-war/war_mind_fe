@@ -1,9 +1,7 @@
 import {
   AlertCircle,
   AudioLines,
-  Mic,
   RefreshCcw,
-  Share2,
   Square,
 } from "lucide-react";
 
@@ -25,69 +23,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useInterviewSessionController } from "@/features/interview-lab/hooks";
 import { Shimmer } from "@/components/ai/shimmer";
-
-const readinessItemMetadata = {
-  interviewer: {
-    description: "Meet tab audio",
-    icon: Share2,
-    title: "Interviewer lane",
-  },
-  user: {
-    description: "Microphone input",
-    icon: Mic,
-    title: "User lane",
-  },
-} as const;
-
-const statusLabels = {
-  completed: "Completed",
-  failed: "Failed",
-  finalizing: "Finalizing",
-  idle: "Idle",
-  media_ready: "Media Ready",
-  preparing_media: "Preparing Media",
-  starting: "Starting",
-  stopped: "Stopped",
-  stopping: "Stopping",
-  streaming: "Streaming",
-} as const;
-
-const readinessLabels = {
-  ended: "Ended",
-  failed: "Failed",
-  idle: "Idle",
-  ready: "Ready",
-  requesting: "Requesting",
-} as const;
-
-const formatDateTime = (value: string | null): string => {
-  if (!value) {
-    return "Not available";
-  }
-
-  return new Intl.DateTimeFormat("en-US", {
-    dateStyle: "medium",
-    timeStyle: "medium",
-  }).format(new Date(value));
-};
-
-const getStatusBadgeVariant = (
-  status: keyof typeof statusLabels,
-): "default" | "destructive" | "outline" | "secondary" => {
-  if (status === "failed") {
-    return "destructive";
-  }
-
-  if (status === "completed") {
-    return "default";
-  }
-
-  if (status === "streaming" || status === "stopped") {
-    return "secondary";
-  }
-
-  return "outline";
-};
+import { READINESS_ITEM_METADATA, STATUS_LABELS, READINESS_LABELS } from "@/features/interview-lab/constants/interview-lab.constants";
+import { formatDateTime, getStatusBadgeVariant } from "@/features/interview-lab/utils/interview-session.utils";
 
 export const InterviewLabPage = () => {
   const {
@@ -134,7 +71,7 @@ export const InterviewLabPage = () => {
           </div> */}
 
               {(["interviewer", "user"] as const).map((role) => {
-                const metadata = readinessItemMetadata[role];
+                const metadata = READINESS_ITEM_METADATA[role];
                 const openUtterance = openUtterances[role];
 
                 return (
@@ -190,7 +127,7 @@ export const InterviewLabPage = () => {
                   Session status
                 </p>
                 <p className="mt-2 text-sm font-medium text-foreground">
-                  {statusLabels[status]}
+                  {STATUS_LABELS[status]}
                 </p>
               </div>
               <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
@@ -217,7 +154,7 @@ export const InterviewLabPage = () => {
 
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
               {(["interviewer", "user"] as const).map((role) => {
-                const metadata = readinessItemMetadata[role];
+                const metadata = READINESS_ITEM_METADATA[role];
                 const readiness = sourceReadiness[role];
 
                 return (
@@ -238,7 +175,7 @@ export const InterviewLabPage = () => {
                         variant={readiness.isReady ? "secondary" : "outline"}
                         className="shrink-0"
                       >
-                        {readinessLabels[readiness.status]}
+                        {READINESS_LABELS[readiness.status]}
                       </Badge>
                     </div>
                     {readiness.error ? (
@@ -385,7 +322,7 @@ export const InterviewLabPage = () => {
             </p> */}
             <div className="flex flex-wrap items-center gap-2">
               <Badge variant={getStatusBadgeVariant(status)}>
-                {statusLabels[status]}
+                {STATUS_LABELS[status]}
               </Badge>
               <Badge
                 variant="outline"

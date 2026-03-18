@@ -3,6 +3,7 @@ import { nanoid } from "nanoid"
 import {
   INTERVIEW_CONVERSATION_ID_PREFIX,
   INTERVIEW_STREAM_ID_PREFIX,
+  STATUS_LABELS,
 } from "@/features/interview-lab/constants"
 import type {
   InterviewAiAnswerState,
@@ -72,3 +73,35 @@ export const isDuplicateInterviewFinalAnswerEvent = (
   )
 }
 
+
+
+export const formatDateTime = (value: string | null): string => {
+  if (!value) {
+    return "Not available";
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    dateStyle: "medium",
+    timeStyle: "medium",
+  }).format(new Date(value));
+};
+
+
+
+export const getStatusBadgeVariant = (
+  status: keyof typeof STATUS_LABELS,
+): "default" | "destructive" | "outline" | "secondary" => {
+  if (status === "failed") {
+    return "destructive";
+  }
+
+  if (status === "completed") {
+    return "default";
+  }
+
+  if (status === "streaming" || status === "stopped") {
+    return "secondary";
+  }
+
+  return "outline";
+};

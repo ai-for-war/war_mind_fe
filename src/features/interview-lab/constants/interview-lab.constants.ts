@@ -51,3 +51,44 @@ export const INTERVIEW_AUDIO_METADATA_DEFAULTS = {
 
 export const INTERVIEW_CONVERSATION_ID_PREFIX = "interview"
 export const INTERVIEW_STREAM_ID_PREFIX = "stream"
+
+
+import { Mic, Share2 } from "lucide-react";
+
+export const READINESS_ITEM_METADATA = {
+    interviewer: {
+      description: "Meet tab audio",
+      icon: Share2,
+      title: "Interviewer lane",
+    },
+    user: {
+      description: "Microphone input",
+      icon: Mic,
+      title: "User lane",
+    },
+  } as const;   
+
+
+  export const STATUS_LABELS = {
+    completed: "Completed",
+    failed: "Failed",
+    finalizing: "Finalizing",
+    idle: "Idle",
+    media_ready: "Media Ready",
+    preparing_media: "Preparing Media",
+    starting: "Starting",
+    stopped: "Stopped",
+    stopping: "Stopping",
+    streaming: "Streaming",
+  } as const;
+
+
+  export const READINESS_LABELS = {
+    ended: "Ended",
+    failed: "Failed",
+    idle: "Idle",
+    ready: "Ready",
+    requesting: "Requesting",
+  } as const;
+
+  
