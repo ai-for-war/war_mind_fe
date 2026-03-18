@@ -125,24 +125,45 @@ const mergeTranscriptText = (existingText: string, nextText: string): string => 
   return `${normalizedExistingText} ${normalizedNextText}`.trim()
 }
 
-const derivePreviewText = (stableText: string, combinedText: string): string => {
-  if (!combinedText) {
+const derivePreviewTextFromPartial = (
+  stableText: string,
+  partialTranscript: string,
+): string => {
+  const normalizedStableText = normalizeTranscriptText(stableText)
+  const normalizedPartialTranscript = normalizeTranscriptText(partialTranscript)
+
+  if (!normalizedPartialTranscript) {
     return ""
   }
 
-  if (!stableText) {
-    return combinedText
+  if (!normalizedStableText) {
+    return normalizedPartialTranscript
   }
 
-  if (combinedText === stableText) {
+  if (normalizedPartialTranscript === normalizedStableText) {
     return ""
   }
 
-  if (combinedText.startsWith(stableText)) {
-    return combinedText.slice(stableText.length).trimStart()
+  if (normalizedPartialTranscript.startsWith(normalizedStableText)) {
+    return normalizedPartialTranscript.slice(normalizedStableText.length).trimStart()
   }
 
-  return combinedText
+  return normalizedPartialTranscript
+}
+
+const buildCombinedText = (stableText: string, previewText: string): string => {
+  const normalizedStableText = normalizeTranscriptText(stableText)
+  const normalizedPreviewText = normalizeTranscriptText(previewText)
+
+  if (!normalizedStableText) {
+    return normalizedPreviewText
+  }
+
+  if (!normalizedPreviewText) {
+    return normalizedStableText
+  }
+
+  return `${normalizedStableText} ${normalizedPreviewText}`.trim()
 }
 
 const appendStableFragment = (
@@ -177,13 +198,14 @@ const buildOpenUtteranceFromPartial = (
   payload: InterviewSttPartialPayload,
 ): InterviewOpenUtterance => {
   const stableText = existingUtterance?.stableText ?? ""
-  const combinedText = normalizeTranscriptText(payload.transcript)
+  const previewText = derivePreviewTextFromPartial(stableText, payload.transcript)
+  const combinedText = buildCombinedText(stableText, previewText)
 
   return {
     source: payload.source,
     channel: payload.channel,
     stableText,
-    previewText: derivePreviewText(stableText, combinedText),
+    previewText,
     combinedText,
     stableFragments: existingUtterance?.stableFragments ?? [],
     lastUpdatedAt: new Date().toISOString(),
@@ -202,18 +224,13 @@ const buildOpenUtteranceFromFinal = (
     existingUtterance?.stableText ?? "",
     payload.transcript,
   )
-  const existingPreviewText = derivePreviewText(
-    existingUtterance?.stableText ?? "",
-    existingUtterance?.combinedText ?? "",
-  )
-  const combinedText = mergeTranscriptText(stableText, existingPreviewText)
 
   return {
     source: payload.source,
     channel: payload.channel,
     stableText,
-    previewText: derivePreviewText(stableText, combinedText),
-    combinedText,
+    previewText: "",
+    combinedText: stableText,
     stableFragments,
     lastUpdatedAt: new Date().toISOString(),
   }
