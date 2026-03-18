@@ -80,75 +80,30 @@ const normalizeTranscriptText = (value: string): string => {
   return value.replace(/\s+/g, " ").trim()
 }
 
-const findOverlapLength = (left: string, right: string): number => {
-  const maxOverlapLength = Math.min(left.length, right.length)
-
-  for (let currentLength = maxOverlapLength; currentLength > 0; currentLength -= 1) {
-    if (left.slice(-currentLength) === right.slice(0, currentLength)) {
-      return currentLength
-    }
-  }
-
-  return 0
-}
-
-const mergeTranscriptText = (existingText: string, nextText: string): string => {
-  const normalizedExistingText = normalizeTranscriptText(existingText)
-  const normalizedNextText = normalizeTranscriptText(nextText)
-
-  if (!normalizedExistingText) {
-    return normalizedNextText
-  }
-
-  if (!normalizedNextText) {
-    return normalizedExistingText
-  }
-
-  if (normalizedExistingText === normalizedNextText) {
-    return normalizedExistingText
-  }
-
-  if (normalizedNextText.startsWith(normalizedExistingText)) {
-    return normalizedNextText
-  }
-
-  if (normalizedExistingText.endsWith(normalizedNextText)) {
-    return normalizedExistingText
-  }
-
-  const overlapLength = findOverlapLength(normalizedExistingText, normalizedNextText)
-
-  if (overlapLength > 0) {
-    return `${normalizedExistingText}${normalizedNextText.slice(overlapLength)}`
-  }
-
-  return `${normalizedExistingText} ${normalizedNextText}`.trim()
-}
-
-const derivePreviewTextFromPartial = (
+const derivePendingText = (
   stableText: string,
-  partialTranscript: string,
+  incomingTranscript: string,
 ): string => {
   const normalizedStableText = normalizeTranscriptText(stableText)
-  const normalizedPartialTranscript = normalizeTranscriptText(partialTranscript)
+  const normalizedIncomingTranscript = normalizeTranscriptText(incomingTranscript)
 
-  if (!normalizedPartialTranscript) {
+  if (!normalizedIncomingTranscript) {
     return ""
   }
 
   if (!normalizedStableText) {
-    return normalizedPartialTranscript
+    return normalizedIncomingTranscript
   }
 
-  if (normalizedPartialTranscript === normalizedStableText) {
+  if (normalizedIncomingTranscript === normalizedStableText) {
     return ""
   }
 
-  if (normalizedPartialTranscript.startsWith(normalizedStableText)) {
-    return normalizedPartialTranscript.slice(normalizedStableText.length).trimStart()
+  if (normalizedIncomingTranscript.startsWith(normalizedStableText)) {
+    return normalizedIncomingTranscript.slice(normalizedStableText.length).trimStart()
   }
 
-  return normalizedPartialTranscript
+  return normalizedIncomingTranscript
 }
 
 const buildCombinedText = (stableText: string, previewText: string): string => {
@@ -198,7 +153,7 @@ const buildOpenUtteranceFromPartial = (
   payload: InterviewSttPartialPayload,
 ): InterviewOpenUtterance => {
   const stableText = existingUtterance?.stableText ?? ""
-  const previewText = derivePreviewTextFromPartial(stableText, payload.transcript)
+  const previewText = derivePendingText(stableText, payload.transcript)
   const combinedText = buildCombinedText(stableText, previewText)
 
   return {
@@ -220,10 +175,9 @@ const buildOpenUtteranceFromFinal = (
     existingUtterance?.stableFragments ?? [],
     payload,
   )
-  const stableText = mergeTranscriptText(
-    existingUtterance?.stableText ?? "",
-    payload.transcript,
-  )
+  const previousStableText = existingUtterance?.stableText ?? ""
+  const finalizedSuffix = derivePendingText(previousStableText, payload.transcript)
+  const stableText = buildCombinedText(previousStableText, finalizedSuffix)
 
   return {
     source: payload.source,
