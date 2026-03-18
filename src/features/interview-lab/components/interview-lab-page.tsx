@@ -86,13 +86,13 @@ export const InterviewLabPage = () => {
                       </h3>
                     </div>
                     <p className="mt-3 text-sm text-foreground">
-                      {openUtterance?.combinedText ??
-                        "No live utterance for this source."}
+                      {openUtterance?.stableText ||
+                        "No stable utterance for this source yet."}
                     </p>
                     {openUtterance ? (
                       <div className="mt-3 space-y-2 text-xs text-muted-foreground">
-                        <p>Stable: {openUtterance.stableText || "None yet"}</p>
-                        <p>Preview: {openUtterance.previewText || "None"}</p>
+                        {/* <p>Stable: {openUtterance.stableText || "None yet"}</p> */}
+                        <p>Preview: {openUtterance.combinedText || "None"}</p>
                       </div>
                     ) : null}
                   </div>
