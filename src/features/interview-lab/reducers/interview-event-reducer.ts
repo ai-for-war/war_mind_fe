@@ -153,8 +153,9 @@ const buildOpenUtteranceFromPartial = (
   payload: InterviewSttPartialPayload,
 ): InterviewOpenUtterance => {
   const stableText = existingUtterance?.stableText ?? ""
-  const previewText = derivePendingText(stableText, payload.transcript)
-  const combinedText = buildCombinedText(stableText, previewText)
+  // Backend partial events already contain the full live utterance.
+  const previewText = normalizeTranscriptText(payload.transcript)
+  const combinedText = previewText || stableText
 
   return {
     source: payload.source,
