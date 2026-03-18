@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   AlertCircle,
   AudioLines,
@@ -14,6 +15,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
   ResizableHandle,
   ResizablePanel,
@@ -25,6 +27,32 @@ import { useInterviewSessionController } from "@/features/interview-lab/hooks";
 import { Shimmer } from "@/components/ai/shimmer";
 import { READINESS_ITEM_METADATA, STATUS_LABELS, READINESS_LABELS } from "@/features/interview-lab/constants/interview-lab.constants";
 import { formatDateTime, getStatusBadgeVariant } from "@/features/interview-lab/utils/interview-session.utils";
+import { cn } from "@/lib/utils";
+
+const AiAnswerUtterancePreview = ({ text }: { text: string }) => {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <Collapsible open={isExpanded} onOpenChange={setIsExpanded} className="mt-2">
+      <CollapsibleTrigger asChild>
+        <Button
+          type="button"
+          variant="ghost"
+          className="h-auto hover:cursor-pointer w-full justify-start px-0 py-0 text-left font-normal whitespace-normal hover:bg-transparent"
+        >
+          <p
+            className={cn(
+              "w-full text-xs leading-5 text-muted-foreground  hover:text-primary",
+              isExpanded ? "text-foreground" : "line-clamp-2",
+            )}
+          >
+            {text}
+          </p>
+        </Button>
+      </CollapsibleTrigger>
+    </Collapsible>
+  );
+};
 
 export const InterviewLabPage = () => {
   const {
@@ -280,9 +308,7 @@ export const InterviewLabPage = () => {
                       {answer?.status ?? "idle"}
                     </Badge>
                   </div>
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    {utterance.text}
-                  </p>
+                  <AiAnswerUtterancePreview text={utterance.text} />
                   <Message className="mt-3 max-w-full" from="assistant">
                     {answerText ? (
                     <MessageContent className="w-full rounded-lg border border-border/60 bg-primary/10 p-4">
