@@ -30,7 +30,7 @@ export const AppSidebar = () => {
                   <span className="font-bold">WARMIND</span>
                   <span className="">v1.0.0</span>
                 </div> */}
-                <h2 className="text-xl font-bold text-sidebar-primary-foreground">WARMIND</h2>
+                <h2 className="text-xl font-bold">WARMIND</h2>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

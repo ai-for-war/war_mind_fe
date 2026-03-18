@@ -59,7 +59,7 @@ export const NavMain = () => {
         {navItems.map((item) => (
           <SidebarMenuItem key={item.title}>
             <SidebarMenuButton asChild>
-              <div onClick={() => navigate(item.items[0].url)} className="cursor-pointer font-medium">
+              <div onClick={() => navigate(item.items[0].url)} className="cursor-pointer font-bold">
                 {item.title}
               </div>
             </SidebarMenuButton>
