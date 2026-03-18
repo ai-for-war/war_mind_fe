@@ -1,5 +1,5 @@
-import { AudioLines, Bot, ImagePlus, Mic } from "lucide-react"
-import { useLocation, useNavigate } from "react-router-dom"
+import { AudioLines, Bot, ImagePlus, Mic } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import {
   SidebarGroup,
@@ -9,7 +9,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 const navItems = [
   {
@@ -47,11 +47,11 @@ const navItems = [
       },
     ],
   },
-]
+];
 
 export const NavMain = () => {
-  const location = useLocation()
-  const navigate = useNavigate()
+  const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <SidebarGroup>
@@ -59,7 +59,10 @@ export const NavMain = () => {
         {navItems.map((item) => (
           <SidebarMenuItem key={item.title}>
             <SidebarMenuButton asChild>
-              <div onClick={() => navigate(item.items[0].url)} className="cursor-pointer font-bold">
+              <div
+                onClick={() => navigate(item.items[0].url)}
+                className="cursor-pointer font-bold text-[15px]"
+              >
                 {item.title}
               </div>
             </SidebarMenuButton>
@@ -67,12 +70,15 @@ export const NavMain = () => {
               <SidebarMenuSub>
                 {item.items.map((subItem) => (
                   <SidebarMenuSubItem key={subItem.title}>
-                    <SidebarMenuSubButton asChild isActive={location.pathname === subItem.url}>
+                    <SidebarMenuSubButton
+                      asChild
+                      isActive={location.pathname === subItem.url}
+                    >
                       <div
                         onClick={() => navigate(subItem.url)}
-                        className="flex cursor-pointer items-center gap-2 font-medium"
+                        className="flex cursor-pointer items-center gap-2 font-inter text-[15px]"
                       >
-                        <subItem.icon className="size-4" />
+                        <subItem.icon className="size-5!" />
                         {subItem.title}
                       </div>
                     </SidebarMenuSubButton>
@@ -84,5 +90,5 @@ export const NavMain = () => {
         ))}
       </SidebarMenu>
     </SidebarGroup>
-  )
-}
+  );
+};
