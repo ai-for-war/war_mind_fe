@@ -24,6 +24,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useInterviewSessionController } from "@/features/interview-lab/hooks";
+import { Shimmer } from "@/components/ai/shimmer";
 
 const readinessItemMetadata = {
   interviewer: {
@@ -323,7 +324,7 @@ export const InterviewLabPage = () => {
 
             {newestFirstInterviewerClosedUtterances.map((utterance) => {
               const answer = aiAnswers[utterance.utteranceId];
-              const answerText = answer?.text || "Awaiting answer stream.";
+              const answerText = answer?.text;
 
               return (
                 <div
@@ -348,9 +349,17 @@ export const InterviewLabPage = () => {
                     {utterance.text}
                   </p>
                   <Message className="mt-3 max-w-full" from="assistant">
+                    {answerText ? (
                     <MessageContent className="w-full rounded-lg border border-border/60 bg-primary/10 p-4">
-                      <MessageResponse>{answerText}</MessageResponse>
+                        <MessageResponse>{answerText}</MessageResponse>
+                      </MessageContent>
+                    ) : 
+                    <MessageContent className="w-full rounded-lg border border-border/60 bg-primary/10 p-4">
+                      <Shimmer className="font-semibold">
+                          AI is generating an answer...
+                        </Shimmer>
                     </MessageContent>
+                    }
                   </Message>
                   {answer?.error ? (
                     <p className="mt-2 text-xs text-destructive">
