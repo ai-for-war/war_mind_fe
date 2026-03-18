@@ -1,4 +1,4 @@
-import { AudioLines, Bot, Mic, ImagePlus } from "lucide-react";
+import { AudioLines, Bot, ImagePlus, Mic, Lightbulb } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import {
@@ -9,7 +9,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
-} from "@/components/ui/sidebar"
+} from "@/components/ui/sidebar";
 
 const navItems = [
   {
@@ -19,6 +19,11 @@ const navItems = [
         title: "Multi-Agent",
         url: "/multi-agent",
         icon: Bot,
+      },
+      {
+        title: "Interview Lab",
+        url: "/interview-lab",
+        icon: Lightbulb,
       },
     ],
   },
@@ -42,39 +47,48 @@ const navItems = [
       },
     ],
   },
-]
+];
 
 export const NavMain = () => {
-  const location = useLocation()
-  const navigate = useNavigate()
+  const location = useLocation();
+  const navigate = useNavigate();
 
   return (
     <SidebarGroup>
-    <SidebarMenu>
-      {navItems.map((item) => (
-        <SidebarMenuItem key={item.title}>
-          <SidebarMenuButton asChild>
-            <div onClick={() => navigate(item.items[0].url)} className="cursor-pointer font-medium">
-              {item.title}
-            </div>
-          </SidebarMenuButton>
-          {item.items?.length ? (
-            <SidebarMenuSub>
-              {item.items.map((item) => (
-                <SidebarMenuSubItem key={item.title}>
-                  <SidebarMenuSubButton asChild isActive={location.pathname === item.url}>
-                    <div onClick={() => navigate(item.url)} className="flex cursor-pointer items-center gap-2 font-medium">
-                      <item.icon className="size-4" />
-                      {item.title}
-                    </div>
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-              ))}
-            </SidebarMenuSub>
-          ) : null}
-        </SidebarMenuItem>
-      ))}
-    </SidebarMenu>
-  </SidebarGroup>
-  )
-}
+      <SidebarMenu>
+        {navItems.map((item) => (
+          <SidebarMenuItem key={item.title}>
+            <SidebarMenuButton asChild>
+              <div
+                onClick={() => navigate(item.items[0].url)}
+                className="cursor-pointer font-bold text-[15px]"
+              >
+                {item.title}
+              </div>
+            </SidebarMenuButton>
+            {item.items?.length ? (
+              <SidebarMenuSub>
+                {item.items.map((subItem) => (
+                  <SidebarMenuSubItem key={subItem.title}>
+                    <SidebarMenuSubButton
+                      asChild
+                      isActive={location.pathname === subItem.url}
+                    >
+                      <div
+                        onClick={() => navigate(subItem.url)}
+                        className="flex cursor-pointer items-center gap-2 font-inter text-[15px]"
+                      >
+                        <subItem.icon className="size-5!" />
+                        {subItem.title}
+                      </div>
+                    </SidebarMenuSubButton>
+                  </SidebarMenuSubItem>
+                ))}
+              </SidebarMenuSub>
+            ) : null}
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    </SidebarGroup>
+  );
+};

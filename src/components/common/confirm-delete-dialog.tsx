@@ -52,7 +52,7 @@ export function ConfirmDeleteDialog({
           >
             {isLoading ? (
               <>
-                <Spinner className="size-4" />
+                <Spinner variant="infinite" className="size-4" />
                 Deleting...
               </>
             ) : (
