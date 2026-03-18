@@ -1,4 +1,4 @@
-import { AudioLines, Bot, ImagePlus, Mic } from "lucide-react";
+import { AudioLines, Bot, ImagePlus, Mic, Lightbulb } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import {
@@ -23,7 +23,7 @@ const navItems = [
       {
         title: "Interview Lab",
         url: "/interview-lab",
-        icon: AudioLines,
+        icon: Lightbulb,
       },
     ],
   },
