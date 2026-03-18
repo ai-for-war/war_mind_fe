@@ -32,7 +32,7 @@ const ProtectedRoute = () => {
   if (isHydrating || !isHydrated) {
     return (
       <div className="flex h-screen items-center justify-center">
-        <Spinner className="size-6 text-muted-foreground" />
+        <Spinner variant="infinite" className="size-12 text-primary" />
       </div>
     )
   }
