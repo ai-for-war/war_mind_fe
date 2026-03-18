@@ -127,7 +127,9 @@ export const InterviewLabPage = () => {
                   Session status
                 </p>
                 <p className="mt-2 text-sm font-medium text-foreground">
-                  {STATUS_LABELS[status]}
+                  <Badge variant={getStatusBadgeVariant(status)}>
+                    {STATUS_LABELS[status]}
+                  </Badge>
                 </p>
               </div>
               <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
@@ -382,19 +384,19 @@ export const InterviewLabPage = () => {
 
       <div className="hidden min-h-0 flex-1 xl:block">
         <ResizablePanelGroup
-          className="h-full min-h-0 rounded-2xl border border-border/60 bg-card/25 p-3"
+          className="h-full min-h-0 rounded-2xl border border-border/60 bg-card/25"
           orientation="horizontal"
         >
           <ResizablePanel defaultSize={31} minSize={24}>
-            <div className="h-full min-h-0 pr-3">{sessionControlPlaneCard}</div>
+            <div className="h-full min-h-0">{sessionControlPlaneCard}</div>
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={36} minSize={26}>
-            <div className="h-full min-h-0 px-3">{transcriptMonitorCard}</div>
+            <div className="h-full min-h-0">{transcriptMonitorCard}</div>
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={33} minSize={24}>
-            <div className="h-full min-h-0 pl-3">{aiAnswersCard}</div>
+            <div className="h-full min-h-0">{aiAnswersCard}</div>
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
