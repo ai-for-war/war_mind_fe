@@ -78,11 +78,11 @@ const getStatusBadgeVariant = (
     return "destructive";
   }
 
-  if (status === "streaming") {
+  if (status === "completed") {
     return "default";
   }
 
-  if (status === "completed" || status === "stopped") {
+  if (status === "streaming" || status === "stopped") {
     return "secondary";
   }
 
@@ -336,11 +336,7 @@ export const InterviewLabPage = () => {
                       {utterance.utteranceId}
                     </p>
                     <Badge
-                      variant={
-                        answer?.status === "failed"
-                          ? "destructive"
-                          : "secondary"
-                      }
+                      variant={getStatusBadgeVariant(answer?.status ?? "idle")}
                     >
                       {answer?.status ?? "idle"}
                     </Badge>
