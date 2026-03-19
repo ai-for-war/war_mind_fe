@@ -17,6 +17,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Collapsible, CollapsibleTrigger } from "@/components/ui/collapsible";
 import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox";
+import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup,
@@ -25,9 +33,20 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useInterviewSessionController } from "@/features/interview-lab/hooks";
 import { Shimmer } from "@/components/ai/shimmer";
-import { READINESS_ITEM_METADATA, STATUS_LABELS, READINESS_LABELS } from "@/features/interview-lab/constants/interview-lab.constants";
+import {
+  INTERVIEW_LANGUAGE_OPTIONS,
+  READINESS_ITEM_METADATA,
+  STATUS_LABELS,
+  READINESS_LABELS,
+} from "@/features/interview-lab/constants/interview-lab.constants";
 import { formatDateTime, getStatusBadgeVariant } from "@/features/interview-lab/utils/interview-session.utils";
+import type { InterviewAudioLanguage } from "@/features/interview-lab/types";
 import { cn } from "@/lib/utils";
+
+type InterviewLanguageOption = {
+  label: string;
+  value: InterviewAudioLanguage;
+};
 
 const AiAnswerUtterancePreview = ({ text }: { text: string }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -55,6 +74,11 @@ const AiAnswerUtterancePreview = ({ text }: { text: string }) => {
 };
 
 export const InterviewLabPage = () => {
+  const interviewLanguageOptions: InterviewLanguageOption[] =
+    INTERVIEW_LANGUAGE_OPTIONS.map((option) => ({
+      label: option.label,
+      value: option.value,
+    }));
   const {
     acceptedConfig,
     aiAnswers,
@@ -66,6 +90,8 @@ export const InterviewLabPage = () => {
     identifiers,
     lastEventAt,
     openUtterances,
+    selectedLanguage,
+    setSelectedLanguage,
     sourceReadiness,
     startInterviewSession,
     status,
@@ -81,6 +107,10 @@ export const InterviewLabPage = () => {
   const newestFirstInterviewerClosedUtterances = [
     ...interviewerClosedUtterances,
   ].reverse();
+  const selectedLanguageOption =
+    interviewLanguageOptions.find(
+      (option) => option.value === selectedLanguage,
+    ) ?? null;
 
   const sessionControlPlaneCard = (
     <Card className="flex h-[44rem] max-h-[44rem] flex-col border-border/60 bg-card/70">
@@ -170,12 +200,12 @@ export const InterviewLabPage = () => {
               </div>
               <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
                 <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
-                  Audio contract
+                    Audio contract
                 </p>
                 <p className="mt-2 text-sm text-foreground">
                   {acceptedConfig
-                    ? `${acceptedConfig.encoding} · ${acceptedConfig.sampleRate}Hz · ${acceptedConfig.channels}ch`
-                    : "Awaiting stt:started"}
+                    ? `${acceptedConfig.language} · ${acceptedConfig.encoding} · ${acceptedConfig.sampleRate}Hz · ${acceptedConfig.channels}ch`
+                    : `${selectedLanguage} · Awaiting stt:started`}
                 </p>
               </div>
             </div>
@@ -364,7 +394,44 @@ export const InterviewLabPage = () => {
           </div>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-wrap items-end gap-3">
+          <div className="space-y-1">
+            <p className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              Language
+            </p>
+            <Combobox
+              items={interviewLanguageOptions}
+              itemToStringValue={(option) => `${option.label} ${option.value}`}
+              value={selectedLanguageOption}
+              onValueChange={(option) => {
+                if (!option) {
+                  return;
+                }
+
+                setSelectedLanguage(option.value);
+              }}
+              disabled={!canStart}
+            >
+              <ComboboxInput
+                aria-label="Interview transcription language"
+                className="w-[18rem]"
+                placeholder="Search language or code"
+                showClear
+              />
+              <ComboboxContent>
+                <ComboboxEmpty>No language found.</ComboboxEmpty>
+                <ComboboxList>
+                  {(option: InterviewLanguageOption) => (
+                    <ComboboxItem key={option.value} value={option}>
+                      {option.label} ({option.value})
+                    </ComboboxItem>
+                  )}
+                </ComboboxList>
+              </ComboboxContent>
+            </Combobox>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
           <Button
             type="button"
             onClick={() => void startInterviewSession()}
@@ -391,6 +458,7 @@ export const InterviewLabPage = () => {
             <RefreshCcw className="size-4" />
             Reset
           </Button>
+          </div>
         </div>
       </header>
 

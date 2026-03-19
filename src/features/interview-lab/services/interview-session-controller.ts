@@ -1,6 +1,7 @@
 import {
   INTERVIEW_AUDIO_METADATA_DEFAULTS,
   INTERVIEW_CHANNEL_MAP,
+  INTERVIEW_DEFAULT_LANGUAGE,
 } from "@/features/interview-lab/constants"
 import {
   applyInterviewSessionStoreActions,
@@ -11,6 +12,7 @@ import { createInterviewSocketAdapter, type InterviewSocketAdapter } from "@/fea
 import { useInterviewSessionStore } from "@/features/interview-lab/stores"
 import type {
   InterviewAudioFrame,
+  InterviewAudioLanguage,
   InterviewSessionError,
   InterviewSessionIdentifiers,
   InterviewSessionState,
@@ -57,11 +59,15 @@ type InterviewMediaRuntime = {
   ) => Promise<PreparedInterviewMediaSession>
 }
 
+type StartInterviewSessionOptions = {
+  language?: InterviewAudioLanguage
+}
+
 type InterviewSessionController = {
   dispose: () => Promise<void>
   getSnapshot: () => InterviewSessionState
   reset: () => Promise<void>
-  start: () => Promise<void>
+  start: (options?: StartInterviewSessionOptions) => Promise<void>
   stop: () => Promise<void>
   teardown: (options?: InterviewControllerTeardownOptions) => Promise<void>
 }
@@ -135,11 +141,12 @@ const isInterviewSessionError = (
 
 const toStartPayload = (
   identifiers: InterviewSessionIdentifiers,
+  language: InterviewAudioLanguage,
 ): InterviewSocketStartPayload => {
   return {
     stream_id: identifiers.streamId,
     conversation_id: identifiers.conversationId,
-    language: INTERVIEW_AUDIO_METADATA_DEFAULTS.language,
+    language,
     encoding: INTERVIEW_AUDIO_METADATA_DEFAULTS.encoding,
     sample_rate: INTERVIEW_AUDIO_METADATA_DEFAULTS.sampleRate,
     channels: INTERVIEW_AUDIO_METADATA_DEFAULTS.channels,
@@ -429,7 +436,9 @@ export const createInterviewSessionController = ({
     })
   }
 
-  const start = async (): Promise<void> => {
+  const start = async (
+    startOptions?: StartInterviewSessionOptions,
+  ): Promise<void> => {
     if (isDisposed) {
       throw new Error("Interview session controller has already been disposed.")
     }
@@ -462,6 +471,8 @@ export const createInterviewSessionController = ({
 
     lifecycleToken += 1
     const token = lifecycleToken
+    const language =
+      startOptions?.language ?? INTERVIEW_DEFAULT_LANGUAGE
     const identifiers: InterviewSessionIdentifiers = {
       conversationId: generateInterviewConversationId(),
       streamId: generateInterviewStreamId(),
@@ -500,7 +511,7 @@ export const createInterviewSessionController = ({
       const waitForStartAcknowledgement = createPendingStart(identifiers, token)
 
       store.setStatus("starting")
-      socketAdapter.emitStart(toStartPayload(identifiers))
+      socketAdapter.emitStart(toStartPayload(identifiers, language))
 
       await waitForStartAcknowledgement
 
@@ -624,4 +635,5 @@ export type {
   InterviewMediaRuntime,
   InterviewSessionController,
   PreparedInterviewMediaSession,
+  StartInterviewSessionOptions,
 }

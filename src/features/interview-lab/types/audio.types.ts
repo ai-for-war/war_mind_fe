@@ -2,6 +2,7 @@ import {
   INTERVIEW_AUDIO_CHANNELS,
   INTERVIEW_AUDIO_METADATA_DEFAULTS,
   INTERVIEW_CHANNEL_MAP,
+  INTERVIEW_LANGUAGE_OPTIONS,
   INTERVIEW_SOURCE_ROLES,
 } from "@/features/interview-lab/constants"
 
@@ -9,7 +10,8 @@ export type InterviewAudioChannel = (typeof INTERVIEW_AUDIO_CHANNELS)[number]
 
 export type InterviewAudioEncoding = typeof INTERVIEW_AUDIO_METADATA_DEFAULTS.encoding
 
-export type InterviewAudioLanguage = typeof INTERVIEW_AUDIO_METADATA_DEFAULTS.language
+export type InterviewAudioLanguage =
+  (typeof INTERVIEW_LANGUAGE_OPTIONS)[number]["value"]
 
 export type InterviewAudioChannelMap = typeof INTERVIEW_CHANNEL_MAP
 
@@ -49,4 +51,3 @@ export interface InterviewAudioLaneChunk {
   channel: InterviewAudioChannel
   samples: Int16Array
 }
-
