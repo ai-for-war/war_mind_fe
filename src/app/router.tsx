@@ -5,6 +5,7 @@ import { MainLayout } from "@/app/layouts/main-layout"
 import { Spinner } from "@/components/ui/spinner"
 import { LoginPage } from "@/features/auth/components/login-page"
 import { InterviewLabPage } from "@/features/interview-lab"
+import { MeetingRecorderPage } from "@/features/meeting-recorder"
 import { MultiAgentPage } from "@/features/multi-agent"
 import { TextToImagePage } from "@/features/text-to-image"
 import { SocketProvider } from "@/features/socket"
@@ -80,6 +81,10 @@ export const router = createBrowserRouter([
           {
             path: "/interview-lab",
             element: <InterviewLabPage />,
+          },
+          {
+            path: "/meeting-recorder",
+            element: <MeetingRecorderPage />,
           },
           {
             path: "/text-to-image",

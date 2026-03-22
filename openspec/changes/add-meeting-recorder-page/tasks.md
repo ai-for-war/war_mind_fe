@@ -1,9 +1,9 @@
 ## 1. Feature scaffolding and app entry points
 
-- [ ] 1.1 Create the `src/features/meeting-recorder/` feature slice with `components`, `hooks`, `stores`, `services`, `reducers`, `types`, `constants`, and `utils`
-- [ ] 1.2 Add feature barrel exports needed for the meeting recorder page to integrate cleanly with the existing app structure
-- [ ] 1.3 Add the authenticated route and page entry component for the meeting recorder feature
-- [ ] 1.4 Update sidebar navigation so the meeting recorder page is reachable from the authenticated app shell
+- [x] 1.1 Create the `src/features/meeting-recorder/` feature slice with `components`, `hooks`, `stores`, `services`, `reducers`, `types`, `constants`, and `utils`
+- [x] 1.2 Add feature barrel exports needed for the meeting recorder page to integrate cleanly with the existing app structure
+- [x] 1.3 Add the authenticated route and page entry component for the meeting recorder feature
+- [x] 1.4 Update sidebar navigation so the meeting recorder page is reachable from the authenticated app shell
 
 ## 2. Runtime types, constants, and store
 
