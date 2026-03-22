@@ -54,6 +54,13 @@ const BLOCKED_TRANSCRIPT_STATUSES: MeetingSessionStatus[] = [
 
 const BLOCKED_NOTE_STATUSES: MeetingSessionStatus[] = ["failed", "stopped"]
 
+const PRESERVED_TERMINAL_STATUSES: MeetingSessionStatus[] = [
+  "completed",
+  "failed",
+  "interrupted",
+  "stopped",
+]
+
 const normalizeText = (value: string): string => {
   return value.replace(/\s+/g, " ").trim()
 }
@@ -293,7 +300,7 @@ export const reduceMeetingEvent = (
 
     case "meeting:completed":
     case "meeting:interrupted": {
-      if (state.status === "failed") {
+      if (PRESERVED_TERMINAL_STATUSES.includes(state.status)) {
         return [{ type: "noop" }]
       }
 
@@ -313,7 +320,7 @@ export const reduceMeetingEvent = (
     }
 
     case "meeting:error": {
-      if (state.status === "stopped") {
+      if (PRESERVED_TERMINAL_STATUSES.includes(state.status)) {
         return [{ type: "noop" }]
       }
 

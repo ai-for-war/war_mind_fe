@@ -46,6 +46,16 @@ const REMOTE_MEETING_SESSION_STATUSES = new Set<MeetingSessionStatus>([
   "finalizing",
 ])
 
+const LATE_NOTE_ONLY_MEETING_SESSION_STATUSES = new Set<MeetingSessionStatus>([
+  "completed",
+  "interrupted",
+])
+
+const BLOCKED_INBOUND_MEETING_SESSION_STATUSES = new Set<MeetingSessionStatus>([
+  "failed",
+  "stopped",
+])
+
 type MeetingFrameEmitter = (frame: MeetingAudioFrame) => Promise<void> | void
 
 type PreparedMeetingMediaSession = {
@@ -289,22 +299,42 @@ export const createMeetingSessionController = ({
       return false
     }
 
-    const matchesStreamId =
-      hasValue(event.payload.stream_id) &&
-      event.payload.stream_id === activeIdentifiers.streamId
+    const scopedStreamId = hasValue(event.payload.stream_id)
+      ? event.payload.stream_id
+      : null
+    const scopedMeetingId = hasValue(event.payload.meeting_id)
+      ? event.payload.meeting_id
+      : null
 
-    const matchesMeetingId =
-      activeIdentifiers.meetingId !== null &&
-      hasValue(event.payload.meeting_id) &&
-      event.payload.meeting_id === activeIdentifiers.meetingId
+    if (!scopedStreamId && !scopedMeetingId) {
+      return false
+    }
 
-    return matchesStreamId || matchesMeetingId
+    if (
+      scopedStreamId !== null &&
+      scopedStreamId !== activeIdentifiers.streamId
+    ) {
+      return false
+    }
+
+    if (scopedMeetingId !== null) {
+      if (
+        activeIdentifiers.meetingId === null ||
+        scopedMeetingId !== activeIdentifiers.meetingId
+      ) {
+        return false
+      }
+    }
+
+    return true
   }
 
   const isMatchingActiveSessionEvent = (
     event: MeetingReducerEvent,
-    activeIdentifiers: MeetingSessionIdentifiers | null,
+    snapshot: Pick<MeetingSessionState, "identifiers" | "status">,
   ): boolean => {
+    const activeIdentifiers = snapshot.identifiers
+
     if (!activeIdentifiers) {
       return false
     }
@@ -316,6 +346,20 @@ export const createMeetingSessionController = ({
       activeOrganizationId !== activeIdentifiers.organizationId
     ) {
       return false
+    }
+
+    if (BLOCKED_INBOUND_MEETING_SESSION_STATUSES.has(snapshot.status)) {
+      return false
+    }
+
+    if (LATE_NOTE_ONLY_MEETING_SESSION_STATUSES.has(snapshot.status)) {
+      return (
+        event.name === "meeting:note:created" &&
+        guardMeetingInboundEvent(event.payload, activeIdentifiers, {
+          requireMeetingId: true,
+          requireStreamId: false,
+        })
+      )
     }
 
     switch (event.name) {
@@ -488,7 +532,7 @@ export const createMeetingSessionController = ({
   const handleInboundEvent = async (event: MeetingReducerEvent): Promise<void> => {
     const snapshot = readSnapshot()
 
-    if (!isMatchingActiveSessionEvent(event, snapshot.identifiers)) {
+    if (!isMatchingActiveSessionEvent(event, snapshot)) {
       return
     }
 
@@ -550,6 +594,12 @@ export const createMeetingSessionController = ({
       throw new Error("A meeting session is already active for this controller.")
     }
 
+    const store = readStore()
+
+    if (snapshot.status !== "idle") {
+      store.resetSession()
+    }
+
     ensureSocketSubscriptions()
 
     if (!socketAdapter.isConnected()) {
@@ -558,7 +608,6 @@ export const createMeetingSessionController = ({
         "The shared Socket.IO transport is not connected.",
         "socket",
       )
-      const store = readStore()
 
       store.setTerminalError(error)
       store.setStatus("failed")
@@ -573,15 +622,10 @@ export const createMeetingSessionController = ({
         "An active organization is required before starting a meeting recorder session.",
         "organization",
       )
-      const store = readStore()
 
       store.setTerminalError(error)
       store.setStatus("failed")
       return
-    }
-
-    if (snapshot.status !== "idle") {
-      readStore().resetSession()
     }
 
     lifecycleToken += 1
@@ -592,8 +636,6 @@ export const createMeetingSessionController = ({
       streamId: generateMeetingStreamId(),
       meetingId: null,
     }
-    const store = readStore()
-
     requestedStreamId = null
     acceptedStreamId = null
     pendingFinalizeStreamId = null

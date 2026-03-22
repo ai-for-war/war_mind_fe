@@ -53,11 +53,11 @@
 
 ## 7. Failure handling and session safety rules
 
-- [ ] 7.1 Surface startup failures for missing socket connection, missing organization context, missing tab audio, and microphone permission or track errors through the meeting session store
-- [ ] 7.2 Implement forced teardown behavior for active-session loss of socket transport, shared tab audio, or microphone input
-- [ ] 7.3 Reject stale or delayed transcript lifecycle events after stop or fast restart so prior session data cannot mutate a newly started session
-- [ ] 7.4 Reject unrelated user-room events from other meeting sessions in the same organization by enforcing active `stream_id` and `meeting_id` guards
-- [ ] 7.5 Preserve completed or interrupted session transcript and note state while still accepting late `meeting:note:created` events for the same `meeting_id`
+- [x] 7.1 Surface startup failures for missing socket connection, missing organization context, missing tab audio, and microphone permission or track errors through the meeting session store
+- [x] 7.2 Implement forced teardown behavior for active-session loss of socket transport, shared tab audio, or microphone input
+- [x] 7.3 Reject stale or delayed transcript lifecycle events after stop or fast restart so prior session data cannot mutate a newly started session
+- [x] 7.4 Reject unrelated user-room events from other meeting sessions in the same organization by enforcing active `stream_id` and `meeting_id` guards
+- [x] 7.5 Preserve completed or interrupted session transcript and note state while still accepting late `meeting:note:created` events for the same `meeting_id`
 
 ## 8. Verification and refinement
 
