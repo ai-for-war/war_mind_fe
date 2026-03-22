@@ -15,12 +15,12 @@
 
 ## 3. Meeting event reduction logic
 
-- [ ] 3.1 Implement the meeting event reducer that normalizes `meeting:started`, `meeting:final`, `meeting:utterance_closed`, `meeting:note:created`, `meeting:completed`, `meeting:interrupted`, and `meeting:error` into store-safe actions
-- [ ] 3.2 Add reduction logic for `meeting:started` that binds the accepted `stream_id` to the authoritative `meeting_id` and accepted audio config
-- [ ] 3.3 Add reduction logic for `meeting:final` as realtime draft transcript updates keyed by `utterance_id` without committing canonical transcript entries
-- [ ] 3.4 Add reduction logic for `meeting:utterance_closed` as the authoritative transcript commit keyed by `sequence`
-- [ ] 3.5 Add reduction logic for `meeting:note:created` as additive ordered note chunk appends and aggregate note derivation
-- [ ] 3.6 Add terminal lifecycle reduction logic so `meeting:completed` and `meeting:interrupted` preserve session state for late note chunks while `meeting:error` transitions the session to failed
+- [x] 3.1 Implement the meeting event reducer that normalizes `meeting:started`, `meeting:final`, `meeting:utterance_closed`, `meeting:note:created`, `meeting:completed`, `meeting:interrupted`, and `meeting:error` into store-safe actions
+- [x] 3.2 Add reduction logic for `meeting:started` that binds the accepted `stream_id` to the authoritative `meeting_id` and accepted audio config
+- [x] 3.3 Add reduction logic for `meeting:final` as realtime draft transcript updates keyed by `utterance_id` without committing canonical transcript entries
+- [x] 3.4 Add reduction logic for `meeting:utterance_closed` as the authoritative transcript commit keyed by `sequence`
+- [x] 3.5 Add reduction logic for `meeting:note:created` as additive ordered note chunk appends and aggregate note derivation
+- [x] 3.6 Add terminal lifecycle reduction logic so `meeting:completed` and `meeting:interrupted` preserve session state for late note chunks while `meeting:error` transitions the session to failed
 
 ## 4. Socket adapter and session orchestration
 
