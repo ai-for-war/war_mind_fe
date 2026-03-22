@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useShallow } from "zustand/react/shallow"
 
+import { INTERVIEW_DEFAULT_LANGUAGE } from "@/features/interview-lab/constants"
 import {
   createBrowserInterviewMediaRuntime,
   createInterviewSessionController,
@@ -8,6 +9,7 @@ import {
 } from "@/features/interview-lab/services"
 import { useInterviewSessionStore } from "@/features/interview-lab/stores"
 import { useInterviewRuntimeSubscriptions } from "@/features/interview-lab/hooks/use-interview-runtime-subscriptions"
+import type { InterviewAudioLanguage } from "@/features/interview-lab/types"
 
 const ACTIVE_INTERVIEW_SESSION_STATUSES = new Set([
   "preparing_media",
@@ -29,6 +31,9 @@ export const useInterviewSessionController = () => {
     createInterviewSessionController({
       mediaRuntime: createBrowserInterviewMediaRuntime(),
     }),
+  )
+  const [selectedLanguage, setSelectedLanguage] = useState<InterviewAudioLanguage>(
+    INTERVIEW_DEFAULT_LANGUAGE,
   )
   const pendingDisposeTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const sessionState = useInterviewSessionStore(
@@ -82,12 +87,16 @@ export const useInterviewSessionController = () => {
 
       await controller.reset()
     },
+    selectedLanguage,
+    setSelectedLanguage,
     startInterviewSession: async () => {
       if (!canStart) {
         return
       }
 
-      await controller.start()
+      await controller.start({
+        language: selectedLanguage,
+      })
     },
     stopInterviewSession: async () => {
       if (!canStop) {
