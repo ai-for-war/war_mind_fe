@@ -7,11 +7,11 @@
 
 ## 2. Runtime types, constants, and store
 
-- [ ] 2.1 Add meeting session, transcript, note chunk, socket payload, and audio pipeline TypeScript types under `src/features/meeting-recorder/types/`
-- [ ] 2.2 Add feature constants for session statuses, source readiness, supported languages, and audio metadata defaults under `src/features/meeting-recorder/constants/`
-- [ ] 2.3 Reuse the interview language option list through a meeting-recorder-facing constant or selector without duplicating the supported language catalog
-- [ ] 2.4 Implement the Zustand meeting session store for lifecycle status, active identifiers, source readiness, draft utterances, committed utterances, note chunks, derived note state, and terminal errors
-- [ ] 2.5 Add utility helpers for generating `stream_id`, guarding inbound events by `organization_id` and active session identifiers, and maintaining ordered transcript and note timelines
+- [x] 2.1 Add meeting session, transcript, note chunk, socket payload, and audio pipeline TypeScript types under `src/features/meeting-recorder/types/`
+- [x] 2.2 Add feature constants for session statuses, source readiness, supported languages, and audio metadata defaults under `src/features/meeting-recorder/constants/`
+- [x] 2.3 Reuse the interview language option list through a meeting-recorder-facing constant or selector without duplicating the supported language catalog
+- [x] 2.4 Implement the Zustand meeting session store for lifecycle status, active identifiers, source readiness, draft utterances, committed utterances, note chunks, derived note state, and terminal errors
+- [x] 2.5 Add utility helpers for generating `stream_id`, guarding inbound events by `organization_id` and active session identifiers, and maintaining ordered transcript and note timelines
 
 ## 3. Meeting event reduction logic
 
