@@ -24,12 +24,12 @@
 
 ## 4. Socket adapter and session orchestration
 
-- [ ] 4.1 Implement the meeting socket adapter that wraps the shared Socket.IO client for `meeting:start`, `meeting:audio`, `meeting:finalize`, and `meeting:stop`
-- [ ] 4.2 Add inbound event filtering by active `organization_id`, `stream_id`, and `meeting_id` before reducer dispatch
-- [ ] 4.3 Implement the meeting session controller that coordinates organization prerequisites, media preparation, session start, active streaming, finalize, forced stop, reset, and teardown
-- [ ] 4.4 Enforce startup ordering so `meeting:audio` emission begins only after the backend confirms the session with `meeting:started`
-- [ ] 4.5 Split controller teardown so capture/upload resources stop on terminal meeting lifecycle events while late note subscriptions remain active for the same `meeting_id` until reset or full dispose
-- [ ] 4.6 Ensure user-initiated stop uses `meeting:finalize` and forced teardown paths use `meeting:stop` when the transport is still available
+- [x] 4.1 Implement the meeting socket adapter that wraps the shared Socket.IO client for `meeting:start`, `meeting:audio`, `meeting:finalize`, and `meeting:stop`
+- [x] 4.2 Add inbound event filtering by active `organization_id`, `stream_id`, and `meeting_id` before reducer dispatch
+- [x] 4.3 Implement the meeting session controller that coordinates organization prerequisites, media preparation, session start, active streaming, finalize, forced stop, reset, and teardown
+- [x] 4.4 Enforce startup ordering so `meeting:audio` emission begins only after the backend confirms the session with `meeting:started`
+- [x] 4.5 Split controller teardown so capture/upload resources stop on terminal meeting lifecycle events while late note subscriptions remain active for the same `meeting_id` until reset or full dispose
+- [x] 4.6 Ensure user-initiated stop uses `meeting:finalize` and forced teardown paths use `meeting:stop` when the transport is still available
 
 ## 5. Browser media capture and mono audio transformation
 
