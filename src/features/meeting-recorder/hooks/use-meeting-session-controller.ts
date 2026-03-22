@@ -62,6 +62,8 @@ export const useMeetingSessionController = () => {
 
   const canStart = !ACTIVE_MEETING_SESSION_STATUSES.has(sessionState.status)
   const canStop = ACTIVE_MEETING_SESSION_STATUSES.has(sessionState.status)
+  const canFinalize = canStop && sessionState.status !== "finalizing"
+  const canForceStop = canStop
   const canReset = RESETTABLE_MEETING_SESSION_STATUSES.has(sessionState.status)
   const isWaitingForFinalNotes = WAITING_FOR_FINAL_NOTES_STATUSES.has(
     sessionState.status,
@@ -88,6 +90,8 @@ export const useMeetingSessionController = () => {
 
   return {
     ...sessionState,
+    canFinalize,
+    canForceStop,
     canReset,
     canStart,
     canStop,
@@ -110,12 +114,24 @@ export const useMeetingSessionController = () => {
         language: selectedLanguage,
       })
     },
-    stopMeetingSession: async () => {
-      if (!canStop) {
+    finalizeMeetingSession: async () => {
+      if (!canFinalize) {
         return
       }
 
       await controller.stop()
+    },
+    forceStopMeetingSession: async () => {
+      if (!canForceStop) {
+        return
+      }
+
+      await controller.teardown({
+        emitStop: true,
+        error: null,
+        preserveSessionState: true,
+        status: "stopped",
+      })
     },
   }
 }

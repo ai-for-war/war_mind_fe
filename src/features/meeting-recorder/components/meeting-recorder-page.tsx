@@ -37,6 +37,7 @@ import type {
   MeetingAudioLanguage,
   MeetingNoteActionItem,
   MeetingSessionStatus,
+  MeetingTranscriptMessage,
 } from "@/features/meeting-recorder/types";
 
 type MeetingLanguageOption = {
@@ -82,6 +83,43 @@ const getStatusBadgeVariant = (status: MeetingSessionStatus): BadgeVariant => {
   }
 
   return "outline";
+};
+
+const getSpeakerLabel = (message: MeetingTranscriptMessage): string => {
+  if (message.speakerLabel) {
+    return message.speakerLabel;
+  }
+
+  if (message.speakerIndex !== null) {
+    return `Speaker ${message.speakerIndex}`;
+  }
+
+  return "Speaker";
+};
+
+const renderTranscriptMessages = (
+  messages: MeetingTranscriptMessage[],
+  emptyLabel: string,
+) => {
+  if (messages.length === 0) {
+    return <p className="text-sm text-muted-foreground">{emptyLabel}</p>;
+  }
+
+  return (
+    <div className="space-y-2">
+      {messages.map((message, index) => (
+        <div
+          key={`${getSpeakerLabel(message)}-${message.text}-${index}`}
+          className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2"
+        >
+          <div className="flex items-center gap-2">
+            <Badge variant="outline">{getSpeakerLabel(message)}</Badge>
+          </div>
+          <p className="mt-2 text-sm leading-6 text-foreground">{message.text}</p>
+        </div>
+      ))}
+    </div>
+  );
 };
 
 const renderTextList = (items: string[], emptyLabel: string) => {
@@ -138,12 +176,15 @@ export const MeetingRecorderPage = () => {
   );
   const {
     acceptedConfig,
+    canFinalize,
+    canForceStop,
     canReset,
     canStart,
-    canStop,
     committedUtterances,
     derivedNotes,
     draftUtterances,
+    finalizeMeetingSession,
+    forceStopMeetingSession,
     identifiers,
     isWaitingForFinalNotes,
     lastEventAt,
@@ -154,7 +195,6 @@ export const MeetingRecorderPage = () => {
     sourceReadiness,
     startMeetingSession,
     status,
-    stopMeetingSession,
     terminalError,
   } = useMeetingSessionController();
 
@@ -355,10 +395,19 @@ export const MeetingRecorderPage = () => {
                         Closed {formatDateTime(utterance.createdAt)}
                       </span>
                     </div>
-                    <p className="mt-3 text-sm leading-6 text-foreground">
-                      {utterance.combinedText ||
-                        "No transcript text was committed."}
-                    </p>
+                    <div className="mt-3">
+                      {utterance.messages.length > 0
+                        ? renderTranscriptMessages(
+                            utterance.messages,
+                            "No transcript text was committed.",
+                          )
+                        : (
+                            <p className="text-sm leading-6 text-foreground">
+                              {utterance.combinedText ||
+                                "No transcript text was committed."}
+                            </p>
+                          )}
+                    </div>
                   </div>
                 ))
               )}
@@ -593,11 +642,20 @@ export const MeetingRecorderPage = () => {
             <Button
               type="button"
               variant="outline"
-              onClick={() => void stopMeetingSession()}
-              disabled={!canStop}
+              onClick={() => void finalizeMeetingSession()}
+              disabled={!canFinalize}
             >
               <Square className="size-4" />
-              Stop
+              Finalize
+            </Button>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={() => void forceStopMeetingSession()}
+              disabled={!canForceStop}
+            >
+              <AlertCircle className="size-4" />
+              Force Stop
             </Button>
             <Button
               type="button"
