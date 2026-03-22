@@ -1,0 +1,8 @@
+export { MeetingRecorderPage } from "@/features/meeting-recorder/components"
+export * from "@/features/meeting-recorder/constants"
+export * from "@/features/meeting-recorder/hooks"
+export * from "@/features/meeting-recorder/reducers"
+export * from "@/features/meeting-recorder/services"
+export * from "@/features/meeting-recorder/stores"
+export type * from "@/features/meeting-recorder/types"
+export * from "@/features/meeting-recorder/utils"

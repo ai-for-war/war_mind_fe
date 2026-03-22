@@ -24,18 +24,24 @@ The `SidebarHeader` SHALL display the application logo and the application name 
 - **THEN** only the app logo icon is visible in the header, and the "WAR MIND" text is hidden
 
 ### Requirement: Navigation menu with two items
-The `SidebarContent` SHALL render a `NavMain` component containing exactly three navigation items defined by a configuration array: "Multi-Agent" (path: `/multi-agent`), "Voice Cloning" (path: `/voice-cloning`), and "Text to Speech" (path: `/tts`). Each item SHALL display an icon and a label. The "Text to Speech" item SHALL use the `AudioLines` icon from Lucide.
+The `SidebarContent` SHALL render a `NavMain` component whose navigation structure is defined by a configuration array of labeled groups. The sidebar SHALL render these groups and destinations:
+- `Agents`: "Multi-Agent" (path: `/multi-agent`) with the `Bot` icon
+- `Generative AI`: "Interview Lab" (path: `/interview-lab`) with the `Lightbulb` icon and "Meeting Recorder" (path: `/meeting-recorder`) with a recording-appropriate Lucide icon
+- `Confidential report`: "Voice Cloning" (path: `/voice-cloning`) with the `Mic` icon, "Text to Image" (path: `/text-to-image`) with an image-generation-appropriate Lucide icon, and "Text to Speech" (path: `/tts`) with the `AudioLines` icon
 
-#### Scenario: All navigation items are displayed
+Each navigation item SHALL display an icon and a label, and clicking a group heading SHALL navigate to the first destination in that group.
+
+#### Scenario: All navigation groups and items are displayed
 - **WHEN** the sidebar content is rendered
-- **THEN** three menu items are visible: "Multi-Agent", "Voice Cloning", and "Text to Speech", each with an appropriate icon
+- **THEN** the sidebar shows the `Agents`, `Generative AI`, and `Confidential report` groups
+- **AND** the navigation items "Multi-Agent", "Interview Lab", "Meeting Recorder", "Voice Cloning", "Text to Image", and "Text to Speech" are visible with appropriate icons
 
-#### Scenario: TTS navigation active state
-- **WHEN** the user is on the `/tts` route
-- **THEN** the "Text to Speech" menu item is visually highlighted as active and other items are not
+#### Scenario: Group heading navigates to its primary destination
+- **WHEN** the user clicks a navigation group heading
+- **THEN** the app navigates to the first configured destination in that group
 
 ### Requirement: Active state reflects current route
-The navigation menu SHALL highlight the item whose `url` matches the current route path. The active item SHALL be visually distinguished from inactive items using shadcn `SidebarMenuButton`'s `isActive` prop.
+The navigation menu SHALL highlight the item whose `url` matches the current route path. The active item SHALL be visually distinguished from inactive items using shadcn `SidebarMenuButton`'s `isActive` prop. This active-state behavior SHALL apply to grouped navigation destinations including `/voice-cloning`, `/interview-lab`, `/meeting-recorder`, `/text-to-image`, and `/tts`.
 
 #### Scenario: Current route item is highlighted
 - **WHEN** the user is on the `/voice-cloning` route
@@ -44,6 +50,14 @@ The navigation menu SHALL highlight the item whose `url` matches the current rou
 #### Scenario: Active state updates on navigation
 - **WHEN** the user clicks "Multi-Agent" in the sidebar
 - **THEN** the browser navigates to `/multi-agent` and the "Multi-Agent" item becomes active while "Voice Cloning" becomes inactive
+
+#### Scenario: Meeting recorder route is active
+- **WHEN** the user is on the `/meeting-recorder` route
+- **THEN** the "Meeting Recorder" navigation item is visually highlighted as active and nonmatching items are not
+
+#### Scenario: Text-to-image route is active
+- **WHEN** the user is on the `/text-to-image` route
+- **THEN** the "Text to Image" navigation item is visually highlighted as active and nonmatching items are not
 
 ### Requirement: Sidebar collapse to icon-only mode
 The sidebar SHALL support collapsing to icon-only mode (width: `3rem`) using `collapsible="icon"`. When collapsed, only the icons of navigation items SHALL be visible, and hovering over an icon SHALL display a tooltip with the item's label.

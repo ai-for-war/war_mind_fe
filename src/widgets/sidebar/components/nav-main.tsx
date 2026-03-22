@@ -1,4 +1,11 @@
-import { AudioLines, Bot, ImagePlus, Mic, Lightbulb } from "lucide-react";
+import {
+  AudioLines,
+  Bot,
+  CircleDot,
+  ImagePlus,
+  Lightbulb,
+  Mic,
+} from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import {
@@ -19,11 +26,21 @@ const navItems = [
         title: "Multi-Agent",
         url: "/multi-agent",
         icon: Bot,
-      },
+      }
+    ],
+  },
+  {
+    title: "Generative AI",
+    items: [
       {
         title: "Interview Lab",
         url: "/interview-lab",
         icon: Lightbulb,
+      },
+      {
+        title: "Meeting Recorder",
+        url: "/meeting-recorder",
+        icon: CircleDot,
       },
     ],
   },
