@@ -26,7 +26,12 @@ const navItems = [
         title: "Multi-Agent",
         url: "/multi-agent",
         icon: Bot,
-      },
+      }
+    ],
+  },
+  {
+    title: "Generative AI",
+    items: [
       {
         title: "Interview Lab",
         url: "/interview-lab",
