@@ -1,4 +1,7 @@
 export {
+  createBrowserMeetingMediaRuntime,
+} from "@/features/meeting-recorder/services/browser-meeting-media-runtime"
+export {
   buildMeetingSessionError,
   createMeetingSessionController,
   type CreateMeetingSessionControllerOptions,

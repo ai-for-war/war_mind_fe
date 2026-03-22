@@ -33,12 +33,12 @@
 
 ## 5. Browser media capture and mono audio transformation
 
-- [ ] 5.1 Implement microphone capture management for the local audio source with permission, track, and active-state validation
-- [ ] 5.2 Implement Chromium tab capture management for the shared meeting tab audio source with audio-track validation
-- [ ] 5.3 Add track-ended and source-failure listeners that escalate active-session dependency loss into forced teardown
-- [ ] 5.4 Implement the `AudioContext` and `AudioWorklet` transform pipeline that normalizes each input source to mono before mix
-- [ ] 5.5 Implement source mixing, resampling to `16kHz`, and `PCM16` encoding so emitted binary frames match the backend meeting contract
-- [ ] 5.6 Add fixed-duration frame chunk emission with monotonically increasing `sequence` values and correct metadata for each `meeting:audio` event
+- [x] 5.1 Implement microphone capture management for the local audio source with permission, track, and active-state validation
+- [x] 5.2 Implement Chromium tab capture management for the shared meeting tab audio source with audio-track validation
+- [x] 5.3 Add track-ended and source-failure listeners that escalate active-session dependency loss into forced teardown
+- [x] 5.4 Implement the `AudioContext` and `AudioWorklet` transform pipeline that normalizes each input source to mono before mix
+- [x] 5.5 Implement source mixing, resampling to `16kHz`, and `PCM16` encoding so emitted binary frames match the backend meeting contract
+- [x] 5.6 Add fixed-duration frame chunk emission with monotonically increasing `sequence` values and correct metadata for each `meeting:audio` event
 
 ## 6. Page integration and runtime host hooks
 
