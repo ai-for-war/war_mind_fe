@@ -36,21 +36,18 @@ import { useMeetingSessionController } from "@/features/meeting-recorder/hooks";
 import type {
   MeetingAudioLanguage,
   MeetingNoteActionItem,
-  MeetingSessionStatus,
   MeetingTranscriptMessage,
 } from "@/features/meeting-recorder/types";
+import {
+  formatMeetingDateTime,
+  getMeetingSpeakerLabel,
+  getMeetingStatusBadgeVariant,
+} from "@/features/meeting-recorder/utils";
 
 type MeetingLanguageOption = {
   label: string;
   value: MeetingAudioLanguage;
 };
-
-type BadgeVariant = "default" | "destructive" | "outline" | "secondary";
-
-const DATE_TIME_FORMATTER = new Intl.DateTimeFormat("en-US", {
-  dateStyle: "medium",
-  timeStyle: "medium",
-});
 
 const READINESS_METADATA = {
   meeting_tab: {
@@ -65,38 +62,6 @@ const READINESS_METADATA = {
   },
 } as const;
 
-const formatDateTime = (value: string | null): string => {
-  if (!value) {
-    return "Not available";
-  }
-
-  return DATE_TIME_FORMATTER.format(new Date(value));
-};
-
-const getStatusBadgeVariant = (status: MeetingSessionStatus): BadgeVariant => {
-  if (status === "failed") {
-    return "destructive";
-  }
-
-  if (status === "completed" || status === "streaming") {
-    return "default";
-  }
-
-  return "outline";
-};
-
-const getSpeakerLabel = (message: MeetingTranscriptMessage): string => {
-  if (message.speakerLabel) {
-    return message.speakerLabel;
-  }
-
-  if (message.speakerIndex !== null) {
-    return `Speaker ${message.speakerIndex}`;
-  }
-
-  return "Speaker";
-};
-
 const renderTranscriptMessages = (
   messages: MeetingTranscriptMessage[],
   emptyLabel: string,
@@ -109,11 +74,11 @@ const renderTranscriptMessages = (
     <div className="space-y-2">
       {messages.map((message, index) => (
         <div
-          key={`${getSpeakerLabel(message)}-${message.text}-${index}`}
+          key={`${getMeetingSpeakerLabel(message)}-${message.text}-${index}`}
           className="rounded-lg border border-border/60 bg-muted/20 px-3 py-2"
         >
           <div className="flex items-center gap-2">
-            <Badge variant="outline">{getSpeakerLabel(message)}</Badge>
+            <Badge variant="outline">{getMeetingSpeakerLabel(message)}</Badge>
           </div>
           <p className="mt-2 text-sm leading-6 text-foreground">{message.text}</p>
         </div>
@@ -250,7 +215,7 @@ export const MeetingRecorderPage = () => {
                       </span>
                     </div>
                     <span className="text-xs text-muted-foreground">
-                      Updated {formatDateTime(latestDraftUpdatedAt)}
+                      Updated {formatMeetingDateTime(latestDraftUpdatedAt)}
                     </span>
                   </div>
                   <p className="mt-3 text-sm leading-6 text-foreground">
@@ -296,7 +261,7 @@ export const MeetingRecorderPage = () => {
                       </Badge>
                     </div>
                     <p className="mt-3 text-xs text-muted-foreground">
-                      Updated {formatDateTime(readiness.updatedAt)}
+                      Updated {formatMeetingDateTime(readiness.updatedAt)}
                     </p>
                     {readiness.error ? (
                       <p className="mt-3 text-sm text-destructive">
@@ -332,7 +297,7 @@ export const MeetingRecorderPage = () => {
                   Last event
                 </p>
                 <p className="mt-2 text-sm text-foreground">
-                  {formatDateTime(lastEventAt)}
+                  {formatMeetingDateTime(lastEventAt)}
                 </p>
               </div>
               <div className="rounded-xl border border-border/60 bg-muted/20 p-4">
@@ -392,7 +357,7 @@ export const MeetingRecorderPage = () => {
                         </span> */}
                       </div>
                       <span className="text-xs text-muted-foreground">
-                        Closed {formatDateTime(utterance.createdAt)}
+                        Closed {formatMeetingDateTime(utterance.createdAt)}
                       </span>
                     </div>
                     <div className="mt-3">
@@ -467,7 +432,7 @@ export const MeetingRecorderPage = () => {
                     Last updated
                   </p>
                   <p className="mt-2 text-sm text-foreground">
-                    {formatDateTime(derivedNotes.lastUpdatedAt)}
+                    {formatMeetingDateTime(derivedNotes.lastUpdatedAt)}
                   </p>
                 </div>
               </div> */}
@@ -532,7 +497,7 @@ export const MeetingRecorderPage = () => {
                         </span> */}
                       </div>
                       <span className="text-xs text-muted-foreground">
-                        Received {formatDateTime(noteChunk.createdAt)}
+                        Received {formatMeetingDateTime(noteChunk.createdAt)}
                       </span>
                     </div>
                     <div className="mt-4 space-y-4">
@@ -582,7 +547,7 @@ export const MeetingRecorderPage = () => {
             <h1 className="text-2xl font-semibold tracking-tight lg:text-3xl">
               Meeting Recorder
             </h1>
-            <Badge variant={getStatusBadgeVariant(status)}>
+            <Badge variant={getMeetingStatusBadgeVariant(status)}>
               {MEETING_STATUS_LABELS[status]}
             </Badge>
           </div>
