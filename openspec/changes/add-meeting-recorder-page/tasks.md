@@ -42,14 +42,14 @@
 
 ## 6. Page integration and runtime host hooks
 
-- [ ] 6.1 Implement the meeting recorder page component as a thin runtime host that reads normalized state from the meeting store
-- [ ] 6.2 Implement the controller hook that exposes page-level commands for start, stop, reset, language selection, and current session status
-- [ ] 6.3 Implement runtime subscription hooks that register and clean up meeting-specific socket listeners without leaking handlers across rerenders
-- [ ] 6.4 Render source readiness, selected language, lifecycle status, and terminal error state from the normalized runtime store
-- [ ] 6.5 Render realtime draft transcript state and canonical committed transcript entries in sequence order
-- [ ] 6.6 Render additive note chunk cards that show authoritative `from_sequence` and `to_sequence` ranges plus an aggregate notes view derived from received chunks
-- [ ] 6.7 Show a soft “waiting for final AI notes” state after `meeting:completed` or `meeting:interrupted` while continuing to append later note chunks
-- [ ] 6.8 Ensure page unmount disposes the active meeting runtime without showing an exit confirmation prompt
+- [x] 6.1 Implement the meeting recorder page component as a thin runtime host that reads normalized state from the meeting store
+- [x] 6.2 Implement the controller hook that exposes page-level commands for start, stop, reset, language selection, and current session status
+- [x] 6.3 Implement runtime subscription hooks that register and clean up meeting-specific socket listeners without leaking handlers across rerenders
+- [x] 6.4 Render source readiness, selected language, lifecycle status, and terminal error state from the normalized runtime store
+- [x] 6.5 Render realtime draft transcript state and canonical committed transcript entries in sequence order
+- [x] 6.6 Render additive note chunk cards that show authoritative `from_sequence` and `to_sequence` ranges plus an aggregate notes view derived from received chunks
+- [x] 6.7 Show a soft "waiting for final AI notes" state after `meeting:completed` or `meeting:interrupted` while continuing to append later note chunks
+- [x] 6.8 Ensure page unmount disposes the active meeting runtime without showing an exit confirmation prompt
 
 ## 7. Failure handling and session safety rules
 
