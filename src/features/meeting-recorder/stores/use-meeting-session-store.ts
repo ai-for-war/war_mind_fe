@@ -19,6 +19,36 @@ import {
   upsertMeetingNoteChunk,
 } from "@/features/meeting-recorder/utils"
 
+const normalizeTranscriptFragment = (value: string): string => {
+  return value.replace(/\s+/g, " ").trim()
+}
+
+const mergeDraftCombinedText = (
+  previousText: string,
+  nextText: string,
+): string => {
+  const normalizedPreviousText = normalizeTranscriptFragment(previousText)
+  const normalizedNextText = normalizeTranscriptFragment(nextText)
+
+  if (!normalizedPreviousText) {
+    return normalizedNextText
+  }
+
+  if (!normalizedNextText) {
+    return normalizedPreviousText
+  }
+
+  if (normalizedNextText.startsWith(normalizedPreviousText)) {
+    return normalizedNextText
+  }
+
+  if (normalizedPreviousText.startsWith(normalizedNextText)) {
+    return normalizedPreviousText
+  }
+
+  return `${normalizedPreviousText} ${normalizedNextText}`
+}
+
 const buildInitialSourceReadiness = (): Record<
   MeetingSourceRole,
   MeetingSourceReadinessState
@@ -125,13 +155,25 @@ export const useMeetingSessionStore = create<
     }),
   setAcceptedConfig: (acceptedConfig) => set({ acceptedConfig }),
   setDraftUtterance: (utterance) =>
-    set((state) => ({
-      draftUtterances: {
-        ...state.draftUtterances,
-        [utterance.utteranceId]: utterance,
-      },
-      lastEventAt: utterance.lastUpdatedAt,
-    })),
+    set((state) => {
+      const previousUtterance = state.draftUtterances[utterance.utteranceId]
+
+      return {
+        draftUtterances: {
+          ...state.draftUtterances,
+          [utterance.utteranceId]: previousUtterance
+            ? {
+                ...utterance,
+                combinedText: mergeDraftCombinedText(
+                  previousUtterance.combinedText,
+                  utterance.combinedText,
+                ),
+              }
+            : utterance,
+        },
+        lastEventAt: utterance.lastUpdatedAt,
+      }
+    }),
   setIdentifiers: (identifiers) => set({ identifiers }),
   setSourceReadiness: (role, value) =>
     set((state) => ({
