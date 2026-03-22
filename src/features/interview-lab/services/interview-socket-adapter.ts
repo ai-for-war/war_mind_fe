@@ -52,10 +52,12 @@ const registerSocketListener = <TEventName extends InterviewSocketEventName>(
     } as InterviewReducerEvent)
   }
 
-  socket.on(eventName, listener)
+  const socketListener = listener as unknown as never
+
+  socket.on(eventName, socketListener)
 
   return () => {
-    socket.off(eventName, listener)
+    socket.off(eventName, socketListener)
   }
 }
 

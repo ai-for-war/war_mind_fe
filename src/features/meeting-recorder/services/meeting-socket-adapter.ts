@@ -46,10 +46,12 @@ const registerSocketListener = <TEventName extends MeetingSocketEventName>(
     } as MeetingReducerEvent)
   }
 
-  socket.on(eventName, listener)
+  const socketListener = listener as unknown as never
+
+  socket.on(eventName, socketListener)
 
   return () => {
-    socket.off(eventName, listener)
+    socket.off(eventName, socketListener)
   }
 }
 
