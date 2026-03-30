@@ -19,10 +19,10 @@
 
 ## 4. Skill list page
 
-- [ ] 4.1 Implement the `Skill Plugins` page shell with title, supporting copy, primary `New Skill` action, search input, and `All`/`Enabled`/`Disabled` filter controls
-- [ ] 4.2 Implement the single-column list rendering for skill cards showing name, description, enablement state, version, allowed-tool count, and updated metadata
-- [ ] 4.3 Implement loading, empty, no-results, and fetch-error states for the list page
-- [ ] 4.4 Wire list item selection so clicking a skill opens the detail popup without navigating away from `/skill-plugins`
+- [x] 4.1 Implement the `Skill Plugins` page shell with title, supporting copy, primary `New Skill` action, search input, and `All`/`Enabled`/`Disabled` filter controls
+- [x] 4.2 Implement the single-column list rendering for skill cards showing name, description, enablement state, version, allowed-tool count, and updated metadata
+- [x] 4.3 Implement loading, empty, no-results, and fetch-error states for the list page
+- [x] 4.4 Wire list item selection so clicking a skill opens the detail popup without navigating away from `/skill-plugins`
 
 ## 5. Popup workflows
 
