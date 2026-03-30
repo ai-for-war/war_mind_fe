@@ -5,6 +5,7 @@ import {
   ImagePlus,
   Lightbulb,
   Mic,
+  Plug,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -42,6 +43,16 @@ const navItems = [
         url: "/meeting-recorder",
         icon: CircleDot,
       },
+    ],
+  },
+  {
+    title: "Plugins",
+    items: [
+      {
+        title: "Skill",
+        url: "/skill-plugins",
+        icon: Plug,
+      }
     ],
   },
   {

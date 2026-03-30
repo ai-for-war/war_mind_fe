@@ -1,8 +1,8 @@
 ## 1. Navigation and route entry points
 
-- [ ] 1.1 Update `src/widgets/sidebar/components/nav-main.tsx` to add a new `Plugins` group with a `Skill` navigation item targeting `/skill-plugins`
-- [ ] 1.2 Update `src/app/router.tsx` to register the protected `/skill-plugins` route under `MainLayout`
-- [ ] 1.3 Add the feature barrel export and route entry component wiring so the new page can be imported cleanly from `src/features/skill-plugins/`
+- [x] 1.1 Update `src/widgets/sidebar/components/nav-main.tsx` to add a new `Plugins` group with a `Skill` navigation item targeting `/skill-plugins`
+- [x] 1.2 Update `src/app/router.tsx` to register the protected `/skill-plugins` route under `MainLayout`
+- [x] 1.3 Add the feature barrel export and route entry component wiring so the new page can be imported cleanly from `src/features/skill-plugins/`
 
 ## 2. Skill Plugins feature scaffolding
 
