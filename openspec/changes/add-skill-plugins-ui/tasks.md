@@ -12,10 +12,10 @@
 
 ## 3. API and query integration
 
-- [ ] 3.1 Implement lead-agent skill API helpers for list, detail, create, update, delete, enable, disable, and tool catalog requests using the existing authenticated API client
-- [ ] 3.2 Implement TanStack Query hooks for the skill list, selected skill detail, and runtime tool catalog data
-- [ ] 3.3 Implement TanStack Query mutations for create, update, enable, disable, and delete with cache invalidation for list and detail queries
-- [ ] 3.4 Add a request-mapping helper that preserves backend update semantics for `allowed_tool_names` so unchanged, cleared, and replaced tool selections are sent correctly
+- [x] 3.1 Implement lead-agent skill API helpers for list, detail, create, update, delete, enable, disable, and tool catalog requests using the existing authenticated API client
+- [x] 3.2 Implement TanStack Query hooks for the skill list, selected skill detail, and runtime tool catalog data
+- [x] 3.3 Implement TanStack Query mutations for create, update, enable, disable, and delete with cache invalidation for list and detail queries
+- [x] 3.4 Add a request-mapping helper that preserves backend update semantics for `allowed_tool_names` so unchanged, cleared, and replaced tool selections are sent correctly
 
 ## 4. Skill list page
 

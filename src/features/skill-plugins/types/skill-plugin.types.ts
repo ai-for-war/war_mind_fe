@@ -32,6 +32,11 @@ export interface SkillPluginListFilters {
   status: SkillPluginStatusFilter
 }
 
+export interface SkillPluginListParams {
+  skip?: number
+  limit?: number
+}
+
 export interface SkillPluginFormValues {
   name: string
   description: string
@@ -43,6 +48,15 @@ export type CreateSkillPluginFormValues = SkillPluginFormValues
 
 export interface EditSkillPluginFormValues extends SkillPluginFormValues {
   skill_id: string
+}
+
+export type CreateSkillPluginRequest = SkillPluginFormValues
+
+export interface UpdateSkillPluginRequest {
+  name?: string
+  description?: string
+  activation_prompt?: string
+  allowed_tool_names?: string[] | null
 }
 
 export interface SkillPluginListResponse {
@@ -59,4 +73,15 @@ export interface SkillPluginToolCatalogResponse {
 export interface SkillPluginEnablementResponse {
   skill_id: string
   is_enabled: boolean
+}
+
+export interface MapSkillPluginUpdateRequestParams {
+  currentValues: SkillPluginFormValues
+  initialValues: SkillPluginFormValues
+}
+
+export interface UpdateSkillPluginMutationInput {
+  skillId: string
+  currentValues: SkillPluginFormValues
+  initialValues: SkillPluginFormValues
 }
