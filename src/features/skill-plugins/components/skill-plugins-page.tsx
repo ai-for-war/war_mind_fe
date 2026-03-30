@@ -48,12 +48,6 @@ export const SkillPluginsPage = () => {
     return searchableContent.includes(normalizedSearchText)
   })
 
-  const handleDialogOpenChange = (open: boolean) => {
-    if (!open) {
-      pageState.closeDialog()
-    }
-  }
-
   return (
     <section
       className="flex flex-col gap-6"
@@ -115,12 +109,12 @@ export const SkillPluginsPage = () => {
         </div>
       ) : null}
       <SkillPluginDialogShell
-        activeDialog={
-          pageState.activeDialog === "create" || pageState.activeDialog === "detail"
-            ? pageState.activeDialog
-            : null
-        }
-        onOpenChange={handleDialogOpenChange}
+        activeDialog={pageState.activeDialog}
+        clearSelection={pageState.clearSelection}
+        closeDialog={pageState.closeDialog}
+        openDeleteDialog={pageState.openDeleteDialog}
+        openDetailDialog={pageState.openDetailDialog}
+        openEditDialog={pageState.openEditDialog}
         selectedSkillId={pageState.selectedSkillId}
       />
     </section>

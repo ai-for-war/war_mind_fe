@@ -12,7 +12,7 @@ import type {
 
 const DEFAULT_SKILL_PLUGINS_SKIP = 0
 const DEFAULT_SKILL_PLUGINS_LIMIT = 20
-const SKILL_PLUGINS_API_PREFIX = "/api/v1/lead-agent"
+const SKILL_PLUGINS_API_PREFIX = "/lead-agent"
 
 const listSkills = async (
   params?: SkillPluginListParams,

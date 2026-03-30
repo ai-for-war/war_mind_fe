@@ -26,12 +26,12 @@
 
 ## 5. Popup workflows
 
-- [ ] 5.1 Implement the skill detail popup showing name, description, activation prompt, allowed tools, version, enablement state, and action affordances
-- [ ] 5.2 Implement the shared create/edit skill popup with controls for `name`, `description`, `activation_prompt`, and selectable `allowed_tool_names`
-- [ ] 5.3 Load and render the runtime tool catalog in the create/edit popup without hardcoding tool choices in the frontend
-- [ ] 5.4 Implement the enable and disable actions as dedicated popup-triggered mutations separate from edit form submission
-- [ ] 5.5 Implement the delete confirmation popup with copy that distinguishes permanent deletion from disablement
-- [ ] 5.6 Refresh or reconcile list and detail state after successful create, edit, enable, disable, and delete operations
+- [x] 5.1 Implement the skill detail popup showing name, description, activation prompt, allowed tools, version, enablement state, and action affordances
+- [x] 5.2 Implement the shared create/edit skill popup with controls for `name`, `description`, `activation_prompt`, and selectable `allowed_tool_names`
+- [x] 5.3 Load and render the runtime tool catalog in the create/edit popup without hardcoding tool choices in the frontend
+- [x] 5.4 Implement the enable and disable actions as dedicated popup-triggered mutations separate from edit form submission
+- [x] 5.5 Implement the delete confirmation popup with copy that distinguishes permanent deletion from disablement
+- [x] 5.6 Refresh or reconcile list and detail state after successful create, edit, enable, disable, and delete operations
 
 ## 6. Verification
 
