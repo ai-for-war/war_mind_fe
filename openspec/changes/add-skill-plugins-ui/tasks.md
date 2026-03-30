@@ -6,9 +6,9 @@
 
 ## 2. Skill Plugins feature scaffolding
 
-- [ ] 2.1 Create the `src/features/skill-plugins/` feature slice with the directories needed for `components`, `api`, `hooks`, and `types`
-- [ ] 2.2 Add feature-local TypeScript types for skill summaries, skill details, tool catalog items, list filters, and create/edit form values
-- [ ] 2.3 Add a page-level hook or coordinator that owns selected skill id, active dialog state, search text, and status filter state
+- [x] 2.1 Create the `src/features/skill-plugins/` feature slice with the directories needed for `components`, `api`, `hooks`, and `types`
+- [x] 2.2 Add feature-local TypeScript types for skill summaries, skill details, tool catalog items, list filters, and create/edit form values
+- [x] 2.3 Add a page-level hook or coordinator that owns selected skill id, active dialog state, search text, and status filter state
 
 ## 3. API and query integration
 
