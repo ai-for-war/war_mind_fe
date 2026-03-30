@@ -195,7 +195,7 @@ const SkillPluginDetailDialog = ({
                   </div>
                 </div>
 
-                <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
+                <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr] lg:items-start">
                   <div className="space-y-4 rounded-xl border border-border/60 bg-card/70 p-5">
                     <div className="space-y-2">
                       <p className="text-sm font-medium text-foreground">
@@ -207,7 +207,7 @@ const SkillPluginDetailDialog = ({
                     </div>
                   </div>
 
-                  <div className="space-y-4 rounded-xl border border-border/60 bg-card/70 p-5">
+                  <div className="space-y-4 rounded-xl border border-border/60 bg-card/70 p-5 lg:sticky lg:top-0">
                     <div className="space-y-2">
                       <p className="text-sm font-medium text-foreground">
                         Allowed Tools
