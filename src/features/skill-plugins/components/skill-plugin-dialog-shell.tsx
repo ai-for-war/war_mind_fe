@@ -2,6 +2,7 @@ import { useMemo, useState } from "react"
 import { isAxiosError } from "axios"
 import {
   AlertCircle,
+  CheckCircle2,
   Loader2,
   PencilLine,
   Power,
@@ -37,6 +38,12 @@ import { Label } from "@/components/ui/label"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Textarea } from "@/components/ui/textarea"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import {
   mapSkillPluginUpdateRequest,
 } from "@/features/skill-plugins/api"
@@ -345,7 +352,7 @@ const SkillPluginFormDialog = ({
         </DialogHeader>
 
         <ScrollArea className="max-h-[65vh] pr-4">
-          <div className="grid gap-5 lg:grid-cols-[1.2fr_1fr]">
+          <div className="grid gap-5 lg:grid-cols-[1.2fr_1fr] lg:items-start">
             <div className="space-y-4 rounded-xl border border-border/60 bg-card/70 p-5">
               {detailLoading && isEditMode ? (
                 <div className="flex items-center gap-2 rounded-lg border border-border/60 bg-muted/20 p-3 text-sm text-muted-foreground">
@@ -415,7 +422,7 @@ const SkillPluginFormDialog = ({
               </div>
             </div>
 
-            <div className="space-y-4 rounded-xl border border-border/60 bg-card/70 p-5">
+            <div className="space-y-4 rounded-xl border border-border/60 bg-card/70 p-5 lg:sticky lg:top-0">
               <div className="space-y-1">
                 <p className="text-sm font-medium text-foreground">Allowed Tools</p>
                 <p className="text-sm text-muted-foreground">
@@ -439,7 +446,8 @@ const SkillPluginFormDialog = ({
               ) : null}
 
               {!toolCatalogLoading && !toolCatalogError ? (
-                <div className="space-y-4">
+                <ScrollArea className="max-h-[26rem] pr-3">
+                  <div className="space-y-4">
                   {Object.entries(groupedToolCatalogItems).map(([category, items]) => (
                     <div key={category} className="space-y-3">
                       <div className="flex items-center gap-2">
@@ -449,36 +457,70 @@ const SkillPluginFormDialog = ({
                         </p>
                       </div>
 
-                      <ToggleGroup
-                        type="multiple"
-                        value={draftValues.allowed_tool_names}
-                        onValueChange={(nextValue) =>
-                          setDraftValues({
-                            ...draftValues,
-                            allowed_tool_names: nextValue,
-                          })
-                        }
-                        variant="outline"
-                        spacing={2}
-                        className="flex w-full flex-wrap justify-start gap-2"
-                        aria-label={`Allowed tools for ${category}`}
+                      <TooltipProvider delayDuration={150}>
+                        <ToggleGroup
+                          type="multiple"
+                          value={draftValues.allowed_tool_names}
+                          onValueChange={(nextValue) =>
+                            setDraftValues({
+                              ...draftValues,
+                              allowed_tool_names: nextValue,
+                            })
+                          }
+                          variant="outline"
+                          spacing={2}
+                          className="flex w-full flex-wrap justify-start gap-2"
+                          aria-label={`Allowed tools for ${category}`}
                       >
                         {items.map((toolItem) => (
-                          <ToggleGroupItem
-                            key={toolItem.tool_name}
-                            value={toolItem.tool_name}
-                            className="h-auto min-h-16 flex-1 basis-full items-start justify-start px-3 py-3 text-left whitespace-normal sm:basis-[calc(50%-0.25rem)]"
-                            aria-label={`Toggle ${toolItem.display_name}`}
-                          >
-                            <div className="min-w-0 space-y-1">
-                              <p className="font-medium">{toolItem.display_name}</p>
-                              <p className="break-words text-xs leading-5 text-muted-foreground">
-                                {toolItem.description}
-                              </p>
-                            </div>
-                          </ToggleGroupItem>
+                          <Tooltip key={toolItem.tool_name}>
+                            <TooltipTrigger asChild>
+                              <ToggleGroupItem
+                                value={toolItem.tool_name}
+                                className={`h-auto min-h-16 flex-1 basis-full items-start justify-start px-3 py-3 text-left whitespace-normal transition-colors sm:basis-[calc(50%-0.25rem)] ${
+                                  draftValues.allowed_tool_names.includes(
+                                    toolItem.tool_name,
+                                  )
+                                    ? "border-primary bg-primary/12 text-foreground shadow-[0_0_0_1px_hsl(var(--primary))]"
+                                    : "border-border/70"
+                                }`}
+                                aria-label={`Toggle ${toolItem.display_name}`}
+                              >
+                                <div className="flex min-w-0 w-full items-start justify-between gap-3">
+                                  <div className="min-w-0 space-y-1">
+                                    <p className="font-medium">{toolItem.display_name}</p>
+                                    <p
+                                      className={`truncate text-xs leading-5 ${
+                                        draftValues.allowed_tool_names.includes(
+                                          toolItem.tool_name,
+                                        )
+                                          ? "text-foreground/80"
+                                          : "text-muted-foreground"
+                                      }`}
+                                    >
+                                      {toolItem.description}
+                                    </p>
+                                  </div>
+
+                                  {draftValues.allowed_tool_names.includes(
+                                    toolItem.tool_name,
+                                  ) ? (
+                                    <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" />
+                                  ) : null}
+                                </div>
+                              </ToggleGroupItem>
+                            </TooltipTrigger>
+                            <TooltipContent
+                              side="top"
+                              sideOffset={8}
+                              className="max-w-xs text-left leading-5"
+                            >
+                              {toolItem.description}
+                            </TooltipContent>
+                          </Tooltip>
                         ))}
                       </ToggleGroup>
+                      </TooltipProvider>
                     </div>
                   ))}
 
@@ -488,7 +530,8 @@ const SkillPluginFormDialog = ({
                       catalog.
                     </p>
                   ) : null}
-                </div>
+                  </div>
+                </ScrollArea>
               ) : null}
             </div>
           </div>
@@ -592,7 +635,9 @@ export const SkillPluginDialogShell = ({
     }
   }
 
-  const handleFormSubmit = async (formValues: SkillPluginFormValues) => {
+  const handleFormSubmit = async (
+    formValues: SkillPluginFormValues,
+  ): Promise<string | null> => {
     const trimmedFormValues: SkillPluginFormValues = {
       name: formValues.name.trim(),
       description: formValues.description.trim(),
@@ -621,7 +666,7 @@ export const SkillPluginDialogShell = ({
         )
 
         openDetailDialog(createdSkill.skill_id)
-        return
+        return null
       }
 
       if (activeDialog === "edit" && selectedSkillId && skillDetailQuery.data) {
@@ -642,6 +687,7 @@ export const SkillPluginDialogShell = ({
         })
 
         openDetailDialog(updatedSkill.skill_id)
+        return null
       }
     } catch (error) {
       return getApiErrorMessage(error)
