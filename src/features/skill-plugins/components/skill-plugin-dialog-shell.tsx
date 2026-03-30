@@ -459,6 +459,7 @@ const SkillPluginFormDialog = ({
                           })
                         }
                         variant="outline"
+                        spacing={2}
                         className="flex w-full flex-wrap justify-start gap-2"
                         aria-label={`Allowed tools for ${category}`}
                       >
@@ -466,12 +467,12 @@ const SkillPluginFormDialog = ({
                           <ToggleGroupItem
                             key={toolItem.tool_name}
                             value={toolItem.tool_name}
-                            className="h-auto min-h-16 flex-1 basis-full justify-start px-3 py-3 text-left sm:basis-[calc(50%-0.25rem)]"
+                            className="h-auto min-h-16 flex-1 basis-full items-start justify-start px-3 py-3 text-left whitespace-normal sm:basis-[calc(50%-0.25rem)]"
                             aria-label={`Toggle ${toolItem.display_name}`}
                           >
                             <div className="min-w-0 space-y-1">
                               <p className="font-medium">{toolItem.display_name}</p>
-                              <p className="text-xs leading-5 text-muted-foreground">
+                              <p className="break-words text-xs leading-5 text-muted-foreground">
                                 {toolItem.description}
                               </p>
                             </div>
