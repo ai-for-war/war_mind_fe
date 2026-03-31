@@ -1,12 +1,11 @@
+import { useEffect } from "react"
 import {
-  AlertCircle,
   Loader2,
   PencilLine,
   Power,
   Trash2,
 } from "lucide-react"
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -21,6 +20,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { SkillPluginStatusBadge } from "@/features/skill-plugins/components/skill-plugin-status-badge"
 import { formatAbsoluteDateTime } from "@/lib/date"
 import type { SkillPluginDetail } from "@/features/skill-plugins/types"
+import { toast } from "sonner"
 
 export const SkillPluginDetailDialog = ({
   actionError,
@@ -43,6 +43,18 @@ export const SkillPluginDetailDialog = ({
   pendingEnablement: boolean
   skillDetail?: SkillPluginDetail
 }) => {
+  useEffect(() => {
+    if (detailError) {
+      toast.error(detailError)
+    }
+  }, [detailError])
+
+  useEffect(() => {
+    if (actionError) {
+      toast.error(actionError)
+    }
+  }, [actionError])
+
   return (
     <Dialog open onOpenChange={onOpenChange}>
       <DialogContent className="max-h-[85vh] sm:max-w-3xl">
@@ -61,22 +73,6 @@ export const SkillPluginDetailDialog = ({
                 <Loader2 className="size-4 animate-spin" />
                 Loading selected skill details...
               </div>
-            ) : null}
-
-            {detailError ? (
-              <Alert variant="destructive">
-                <AlertCircle className="size-4" />
-                <AlertTitle>Failed to load selected skill</AlertTitle>
-                <AlertDescription>{detailError}</AlertDescription>
-              </Alert>
-            ) : null}
-
-            {actionError ? (
-              <Alert variant="destructive">
-                <AlertCircle className="size-4" />
-                <AlertTitle>Skill action failed</AlertTitle>
-                <AlertDescription>{actionError}</AlertDescription>
-              </Alert>
             ) : null}
 
             {skillDetail ? (

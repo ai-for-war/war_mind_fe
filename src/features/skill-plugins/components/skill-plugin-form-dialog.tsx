@@ -1,12 +1,10 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import {
-  AlertCircle,
   CheckCircle2,
   Loader2,
   Wrench,
 } from "lucide-react"
 
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import {
   Dialog,
@@ -32,6 +30,7 @@ import type {
   SkillPluginFormValues,
   SkillPluginToolCatalogItem,
 } from "@/features/skill-plugins/types"
+import { toast } from "sonner"
 
 export const SkillPluginFormDialog = ({
   detailLoading,
@@ -61,12 +60,22 @@ export const SkillPluginFormDialog = ({
     [toolCatalogItems],
   )
   const [draftValues, setDraftValues] = useState(initialValues)
-  const [submitError, setSubmitError] = useState<string | null>(null)
   const isEditMode = mode === "edit"
+
+  useEffect(() => {
+    if (!toolCatalogError) {
+      return
+    }
+
+    toast.error(toolCatalogError)
+  }, [toolCatalogError])
 
   const handleSubmit = async () => {
     const nextError = await onSubmit(draftValues)
-    setSubmitError(nextError)
+
+    if (nextError) {
+      toast.error(nextError)
+    }
   }
 
   return (
@@ -89,14 +98,6 @@ export const SkillPluginFormDialog = ({
                   <Loader2 className="size-4 animate-spin" />
                   Loading current skill values...
                 </div>
-              ) : null}
-
-              {submitError ? (
-                <Alert variant="destructive">
-                  <AlertCircle className="size-4" />
-                  <AlertTitle>Could not save skill</AlertTitle>
-                  <AlertDescription>{submitError}</AlertDescription>
-                </Alert>
               ) : null}
 
               <div className="space-y-2">
@@ -165,14 +166,6 @@ export const SkillPluginFormDialog = ({
                   <Loader2 className="size-4 animate-spin" />
                   Loading available tools...
                 </div>
-              ) : null}
-
-              {toolCatalogError ? (
-                <Alert variant="destructive">
-                  <AlertCircle className="size-4" />
-                  <AlertTitle>Could not load tool catalog</AlertTitle>
-                  <AlertDescription>{toolCatalogError}</AlertDescription>
-                </Alert>
               ) : null}
 
               {!toolCatalogLoading && !toolCatalogError ? (
