@@ -9,6 +9,7 @@ import { MeetingRecorderPage } from "@/features/meeting-recorder"
 import { MultiAgentPage } from "@/features/multi-agent"
 import { TextToImagePage } from "@/features/text-to-image"
 import { SocketProvider } from "@/features/socket"
+import { SkillPluginsPage } from "@/features/skill-plugins"
 import { TtsPage } from "@/features/tts"
 import { VoiceCloningPage } from "@/features/voice-cloning"
 import { useHydrateAuth } from "@/hooks/use-hydrate-auth"
@@ -89,6 +90,10 @@ export const router = createBrowserRouter([
           {
             path: "/text-to-image",
             element: <TextToImagePage />,
+          },
+          {
+            path: "/skill-plugins",
+            element: <SkillPluginsPage />,
           },
         ],
       },
