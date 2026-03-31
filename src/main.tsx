@@ -5,6 +5,7 @@ import { RouterProvider } from "react-router-dom"
 
 import { ThemeProvider } from "@/app/providers/theme-provider"
 import { router } from "@/app/router"
+import { Toaster } from "@/components/ui/sonner"
 import "./index.css"
 
 const queryClient = new QueryClient()
@@ -14,6 +15,7 @@ createRoot(document.getElementById("root")!).render(
     <QueryClientProvider client={queryClient}>
       <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
         <RouterProvider router={router} />
+        <Toaster />
       </ThemeProvider>
     </QueryClientProvider>
   </StrictMode>,
