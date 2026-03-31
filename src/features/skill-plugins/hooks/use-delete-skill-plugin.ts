@@ -10,12 +10,17 @@ export const useDeleteSkillPlugin = () => {
     mutationFn: (skillId: string) => skillPluginsApi.deleteSkill(skillId),
     mutationKey: skillPluginQueryKeys.mutation("delete"),
     onSuccess: async (_, skillId) => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: skillPluginQueryKeys.lists() }),
-        queryClient.invalidateQueries({
-          queryKey: skillPluginQueryKeys.detail(skillId),
-        }),
-      ])
+      await queryClient.cancelQueries({
+        queryKey: skillPluginQueryKeys.detail(skillId),
+      })
+
+      queryClient.removeQueries({
+        queryKey: skillPluginQueryKeys.detail(skillId),
+      })
+
+      await queryClient.invalidateQueries({
+        queryKey: skillPluginQueryKeys.lists(),
+      })
     },
   })
 }
