@@ -11,7 +11,7 @@ import type {
 } from "@/features/skill-plugins/types"
 
 const DEFAULT_SKILL_PLUGINS_SKIP = 0
-const DEFAULT_SKILL_PLUGINS_LIMIT = 20
+const DEFAULT_SKILL_PLUGINS_LIMIT = 8
 const SKILL_PLUGINS_API_PREFIX = "/lead-agent"
 
 const listSkills = async (

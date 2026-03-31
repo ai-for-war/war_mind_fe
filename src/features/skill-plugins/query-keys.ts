@@ -1,7 +1,7 @@
 import type { SkillPluginListParams } from "@/features/skill-plugins/types"
 
 const DEFAULT_SKILL_PLUGINS_SKIP = 0
-const DEFAULT_SKILL_PLUGINS_LIMIT = 20
+const DEFAULT_SKILL_PLUGINS_LIMIT = 8
 
 export const skillPluginQueryKeys = {
   all: ["skill-plugins"] as const,

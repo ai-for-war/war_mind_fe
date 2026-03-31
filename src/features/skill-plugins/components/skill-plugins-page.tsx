@@ -1,5 +1,15 @@
-import { useDeferredValue } from "react"
+import { useDeferredValue, useState } from "react"
 
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   useSkillPluginList,
   useSkillPluginsPageState,
@@ -14,11 +24,19 @@ import {
 } from "@/features/skill-plugins/components/skill-plugin-list-states"
 import { SkillPluginListToolbar } from "@/features/skill-plugins/components/skill-plugin-list-toolbar"
 
+const SKILL_PLUGINS_PAGE_SIZE = 8
+
 export const SkillPluginsPage = () => {
   const pageState = useSkillPluginsPageState()
+  const [currentPage, setCurrentPage] = useState(1)
   const deferredSearchText = useDeferredValue(pageState.searchText)
-  const skillPluginListQuery = useSkillPluginList()
+  const skillPluginListQuery = useSkillPluginList({
+    limit: SKILL_PLUGINS_PAGE_SIZE,
+    skip: (currentPage - 1) * SKILL_PLUGINS_PAGE_SIZE,
+  })
   const skillPlugins = skillPluginListQuery.data?.items ?? []
+  const totalSkills = skillPluginListQuery.data?.total ?? 0
+  const totalPages = Math.max(1, Math.ceil(totalSkills / SKILL_PLUGINS_PAGE_SIZE))
   const normalizedSearchText = deferredSearchText.trim().toLowerCase()
 
   const filteredSkillPlugins = skillPlugins.filter((skillPlugin) => {
@@ -48,6 +66,38 @@ export const SkillPluginsPage = () => {
     return searchableContent.includes(normalizedSearchText)
   })
 
+  const paginationItems = Array.from(
+    { length: totalPages },
+    (_, index) => index + 1,
+  ).filter((pageNumber) => {
+    if (totalPages <= 5) {
+      return true
+    }
+
+    return (
+      pageNumber === 1 ||
+      pageNumber === totalPages ||
+      Math.abs(pageNumber - currentPage) <= 1
+    )
+  })
+
+  const handleSearchChange = (value: string) => {
+    setCurrentPage(1)
+    pageState.setSearchText(value)
+  }
+
+  const handleStatusFilterChange = (
+    value: Parameters<typeof pageState.setStatusFilter>[0],
+  ) => {
+    setCurrentPage(1)
+    pageState.setStatusFilter(value)
+  }
+
+  const handleResetFilters = () => {
+    setCurrentPage(1)
+    pageState.resetFilters()
+  }
+
   return (
     <section
       className="flex flex-col gap-6"
@@ -65,8 +115,8 @@ export const SkillPluginsPage = () => {
 
       <SkillPluginListToolbar
         onCreate={pageState.openCreateDialog}
-        onSearchChange={pageState.setSearchText}
-        onStatusFilterChange={pageState.setStatusFilter}
+        onSearchChange={handleSearchChange}
+        onStatusFilterChange={handleStatusFilterChange}
         resultCount={filteredSkillPlugins.length}
         searchText={pageState.searchText}
         statusFilter={pageState.statusFilter}
@@ -92,20 +142,97 @@ export const SkillPluginsPage = () => {
       !skillPluginListQuery.isError &&
       skillPlugins.length > 0 &&
       filteredSkillPlugins.length === 0 ? (
-        <SkillPluginListNoResultsState onReset={pageState.resetFilters} />
+        <SkillPluginListNoResultsState onReset={handleResetFilters} />
       ) : null}
 
       {!skillPluginListQuery.isLoading &&
       !skillPluginListQuery.isError &&
       filteredSkillPlugins.length > 0 ? (
-        <div className="space-y-4">
-          {filteredSkillPlugins.map((skillPlugin) => (
-            <SkillPluginCard
-              key={skillPlugin.skill_id}
-              skill={skillPlugin}
-              onSelect={pageState.openDetailDialog}
-            />
-          ))}
+        <div className="space-y-6">
+          <div className="rounded-2xl border border-border/60 bg-card/30 p-2">
+            <ScrollArea className="h-[calc(100vh-24rem)] min-h-[24rem] pr-3">
+              <div className="space-y-4 p-2">
+                {filteredSkillPlugins.map((skillPlugin) => (
+                  <SkillPluginCard
+                    key={skillPlugin.skill_id}
+                    skill={skillPlugin}
+                    onSelect={pageState.openDetailDialog}
+                  />
+                ))}
+              </div>
+            </ScrollArea>
+          </div>
+
+          {totalPages > 1 ? (
+            <Pagination>
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    href="#"
+                    onClick={(event) => {
+                      event.preventDefault()
+
+                      if (currentPage === 1) {
+                        return
+                      }
+
+                      setCurrentPage((previousPage) => previousPage - 1)
+                    }}
+                    className={currentPage === 1 ? "pointer-events-none opacity-50" : undefined}
+                  />
+                </PaginationItem>
+
+                {paginationItems.map((pageNumber, index) => {
+                  const previousPageNumber = paginationItems[index - 1]
+                  const shouldShowEllipsis =
+                    previousPageNumber && pageNumber - previousPageNumber > 1
+
+                  return (
+                    <div key={`skill-plugin-page-${pageNumber}`} className="flex items-center">
+                      {shouldShowEllipsis ? (
+                        <PaginationItem>
+                          <PaginationEllipsis />
+                        </PaginationItem>
+                      ) : null}
+
+                      <PaginationItem>
+                        <PaginationLink
+                          href="#"
+                          isActive={pageNumber === currentPage}
+                          onClick={(event) => {
+                            event.preventDefault()
+                            setCurrentPage(pageNumber)
+                          }}
+                        >
+                          {pageNumber}
+                        </PaginationLink>
+                      </PaginationItem>
+                    </div>
+                  )
+                })}
+
+                <PaginationItem>
+                  <PaginationNext
+                    href="#"
+                    onClick={(event) => {
+                      event.preventDefault()
+
+                      if (currentPage === totalPages) {
+                        return
+                      }
+
+                      setCurrentPage((previousPage) => previousPage + 1)
+                    }}
+                    className={
+                      currentPage === totalPages
+                        ? "pointer-events-none opacity-50"
+                        : undefined
+                    }
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
+          ) : null}
         </div>
       ) : null}
       <SkillPluginDialogShell
