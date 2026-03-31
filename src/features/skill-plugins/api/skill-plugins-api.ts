@@ -17,12 +17,16 @@ const SKILL_PLUGINS_API_PREFIX = "/lead-agent"
 const listSkills = async (
   params?: SkillPluginListParams,
 ): Promise<SkillPluginListResponse> => {
+  const normalizedSearch = params?.search?.trim()
+
   const response = await apiClient.get<SkillPluginListResponse>(
     `${SKILL_PLUGINS_API_PREFIX}/skills`,
     {
       params: {
+        filter: params?.filter ?? "all",
         skip: params?.skip ?? DEFAULT_SKILL_PLUGINS_SKIP,
         limit: params?.limit ?? DEFAULT_SKILL_PLUGINS_LIMIT,
+        search: normalizedSearch ? normalizedSearch : undefined,
       },
     },
   )

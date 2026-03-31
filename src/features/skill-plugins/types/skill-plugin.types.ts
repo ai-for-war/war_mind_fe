@@ -35,6 +35,8 @@ export interface SkillPluginListFilters {
 export interface SkillPluginListParams {
   skip?: number
   limit?: number
+  search?: string
+  filter?: SkillPluginStatusFilter
 }
 
 export interface SkillPluginFormValues {

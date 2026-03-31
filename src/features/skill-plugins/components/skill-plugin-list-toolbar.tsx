@@ -53,7 +53,7 @@ export const SkillPluginListToolbar = ({
           <Input
             value={searchText}
             onChange={(event) => onSearchChange(event.target.value)}
-            placeholder="Search by name, description, status, version, or tools"
+            placeholder="Search by skill name"
             className="pl-9"
             aria-label="Search skill plugins"
           />

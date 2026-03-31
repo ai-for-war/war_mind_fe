@@ -9,6 +9,8 @@ export const skillPluginQueryKeys = {
   list: (params?: SkillPluginListParams) =>
     [
       ...skillPluginQueryKeys.lists(),
+      params?.search?.trim() ?? "",
+      params?.filter ?? "all",
       params?.skip ?? DEFAULT_SKILL_PLUGINS_SKIP,
       params?.limit ?? DEFAULT_SKILL_PLUGINS_LIMIT,
     ] as const,

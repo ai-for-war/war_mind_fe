@@ -1,4 +1,4 @@
-import { useDeferredValue, useState } from "react"
+import { useState } from "react"
 
 import {
   Pagination,
@@ -10,6 +10,7 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { useDebouncedValue } from "@/hooks/use-debounced-value"
 import {
   useSkillPluginList,
   useSkillPluginsPageState,
@@ -29,42 +30,18 @@ const SKILL_PLUGINS_PAGE_SIZE = 8
 export const SkillPluginsPage = () => {
   const pageState = useSkillPluginsPageState()
   const [currentPage, setCurrentPage] = useState(1)
-  const deferredSearchText = useDeferredValue(pageState.searchText)
+  const debouncedSearchText = useDebouncedValue(pageState.searchText, 300)
   const skillPluginListQuery = useSkillPluginList({
+    filter: pageState.statusFilter,
     limit: SKILL_PLUGINS_PAGE_SIZE,
+    search: debouncedSearchText,
     skip: (currentPage - 1) * SKILL_PLUGINS_PAGE_SIZE,
   })
   const skillPlugins = skillPluginListQuery.data?.items ?? []
   const totalSkills = skillPluginListQuery.data?.total ?? 0
   const totalPages = Math.max(1, Math.ceil(totalSkills / SKILL_PLUGINS_PAGE_SIZE))
-  const normalizedSearchText = deferredSearchText.trim().toLowerCase()
-
-  const filteredSkillPlugins = skillPlugins.filter((skillPlugin) => {
-    const matchesStatusFilter =
-      pageState.statusFilter === "all" ||
-      (pageState.statusFilter === "enabled" && skillPlugin.is_enabled) ||
-      (pageState.statusFilter === "disabled" && !skillPlugin.is_enabled)
-
-    if (!matchesStatusFilter) {
-      return false
-    }
-
-    if (!normalizedSearchText) {
-      return true
-    }
-
-    const searchableContent = [
-      skillPlugin.name,
-      skillPlugin.description,
-      skillPlugin.version,
-      skillPlugin.is_enabled ? "enabled" : "disabled",
-      ...skillPlugin.allowed_tool_names,
-    ]
-      .join(" ")
-      .toLowerCase()
-
-    return searchableContent.includes(normalizedSearchText)
-  })
+  const hasActiveServerFilters =
+    debouncedSearchText.trim().length > 0 || pageState.statusFilter !== "all"
 
   const paginationItems = Array.from(
     { length: totalPages },
@@ -117,7 +94,7 @@ export const SkillPluginsPage = () => {
         onCreate={pageState.openCreateDialog}
         onSearchChange={handleSearchChange}
         onStatusFilterChange={handleStatusFilterChange}
-        resultCount={filteredSkillPlugins.length}
+        resultCount={totalSkills}
         searchText={pageState.searchText}
         statusFilter={pageState.statusFilter}
       />
@@ -134,25 +111,26 @@ export const SkillPluginsPage = () => {
 
       {!skillPluginListQuery.isLoading &&
       !skillPluginListQuery.isError &&
-      skillPlugins.length === 0 ? (
+      totalSkills === 0 &&
+      !hasActiveServerFilters ? (
         <SkillPluginListEmptyState onCreate={pageState.openCreateDialog} />
       ) : null}
 
       {!skillPluginListQuery.isLoading &&
       !skillPluginListQuery.isError &&
-      skillPlugins.length > 0 &&
-      filteredSkillPlugins.length === 0 ? (
+      totalSkills === 0 &&
+      hasActiveServerFilters ? (
         <SkillPluginListNoResultsState onReset={handleResetFilters} />
       ) : null}
 
       {!skillPluginListQuery.isLoading &&
       !skillPluginListQuery.isError &&
-      filteredSkillPlugins.length > 0 ? (
+      skillPlugins.length > 0 ? (
         <div className="space-y-6">
           <div className="rounded-2xl border border-border/60 bg-card/30 p-2">
             <ScrollArea className="h-[calc(100vh-24rem)] min-h-[24rem] pr-3">
               <div className="space-y-4 p-2">
-                {filteredSkillPlugins.map((skillPlugin) => (
+                {skillPlugins.map((skillPlugin) => (
                   <SkillPluginCard
                     key={skillPlugin.skill_id}
                     skill={skillPlugin}
