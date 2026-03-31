@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { SkillPluginStatusBadge } from "@/features/skill-plugins/components/skill-plugin-status-badge"
+import { formatAbsoluteDateTime } from "@/lib/date"
 import type { SkillPluginDetail } from "@/features/skill-plugins/types"
 
 export const SkillPluginDetailDialog = ({
@@ -147,11 +148,15 @@ export const SkillPluginDetailDialog = ({
                         </div>
                         <div className="flex items-start justify-between gap-4">
                           <dt>Updated</dt>
-                          <dd className="text-right">{skillDetail.updated_at}</dd>
+                          <dd className="text-right">
+                            {formatAbsoluteDateTime(skillDetail.updated_at)}
+                          </dd>
                         </div>
                         <div className="flex items-start justify-between gap-4">
                           <dt>Created</dt>
-                          <dd className="text-right">{skillDetail.created_at}</dd>
+                          <dd className="text-right">
+                            {formatAbsoluteDateTime(skillDetail.created_at)}
+                          </dd>
                         </div>
                       </dl>
                     </div>

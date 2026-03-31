@@ -3,21 +3,11 @@ import { Clock3, Wrench } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { SkillPluginStatusBadge } from "@/features/skill-plugins/components/skill-plugin-status-badge"
+import { formatAbsoluteDateTime } from "@/lib/date"
 import type { SkillPluginSummary } from "@/features/skill-plugins/types"
 
-const updatedAtFormatter = new Intl.DateTimeFormat("en-US", {
-  dateStyle: "medium",
-  timeStyle: "short",
-})
-
 const formatUpdatedAt = (updatedAt: string) => {
-  const parsedDate = new Date(updatedAt)
-
-  if (Number.isNaN(parsedDate.getTime())) {
-    return "Updated recently"
-  }
-
-  return `Updated ${updatedAtFormatter.format(parsedDate)}`
+  return `Updated ${formatAbsoluteDateTime(updatedAt, "recently")}`
 }
 
 export const SkillPluginCard = ({
