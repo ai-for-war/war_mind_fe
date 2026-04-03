@@ -1,6 +1,7 @@
 import {
   FileSearch,
   Globe,
+  Layers,
   type LucideIcon,
   Search,
   Wrench,
@@ -84,6 +85,9 @@ const formatFetchContentArguments: ToolArgumentFormatter = (argumentsValue) =>
     formatUnknownValue(argumentsValue.max_length),
   ])
 
+const formatLoadSkillArguments: ToolArgumentFormatter = (argumentsValue) =>
+  joinSummaryParts([formatUnknownValue(argumentsValue.skill_id)])
+
 const formatFallbackArguments: ToolArgumentFormatter = (argumentsValue) => {
   const entries = Object.entries(argumentsValue).slice(0, 3)
   return joinSummaryParts(entries.map(([key, value]) => formatKeyValue(key, value)))
@@ -94,6 +98,11 @@ const TOOL_PRESENTATION_REGISTRY: Record<string, SuperAgentToolPresentation> = {
     formatArguments: formatFetchContentArguments,
     icon: Globe,
     label: "Crawl",
+  },
+  load_skill: {
+    formatArguments: formatLoadSkillArguments,
+    icon: Layers,
+    label: "Load Skill",
   },
   search: {
     formatArguments: formatSearchArguments,
