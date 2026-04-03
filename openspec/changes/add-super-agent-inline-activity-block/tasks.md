@@ -1,8 +1,8 @@
 ## 1. Activity Trace State
 
-- [ ] 1.1 Extend `src/features/super-agent/types/chat-workspace.types.ts` with inline activity trace and activity step models that support `active`, `complete`, and `failed`
-- [ ] 1.2 Add per-conversation activity trace state and actions to `src/features/super-agent/stores/use-super-agent-chat-workspace-store.ts`
-- [ ] 1.3 Update conversation workspace reset paths so activity traces are cleared on explicit reset and naturally disappear after reload
+- [x] 1.1 Extend `src/features/super-agent/types/chat-workspace.types.ts` with inline activity trace and activity step models that support `active`, `complete`, and `failed`
+- [x] 1.2 Add per-conversation activity trace state and actions to `src/features/super-agent/stores/use-super-agent-chat-workspace-store.ts`
+- [x] 1.3 Update conversation workspace reset paths so activity traces are cleared on explicit reset and naturally disappear after reload
 
 ## 2. Socket Lifecycle Wiring
 
