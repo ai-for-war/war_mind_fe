@@ -3,6 +3,7 @@ import { useState } from "react"
 
 import { ConversationEmptyState } from "@/components/ai/conversation"
 import { ChatWorkspaceStatus } from "@/components/ai/chat-workspace-status"
+import { AiMessageMetadataInspector } from "@/components/ai/message-metadata-inspector"
 import { Suggestion } from "@/components/ai/suggestion"
 import { Button } from "@/components/ui/button"
 import {
@@ -12,6 +13,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetTitle,
+} from "@/components/ui/sheet"
 import { Skeleton } from "@/components/ui/skeleton"
 import { ChatThread } from "@/features/multi-agent/components/chat-thread"
 import { ComposerPanel } from "@/features/multi-agent/components/composer-panel"
@@ -28,6 +35,7 @@ import type {
   MultiAgentMessageRecord,
   MultiAgentRunStatus,
 } from "@/features/multi-agent/types/chat-workspace.types"
+import { normalizeAssistantMessageMetadata } from "@/lib/ai-message-metadata"
 import { cn } from "@/lib/utils"
 
 const FRESH_CHAT_SUGGESTIONS = [
@@ -155,6 +163,9 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
 
   const [freshChatOptimisticMessage, setFreshChatOptimisticMessage] =
     useState<MultiAgentMessageRecord | null>(null)
+  const [isMetadataSheetOpen, setMetadataSheetOpen] = useState(false)
+  const [selectedMetadataMessage, setSelectedMetadataMessage] =
+    useState<MultiAgentMessageRecord | null>(null)
   const messagesQuery = useConversationMessages(activeConversationId)
   const sendMessageMutation = useSendMessage()
   useChatLifecycleSubscriptions({ activeConversationId })
@@ -217,6 +228,22 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
     ? streamingAssistantByConversation[activeConversationId] ?? null
     : null
   const activeThreadError = threadErrorByConversation[conversationKey] ?? null
+  const activeSelectedMetadataMessage =
+    selectedMetadataMessage &&
+    selectedMetadataMessage.conversation_id === (activeConversationId ?? MULTI_AGENT_FRESH_CHAT_KEY)
+      ? selectedMetadataMessage
+      : null
+  const selectedMetadata = activeSelectedMetadataMessage
+    ? normalizeAssistantMessageMetadata(activeSelectedMetadataMessage.metadata)
+    : null
+
+  const handleOpenMetadata = (message: MultiAgentMessageRecord) => {
+    const isSameMessage = activeSelectedMetadataMessage?.id === message.id
+    const nextMessage = isSameMessage ? null : message
+
+    setSelectedMetadataMessage(nextMessage)
+    setMetadataSheetOpen(!isSameMessage)
+  }
 
   return (
     <main className={cn("flex min-h-0 flex-1", className)}>
@@ -239,22 +266,36 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
         </CardHeader>
 
         <CardContent className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden px-0">
-          {!activeConversationId && !freshChatOptimisticMessage ? (
-            <FreshChatState onSuggestionClick={handleSuggestionClick} />
-          ) : activeConversationId && messagesQuery.isPending ? (
-            <ChatWorkspaceLoading />
-          ) : activeConversationId && messagesQuery.isError ? (
-            <ChatWorkspaceError onRetry={() => void messagesQuery.refetch()} />
-          ) : (
-            <ChatThread
-              className="min-h-0 flex-1"
-              conversationId={activeConversationId ?? MULTI_AGENT_FRESH_CHAT_KEY}
-              messages={threadMessages}
-              runStatus={runStatus}
-              streamingAssistant={activeStreamingAssistant}
-              threadError={activeThreadError}
-            />
-          )}
+          <div className="flex min-h-0 flex-1 gap-2 overflow-hidden">
+            <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+              {!activeConversationId && !freshChatOptimisticMessage ? (
+                <FreshChatState onSuggestionClick={handleSuggestionClick} />
+              ) : activeConversationId && messagesQuery.isPending ? (
+                <ChatWorkspaceLoading />
+              ) : activeConversationId && messagesQuery.isError ? (
+                <ChatWorkspaceError onRetry={() => void messagesQuery.refetch()} />
+              ) : (
+                <ChatThread
+                  className="min-h-0 flex-1"
+                  conversationId={activeConversationId ?? MULTI_AGENT_FRESH_CHAT_KEY}
+                  messages={threadMessages}
+                  onOpenMetadata={handleOpenMetadata}
+                  runStatus={runStatus}
+                  streamingAssistant={activeStreamingAssistant}
+                  threadError={activeThreadError}
+                />
+              )}
+            </div>
+
+            {selectedMetadata ? (
+              <div className="hidden min-h-0 w-full max-w-[22rem] shrink-0 overflow-hidden xl:block">
+                <AiMessageMetadataInspector
+                  className="border-border/60"
+                  metadata={selectedMetadata}
+                />
+              </div>
+            ) : null}
+          </div>
 
           <ComposerPanel
             // className="mt-1"
@@ -265,6 +306,18 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
           />
         </CardContent>
       </Card>
+
+      <Sheet open={Boolean(selectedMetadata) && isMetadataSheetOpen} onOpenChange={setMetadataSheetOpen}>
+        <SheetContent className="w-full max-w-[24rem] p-0 sm:max-w-[24rem]" side="right">
+          <SheetTitle className="sr-only">Assistant message metadata</SheetTitle>
+          <SheetDescription className="sr-only">
+            Inspect the model, skill, and tools used for the selected assistant response.
+          </SheetDescription>
+          {selectedMetadata ? (
+            <AiMessageMetadataInspector className="h-full rounded-none border-0 shadow-none" metadata={selectedMetadata} />
+          ) : null}
+        </SheetContent>
+      </Sheet>
     </main>
   )
 }

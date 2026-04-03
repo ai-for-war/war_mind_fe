@@ -14,10 +14,10 @@
 
 ## 3. Multi-Agent thread and workspace integration
 
-- [ ] 3.1 Update `src/features/multi-agent/components/chat-thread.tsx` so assistant messages with displayable metadata show a metadata-inspector action and user messages do not
-- [ ] 3.2 Extend `src/features/multi-agent/components/chat-workspace.tsx` with local selected-assistant-message metadata state and clear that selection whenever the active conversation changes
-- [ ] 3.3 Render the shared metadata inspector as an inline right-side panel for larger viewports in the `Multi-Agent` workspace
-- [ ] 3.4 Add a smaller-viewport `Sheet` fallback for the same `Multi-Agent` metadata inspector content and open/close behavior
+- [x] 3.1 Update `src/features/multi-agent/components/chat-thread.tsx` so assistant messages with displayable metadata show a metadata-inspector action and user messages do not
+- [x] 3.2 Extend `src/features/multi-agent/components/chat-workspace.tsx` with local selected-assistant-message metadata state and clear that selection whenever the active conversation changes
+- [x] 3.3 Render the shared metadata inspector as an inline right-side panel for larger viewports in the `Multi-Agent` workspace
+- [x] 3.4 Add a smaller-viewport `Sheet` fallback for the same `Multi-Agent` metadata inspector content and open/close behavior
 
 ## 4. Metadata content wiring and UI polish
 
