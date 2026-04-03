@@ -1,9 +1,9 @@
 ## 1. Shared metadata parsing and presentation foundations
 
-- [ ] 1.1 Add a shared assistant-message metadata normalizer that safely extracts `model`, `skill_id`, optional `skill_version`, optional `loaded_skills`, and `tool_calls` from `metadata`
-- [ ] 1.2 Add shared helper logic that determines whether an assistant message has displayable metadata and therefore should show the metadata-inspector action
-- [ ] 1.3 Extract or wrap the existing tool label/icon/argument-summary helpers so both `Super-Agent` and `Multi-Agent` can render tool-call summaries with the same presentation rules
-- [ ] 1.4 Create a shared metadata inspector component that renders `Model`, `Skill`, and `Tools` sections, hides empty sections, and uses chain-of-thought-style rows for historical tool calls
+- [x] 1.1 Add a shared assistant-message metadata normalizer that safely extracts `model`, `skill_id`, optional `skill_version`, optional `loaded_skills`, and `tool_calls` from `metadata`
+- [x] 1.2 Add shared helper logic that determines whether an assistant message has displayable metadata and therefore should show the metadata-inspector action
+- [x] 1.3 Extract or wrap the existing tool label/icon/argument-summary helpers so both `Super-Agent` and `Multi-Agent` can render tool-call summaries with the same presentation rules
+- [x] 1.4 Create a shared metadata inspector component that renders `Model`, `Skill`, and `Tools` sections, hides empty sections, and uses chain-of-thought-style rows for historical tool calls
 
 ## 2. Super-Agent thread and workspace integration
 
