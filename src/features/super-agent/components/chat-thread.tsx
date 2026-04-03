@@ -5,7 +5,7 @@ import {
   ConversationScrollButton,
 } from "@/components/ai/conversation"
 import { AssistantMessagePlaceholder } from "@/components/ai/assistant-message-placeholder"
-import { Actions, CopyAction } from "@/components/ai/actions"
+import { Actions, CopyAction, MetadataAction } from "@/components/ai/actions"
 import { Message, MessageContent, MessageResponse } from "@/components/ai/message"
 import type {
   SuperAgentInlineActivityTrace,
@@ -13,6 +13,7 @@ import type {
   SuperAgentRunStatus,
   SuperAgentStreamingAssistantState,
 } from "@/features/super-agent/types/chat-workspace.types"
+import { hasDisplayableAssistantMessageMetadata } from "@/lib/ai-message-metadata"
 import { cn } from "@/lib/utils"
 
 import { SuperAgentActivityBlock } from "./super-agent-activity-block"
@@ -22,6 +23,7 @@ type ChatThreadProps = {
   className?: string
   conversationId: string
   messages: SuperAgentMessageRecord[]
+  onOpenMetadata?: (message: SuperAgentMessageRecord) => void
   runStatus: SuperAgentRunStatus
   streamingAssistant: SuperAgentStreamingAssistantState | null
   threadError: string | null
@@ -46,6 +48,7 @@ export const ChatThread = ({
   className,
   conversationId,
   messages,
+  onOpenMetadata,
   runStatus,
   streamingAssistant,
   threadError,
@@ -96,6 +99,10 @@ export const ChatThread = ({
                     toMessageAuthor(message.role) === "user" ? "ml-auto" : undefined,
                   )}
                 >
+                  {toMessageAuthor(message.role) === "assistant" &&
+                  hasDisplayableAssistantMessageMetadata(message.metadata) ? (
+                    <MetadataAction onClick={() => onOpenMetadata?.(message)} />
+                  ) : null}
                   <CopyAction text={message.content} />
                 </Actions>
               </Message>

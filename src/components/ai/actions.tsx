@@ -1,6 +1,13 @@
 "use client"
 
-import { CheckIcon, CopyIcon, RefreshCcwIcon, ThumbsDownIcon, ThumbsUpIcon } from "lucide-react"
+import {
+  CheckIcon,
+  CopyIcon,
+  PanelRightOpenIcon,
+  RefreshCcwIcon,
+  ThumbsDownIcon,
+  ThumbsUpIcon,
+} from "lucide-react"
 import type { ComponentProps } from "react"
 import { useCallback, useEffect, useState } from "react"
 import { toast } from "sonner"
@@ -117,6 +124,18 @@ export const CopyAction = ({
     </Action>
   )
 }
+
+export type MetadataActionProps = Omit<ActionProps, "children">
+
+export const MetadataAction = ({
+  label = "View metadata",
+  tooltip = "View metadata",
+  ...props
+}: MetadataActionProps) => (
+  <Action aria-label={label} label={label} tooltip={tooltip} {...props}>
+    <PanelRightOpenIcon className="size-4" />
+  </Action>
+)
 
 /** Demo component for preview */
 export default function ActionsDemo() {
