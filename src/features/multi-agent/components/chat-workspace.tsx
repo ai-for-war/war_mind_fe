@@ -2,8 +2,8 @@ import { AlertCircle, RefreshCw, Sparkles } from "lucide-react"
 import { useState } from "react"
 
 import { ConversationEmptyState } from "@/components/ai/conversation"
+import { ChatWorkspaceStatus } from "@/components/ai/chat-workspace-status"
 import { Suggestion } from "@/components/ai/suggestion"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Card,
@@ -29,7 +29,6 @@ import type {
   MultiAgentRunStatus,
 } from "@/features/multi-agent/types/chat-workspace.types"
 import { cn } from "@/lib/utils"
-import { getBadgeColor } from "@/common/badgeColor"
 
 const FRESH_CHAT_SUGGESTIONS = [
   "Summarize recent updates in this project",
@@ -165,11 +164,6 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   const runStatus = (runStatusByConversation[conversationKey] ?? "idle") satisfies MultiAgentRunStatus
   const isSubmitting = runStatus === "submitting"
 
-  const badgeLabel =
-    activeConversationId || runStatus !== "idle" ? `${runStatus}` : "Fresh chat"
-
-
-
   const handleSuggestionClick = (value: string) => {
     setComposerDraft(null, value)
   }
@@ -228,7 +222,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
     <main className={cn("flex min-h-0 flex-1", className)}>
       <Card className="flex h-[calc(100dvh-6rem)]  min-h-[34rem] w-full max-h-[calc(100dvh-6rem)] flex-col gap-0 overflow-hidden pb-0">
         <CardHeader className="mb-2">
-          <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="flex flex-col justify-between gap-4 xl:flex-row xl:items-start">
             <div className="space-y-1">
               <CardTitle>Chat Workspace</CardTitle>
               <CardDescription>
@@ -237,9 +231,10 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
                   : "No active conversation selected. Start a fresh chat from here."}
               </CardDescription>
             </div>
-            <Badge className={cn("font-mono", getBadgeColor(badgeLabel))} variant="default">
-              {badgeLabel}
-            </Badge>
+            <ChatWorkspaceStatus
+              activeConversationId={activeConversationId}
+              runStatus={runStatus}
+            />
           </div>
         </CardHeader>
 
