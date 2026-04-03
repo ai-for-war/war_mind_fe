@@ -32,19 +32,44 @@ type MetadataSectionProps = {
   children: ReactNode
   className?: string
   icon: ComponentType<{ className?: string }>
+  meta?: ReactNode
   title: string
 }
+
+const MetadataPill = ({
+  children,
+  className,
+  variant = "secondary",
+}: {
+  children: ReactNode
+  className?: string
+  variant?: "outline" | "secondary"
+}) => (
+  <Badge
+    className={cn(
+      "max-w-full rounded-md px-2.5 py-1 font-medium text-sm break-all whitespace-normal",
+      className,
+    )}
+    variant={variant}
+  >
+    {children}
+  </Badge>
+)
 
 const MetadataSection = ({
   children,
   className,
   icon: Icon,
+  meta,
   title,
 }: MetadataSectionProps) => (
   <section className={cn("space-y-3", className)}>
-    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-      <Icon className="size-4" />
-      <span className="font-medium text-foreground">{title}</span>
+    <div className="flex items-center justify-between gap-2 text-sm text-muted-foreground">
+      <div className="flex min-w-0 items-center gap-2">
+        <Icon className="size-4 shrink-0" />
+        <span className="truncate font-medium text-foreground">{title}</span>
+      </div>
+      {meta ? <div className="shrink-0">{meta}</div> : null}
     </div>
     {children}
   </section>
@@ -52,9 +77,9 @@ const MetadataSection = ({
 
 export const AiMessageMetadataInspector = ({
   className,
-  description = "Inspect the model, skill, and tools used for this response.",
+  description = "Model, skill, and tools used for this response.",
   metadata,
-  title = "Metadata",
+  title = "Response metadata",
 }: AiMessageMetadataInspectorProps) => {
   const hasSkillSection = Boolean(
     metadata.skillId || metadata.skillVersion || metadata.loadedSkills.length > 0,
@@ -64,35 +89,40 @@ export const AiMessageMetadataInspector = ({
     <Card className={cn("h-full gap-0 overflow-hidden", className)}>
       <CardHeader className="border-b pb-4">
         <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+        <CardDescription className="text-xs">{description}</CardDescription>
       </CardHeader>
 
       <ScrollArea className="min-h-0 flex-1">
-        <CardContent className="space-y-5 py-6">
+        <CardContent className="space-y-5 py-5">
           {metadata.model ? (
             <MetadataSection icon={BotIcon} title="Model">
-              <Badge
-                className="max-w-full rounded-md px-2.5 py-1 font-medium text-sm break-all whitespace-normal"
-                variant="secondary"
-              >
+              <MetadataPill className="font-mono text-[13px] tracking-[-0.01em]">
                 {metadata.model}
-              </Badge>
+              </MetadataPill>
             </MetadataSection>
           ) : null}
 
           {metadata.model && (hasSkillSection || metadata.toolCalls.length > 0) ? <Separator /> : null}
 
           {hasSkillSection ? (
-            <MetadataSection icon={LayersIcon} title="Skill">
+            <MetadataSection
+              icon={LayersIcon}
+              meta={
+                metadata.loadedSkills.length > 0 ? (
+                  <Badge variant="outline">{metadata.loadedSkills.length} loaded</Badge>
+                ) : undefined
+              }
+              title="Skill"
+            >
               <div className="space-y-3 rounded-lg border border-border/60 bg-muted/20 p-3">
                 {metadata.skillId ? (
                   <div className="flex flex-wrap items-center gap-2">
-                    <Badge
-                      className="max-w-full rounded-md px-2.5 py-1 font-medium text-sm break-all whitespace-normal"
+                    <MetadataPill
+                      className="font-mono text-[13px] tracking-[-0.01em]"
                       variant="outline"
                     >
                       {metadata.skillId}
-                    </Badge>
+                    </MetadataPill>
                     {metadata.skillVersion ? (
                       <Badge variant="secondary">v{metadata.skillVersion}</Badge>
                     ) : null}
@@ -121,7 +151,11 @@ export const AiMessageMetadataInspector = ({
           {hasSkillSection && metadata.toolCalls.length > 0 ? <Separator /> : null}
 
           {metadata.toolCalls.length > 0 ? (
-            <MetadataSection icon={WrenchIcon} title="Tools">
+            <MetadataSection
+              icon={WrenchIcon}
+              meta={<Badge variant="outline">{metadata.toolCalls.length}</Badge>}
+              title="Tools"
+            >
               <div className="space-y-3 rounded-lg border border-border/60 bg-muted/20 p-3">
                 {metadata.toolCalls.map((toolCall, index) => {
                   const presentation = getAiToolPresentation(toolCall.name)

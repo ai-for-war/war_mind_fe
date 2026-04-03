@@ -1,4 +1,5 @@
 import { AlertCircle, RefreshCw, Sparkles } from "lucide-react"
+import { AnimatePresence, motion } from "motion/react"
 import { useEffect, useState } from "react"
 
 import { ConversationEmptyState } from "@/components/ai/conversation"
@@ -54,6 +55,8 @@ const FRESH_CHAT_SUGGESTIONS = [
 type ChatWorkspaceProps = {
   className?: string
 }
+
+const DESKTOP_METADATA_INSPECTOR_BREAKPOINT = "(min-width: 1280px)"
 
 const ChatWorkspaceLoading = () => (
   <div className="flex h-full min-h-0 flex-1 flex-col rounded-lg border border-border/60 p-6">
@@ -196,6 +199,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
 
   const [freshChatOptimisticMessage, setFreshChatOptimisticMessage] =
     useState<SuperAgentMessageRecord | null>(null)
+  const [isDesktopMetadataInspector, setIsDesktopMetadataInspector] = useState(false)
   const [isMetadataSheetOpen, setMetadataSheetOpen] = useState(false)
   const [selectedMetadataMessage, setSelectedMetadataMessage] =
     useState<SuperAgentMessageRecord | null>(null)
@@ -223,6 +227,24 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
         ? "Choose a valid runtime before sending."
         : null
   const isRuntimeReady = Boolean(normalizedRuntime)
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return
+    }
+
+    const mediaQuery = window.matchMedia(DESKTOP_METADATA_INSPECTOR_BREAKPOINT)
+    const handleChange = (event: MediaQueryListEvent | MediaQueryList) => {
+      setIsDesktopMetadataInspector(event.matches)
+    }
+
+    handleChange(mediaQuery)
+    mediaQuery.addEventListener("change", handleChange)
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleChange)
+    }
+  }, [])
 
   useEffect(() => {
     if (!runtimeCatalogQuery.catalog) {
@@ -329,9 +351,9 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
     ? (activityTraceByConversation[activeConversationId] ?? null)
     : null satisfies SuperAgentInlineActivityTrace | null
   const activeThreadError = threadErrorByConversation[conversationKey] ?? null
+  const activeThreadMessageIds = new Set(threadMessages.map((message) => message.id))
   const activeSelectedMetadataMessage =
-    selectedMetadataMessage &&
-    selectedMetadataMessage.conversation_id === (activeConversationId ?? SUPER_AGENT_FRESH_CHAT_KEY)
+    selectedMetadataMessage && activeThreadMessageIds.has(selectedMetadataMessage.id)
       ? selectedMetadataMessage
       : null
   const selectedMetadata = activeSelectedMetadataMessage
@@ -389,14 +411,23 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
               )}
             </div>
 
-            {selectedMetadata ? (
-              <div className="hidden min-h-0 w-full max-w-[22rem] shrink-0 overflow-hidden xl:block">
-                <AiMessageMetadataInspector
-                  className="border-border/60"
-                  metadata={selectedMetadata}
-                />
-              </div>
-            ) : null}
+            <AnimatePresence initial={false}>
+              {selectedMetadata ? (
+                <motion.div
+                  animate={{ opacity: 1, x: 0 }}
+                  className="hidden min-h-0 w-full max-w-[22rem] shrink-0 overflow-hidden xl:block"
+                  exit={{ opacity: 0, x: 16 }}
+                  initial={{ opacity: 0, x: 24 }}
+                  key={activeSelectedMetadataMessage?.id ?? "metadata-panel"}
+                  transition={{ type: "tween", duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+                >
+                  <AiMessageMetadataInspector
+                    className="border-border/60"
+                    metadata={selectedMetadata}
+                  />
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
           </div>
 
           {runtimeNotice ? (
@@ -439,7 +470,10 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
         </CardContent>
       </Card>
 
-      <Sheet open={Boolean(selectedMetadata) && isMetadataSheetOpen} onOpenChange={setMetadataSheetOpen}>
+      <Sheet
+        open={Boolean(selectedMetadata) && isMetadataSheetOpen && !isDesktopMetadataInspector}
+        onOpenChange={setMetadataSheetOpen}
+      >
         <SheetContent className="w-full max-w-[24rem] p-0 sm:max-w-[24rem]" side="right">
           <SheetTitle className="sr-only">Assistant message metadata</SheetTitle>
           <SheetDescription className="sr-only">

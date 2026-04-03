@@ -21,10 +21,10 @@
 
 ## 4. Metadata content wiring and UI polish
 
-- [ ] 4.1 Wire model rendering so the inspector shows the selected assistant response model without exposing unrelated backend metadata fields
-- [ ] 4.2 Wire skill rendering so the inspector shows `skill_id`, optional `skill_version`, and optional `loaded_skills` without placeholder noise when data is absent
-- [ ] 4.3 Wire tool-call rendering so historical tool calls appear as mapped execution-style steps with summarized arguments and no raw JSON dumps
-- [ ] 4.4 Ensure the inspector header and section layout stay compact and omit timestamps, placeholder debug rows, and empty-state filler sections
+- [x] 4.1 Wire model rendering so the inspector shows the selected assistant response model without exposing unrelated backend metadata fields
+- [x] 4.2 Wire skill rendering so the inspector shows `skill_id`, optional `skill_version`, and optional `loaded_skills` without placeholder noise when data is absent
+- [x] 4.3 Wire tool-call rendering so historical tool calls appear as mapped execution-style steps with summarized arguments and no raw JSON dumps
+- [x] 4.4 Ensure the inspector header and section layout stay compact and omit timestamps, placeholder debug rows, and empty-state filler sections
 
 ## 5. Verification
 
