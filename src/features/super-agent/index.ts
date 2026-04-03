@@ -4,6 +4,8 @@ export { ConversationRail } from "@/features/super-agent/components/conversation
 export { ChatThread } from "@/features/super-agent/components/chat-thread"
 export { ChatWorkspace } from "@/features/super-agent/components/chat-workspace"
 export { ComposerPanel } from "@/features/super-agent/components/composer-panel"
+export { SuperAgentActivityBlock } from "@/features/super-agent/components/super-agent-activity-block"
+export { SuperAgentActivityStep } from "@/features/super-agent/components/super-agent-activity-step"
 export { SuperAgentPage } from "@/features/super-agent/components/super-agent-page"
 export { SuperAgentRuntimePicker } from "@/features/super-agent/components/super-agent-runtime-picker"
 export { useConversationMessages } from "@/features/super-agent/hooks/use-conversation-messages"
@@ -14,6 +16,11 @@ export { useSendMessage } from "@/features/super-agent/hooks/use-send-message"
 export { superAgentQueryKeys } from "@/features/super-agent/query-keys"
 export { useSuperAgentChatWorkspaceStore } from "@/features/super-agent/stores/use-super-agent-chat-workspace-store"
 export { useSuperAgentRailStore } from "@/features/super-agent/stores/use-super-agent-rail-store"
+export {
+  formatSuperAgentToolArgumentsSummary,
+  getSuperAgentToolPresentation,
+  toStableToolLabel,
+} from "@/features/super-agent/utils/tool-presentation"
 export type {
   ChatMessageCompletedPayload,
   ChatMessageFailedPayload,

@@ -85,6 +85,26 @@ export type SuperAgentSocketLifecyclePayload =
 
 export type SuperAgentRunStatus = "idle" | "submitting" | "streaming" | "completed" | "failed"
 
+export type SuperAgentInlineActivityStepStatus = "active" | "complete" | "failed"
+
+export type SuperAgentInlineActivityTraceStatus = "streaming" | "completed" | "failed"
+
+export interface SuperAgentInlineActivityStep {
+  arguments: Record<string, unknown>
+  completedAt: string | null
+  startedAt: string
+  status: SuperAgentInlineActivityStepStatus
+  toolCallId: string
+  toolName: string
+}
+
+export interface SuperAgentInlineActivityTrace {
+  completedAt: string | null
+  startedAt: string
+  status: SuperAgentInlineActivityTraceStatus
+  steps: SuperAgentInlineActivityStep[]
+}
+
 export type SuperAgentThreadRow =
   | {
       id: string

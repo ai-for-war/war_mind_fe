@@ -5,14 +5,17 @@ import {
   ConversationScrollButton,
 } from "@/components/ai/conversation"
 import { Message, MessageContent, MessageResponse } from "@/components/ai/message"
-import { Shimmer } from "@/components/ai/shimmer"
 import type {
+  SuperAgentInlineActivityTrace,
   SuperAgentMessageRecord,
   SuperAgentStreamingAssistantState,
 } from "@/features/super-agent/types/chat-workspace.types"
 import { cn } from "@/lib/utils"
 
+import { SuperAgentActivityBlock } from "./super-agent-activity-block"
+
 type ChatThreadProps = {
+  activityTrace: SuperAgentInlineActivityTrace | null
   className?: string
   conversationId: string
   messages: SuperAgentMessageRecord[]
@@ -35,6 +38,7 @@ const byChronologicalOrder = (a: SuperAgentMessageRecord, b: SuperAgentMessageRe
 }
 
 export const ChatThread = ({
+  activityTrace,
   className,
   conversationId,
   messages,
@@ -43,6 +47,10 @@ export const ChatThread = ({
 }: ChatThreadProps) => {
   const orderedMessages = [...messages].sort(byChronologicalOrder)
   const hasStreamingAssistant = Boolean(streamingAssistant)
+  const hasActivityTrace = Boolean(activityTrace && activityTrace.steps.length > 0)
+  const lastAssistantMessageId =
+    [...orderedMessages].reverse().find((message) => toMessageAuthor(message.role) === "assistant")?.id ??
+    null
   const hasMessages = orderedMessages.length > 0 || hasStreamingAssistant
 
   return (
@@ -62,6 +70,12 @@ export const ChatThread = ({
             {orderedMessages.map((message) => (
               <Message from={toMessageAuthor(message.role)} key={message.id}>
                 <MessageContent className="bg-primary/10 p-5 rounded-lg">
+                  {!hasStreamingAssistant &&
+                  hasActivityTrace &&
+                  message.id === lastAssistantMessageId &&
+                  toMessageAuthor(message.role) === "assistant" ? (
+                    <SuperAgentActivityBlock className="mb-3" trace={activityTrace} />
+                  ) : null}
                   <MessageResponse>{message.content}</MessageResponse>
                 </MessageContent>
               </Message>
@@ -70,13 +84,12 @@ export const ChatThread = ({
             {streamingAssistant ? (
               <Message from="assistant" key={`streaming-${conversationId}`}>
                 <MessageContent className="bg-primary/10 p-5 rounded-lg">
+                  {hasActivityTrace ? (
+                    <SuperAgentActivityBlock className="mb-3" trace={activityTrace} />
+                  ) : null}
                   {streamingAssistant.content ? (
                     <MessageResponse>{streamingAssistant.content}</MessageResponse>
-                  ) : (
-                    <Shimmer as="span" className="text-muted-foreground font-bold text-sm">
-                      Thinking...
-                    </Shimmer>
-                  )}
+                  ) : null}
                 </MessageContent>
               </Message>
             ) : null}

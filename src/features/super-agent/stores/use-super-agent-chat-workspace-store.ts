@@ -1,6 +1,13 @@
 import { create } from "zustand"
 
-import type { SuperAgentRunStatus, SuperAgentStreamingAssistantState } from "@/features/super-agent/types/chat-workspace.types"
+import type {
+  SuperAgentInlineActivityStep,
+  SuperAgentInlineActivityStepStatus,
+  SuperAgentInlineActivityTrace,
+  SuperAgentInlineActivityTraceStatus,
+  SuperAgentRunStatus,
+  SuperAgentStreamingAssistantState,
+} from "@/features/super-agent/types/chat-workspace.types"
 import type {
   LeadAgentRuntimeCatalogResponse,
   SuperAgentRuntimeSelection,
@@ -25,6 +32,7 @@ const omitKey = <TValue>(source: Record<string, TValue>, key: string): Record<st
 }
 
 type SuperAgentChatWorkspaceState = {
+  activityTraceByConversation: Record<string, SuperAgentInlineActivityTrace>
   composerDraftByConversation: Record<string, string>
   composerRuntimeNoticeByConversation: Record<string, string | null>
   composerRuntimeSelectionByConversation: Record<string, SuperAgentRuntimeSelection>
@@ -35,6 +43,7 @@ type SuperAgentChatWorkspaceState = {
 
 type SuperAgentChatWorkspaceActions = {
   appendStreamingAssistantToken: (conversationId: string, token: string) => void
+  clearActivityTrace: (conversationId: string | null) => void
   clearComposerDraft: (conversationId: string | null) => void
   clearComposerRuntimeNotice: (conversationId: string | null) => void
   clearComposerRuntimeSelection: (conversationId: string | null) => void
@@ -64,15 +73,29 @@ type SuperAgentChatWorkspaceActions = {
     conversationId: string | null,
     reasoning: string | null,
   ) => void
+  setInlineActivityTraceStatus: (
+    conversationId: string,
+    status: SuperAgentInlineActivityTraceStatus,
+  ) => void
+  setInlineActivityStepStatus: (
+    conversationId: string,
+    toolCallId: string,
+    status: SuperAgentInlineActivityStepStatus,
+  ) => void
   setRunStatus: (conversationId: string, status: SuperAgentRunStatus) => void
   setStreamingAssistant: (
     conversationId: string,
     value: Pick<SuperAgentStreamingAssistantState, "content" | "isStreaming">,
   ) => void
   setThreadError: (conversationId: string, error: string | null) => void
+  upsertInlineActivityStep: (
+    conversationId: string,
+    step: Pick<SuperAgentInlineActivityStep, "arguments" | "status" | "toolCallId" | "toolName">,
+  ) => void
 }
 
 const initialState: SuperAgentChatWorkspaceState = {
+  activityTraceByConversation: {},
   composerDraftByConversation: {},
   composerRuntimeNoticeByConversation: {},
   composerRuntimeSelectionByConversation: {},
@@ -99,6 +122,17 @@ export const useSuperAgentChatWorkspaceStore = create<
             updatedAt: new Date().toISOString(),
           },
         },
+      }
+    }),
+  clearActivityTrace: (conversationId) =>
+    set((state) => {
+      const conversationKey = toConversationKey(conversationId)
+
+      return {
+        activityTraceByConversation: omitKey(
+          state.activityTraceByConversation,
+          conversationKey,
+        ),
       }
     }),
   clearComposerDraft: (conversationId) =>
@@ -169,6 +203,10 @@ export const useSuperAgentChatWorkspaceStore = create<
       const conversationKey = toConversationKey(conversationId)
 
       return {
+        activityTraceByConversation: omitKey(
+          state.activityTraceByConversation,
+          conversationKey,
+        ),
         composerDraftByConversation: omitKey(
           state.composerDraftByConversation,
           conversationKey,
@@ -280,6 +318,54 @@ export const useSuperAgentChatWorkspaceStore = create<
         },
       }
     }),
+  setInlineActivityTraceStatus: (conversationId, status) =>
+    set((state) => {
+      const currentTrace = state.activityTraceByConversation[conversationId]
+      const now = new Date().toISOString()
+
+      return {
+        activityTraceByConversation: {
+          ...state.activityTraceByConversation,
+          [conversationId]: {
+            completedAt:
+              status === "completed" || status === "failed"
+                ? currentTrace?.completedAt ?? now
+                : null,
+            startedAt: currentTrace?.startedAt ?? now,
+            status,
+            steps: currentTrace?.steps ?? [],
+          },
+        },
+      }
+    }),
+  setInlineActivityStepStatus: (conversationId, toolCallId, status) =>
+    set((state) => {
+      const currentTrace = state.activityTraceByConversation[conversationId]
+      if (!currentTrace) {
+        return state
+      }
+
+      const now = new Date().toISOString()
+      const nextSteps = currentTrace.steps.map((step) =>
+        step.toolCallId === toolCallId
+          ? {
+              ...step,
+              completedAt: status === "active" ? null : step.completedAt ?? now,
+              status,
+            }
+          : step,
+      )
+
+      return {
+        activityTraceByConversation: {
+          ...state.activityTraceByConversation,
+          [conversationId]: {
+            ...currentTrace,
+            steps: nextSteps,
+          },
+        },
+      }
+    }),
   setRunStatus: (conversationId, status) =>
     set((state) => ({
       runStatusByConversation: {
@@ -305,4 +391,40 @@ export const useSuperAgentChatWorkspaceStore = create<
         [conversationId]: error,
       },
     })),
+  upsertInlineActivityStep: (conversationId, step) =>
+    set((state) => {
+      const currentTrace = state.activityTraceByConversation[conversationId]
+      const now = new Date().toISOString()
+      const nextStep: SuperAgentInlineActivityStep = {
+        arguments: step.arguments,
+        completedAt: step.status === "active" ? null : now,
+        startedAt:
+          currentTrace?.steps.find((currentStep) => currentStep.toolCallId === step.toolCallId)
+            ?.startedAt ?? now,
+        status: step.status,
+        toolCallId: step.toolCallId,
+        toolName: step.toolName,
+      }
+      const existingIndex =
+        currentTrace?.steps.findIndex((currentStep) => currentStep.toolCallId === step.toolCallId) ??
+        -1
+      const nextSteps =
+        existingIndex >= 0
+          ? (currentTrace?.steps ?? []).map((currentStep, index) =>
+              index === existingIndex ? nextStep : currentStep,
+            )
+          : [...(currentTrace?.steps ?? []), nextStep]
+
+      return {
+        activityTraceByConversation: {
+          ...state.activityTraceByConversation,
+          [conversationId]: {
+            completedAt: currentTrace?.completedAt ?? null,
+            startedAt: currentTrace?.startedAt ?? now,
+            status: currentTrace?.status ?? "streaming",
+            steps: nextSteps,
+          },
+        },
+      }
+    }),
 }))
