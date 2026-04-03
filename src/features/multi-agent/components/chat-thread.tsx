@@ -5,19 +5,21 @@ import {
   ConversationScrollButton,
 } from "@/components/ai/conversation"
 import { AssistantMessagePlaceholder } from "@/components/ai/assistant-message-placeholder"
-import { Actions, CopyAction } from "@/components/ai/actions"
+import { Actions, CopyAction, MetadataAction } from "@/components/ai/actions"
 import { Message, MessageContent, MessageResponse } from "@/components/ai/message"
 import type {
   MultiAgentMessageRecord,
   MultiAgentRunStatus,
   MultiAgentStreamingAssistantState,
 } from "@/features/multi-agent/types/chat-workspace.types"
+import { hasDisplayableAssistantMessageMetadata } from "@/lib/ai-message-metadata"
 import { cn } from "@/lib/utils"
 
 type ChatThreadProps = {
   className?: string
   conversationId: string
   messages: MultiAgentMessageRecord[]
+  onOpenMetadata?: (message: MultiAgentMessageRecord) => void
   runStatus: MultiAgentRunStatus
   streamingAssistant: MultiAgentStreamingAssistantState | null
   threadError: string | null
@@ -41,6 +43,7 @@ export const ChatThread = ({
   className,
   conversationId,
   messages,
+  onOpenMetadata,
   runStatus,
   streamingAssistant,
   threadError,
@@ -80,6 +83,10 @@ export const ChatThread = ({
                     toMessageAuthor(message.role) === "user" ? "ml-auto" : undefined,
                   )}
                 >
+                  {toMessageAuthor(message.role) === "assistant" &&
+                  hasDisplayableAssistantMessageMetadata(message.metadata) ? (
+                    <MetadataAction onClick={() => onOpenMetadata?.(message)} />
+                  ) : null}
                   <CopyAction text={message.content} />
                 </Actions>
               </Message>
