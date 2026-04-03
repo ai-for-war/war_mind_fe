@@ -1,10 +1,10 @@
 ## 1. Runtime catalog data and request primitives
 
-- [ ] 1.1 Add `super-agent` TypeScript types for the lead-agent runtime catalog response, provider/model entries, reasoning options, and runtime snapshot payloads
-- [ ] 1.2 Add query-key helpers and an API-layer function for `GET /api/v1/lead-agent/catalog` under `src/features/super-agent/`
-- [ ] 1.3 Add a TanStack Query hook for loading and refetching the lead-agent runtime catalog with loading, error, and retry support
-- [ ] 1.4 Extend the `Super-Agent` send-message request typing and API mapping to include `provider`, `model`, and optional `reasoning`
-- [ ] 1.5 Add request-normalization helpers that validate the active runtime selection against the latest catalog and omit `reasoning` when the selected model does not support it
+- [x] 1.1 Add `super-agent` TypeScript types for the lead-agent runtime catalog response, provider/model entries, reasoning options, and runtime snapshot payloads
+- [x] 1.2 Add query-key helpers and an API-layer function for `GET /api/v1/lead-agent/catalog` under `src/features/super-agent/`
+- [x] 1.3 Add a TanStack Query hook for loading and refetching the lead-agent runtime catalog with loading, error, and retry support
+- [x] 1.4 Extend the `Super-Agent` send-message request typing and API mapping to include `provider`, `model`, and optional `reasoning`
+- [x] 1.5 Add request-normalization helpers that validate the active runtime selection against the latest catalog and omit `reasoning` when the selected model does not support it
 
 ## 2. Composer runtime state and fallback behavior
 

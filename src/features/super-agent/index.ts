@@ -8,6 +8,7 @@ export { SuperAgentPage } from "@/features/super-agent/components/super-agent-pa
 export { useConversationMessages } from "@/features/super-agent/hooks/use-conversation-messages"
 export { useConversations } from "@/features/super-agent/hooks/use-conversations"
 export { useChatLifecycleSubscriptions } from "@/features/super-agent/hooks/use-chat-lifecycle-subscriptions"
+export { useLeadAgentRuntimeCatalog } from "@/features/super-agent/hooks/use-lead-agent-runtime-catalog"
 export { useSendMessage } from "@/features/super-agent/hooks/use-send-message"
 export { superAgentQueryKeys } from "@/features/super-agent/query-keys"
 export { useSuperAgentChatWorkspaceStore } from "@/features/super-agent/stores/use-super-agent-chat-workspace-store"
@@ -27,9 +28,17 @@ export type {
   ConversationRailResponsiveState,
   ConversationSelectionState,
   ConversationStatusFilter,
+  LeadAgentReasoningOption,
+  LeadAgentRuntimeCatalogModelEntry,
+  LeadAgentRuntimeCatalogProviderEntry,
+  LeadAgentRuntimeCatalogResponse,
+  NormalizeSuperAgentRuntimeSelectionResult,
   SuperAgentMessageRecord,
   SuperAgentMessageRole,
+  SuperAgentMessageRuntimeMetadata,
   SuperAgentRunStatus,
+  SuperAgentRuntimeSelection,
+  SuperAgentRuntimeSnapshotPayload,
   SuperAgentSocketLifecyclePayload,
   SuperAgentStreamingAssistantState,
   SuperAgentThreadRow,

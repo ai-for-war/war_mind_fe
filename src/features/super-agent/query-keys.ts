@@ -5,6 +5,10 @@ const SUPER_AGENT_CONVERSATIONS_QUERY_KEY = [
   ...SUPER_AGENT_QUERY_KEY,
   "conversations",
 ] as const
+const SUPER_AGENT_RUNTIME_CATALOG_QUERY_KEY = [
+  ...SUPER_AGENT_QUERY_KEY,
+  "runtime-catalog",
+] as const
 const SUPER_AGENT_MESSAGES_QUERY_KEY = [...SUPER_AGENT_QUERY_KEY, "messages"] as const
 
 export const superAgentQueryKeys = {
@@ -15,4 +19,5 @@ export const superAgentQueryKeys = {
   conversationsAll: SUPER_AGENT_CONVERSATIONS_QUERY_KEY,
   conversationsList: ({ limit, search, skip, status }: ConversationListParams) =>
     [...SUPER_AGENT_CONVERSATIONS_QUERY_KEY, { limit, search, skip, status }] as const,
+  runtimeCatalog: () => SUPER_AGENT_RUNTIME_CATALOG_QUERY_KEY,
 }

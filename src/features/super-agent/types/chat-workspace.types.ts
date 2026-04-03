@@ -1,4 +1,10 @@
+import type { SuperAgentRuntimeSnapshotPayload } from "@/features/super-agent/types/runtime-catalog.types"
+
 export type SuperAgentMessageRole = "user" | "assistant" | "system" | "tool" | string
+
+export interface SuperAgentMessageRuntimeMetadata {
+  runtime?: SuperAgentRuntimeSnapshotPayload
+}
 
 export interface SuperAgentMessageRecord {
   id: string
@@ -6,7 +12,7 @@ export interface SuperAgentMessageRecord {
   role: SuperAgentMessageRole
   content: string
   attachments: unknown[] | null
-  metadata: Record<string, unknown> | null
+  metadata: (Record<string, unknown> & SuperAgentMessageRuntimeMetadata) | null
   is_complete: boolean
   created_at: string
 }
@@ -19,6 +25,9 @@ export interface ConversationMessagesResponse {
 export interface SendMessageRequest {
   content: string
   conversation_id?: string | null
+  provider: string
+  model: string
+  reasoning?: string
 }
 
 export interface SendMessageResponse {

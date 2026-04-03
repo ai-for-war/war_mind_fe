@@ -1,5 +1,6 @@
 export { useDebouncedValue } from "@/features/super-agent/hooks/use-debounced-value"
 export { useConversations } from "@/features/super-agent/hooks/use-conversations"
 export { useConversationMessages } from "@/features/super-agent/hooks/use-conversation-messages"
+export { useLeadAgentRuntimeCatalog } from "@/features/super-agent/hooks/use-lead-agent-runtime-catalog"
 export { useSendMessage } from "@/features/super-agent/hooks/use-send-message"
 export { useChatLifecycleSubscriptions } from "@/features/super-agent/hooks/use-chat-lifecycle-subscriptions"

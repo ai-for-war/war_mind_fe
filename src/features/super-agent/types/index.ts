@@ -17,6 +17,7 @@ export type {
   ConversationMessagesResponse,
   SuperAgentMessageRecord,
   SuperAgentMessageRole,
+  SuperAgentMessageRuntimeMetadata,
   SuperAgentRunStatus,
   SuperAgentSocketLifecyclePayload,
   SuperAgentStreamingAssistantState,
@@ -24,3 +25,12 @@ export type {
   SendMessageRequest,
   SendMessageResponse,
 } from "@/features/super-agent/types/chat-workspace.types"
+export type {
+  LeadAgentReasoningOption,
+  LeadAgentRuntimeCatalogModelEntry,
+  LeadAgentRuntimeCatalogProviderEntry,
+  LeadAgentRuntimeCatalogResponse,
+  NormalizeSuperAgentRuntimeSelectionResult,
+  SuperAgentRuntimeSelection,
+  SuperAgentRuntimeSnapshotPayload,
+} from "@/features/super-agent/types/runtime-catalog.types"

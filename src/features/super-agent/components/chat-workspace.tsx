@@ -17,6 +17,7 @@ import { ChatThread } from "@/features/super-agent/components/chat-thread"
 import { ComposerPanel } from "@/features/super-agent/components/composer-panel"
 import { useChatLifecycleSubscriptions } from "@/features/super-agent/hooks/use-chat-lifecycle-subscriptions"
 import { useConversationMessages } from "@/features/super-agent/hooks/use-conversation-messages"
+import { useLeadAgentRuntimeCatalog } from "@/features/super-agent/hooks/use-lead-agent-runtime-catalog"
 import { useSendMessage } from "@/features/super-agent/hooks/use-send-message"
 import {
   SUPER_AGENT_FRESH_CHAT_KEY,
@@ -28,6 +29,10 @@ import type {
   SuperAgentMessageRecord,
   SuperAgentRunStatus,
 } from "@/features/super-agent/types/chat-workspace.types"
+import {
+  getLeadAgentRuntimeCatalogDefaultSelection,
+  normalizeSuperAgentRuntimeSelection,
+} from "@/features/super-agent/utils/runtime-catalog"
 import { cn } from "@/lib/utils"
 import { getBadgeColor } from "@/common/badgeColor"
 
@@ -157,6 +162,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   const [freshChatOptimisticMessage, setFreshChatOptimisticMessage] =
     useState<SuperAgentMessageRecord | null>(null)
   const messagesQuery = useConversationMessages(activeConversationId)
+  const runtimeCatalogQuery = useLeadAgentRuntimeCatalog()
   const sendMessageMutation = useSendMessage()
   useChatLifecycleSubscriptions({ activeConversationId })
 
@@ -167,8 +173,9 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
 
   const badgeLabel =
     activeConversationId || runStatus !== "idle" ? `${runStatus}` : "Fresh chat"
-
-
+  const defaultRuntimeSelection = runtimeCatalogQuery.catalog
+    ? getLeadAgentRuntimeCatalogDefaultSelection(runtimeCatalogQuery.catalog)
+    : null
 
   const handleSuggestionClick = (value: string) => {
     setComposerDraft(null, value)
@@ -181,6 +188,20 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
     }
 
     const submitKey = conversationKey
+    const normalizedRuntime =
+      runtimeCatalogQuery.catalog && defaultRuntimeSelection
+        ? normalizeSuperAgentRuntimeSelection(
+            runtimeCatalogQuery.catalog,
+            defaultRuntimeSelection,
+          )
+        : null
+
+    if (!normalizedRuntime) {
+      setRunStatus(submitKey, "failed")
+      setThreadError(submitKey, "Unable to load a valid lead-agent runtime. Please retry.")
+      return
+    }
+
     setRunStatus(submitKey, "submitting")
     setThreadError(submitKey, null)
 
@@ -192,6 +213,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
       const result = await sendMessageMutation.mutateAsync({
         content: prompt,
         conversation_id: activeConversationId,
+        ...normalizedRuntime.runtime,
       })
 
       clearComposerDraft(activeConversationId)
