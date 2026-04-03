@@ -6,9 +6,9 @@
 
 ## 2. Socket Lifecycle Wiring
 
-- [ ] 2.1 Subscribe to `chat:message:tool_start` in `src/features/super-agent/hooks/use-chat-lifecycle-subscriptions.ts` and create or refresh an active activity step keyed by `tool_call_id`
-- [ ] 2.2 Subscribe to `chat:message:tool_end` in `src/features/super-agent/hooks/use-chat-lifecycle-subscriptions.ts` and mark the matching activity step as complete without removing it
-- [ ] 2.3 Update completion and failure handling in `src/features/super-agent/hooks/use-chat-lifecycle-subscriptions.ts` so completed traces stay visible for the current session and failed runs can preserve failed steps
+- [x] 2.1 Subscribe to `chat:message:tool_start` in `src/features/super-agent/hooks/use-chat-lifecycle-subscriptions.ts` and create or refresh an active activity step keyed by `tool_call_id`
+- [x] 2.2 Subscribe to `chat:message:tool_end` in `src/features/super-agent/hooks/use-chat-lifecycle-subscriptions.ts` and mark the matching activity step as complete without removing it
+- [x] 2.3 Update completion and failure handling in `src/features/super-agent/hooks/use-chat-lifecycle-subscriptions.ts` so completed traces stay visible for the current session and failed runs can preserve failed steps
 
 ## 3. Tool Presentation Mapping
 

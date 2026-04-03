@@ -9,6 +9,8 @@ import type {
   ChatMessageFailedPayload,
   ChatMessageStartedPayload,
   ChatMessageTokenPayload,
+  ChatMessageToolEndPayload,
+  ChatMessageToolStartPayload,
 } from "@/features/super-agent/types/chat-workspace.types"
 
 type UseChatLifecycleSubscriptionsOptions = {
@@ -21,14 +23,24 @@ export const useChatLifecycleSubscriptions = ({
   const appendStreamingAssistantToken = useSuperAgentChatWorkspaceStore(
     (state) => state.appendStreamingAssistantToken,
   )
+  const clearActivityTrace = useSuperAgentChatWorkspaceStore((state) => state.clearActivityTrace)
   const clearStreamingAssistant = useSuperAgentChatWorkspaceStore(
     (state) => state.clearStreamingAssistant,
+  )
+  const setInlineActivityStepStatus = useSuperAgentChatWorkspaceStore(
+    (state) => state.setInlineActivityStepStatus,
+  )
+  const setInlineActivityTraceStatus = useSuperAgentChatWorkspaceStore(
+    (state) => state.setInlineActivityTraceStatus,
   )
   const setRunStatus = useSuperAgentChatWorkspaceStore((state) => state.setRunStatus)
   const setStreamingAssistant = useSuperAgentChatWorkspaceStore(
     (state) => state.setStreamingAssistant,
   )
   const setThreadError = useSuperAgentChatWorkspaceStore((state) => state.setThreadError)
+  const upsertInlineActivityStep = useSuperAgentChatWorkspaceStore(
+    (state) => state.upsertInlineActivityStep,
+  )
   const status = useSocketTransportStore((state) => state.status)
   const lastConnectedAt = useSocketTransportStore((state) => state.lastConnectedAt)
   const queryClient = useQueryClient()
@@ -37,6 +49,7 @@ export const useChatLifecycleSubscriptions = ({
   useSocketSubscription<ChatMessageStartedPayload>(
     "chat:message:started",
     ({ conversation_id }) => {
+      clearActivityTrace(conversation_id)
       setRunStatus(conversation_id, "streaming")
       setThreadError(conversation_id, null)
       setStreamingAssistant(conversation_id, {
@@ -56,10 +69,34 @@ export const useChatLifecycleSubscriptions = ({
     { organizationScoped: true },
   )
 
+  useSocketSubscription<ChatMessageToolStartPayload>(
+    "chat:message:tool_start",
+    ({ arguments: toolArguments, conversation_id, tool_call_id, tool_name }) => {
+      setRunStatus(conversation_id, "streaming")
+      setInlineActivityTraceStatus(conversation_id, "streaming")
+      upsertInlineActivityStep(conversation_id, {
+        arguments: toolArguments,
+        status: "active",
+        toolCallId: tool_call_id,
+        toolName: tool_name,
+      })
+    },
+    { organizationScoped: true },
+  )
+
+  useSocketSubscription<ChatMessageToolEndPayload>(
+    "chat:message:tool_end",
+    ({ conversation_id, tool_call_id }) => {
+      setInlineActivityStepStatus(conversation_id, tool_call_id, "complete")
+    },
+    { organizationScoped: true },
+  )
+
   useSocketSubscription<ChatMessageCompletedPayload>(
     "chat:message:completed",
     ({ conversation_id }) => {
       setRunStatus(conversation_id, "completed")
+      setInlineActivityTraceStatus(conversation_id, "completed")
       setThreadError(conversation_id, null)
       clearStreamingAssistant(conversation_id)
 
@@ -78,7 +115,17 @@ export const useChatLifecycleSubscriptions = ({
   useSocketSubscription<ChatMessageFailedPayload>(
     "chat:message:failed",
     ({ conversation_id, error }) => {
+      const activityTrace =
+        useSuperAgentChatWorkspaceStore.getState().activityTraceByConversation[conversation_id]
+      const latestActiveStep = [...(activityTrace?.steps ?? [])]
+        .reverse()
+        .find((step) => step.status === "active")
+
       setRunStatus(conversation_id, "failed")
+      setInlineActivityTraceStatus(conversation_id, "failed")
+      if (latestActiveStep) {
+        setInlineActivityStepStatus(conversation_id, latestActiveStep.toolCallId, "failed")
+      }
       setThreadError(conversation_id, error || "Assistant response failed.")
       clearStreamingAssistant(conversation_id)
 
