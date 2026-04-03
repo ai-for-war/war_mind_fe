@@ -6,6 +6,7 @@ import {
   Lightbulb,
   Mic,
   Plug,
+  Sparkles,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -27,6 +28,11 @@ const navItems = [
         title: "Multi-Agent",
         url: "/multi-agent",
         icon: Bot,
+      },
+      {
+        title: "Super-Agent",
+        url: "/super-agent",
+        icon: Sparkles,
       }
     ],
   },

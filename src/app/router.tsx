@@ -8,6 +8,7 @@ import { InterviewLabPage } from "@/features/interview-lab"
 import { MeetingRecorderPage } from "@/features/meeting-recorder"
 import { MultiAgentPage } from "@/features/multi-agent"
 import { TextToImagePage } from "@/features/text-to-image"
+import { SuperAgentPage } from "@/features/super-agent"
 import { SocketProvider } from "@/features/socket"
 import { SkillPluginsPage } from "@/features/skill-plugins"
 import { TtsPage } from "@/features/tts"
@@ -78,6 +79,10 @@ export const router = createBrowserRouter([
           {
             path: "/multi-agent",
             element: <MultiAgentPage />,
+          },
+          {
+            path: "/super-agent",
+            element: <SuperAgentPage />,
           },
           {
             path: "/interview-lab",
