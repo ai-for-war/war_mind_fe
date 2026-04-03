@@ -43,13 +43,15 @@ type ChatWorkspaceProps = {
 }
 
 const ChatWorkspaceLoading = () => (
-  <div className="space-y-3">
-    <Skeleton className="h-5 w-1/3" />
-    <Skeleton className="h-4 w-full" />
-    <Skeleton className="h-4 w-11/12" />
-    <Skeleton className="h-4 w-2/3" />
-    <div className="pt-2">
-      <Skeleton className="h-10 w-28" />
+  <div className="flex h-full min-h-0 flex-1 flex-col rounded-lg border border-border/60 p-6">
+    <div className="space-y-3">
+      <Skeleton className="h-5 w-1/3" />
+      <Skeleton className="h-4 w-full" />
+      <Skeleton className="h-4 w-11/12" />
+      <Skeleton className="h-4 w-2/3" />
+      <div className="pt-2">
+        <Skeleton className="h-10 w-28" />
+      </div>
     </div>
   </div>
 )
@@ -61,7 +63,7 @@ type ChatWorkspaceErrorProps = {
 const ChatWorkspaceError = ({ onRetry }: ChatWorkspaceErrorProps) => (
   <div
     role="alert"
-    className="rounded-lg border border-destructive/40 bg-destructive/10 p-4 text-destructive"
+    className="flex min-h-0 flex-1 flex-col rounded-lg border border-destructive/40 bg-destructive/10 p-4 text-destructive"
   >
     <div className="flex items-start gap-3">
       <AlertCircle className="mt-0.5 size-4 shrink-0" />
@@ -85,7 +87,7 @@ type FreshChatStateProps = {
 
 const FreshChatState = ({ onSuggestionClick }: FreshChatStateProps) => (
   <ConversationEmptyState
-    className="items-start rounded-lg border border-dashed bg-muted/20 p-6 text-left"
+    className="flex min-h-0 flex-1 items-start rounded-lg border border-dashed bg-muted/20 p-6 text-left"
     description="Choose a suggestion to prefill your first prompt, or start typing in the composer."
     icon={<Sparkles className="size-5" />}
     title="Start a fresh multi-agent chat"
