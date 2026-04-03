@@ -1,8 +1,11 @@
+import { useState } from "react"
+
 import {
   ChainOfThought,
   ChainOfThoughtContent,
   ChainOfThoughtHeader,
 } from "@/components/ai/chain-of-thought"
+import { Badge } from "@/components/ui/badge"
 import type { SuperAgentInlineActivityTrace } from "@/features/super-agent/types/chat-workspace.types"
 import { cn } from "@/lib/utils"
 
@@ -29,6 +32,8 @@ export const SuperAgentActivityBlock = ({
   className,
   trace,
 }: SuperAgentActivityBlockProps) => {
+  const [isOpen, setIsOpen] = useState(true)
+
   if (trace.steps.length === 0) {
     return null
   }
@@ -40,19 +45,37 @@ export const SuperAgentActivityBlock = ({
         className,
       )}
       defaultOpen
+      onOpenChange={setIsOpen}
+      open={isOpen}
     >
-      <ChainOfThoughtHeader className="gap-2 text-xs hover:text-foreground">
-        {toTraceTitle(trace)}
+      <ChainOfThoughtHeader
+        className={cn(
+          "gap-3 rounded-md px-1 py-0.5 text-xs hover:text-foreground",
+        )}
+      >
+        <div className="flex min-w-0 flex-1 items-center gap-3 self-center">
+          <span className="shrink-0">{toTraceTitle(trace)}</span>
+          <Badge
+            className="shrink-0 rounded-full border border-border/70 bg-background/80 px-2 py-0 text-[10px] uppercase tracking-[0.18em] text-muted-foreground"
+            variant="outline"
+          >
+            {trace.steps.length} step{trace.steps.length > 1 ? "s" : ""}
+          </Badge>
+        </div>
       </ChainOfThoughtHeader>
-      <ChainOfThoughtContent className="mt-0 space-y-3">
-        {trace.steps.map((step, index) => (
-          <SuperAgentActivityStep
-            isLastStep={index === trace.steps.length - 1}
-            key={step.toolCallId}
-            step={step}
-          />
-        ))}
-      </ChainOfThoughtContent>
+      
+      {
+        isOpen ? (
+          <ChainOfThoughtContent className="mt-0 space-y-3">
+            {trace.steps.map((step, index) => (
+              <SuperAgentActivityStep
+                isLastStep={index === trace.steps.length - 1}
+                key={step.toolCallId}
+                step={step}
+              />
+            ))}
+          </ChainOfThoughtContent>
+        ) : null}
     </ChainOfThought>
   )
 }

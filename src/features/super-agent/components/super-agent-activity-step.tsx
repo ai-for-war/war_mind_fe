@@ -1,6 +1,7 @@
 import { CircleAlert, LoaderCircle } from "lucide-react"
 
 import { ChainOfThoughtStep } from "@/components/ai/chain-of-thought"
+import { Badge } from "@/components/ui/badge"
 import type { SuperAgentInlineActivityStep } from "@/features/super-agent/types/chat-workspace.types"
 import {
   formatSuperAgentToolArgumentsSummary,
@@ -24,6 +25,7 @@ export const SuperAgentActivityStep = ({
   const isFailed = step.status === "failed"
   const isActive = step.status === "active"
   const StepIcon = isFailed ? CircleAlert : isActive ? LoaderCircle : presentation.icon
+  const statusLabel = step.status === "failed" ? "Failed" : step.status === "active" ? "Active" : "Complete"
 
   return (
     <ChainOfThoughtStep
@@ -39,18 +41,19 @@ export const SuperAgentActivityStep = ({
       label={
         <div className="flex items-center gap-2">
           <span className="font-medium text-foreground">{presentation.label}</span>
-          <span
+          <Badge
             className={cn(
-              "text-[11px] uppercase tracking-[0.18em]",
+              "rounded-full px-2 py-0 text-[10px] uppercase tracking-[0.16em]",
               isFailed
-                ? "text-destructive/80"
+                ? "border-rose-300 bg-rose-100 text-rose-700 hover:bg-rose-100 dark:border-rose-300/30 dark:bg-rose-400/15 dark:text-rose-100"
                 : isActive
-                  ? "text-foreground/70"
-                  : "text-muted-foreground",
+                  ? "border-sky-300 bg-sky-100 text-sky-700 hover:bg-sky-100 dark:border-sky-300/30 dark:bg-sky-400/15 dark:text-sky-100"
+                  : "border-emerald-300 bg-emerald-100 text-emerald-700 hover:bg-emerald-100 dark:border-emerald-300/30 dark:bg-emerald-400/15 dark:text-emerald-100",
             )}
+            variant="outline"
           >
-            {step.status}
-          </span>
+            {statusLabel}
+          </Badge>
         </div>
       }
       status={isActive ? "active" : "complete"}
