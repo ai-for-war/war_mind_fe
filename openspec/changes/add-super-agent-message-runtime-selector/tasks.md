@@ -8,11 +8,11 @@
 
 ## 2. Composer runtime state and fallback behavior
 
-- [ ] 2.1 Extend the `super-agent` workspace state to track the active composer runtime selection for fresh-chat and selected-conversation flows
-- [ ] 2.2 Initialize composer runtime state from the backend catalog defaults after the catalog query succeeds
-- [ ] 2.3 Implement state transitions so selecting a model also sets its owning provider and selecting a new model resets or rehydrates reasoning correctly
-- [ ] 2.4 Implement invalid-selection fallback logic for catalog refreshes, including model replacement, reasoning replacement, and a visible notice when the active selection changes
-- [ ] 2.5 Prevent prompt submission when the catalog is unavailable or the runtime selection cannot be normalized to a valid backend-supported tuple
+- [x] 2.1 Extend the `super-agent` workspace state to track the active composer runtime selection for fresh-chat and selected-conversation flows
+- [x] 2.2 Initialize composer runtime state from the backend catalog defaults after the catalog query succeeds
+- [x] 2.3 Implement state transitions so selecting a model also sets its owning provider and selecting a new model resets or rehydrates reasoning correctly
+- [x] 2.4 Implement invalid-selection fallback logic for catalog refreshes, including model replacement, reasoning replacement, and a visible notice when the active selection changes
+- [x] 2.5 Prevent prompt submission when the catalog is unavailable or the runtime selection cannot be normalized to a valid backend-supported tuple
 
 ## 3. Composer UI and grouped picker experience
 

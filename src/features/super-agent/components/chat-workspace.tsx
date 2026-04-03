@@ -1,8 +1,9 @@
 import { AlertCircle, RefreshCw, Sparkles } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import { ConversationEmptyState } from "@/components/ai/conversation"
 import { Suggestion } from "@/components/ai/suggestion"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
@@ -30,8 +31,7 @@ import type {
   SuperAgentRunStatus,
 } from "@/features/super-agent/types/chat-workspace.types"
 import {
-  getLeadAgentRuntimeCatalogDefaultSelection,
-  normalizeSuperAgentRuntimeSelection,
+  resolveSuperAgentRuntimeSelection,
 } from "@/features/super-agent/utils/runtime-catalog"
 import { cn } from "@/lib/utils"
 import { getBadgeColor } from "@/common/badgeColor"
@@ -143,11 +143,29 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   const activeConversationId = useSuperAgentRailStore((state) => state.activeConversationId)
   const setActiveConversationId = useSuperAgentRailStore((state) => state.setActiveConversationId)
   const clearComposerDraft = useSuperAgentChatWorkspaceStore((state) => state.clearComposerDraft)
+  const clearComposerRuntimeNotice = useSuperAgentChatWorkspaceStore(
+    (state) => state.clearComposerRuntimeNotice,
+  )
   const composerDraftByConversation = useSuperAgentChatWorkspaceStore(
     (state) => state.composerDraftByConversation,
   )
+  const composerRuntimeNoticeByConversation = useSuperAgentChatWorkspaceStore(
+    (state) => state.composerRuntimeNoticeByConversation,
+  )
+  const composerRuntimeSelectionByConversation = useSuperAgentChatWorkspaceStore(
+    (state) => state.composerRuntimeSelectionByConversation,
+  )
+  const rekeyComposerRuntimeSelection = useSuperAgentChatWorkspaceStore(
+    (state) => state.rekeyComposerRuntimeSelection,
+  )
   const runStatusByConversation = useSuperAgentChatWorkspaceStore(
     (state) => state.runStatusByConversation,
+  )
+  const setComposerRuntimeNotice = useSuperAgentChatWorkspaceStore(
+    (state) => state.setComposerRuntimeNotice,
+  )
+  const setComposerRuntimeSelection = useSuperAgentChatWorkspaceStore(
+    (state) => state.setComposerRuntimeSelection,
   )
   const streamingAssistantByConversation = useSuperAgentChatWorkspaceStore(
     (state) => state.streamingAssistantByConversation,
@@ -168,14 +186,66 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
 
   const conversationKey = toSuperAgentConversationKey(activeConversationId)
   const draft = composerDraftByConversation[conversationKey] ?? ""
+  const runtimeNotice = composerRuntimeNoticeByConversation[conversationKey] ?? null
+  const activeRuntimeSelection = composerRuntimeSelectionByConversation[conversationKey] ?? null
   const runStatus = (runStatusByConversation[conversationKey] ?? "idle") satisfies SuperAgentRunStatus
   const isSubmitting = runStatus === "submitting"
 
   const badgeLabel =
     activeConversationId || runStatus !== "idle" ? `${runStatus}` : "Fresh chat"
-  const defaultRuntimeSelection = runtimeCatalogQuery.catalog
-    ? getLeadAgentRuntimeCatalogDefaultSelection(runtimeCatalogQuery.catalog)
+  const resolvedRuntime = runtimeCatalogQuery.catalog
+    ? resolveSuperAgentRuntimeSelection(runtimeCatalogQuery.catalog, activeRuntimeSelection)
     : null
+  const normalizedRuntime = resolvedRuntime?.normalized ?? null
+  const runtimeError = runtimeCatalogQuery.isError
+    ? "Runtime catalog unavailable. Retry and try again."
+    : !runtimeCatalogQuery.catalog
+      ? "Loading runtime catalog."
+      : !normalizedRuntime
+        ? "Choose a valid runtime before sending."
+        : null
+  const isRuntimeReady = Boolean(normalizedRuntime)
+
+  useEffect(() => {
+    if (!runtimeCatalogQuery.catalog) {
+      return
+    }
+
+    const result = resolveSuperAgentRuntimeSelection(
+      runtimeCatalogQuery.catalog,
+      activeRuntimeSelection,
+    )
+
+    if (!result.nextSelection) {
+      return
+    }
+
+    if (
+      !activeRuntimeSelection ||
+      result.changed ||
+      activeRuntimeSelection.provider !== result.nextSelection.provider ||
+      activeRuntimeSelection.model !== result.nextSelection.model ||
+      activeRuntimeSelection.reasoning !== result.nextSelection.reasoning
+    ) {
+      setComposerRuntimeSelection(activeConversationId, result.nextSelection)
+    }
+
+    if (activeRuntimeSelection && result.changed) {
+      setComposerRuntimeNotice(
+        activeConversationId,
+        "Your previous runtime is no longer available. We switched to the latest supported default.",
+      )
+    } else if (!activeRuntimeSelection) {
+      clearComposerRuntimeNotice(activeConversationId)
+    }
+  }, [
+    activeConversationId,
+    activeRuntimeSelection,
+    clearComposerRuntimeNotice,
+    runtimeCatalogQuery.catalog,
+    setComposerRuntimeNotice,
+    setComposerRuntimeSelection,
+  ])
 
   const handleSuggestionClick = (value: string) => {
     setComposerDraft(null, value)
@@ -188,14 +258,6 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
     }
 
     const submitKey = conversationKey
-    const normalizedRuntime =
-      runtimeCatalogQuery.catalog && defaultRuntimeSelection
-        ? normalizeSuperAgentRuntimeSelection(
-            runtimeCatalogQuery.catalog,
-            defaultRuntimeSelection,
-          )
-        : null
-
     if (!normalizedRuntime) {
       setRunStatus(submitKey, "failed")
       setThreadError(submitKey, "Unable to load a valid lead-agent runtime. Please retry.")
@@ -220,6 +282,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
 
       if (!activeConversationId) {
         setFreshChatOptimisticMessage(null)
+        rekeyComposerRuntimeSelection(null, result.conversation_id)
         setRunStatus(result.conversation_id, "submitting")
         setThreadError(result.conversation_id, null)
         setRunStatus(submitKey, "idle")
@@ -282,12 +345,21 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
             />
           )}
 
+          {runtimeNotice ? (
+            <div className="px-6">
+              <Alert>
+                <AlertDescription>{runtimeNotice}</AlertDescription>
+              </Alert>
+            </div>
+          ) : null}
+
           <ComposerPanel
-            // className="mt-1"
             draft={draft}
+            isRuntimeReady={isRuntimeReady}
             isSubmitting={isSubmitting}
             onDraftChange={(value) => setComposerDraft(activeConversationId, value)}
             onSubmit={(text) => void handleSubmitPrompt(text)}
+            runtimeError={runtimeError}
           />
         </CardContent>
       </Card>

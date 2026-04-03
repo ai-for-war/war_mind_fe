@@ -100,3 +100,46 @@ export const normalizeSuperAgentRuntimeSelection = (
     },
   }
 }
+
+const areSelectionsEqual = (
+  left: SuperAgentRuntimeSelection | null,
+  right: SuperAgentRuntimeSelection | null,
+): boolean =>
+  left?.provider === right?.provider &&
+  left?.model === right?.model &&
+  left?.reasoning === right?.reasoning
+
+export interface ResolveSuperAgentRuntimeSelectionResult {
+  nextSelection: SuperAgentRuntimeSelection | null
+  normalized: NormalizeSuperAgentRuntimeSelectionResult | null
+  changed: boolean
+}
+
+export const resolveSuperAgentRuntimeSelection = (
+  catalog: LeadAgentRuntimeCatalogResponse,
+  selection: SuperAgentRuntimeSelection | null | undefined,
+): ResolveSuperAgentRuntimeSelectionResult => {
+  const normalized = normalizeSuperAgentRuntimeSelection(catalog, selection)
+
+  if (normalized && selection) {
+    return {
+      changed: false,
+      nextSelection: {
+        model: normalized.runtime.model,
+        provider: normalized.runtime.provider,
+        reasoning: normalized.runtime.reasoning ?? null,
+      },
+      normalized,
+    }
+  }
+
+  const fallbackSelection = getLeadAgentRuntimeCatalogDefaultSelection(catalog)
+
+  return {
+    changed: !areSelectionsEqual(selection ?? null, fallbackSelection),
+    nextSelection: fallbackSelection,
+    normalized: fallbackSelection
+      ? normalizeSuperAgentRuntimeSelection(catalog, fallbackSelection)
+      : null,
+  }
+}
