@@ -12,9 +12,9 @@
 
 ## 3. Tool Presentation Mapping
 
-- [ ] 3.1 Create a super-agent tool presentation registry that maps backend `tool_name` values to display labels and icons, including `fetch_content -> Crawl`
-- [ ] 3.2 Add argument summary helpers that format tool start arguments into compact inline text with URL shortening and string truncation rules
-- [ ] 3.3 Cover fallback behavior for unknown tools so unmapped `tool_name` values still render with a stable label and argument summary
+- [x] 3.1 Create a super-agent tool presentation registry that maps backend `tool_name` values to display labels and icons, including `fetch_content -> Crawl`
+- [x] 3.2 Add argument summary helpers that format tool start arguments into compact inline text with URL shortening and string truncation rules
+- [x] 3.3 Cover fallback behavior for unknown tools so unmapped `tool_name` values still render with a stable label and argument summary
 
 ## 4. Inline Activity UI
 

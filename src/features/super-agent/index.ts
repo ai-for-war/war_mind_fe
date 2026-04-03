@@ -14,6 +14,11 @@ export { useSendMessage } from "@/features/super-agent/hooks/use-send-message"
 export { superAgentQueryKeys } from "@/features/super-agent/query-keys"
 export { useSuperAgentChatWorkspaceStore } from "@/features/super-agent/stores/use-super-agent-chat-workspace-store"
 export { useSuperAgentRailStore } from "@/features/super-agent/stores/use-super-agent-rail-store"
+export {
+  formatSuperAgentToolArgumentsSummary,
+  getSuperAgentToolPresentation,
+  toStableToolLabel,
+} from "@/features/super-agent/utils/tool-presentation"
 export type {
   ChatMessageCompletedPayload,
   ChatMessageFailedPayload,
