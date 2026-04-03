@@ -1,5 +1,5 @@
 import { AlertCircle, RefreshCw, Sparkles } from "lucide-react"
-import { AnimatePresence, motion } from "motion/react"
+import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 
 import { ConversationEmptyState } from "@/components/ai/conversation"
@@ -411,23 +411,26 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
               )}
             </div>
 
-            <AnimatePresence initial={false}>
-              {selectedMetadata ? (
-                <motion.div
-                  animate={{ opacity: 1, x: 0 }}
-                  className="hidden min-h-0 w-full max-w-[22rem] shrink-0 overflow-hidden xl:block"
-                  exit={{ opacity: 0, x: 16 }}
-                  initial={{ opacity: 0, x: 24 }}
-                  key={activeSelectedMetadataMessage?.id ?? "metadata-panel"}
-                  transition={{ type: "tween", duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  <AiMessageMetadataInspector
-                    className="border-border/60"
-                    metadata={selectedMetadata}
-                  />
-                </motion.div>
-              ) : null}
-            </AnimatePresence>
+            <div className="hidden min-h-0 shrink-0 xl:block">
+              <motion.div
+                animate={{
+                  width: selectedMetadata ? "22rem" : 0,
+                  x: selectedMetadata ? 0 : 24,
+                }}
+                className="h-full overflow-hidden"
+                initial={false}
+                transition={{ type: "tween", duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+              >
+                <div className="h-full w-[22rem]">
+                  {selectedMetadata ? (
+                    <AiMessageMetadataInspector
+                      className="border-border/60"
+                      metadata={selectedMetadata}
+                    />
+                  ) : null}
+                </div>
+              </motion.div>
+            </div>
           </div>
 
           {runtimeNotice ? (

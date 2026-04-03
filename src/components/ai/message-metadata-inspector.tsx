@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils"
 type AiMessageMetadataInspectorProps = {
   className?: string
   description?: string
-  metadata: NormalizedAssistantMessageMetadata
+  metadata: NormalizedAssistantMessageMetadata | null
   title?: string
 }
 
@@ -81,6 +81,10 @@ export const AiMessageMetadataInspector = ({
   metadata,
   title = "Response metadata",
 }: AiMessageMetadataInspectorProps) => {
+  if (!metadata) {
+    return null
+  }
+
   const hasSkillSection = Boolean(
     metadata.skillId || metadata.skillVersion || metadata.loadedSkills.length > 0,
   )
@@ -164,7 +168,7 @@ export const AiMessageMetadataInspector = ({
                   return (
                     <ChainOfThoughtStep
                       className={cn(
-                        "gap-3 text-sm",
+                        "gap-3 text-sm [&>div:last-child]:min-w-0 [&>div:last-child]:overflow-hidden [&>div:last-child>div:last-child]:break-all [&>div:last-child>div:last-child]:whitespace-normal [&_svg]:shrink-0",
                         index === metadata.toolCalls.length - 1
                           ? "[&>div:first-child>div]:hidden"
                           : "[&>div:first-child>div]:block",
