@@ -16,12 +16,12 @@
 
 ## 3. Composer UI and grouped picker experience
 
-- [ ] 3.1 Update `ComposerPanel` to render a compact `Choose model` trigger inside the composer footer beside the existing submit controls
-- [ ] 3.2 Implement the grouped model picker so provider names render as menu block headers and models render as selectable items in catalog order
-- [ ] 3.3 Ensure the closed `Choose model` trigger displays both provider and model so the active runtime is unambiguous
-- [ ] 3.4 Add the conditional `Reasoning` control that appears only when the selected model has non-empty `reasoning_options`
-- [ ] 3.5 Implement responsive picker behavior so desktop uses a dialog/command-style surface and mobile uses a sheet-style surface without breaking composer usability
-- [ ] 3.6 Add composer-level loading, error, and retry states for runtime selection so the UI does not invent catalog values when the backend catalog is unavailable
+- [x] 3.1 Update `ComposerPanel` to render a compact `Choose model` trigger inside the composer footer beside the existing submit controls
+- [x] 3.2 Implement the grouped model picker so provider names render as menu block headers and models render as selectable items in catalog order
+- [x] 3.3 Ensure the closed `Choose model` trigger displays both provider and model so the active runtime is unambiguous
+- [x] 3.4 Add the conditional `Reasoning` control that appears only when the selected model has non-empty `reasoning_options`
+- [x] 3.5 Implement responsive picker behavior so desktop uses a dialog/command-style surface and mobile uses a sheet-style surface without breaking composer usability
+- [x] 3.6 Add composer-level loading, error, and retry states for runtime selection so the UI does not invent catalog values when the backend catalog is unavailable
 
 ## 4. Submission flow and per-turn runtime display
 

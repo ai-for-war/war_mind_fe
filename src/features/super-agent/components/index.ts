@@ -3,3 +3,4 @@ export { ConversationRail } from "@/features/super-agent/components/conversation
 export { ChatWorkspace } from "@/features/super-agent/components/chat-workspace"
 export { ChatThread } from "@/features/super-agent/components/chat-thread"
 export { ComposerPanel } from "@/features/super-agent/components/composer-panel"
+export { SuperAgentRuntimePicker } from "@/features/super-agent/components/super-agent-runtime-picker"

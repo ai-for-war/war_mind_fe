@@ -164,6 +164,12 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   const setComposerRuntimeNotice = useSuperAgentChatWorkspaceStore(
     (state) => state.setComposerRuntimeNotice,
   )
+  const setComposerRuntimeModel = useSuperAgentChatWorkspaceStore(
+    (state) => state.setComposerRuntimeModel,
+  )
+  const setComposerRuntimeReasoning = useSuperAgentChatWorkspaceStore(
+    (state) => state.setComposerRuntimeReasoning,
+  )
   const setComposerRuntimeSelection = useSuperAgentChatWorkspaceStore(
     (state) => state.setComposerRuntimeSelection,
   )
@@ -354,12 +360,33 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
           ) : null}
 
           <ComposerPanel
+            catalog={runtimeCatalogQuery.catalog}
             draft={draft}
+            isRuntimeLoading={runtimeCatalogQuery.isPending}
             isRuntimeReady={isRuntimeReady}
+            isRuntimeRetrying={runtimeCatalogQuery.isRefetching}
             isSubmitting={isSubmitting}
             onDraftChange={(value) => setComposerDraft(activeConversationId, value)}
+            onRetryRuntime={() => void runtimeCatalogQuery.refetchCatalog()}
+            onSelectModel={({ model, provider }) => {
+              if (!runtimeCatalogQuery.catalog) {
+                return
+              }
+
+              setComposerRuntimeModel(activeConversationId, {
+                catalog: runtimeCatalogQuery.catalog,
+                model,
+                provider,
+              })
+              clearComposerRuntimeNotice(activeConversationId)
+            }}
+            onSelectReasoning={(reasoning) => {
+              setComposerRuntimeReasoning(activeConversationId, reasoning)
+              clearComposerRuntimeNotice(activeConversationId)
+            }}
             onSubmit={(text) => void handleSubmitPrompt(text)}
             runtimeError={runtimeError}
+            runtimeSelection={activeRuntimeSelection}
           />
         </CardContent>
       </Card>

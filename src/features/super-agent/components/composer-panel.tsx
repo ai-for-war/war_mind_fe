@@ -8,26 +8,45 @@ import {
   PromptInputTextarea,
   PromptInputTools,
 } from "@/components/ai/prompt-input"
+import { SuperAgentRuntimePicker } from "@/features/super-agent/components/super-agent-runtime-picker"
+import type {
+  LeadAgentRuntimeCatalogResponse,
+  SuperAgentRuntimeSelection,
+} from "@/features/super-agent/types"
 import { cn } from "@/lib/utils"
 
 type ComposerPanelProps = {
+  catalog: LeadAgentRuntimeCatalogResponse | null
   className?: string
   draft: string
   isRuntimeReady?: boolean
+  isRuntimeRetrying?: boolean
+  isRuntimeLoading?: boolean
   isSubmitting: boolean
   onDraftChange: (value: string) => void
+  onRetryRuntime: () => void
+  onSelectModel: (args: { model: string; provider: string }) => void
+  onSelectReasoning: (reasoning: string) => void
   onSubmit: (text: string) => void
   runtimeError?: string | null
+  runtimeSelection: SuperAgentRuntimeSelection | null
 }
 
 export const ComposerPanel = ({
+  catalog,
   className,
   draft,
   isRuntimeReady = true,
+  isRuntimeRetrying = false,
+  isRuntimeLoading = false,
   isSubmitting,
   onDraftChange,
+  onRetryRuntime,
+  onSelectModel,
+  onSelectReasoning,
   onSubmit,
   runtimeError,
+  runtimeSelection,
 }: ComposerPanelProps) => {
   const [validationError, setValidationError] = useState<string | null>(null)
 
@@ -73,7 +92,18 @@ export const ComposerPanel = ({
         </PromptInputBody>
 
         <PromptInputFooter className="mt-1">
-          <PromptInputTools />
+          <PromptInputTools>
+            <SuperAgentRuntimePicker
+              catalog={catalog}
+              isLoading={isRuntimeLoading}
+              isRetrying={isRuntimeRetrying}
+              onRetry={onRetryRuntime}
+              onSelectModel={onSelectModel}
+              onSelectReasoning={onSelectReasoning}
+              runtimeError={runtimeError}
+              selection={runtimeSelection}
+            />
+          </PromptInputTools>
           <PromptInputSubmit
             disabled={isSubmitting || !isRuntimeReady}
             status={isSubmitting ? "submitted" : "ready"}
