@@ -25,18 +25,18 @@
 
 ## 4. Submission flow and per-turn runtime display
 
-- [ ] 4.1 Update `ChatWorkspace` submission flow to send the normalized runtime snapshot with every outbound message
-- [ ] 4.2 Extend optimistic user-message creation for both fresh-chat and existing-conversation flows so each submitted turn carries its runtime snapshot immediately
-- [ ] 4.3 Extend `useSendMessage` optimistic cache handling to preserve runtime metadata on optimistic user messages
-- [ ] 4.4 Extend `SuperAgentMessageRecord` handling and thread rendering so the chat thread displays the runtime used for each submitted turn
-- [ ] 4.5 Preserve stable per-turn runtime display when later messages in the same conversation use different models
+- [x] 4.1 Update `ChatWorkspace` submission flow to send the normalized runtime snapshot with every outbound message
+- [x] 4.2 Extend optimistic user-message creation for both fresh-chat and existing-conversation flows so each submitted turn carries its runtime snapshot immediately
+- [x] 4.3 Extend `useSendMessage` optimistic cache handling to preserve runtime metadata on optimistic user messages
+- [x] 4.4 Extend `SuperAgentMessageRecord` handling and thread rendering so the chat thread displays the runtime used for each submitted turn
+- [x] 4.5 Preserve stable per-turn runtime display when later messages in the same conversation use different models
 
 ## 5. Verification and refinement
 
-- [ ] 5.1 Verify fresh-chat and existing-conversation flows both expose runtime controls and allow per-message runtime switching
-- [ ] 5.2 Verify grouped model selection, conditional reasoning visibility, and reasoning clearing behavior across models with and without reasoning support
-- [ ] 5.3 Verify send-message requests include `provider`, `model`, and optional `reasoning` exactly when allowed by the catalog
-- [ ] 5.4 Verify optimistic turns and persisted thread turns display the correct runtime after single-model and mixed-model conversations
-- [ ] 5.5 Verify catalog refresh fallback behavior when the selected model or reasoning value becomes invalid
-- [ ] 5.6 Verify desktop and mobile composer layouts remain usable with the new runtime controls
-- [ ] 5.7 Run lint and typecheck for the touched `super-agent` files and resolve any issues introduced by the change
+- [x] 5.1 Verify fresh-chat and existing-conversation flows both expose runtime controls and allow per-message runtime switching
+- [x] 5.2 Verify grouped model selection, conditional reasoning visibility, and reasoning clearing behavior across models with and without reasoning support
+- [x] 5.3 Verify send-message requests include `provider`, `model`, and optional `reasoning` exactly when allowed by the catalog
+- [x] 5.4 Verify optimistic turns and persisted thread turns display the correct runtime after single-model and mixed-model conversations
+- [x] 5.5 Verify catalog refresh fallback behavior when the selected model or reasoning value becomes invalid
+- [x] 5.6 Verify desktop and mobile composer layouts remain usable with the new runtime controls
+- [x] 5.7 Run lint and typecheck for the touched `super-agent` files and resolve any issues introduced by the change
