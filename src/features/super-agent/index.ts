@@ -4,6 +4,8 @@ export { ConversationRail } from "@/features/super-agent/components/conversation
 export { ChatThread } from "@/features/super-agent/components/chat-thread"
 export { ChatWorkspace } from "@/features/super-agent/components/chat-workspace"
 export { ComposerPanel } from "@/features/super-agent/components/composer-panel"
+export { SuperAgentActivityBlock } from "@/features/super-agent/components/super-agent-activity-block"
+export { SuperAgentActivityStep } from "@/features/super-agent/components/super-agent-activity-step"
 export { SuperAgentPage } from "@/features/super-agent/components/super-agent-page"
 export { SuperAgentRuntimePicker } from "@/features/super-agent/components/super-agent-runtime-picker"
 export { useConversationMessages } from "@/features/super-agent/hooks/use-conversation-messages"

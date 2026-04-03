@@ -27,6 +27,7 @@ import {
 } from "@/features/super-agent/stores/use-super-agent-chat-workspace-store"
 import { useSuperAgentRailStore } from "@/features/super-agent/stores/use-super-agent-rail-store"
 import type {
+  SuperAgentInlineActivityTrace,
   SuperAgentMessageRecord,
   SuperAgentRunStatus,
 } from "@/features/super-agent/types/chat-workspace.types"
@@ -154,6 +155,9 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   )
   const composerRuntimeSelectionByConversation = useSuperAgentChatWorkspaceStore(
     (state) => state.composerRuntimeSelectionByConversation,
+  )
+  const activityTraceByConversation = useSuperAgentChatWorkspaceStore(
+    (state) => state.activityTraceByConversation,
   )
   const rekeyComposerRuntimeSelection = useSuperAgentChatWorkspaceStore(
     (state) => state.rekeyComposerRuntimeSelection,
@@ -313,6 +317,9 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   const activeStreamingAssistant = activeConversationId
     ? streamingAssistantByConversation[activeConversationId] ?? null
     : null
+  const activeActivityTrace = activeConversationId
+    ? (activityTraceByConversation[activeConversationId] ?? null)
+    : null satisfies SuperAgentInlineActivityTrace | null
   const activeThreadError = threadErrorByConversation[conversationKey] ?? null
 
   return (
@@ -344,6 +351,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
           ) : (
             <ChatThread
               className="min-h-0 flex-1"
+              activityTrace={activeActivityTrace}
               conversationId={activeConversationId ?? SUPER_AGENT_FRESH_CHAT_KEY}
               messages={threadMessages}
               streamingAssistant={activeStreamingAssistant}

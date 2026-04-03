@@ -18,9 +18,9 @@
 
 ## 4. Inline Activity UI
 
-- [ ] 4.1 Create dedicated inline activity block and activity step components under `src/features/super-agent/components/` for compact assistant-bubble trace rendering
-- [ ] 4.2 Update `src/features/super-agent/components/chat-thread.tsx` to render the activity block above streamed assistant text inside the assistant message bubble
-- [ ] 4.3 Replace the generic `Thinking...` placeholder behavior with activity-aware streaming UI while keeping answer text rendering unchanged below the block
+- [x] 4.1 Create dedicated inline activity block and activity step components under `src/features/super-agent/components/` for compact assistant-bubble trace rendering
+- [x] 4.2 Update `src/features/super-agent/components/chat-thread.tsx` to render the activity block above streamed assistant text inside the assistant message bubble
+- [x] 4.3 Replace the generic `Thinking...` placeholder behavior with activity-aware streaming UI while keeping answer text rendering unchanged below the block
 
 ## 5. Verification
 
