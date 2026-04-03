@@ -154,6 +154,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   const activeConversationId = useSuperAgentRailStore((state) => state.activeConversationId)
   const setActiveConversationId = useSuperAgentRailStore((state) => state.setActiveConversationId)
   const clearComposerDraft = useSuperAgentChatWorkspaceStore((state) => state.clearComposerDraft)
+  const clearActivityTrace = useSuperAgentChatWorkspaceStore((state) => state.clearActivityTrace)
   const clearComposerRuntimeNotice = useSuperAgentChatWorkspaceStore(
     (state) => state.clearComposerRuntimeNotice,
   )
@@ -304,6 +305,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
       return
     }
 
+    clearActivityTrace(submitKey)
     setRunStatus(submitKey, "submitting")
     setThreadError(submitKey, null)
 
