@@ -4,6 +4,7 @@ import {
   ConversationEmptyState,
   ConversationScrollButton,
 } from "@/components/ai/conversation"
+import { Actions, CopyAction } from "@/components/ai/actions"
 import { Message, MessageContent, MessageResponse } from "@/components/ai/message"
 import type {
   SuperAgentInlineActivityTrace,
@@ -72,25 +73,39 @@ export const ChatThread = ({
                 <MessageContent className="bg-primary/10 p-5 rounded-lg">
                   {!hasStreamingAssistant &&
                   hasActivityTrace &&
+                  activityTrace &&
                   message.id === lastAssistantMessageId &&
                   toMessageAuthor(message.role) === "assistant" ? (
                     <SuperAgentActivityBlock className="mb-3" trace={activityTrace} />
                   ) : null}
                   <MessageResponse>{message.content}</MessageResponse>
                 </MessageContent>
+                <Actions
+                  className={cn(
+                    "opacity-0 transition-opacity group-hover:opacity-100",
+                    toMessageAuthor(message.role) === "user" ? "ml-auto" : undefined,
+                  )}
+                >
+                  <CopyAction text={message.content} />
+                </Actions>
               </Message>
             ))}
 
             {streamingAssistant ? (
               <Message from="assistant" key={`streaming-${conversationId}`}>
                 <MessageContent className="bg-primary/10 p-5 rounded-lg">
-                  {hasActivityTrace ? (
+                  {hasActivityTrace && activityTrace ? (
                     <SuperAgentActivityBlock className="mb-3" trace={activityTrace} />
                   ) : null}
                   {streamingAssistant.content ? (
                     <MessageResponse>{streamingAssistant.content}</MessageResponse>
                   ) : null}
                 </MessageContent>
+                {streamingAssistant.content ? (
+                  <Actions className="opacity-0 transition-opacity group-hover:opacity-100">
+                    <CopyAction text={streamingAssistant.content} />
+                  </Actions>
+                ) : null}
               </Message>
             ) : null}
           </>

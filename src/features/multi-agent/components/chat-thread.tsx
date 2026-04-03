@@ -4,6 +4,7 @@ import {
   ConversationEmptyState,
   ConversationScrollButton,
 } from "@/components/ai/conversation"
+import { Actions, CopyAction } from "@/components/ai/actions"
 import { Message, MessageContent, MessageResponse } from "@/components/ai/message"
 import { Shimmer } from "@/components/ai/shimmer"
 import type {
@@ -64,6 +65,14 @@ export const ChatThread = ({
                 <MessageContent className="bg-primary/10 p-5 rounded-lg">
                   <MessageResponse>{message.content}</MessageResponse>
                 </MessageContent>
+                <Actions
+                  className={cn(
+                    "opacity-0 transition-opacity group-hover:opacity-100",
+                    toMessageAuthor(message.role) === "user" ? "ml-auto" : undefined,
+                  )}
+                >
+                  <CopyAction text={message.content} />
+                </Actions>
               </Message>
             ))}
 
@@ -78,6 +87,11 @@ export const ChatThread = ({
                     </Shimmer>
                   )}
                 </MessageContent>
+                {streamingAssistant.content ? (
+                  <Actions className="opacity-0 transition-opacity group-hover:opacity-100">
+                    <CopyAction text={streamingAssistant.content} />
+                  </Actions>
+                ) : null}
               </Message>
             ) : null}
           </>

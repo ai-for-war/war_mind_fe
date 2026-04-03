@@ -1,7 +1,9 @@
 "use client"
 
-import { CopyIcon, RefreshCcwIcon, ThumbsDownIcon, ThumbsUpIcon } from "lucide-react"
+import { CheckIcon, CopyIcon, RefreshCcwIcon, ThumbsDownIcon, ThumbsUpIcon } from "lucide-react"
 import type { ComponentProps } from "react"
+import { useCallback, useEffect, useState } from "react"
+import { toast } from "sonner"
 import { Button } from "../ui/button"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip"
 import { cn } from "../../lib/utils"
@@ -56,6 +58,64 @@ export const Action = ({
   }
 
   return button
+}
+
+export type CopyActionProps = Omit<ActionProps, "children" | "onClick"> & {
+  copiedLabel?: string
+  copiedTooltip?: string
+  text: string
+}
+
+export const CopyAction = ({
+  copiedLabel = "Copied",
+  copiedTooltip = "Copied",
+  label = "Copy message",
+  text,
+  tooltip = "Copy message",
+  ...props
+}: CopyActionProps) => {
+  const [isCopied, setIsCopied] = useState(false)
+
+  useEffect(() => {
+    if (!isCopied) {
+      return
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setIsCopied(false)
+    }, 1500)
+
+    return () => {
+      window.clearTimeout(timeoutId)
+    }
+  }, [isCopied])
+
+  const handleCopy = useCallback(async () => {
+    if (typeof window === "undefined" || !navigator?.clipboard || text.trim().length === 0) {
+      toast.error("Nothing to copy yet.")
+      return
+    }
+
+    try {
+      await navigator.clipboard.writeText(text)
+      setIsCopied(true)
+      toast.success("Message copied to clipboard.")
+    } catch {
+      toast.error("Unable to copy this message.")
+    }
+  }, [text])
+
+  return (
+    <Action
+      aria-label={isCopied ? copiedLabel : label}
+      label={isCopied ? copiedLabel : label}
+      onClick={handleCopy}
+      tooltip={isCopied ? copiedTooltip : tooltip}
+      {...props}
+    >
+      {isCopied ? <CheckIcon className="size-4" /> : <CopyIcon className="size-4" />}
+    </Action>
+  )
 }
 
 /** Demo component for preview */
