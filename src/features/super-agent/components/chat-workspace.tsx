@@ -352,6 +352,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
               activityTrace={activeActivityTrace}
               conversationId={activeConversationId ?? SUPER_AGENT_FRESH_CHAT_KEY}
               messages={threadMessages}
+              runStatus={runStatus}
               streamingAssistant={activeStreamingAssistant}
               threadError={activeThreadError}
             />

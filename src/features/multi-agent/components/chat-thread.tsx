@@ -4,11 +4,12 @@ import {
   ConversationEmptyState,
   ConversationScrollButton,
 } from "@/components/ai/conversation"
+import { AssistantMessagePlaceholder } from "@/components/ai/assistant-message-placeholder"
 import { Actions, CopyAction } from "@/components/ai/actions"
 import { Message, MessageContent, MessageResponse } from "@/components/ai/message"
-import { Shimmer } from "@/components/ai/shimmer"
 import type {
   MultiAgentMessageRecord,
+  MultiAgentRunStatus,
   MultiAgentStreamingAssistantState,
 } from "@/features/multi-agent/types/chat-workspace.types"
 import { cn } from "@/lib/utils"
@@ -17,6 +18,7 @@ type ChatThreadProps = {
   className?: string
   conversationId: string
   messages: MultiAgentMessageRecord[]
+  runStatus: MultiAgentRunStatus
   streamingAssistant: MultiAgentStreamingAssistantState | null
   threadError: string | null
 }
@@ -39,11 +41,18 @@ export const ChatThread = ({
   className,
   conversationId,
   messages,
+  runStatus,
   streamingAssistant,
   threadError,
 }: ChatThreadProps) => {
   const orderedMessages = [...messages].sort(byChronologicalOrder)
   const hasStreamingAssistant = Boolean(streamingAssistant)
+  const placeholderStage =
+    streamingAssistant && !streamingAssistant.content
+      ? "streaming"
+      : !streamingAssistant && runStatus === "submitting"
+        ? "submitting"
+        : null
   const hasMessages = orderedMessages.length > 0 || hasStreamingAssistant
 
   return (
@@ -82,9 +91,7 @@ export const ChatThread = ({
                   {streamingAssistant.content ? (
                     <MessageResponse>{streamingAssistant.content}</MessageResponse>
                   ) : (
-                    <Shimmer as="span" className="text-muted-foreground font-bold text-sm">
-                      Thinking...
-                    </Shimmer>
+                    <AssistantMessagePlaceholder />
                   )}
                 </MessageContent>
                 {streamingAssistant.content ? (
@@ -92,6 +99,14 @@ export const ChatThread = ({
                     <CopyAction text={streamingAssistant.content} />
                   </Actions>
                 ) : null}
+              </Message>
+            ) : null}
+
+            {placeholderStage === "submitting" ? (
+              <Message from="assistant" key={`pending-${conversationId}`}>
+                <MessageContent className="bg-primary/10 p-5 rounded-lg">
+                  <AssistantMessagePlaceholder />
+                </MessageContent>
               </Message>
             ) : null}
           </>

@@ -4,11 +4,13 @@ import {
   ConversationEmptyState,
   ConversationScrollButton,
 } from "@/components/ai/conversation"
+import { AssistantMessagePlaceholder } from "@/components/ai/assistant-message-placeholder"
 import { Actions, CopyAction } from "@/components/ai/actions"
 import { Message, MessageContent, MessageResponse } from "@/components/ai/message"
 import type {
   SuperAgentInlineActivityTrace,
   SuperAgentMessageRecord,
+  SuperAgentRunStatus,
   SuperAgentStreamingAssistantState,
 } from "@/features/super-agent/types/chat-workspace.types"
 import { cn } from "@/lib/utils"
@@ -20,6 +22,7 @@ type ChatThreadProps = {
   className?: string
   conversationId: string
   messages: SuperAgentMessageRecord[]
+  runStatus: SuperAgentRunStatus
   streamingAssistant: SuperAgentStreamingAssistantState | null
   threadError: string | null
 }
@@ -43,12 +46,19 @@ export const ChatThread = ({
   className,
   conversationId,
   messages,
+  runStatus,
   streamingAssistant,
   threadError,
 }: ChatThreadProps) => {
   const orderedMessages = [...messages].sort(byChronologicalOrder)
   const hasStreamingAssistant = Boolean(streamingAssistant)
   const hasActivityTrace = Boolean(activityTrace && activityTrace.steps.length > 0)
+  const placeholderStage =
+    streamingAssistant && !streamingAssistant.content
+      ? "streaming"
+      : !streamingAssistant && runStatus === "submitting"
+        ? "submitting"
+        : null
   const lastAssistantMessageId =
     [...orderedMessages].reverse().find((message) => toMessageAuthor(message.role) === "assistant")?.id ??
     null
@@ -99,13 +109,26 @@ export const ChatThread = ({
                   ) : null}
                   {streamingAssistant.content ? (
                     <MessageResponse>{streamingAssistant.content}</MessageResponse>
-                  ) : null}
+                  ) : (
+                    <AssistantMessagePlaceholder />
+                  )}
                 </MessageContent>
                 {streamingAssistant.content ? (
                   <Actions className="opacity-0 transition-opacity group-hover:opacity-100">
                     <CopyAction text={streamingAssistant.content} />
                   </Actions>
                 ) : null}
+              </Message>
+            ) : null}
+
+            {placeholderStage === "submitting" ? (
+              <Message from="assistant" key={`pending-${conversationId}`}>
+                <MessageContent className="bg-primary/10 p-5 rounded-lg">
+                  {hasActivityTrace && activityTrace ? (
+                    <SuperAgentActivityBlock className="mb-3" trace={activityTrace} />
+                  ) : null}
+                  <AssistantMessagePlaceholder />
+                </MessageContent>
               </Message>
             ) : null}
           </>

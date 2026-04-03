@@ -250,6 +250,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
               className="min-h-0 flex-1"
               conversationId={activeConversationId ?? MULTI_AGENT_FRESH_CHAT_KEY}
               messages={threadMessages}
+              runStatus={runStatus}
               streamingAssistant={activeStreamingAssistant}
               threadError={activeThreadError}
             />
