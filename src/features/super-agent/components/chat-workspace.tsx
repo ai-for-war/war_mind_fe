@@ -24,6 +24,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton"
 import { ChatThread } from "@/features/super-agent/components/chat-thread"
 import { ComposerPanel } from "@/features/super-agent/components/composer-panel"
+import { SuperAgentPlanDock } from "@/features/super-agent/components/super-agent-plan-dock"
 import { useChatLifecycleSubscriptions } from "@/features/super-agent/hooks/use-chat-lifecycle-subscriptions"
 import { useConversationMessages } from "@/features/super-agent/hooks/use-conversation-messages"
 import { useLeadAgentRuntimeCatalog } from "@/features/super-agent/hooks/use-lead-agent-runtime-catalog"
@@ -156,6 +157,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   const setActiveConversationId = useSuperAgentRailStore((state) => state.setActiveConversationId)
   const clearComposerDraft = useSuperAgentChatWorkspaceStore((state) => state.clearComposerDraft)
   const clearActivityTrace = useSuperAgentChatWorkspaceStore((state) => state.clearActivityTrace)
+  const clearPlan = useSuperAgentChatWorkspaceStore((state) => state.clearPlan)
   const clearComposerRuntimeNotice = useSuperAgentChatWorkspaceStore(
     (state) => state.clearComposerRuntimeNotice,
   )
@@ -171,6 +173,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   const activityTraceByConversation = useSuperAgentChatWorkspaceStore(
     (state) => state.activityTraceByConversation,
   )
+  const planByConversation = useSuperAgentChatWorkspaceStore((state) => state.planByConversation)
   const rekeyComposerRuntimeSelection = useSuperAgentChatWorkspaceStore(
     (state) => state.rekeyComposerRuntimeSelection,
   )
@@ -307,6 +310,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
     }
 
     clearActivityTrace(submitKey)
+    clearPlan(submitKey)
     setRunStatus(submitKey, "submitting")
     setThreadError(submitKey, null)
 
@@ -353,6 +357,9 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   const activeActivityTrace = activeConversationId
     ? (activityTraceByConversation[activeConversationId] ?? null)
     : null satisfies SuperAgentInlineActivityTrace | null
+  const activePlan = activeConversationId
+    ? planByConversation[activeConversationId] ?? null
+    : null
   const activeThreadError = threadErrorByConversation[conversationKey] ?? null
   const activeThreadMessageIds = new Set(threadMessages.map((message) => message.id))
   const activeSelectedMetadataMessage =
@@ -444,6 +451,12 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
               <Alert>
                 <AlertDescription>{runtimeNotice}</AlertDescription>
               </Alert>
+            </div>
+          ) : null}
+
+          {activePlan ? (
+            <div className="px-6">
+              <SuperAgentPlanDock plan={activePlan} runStatus={runStatus} />
             </div>
           ) : null}
 

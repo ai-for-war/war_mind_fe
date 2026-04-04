@@ -1,10 +1,14 @@
 import { create } from "zustand"
 
+import { summarizePlanTodos } from "@/common/plan-todo"
 import type {
   SuperAgentInlineActivityStep,
   SuperAgentInlineActivityStepStatus,
   SuperAgentInlineActivityTrace,
   SuperAgentInlineActivityTraceStatus,
+  SuperAgentPlanSnapshot,
+  SuperAgentPlanSummary,
+  SuperAgentPlanTodo,
   SuperAgentRunStatus,
   SuperAgentStreamingAssistantState,
 } from "@/features/super-agent/types/chat-workspace.types"
@@ -36,6 +40,7 @@ type SuperAgentChatWorkspaceState = {
   composerDraftByConversation: Record<string, string>
   composerRuntimeNoticeByConversation: Record<string, string | null>
   composerRuntimeSelectionByConversation: Record<string, SuperAgentRuntimeSelection>
+  planByConversation: Record<string, SuperAgentPlanSnapshot>
   runStatusByConversation: Record<string, SuperAgentRunStatus>
   streamingAssistantByConversation: Record<string, SuperAgentStreamingAssistantState>
   threadErrorByConversation: Record<string, string | null>
@@ -47,6 +52,7 @@ type SuperAgentChatWorkspaceActions = {
   clearComposerDraft: (conversationId: string | null) => void
   clearComposerRuntimeNotice: (conversationId: string | null) => void
   clearComposerRuntimeSelection: (conversationId: string | null) => void
+  clearPlan: (conversationId: string | null) => void
   clearStreamingAssistant: (conversationId: string) => void
   clearThreadError: (conversationId: string) => void
   rekeyComposerRuntimeSelection: (
@@ -72,6 +78,13 @@ type SuperAgentChatWorkspaceActions = {
   setComposerRuntimeReasoning: (
     conversationId: string | null,
     reasoning: string | null,
+  ) => void
+  setPlan: (
+    conversationId: string | null,
+    plan: {
+      summary?: Partial<SuperAgentPlanSummary> | null
+      todos: SuperAgentPlanTodo[]
+    },
   ) => void
   setInlineActivityTraceStatus: (
     conversationId: string,
@@ -99,6 +112,7 @@ const initialState: SuperAgentChatWorkspaceState = {
   composerDraftByConversation: {},
   composerRuntimeNoticeByConversation: {},
   composerRuntimeSelectionByConversation: {},
+  planByConversation: {},
   runStatusByConversation: {},
   streamingAssistantByConversation: {},
   threadErrorByConversation: {},
@@ -165,6 +179,14 @@ export const useSuperAgentChatWorkspaceStore = create<
         ),
       }
     }),
+  clearPlan: (conversationId) =>
+    set((state) => {
+      const conversationKey = toConversationKey(conversationId)
+
+      return {
+        planByConversation: omitKey(state.planByConversation, conversationKey),
+      }
+    }),
   clearStreamingAssistant: (conversationId) =>
     set((state) => ({
       streamingAssistantByConversation: omitKey(
@@ -219,6 +241,7 @@ export const useSuperAgentChatWorkspaceStore = create<
           state.composerRuntimeSelectionByConversation,
           conversationKey,
         ),
+        planByConversation: omitKey(state.planByConversation, conversationKey),
         runStatusByConversation: omitKey(state.runStatusByConversation, conversationKey),
         streamingAssistantByConversation: omitKey(
           state.streamingAssistantByConversation,
@@ -314,6 +337,34 @@ export const useSuperAgentChatWorkspaceStore = create<
           [conversationKey]: {
             ...currentSelection,
             reasoning,
+          },
+        },
+      }
+    }),
+  setPlan: (conversationId, plan) =>
+    set((state) => {
+      const conversationKey = toConversationKey(conversationId)
+      if (plan.todos.length === 0) {
+        return {
+          planByConversation: omitKey(state.planByConversation, conversationKey),
+        }
+      }
+
+      const normalizedSummary = summarizePlanTodos(plan.todos)
+      const nextSummary: SuperAgentPlanSummary = {
+        completed: plan.summary?.completed ?? normalizedSummary.completed,
+        in_progress: plan.summary?.in_progress ?? normalizedSummary.in_progress,
+        pending: plan.summary?.pending ?? normalizedSummary.pending,
+        total: plan.summary?.total ?? normalizedSummary.total,
+      }
+
+      return {
+        planByConversation: {
+          ...state.planByConversation,
+          [conversationKey]: {
+            summary: nextSummary,
+            todos: plan.todos,
+            updatedAt: new Date().toISOString(),
           },
         },
       }

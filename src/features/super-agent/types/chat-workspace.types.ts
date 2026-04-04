@@ -75,9 +75,35 @@ export interface ChatMessageFailedPayload {
   organization_id?: string
 }
 
+export interface SuperAgentPlanTodo {
+  content: string
+  status: string
+}
+
+export interface SuperAgentPlanSummary {
+  completed: number
+  in_progress: number
+  pending: number
+  total: number
+}
+
+export interface SuperAgentPlanSnapshot {
+  summary: SuperAgentPlanSummary
+  todos: SuperAgentPlanTodo[]
+  updatedAt: string
+}
+
+export interface ChatMessagePlanUpdatedPayload {
+  conversation_id: string
+  organization_id?: string
+  summary?: Partial<SuperAgentPlanSummary> | null
+  todos: SuperAgentPlanTodo[]
+}
+
 export type SuperAgentSocketLifecyclePayload =
   | ChatMessageStartedPayload
   | ChatMessageTokenPayload
+  | ChatMessagePlanUpdatedPayload
   | ChatMessageToolStartPayload
   | ChatMessageToolEndPayload
   | ChatMessageCompletedPayload

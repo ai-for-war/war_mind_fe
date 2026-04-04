@@ -10,6 +10,7 @@ export type {
 export type {
   ChatMessageCompletedPayload,
   ChatMessageFailedPayload,
+  ChatMessagePlanUpdatedPayload,
   ChatMessageStartedPayload,
   ChatMessageTokenPayload,
   ChatMessageToolEndPayload,
@@ -22,6 +23,9 @@ export type {
   SuperAgentMessageRecord,
   SuperAgentMessageRole,
   SuperAgentMessageRuntimeMetadata,
+  SuperAgentPlanSnapshot,
+  SuperAgentPlanSummary,
+  SuperAgentPlanTodo,
   SuperAgentRunStatus,
   SuperAgentSocketLifecyclePayload,
   SuperAgentStreamingAssistantState,
