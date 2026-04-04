@@ -7,6 +7,7 @@ import type {
   MultiAgentMessageRecord,
   SendMessageRequest,
 } from "@/features/multi-agent/types/chat-workspace.types"
+import { useActiveOrganizationId } from "@/hooks/use-active-organization-id"
 
 type SendMessageMutationContext = {
   conversationId: string | null
@@ -14,6 +15,7 @@ type SendMessageMutationContext = {
 }
 
 export const useSendMessage = () => {
+  const activeOrganizationId = useActiveOrganizationId()
   const queryClient = useQueryClient()
 
   return useMutation({
@@ -23,7 +25,10 @@ export const useSendMessage = () => {
         return { conversationId: null, previousMessages: undefined }
       }
 
-      const queryKey = multiAgentQueryKeys.conversationMessages(conversationId)
+      const queryKey = multiAgentQueryKeys.conversationMessages(
+        activeOrganizationId,
+        conversationId,
+      )
       await queryClient.cancelQueries({ queryKey })
 
       const previousMessages = queryClient.getQueryData<ConversationMessagesResponse>(queryKey)
@@ -52,17 +57,23 @@ export const useSendMessage = () => {
       }
 
       queryClient.setQueryData(
-        multiAgentQueryKeys.conversationMessages(context.conversationId),
+        multiAgentQueryKeys.conversationMessages(
+          activeOrganizationId,
+          context.conversationId,
+        ),
         context.previousMessages,
       )
     },
     onSuccess: async ({ conversation_id }) => {
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: multiAgentQueryKeys.conversationsAll,
+          queryKey: multiAgentQueryKeys.conversationsAll(activeOrganizationId),
         }),
         queryClient.invalidateQueries({
-          queryKey: multiAgentQueryKeys.conversationMessages(conversation_id),
+          queryKey: multiAgentQueryKeys.conversationMessages(
+            activeOrganizationId,
+            conversation_id,
+          ),
         }),
       ])
     },

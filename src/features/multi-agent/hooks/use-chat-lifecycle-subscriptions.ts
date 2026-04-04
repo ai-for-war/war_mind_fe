@@ -10,6 +10,7 @@ import type {
   ChatMessageStartedPayload,
   ChatMessageTokenPayload,
 } from "@/features/multi-agent/types/chat-workspace.types"
+import { useActiveOrganizationId } from "@/hooks/use-active-organization-id"
 
 type UseChatLifecycleSubscriptionsOptions = {
   activeConversationId: string | null
@@ -18,6 +19,7 @@ type UseChatLifecycleSubscriptionsOptions = {
 export const useChatLifecycleSubscriptions = ({
   activeConversationId,
 }: UseChatLifecycleSubscriptionsOptions): void => {
+  const activeOrganizationId = useActiveOrganizationId()
   const appendStreamingAssistantToken = useMultiAgentChatWorkspaceStore(
     (state) => state.appendStreamingAssistantToken,
   )
@@ -65,10 +67,13 @@ export const useChatLifecycleSubscriptions = ({
 
       void Promise.all([
         queryClient.invalidateQueries({
-          queryKey: multiAgentQueryKeys.conversationMessages(conversation_id),
+          queryKey: multiAgentQueryKeys.conversationMessages(
+            activeOrganizationId,
+            conversation_id,
+          ),
         }),
         queryClient.invalidateQueries({
-          queryKey: multiAgentQueryKeys.conversationsAll,
+          queryKey: multiAgentQueryKeys.conversationsAll(activeOrganizationId),
         }),
       ])
     },
@@ -83,7 +88,10 @@ export const useChatLifecycleSubscriptions = ({
       clearStreamingAssistant(conversation_id)
 
       void queryClient.invalidateQueries({
-        queryKey: multiAgentQueryKeys.conversationMessages(conversation_id),
+        queryKey: multiAgentQueryKeys.conversationMessages(
+          activeOrganizationId,
+          conversation_id,
+        ),
       })
     },
     { organizationScoped: true },
@@ -102,11 +110,14 @@ export const useChatLifecycleSubscriptions = ({
 
     void Promise.all([
       queryClient.invalidateQueries({
-        queryKey: multiAgentQueryKeys.conversationMessages(activeConversationId),
+        queryKey: multiAgentQueryKeys.conversationMessages(
+          activeOrganizationId,
+          activeConversationId,
+        ),
       }),
       queryClient.invalidateQueries({
-        queryKey: multiAgentQueryKeys.conversationsAll,
+        queryKey: multiAgentQueryKeys.conversationsAll(activeOrganizationId),
       }),
     ])
-  }, [activeConversationId, lastConnectedAt, queryClient, status])
+  }, [activeConversationId, activeOrganizationId, lastConnectedAt, queryClient, status])
 }

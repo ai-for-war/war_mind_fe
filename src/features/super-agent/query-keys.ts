@@ -1,23 +1,31 @@
 import type { ConversationListParams } from "@/features/super-agent/types/conversation.types"
+import { getOrganizationQueryScope } from "@/lib/organization-query"
 
 const SUPER_AGENT_QUERY_KEY = ["super-agent"] as const
-const SUPER_AGENT_CONVERSATIONS_QUERY_KEY = [
-  ...SUPER_AGENT_QUERY_KEY,
-  "conversations",
-] as const
-const SUPER_AGENT_RUNTIME_CATALOG_QUERY_KEY = [
-  ...SUPER_AGENT_QUERY_KEY,
-  "runtime-catalog",
-] as const
-const SUPER_AGENT_MESSAGES_QUERY_KEY = [...SUPER_AGENT_QUERY_KEY, "messages"] as const
 
 export const superAgentQueryKeys = {
   all: SUPER_AGENT_QUERY_KEY,
-  conversationMessages: (conversationId: string) =>
-    [...SUPER_AGENT_MESSAGES_QUERY_KEY, conversationId] as const,
-  conversationMessagesPlaceholder: [...SUPER_AGENT_MESSAGES_QUERY_KEY, "placeholder"] as const,
-  conversationsAll: SUPER_AGENT_CONVERSATIONS_QUERY_KEY,
-  conversationsList: ({ limit, search, skip, status }: ConversationListParams) =>
-    [...SUPER_AGENT_CONVERSATIONS_QUERY_KEY, { limit, search, skip, status }] as const,
-  runtimeCatalog: () => SUPER_AGENT_RUNTIME_CATALOG_QUERY_KEY,
+  scoped: (organizationId?: string | null) =>
+    [
+      ...SUPER_AGENT_QUERY_KEY,
+      "organization",
+      getOrganizationQueryScope(organizationId),
+    ] as const,
+  conversationsAll: (organizationId?: string | null) =>
+    [...superAgentQueryKeys.scoped(organizationId), "conversations"] as const,
+  conversationMessagesAll: (organizationId?: string | null) =>
+    [...superAgentQueryKeys.scoped(organizationId), "messages"] as const,
+  conversationMessages: (
+    organizationId: string | null | undefined,
+    conversationId: string,
+  ) => [...superAgentQueryKeys.conversationMessagesAll(organizationId), conversationId] as const,
+  conversationMessagesPlaceholder: (organizationId?: string | null) =>
+    [...superAgentQueryKeys.conversationMessagesAll(organizationId), "placeholder"] as const,
+  conversationsList: (
+    organizationId: string | null | undefined,
+    { limit, search, skip, status }: ConversationListParams,
+  ) =>
+    [...superAgentQueryKeys.conversationsAll(organizationId), { limit, search, skip, status }] as const,
+  runtimeCatalog: (organizationId?: string | null) =>
+    [...superAgentQueryKeys.scoped(organizationId), "runtime-catalog"] as const,
 }

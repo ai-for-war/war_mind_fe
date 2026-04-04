@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { useQueryClient } from "@tanstack/react-query"
 
 import { textToImageQueryKeys } from "@/features/text-to-image/query-keys"
 import { useSocketSubscription, useSocketTransportStore } from "@/features/socket"
 import type { ImageGenerationLifecycleEventPayload } from "@/features/text-to-image/types"
+import { useActiveOrganizationId } from "@/hooks/use-active-organization-id"
 
 type UseImageGenerationLifecycleSubscriptionsOptions = {
   selectedJobId: string | null
@@ -21,22 +22,23 @@ const isTerminalOrActiveLifecycleEvent = (status: string): boolean => {
 export const useImageGenerationLifecycleSubscriptions = ({
   selectedJobId,
 }: UseImageGenerationLifecycleSubscriptionsOptions): void => {
+  const activeOrganizationId = useActiveOrganizationId()
   const queryClient = useQueryClient()
   const socketStatus = useSocketTransportStore((state) => state.status)
   const lastConnectedAt = useSocketTransportStore((state) => state.lastConnectedAt)
   const lastHandledConnectedAtRef = useRef<number | null>(null)
 
-  const invalidateHistory = (): void => {
+  const invalidateHistory = useCallback((): void => {
     void queryClient.invalidateQueries({
-      queryKey: textToImageQueryKeys.historyLists(),
+      queryKey: textToImageQueryKeys.historyLists(activeOrganizationId),
     })
-  }
+  }, [activeOrganizationId, queryClient])
 
-  const invalidateSelectedDetail = (jobId: string): void => {
+  const invalidateSelectedDetail = useCallback((jobId: string): void => {
     void queryClient.invalidateQueries({
-      queryKey: textToImageQueryKeys.detail(jobId),
+      queryKey: textToImageQueryKeys.detail(activeOrganizationId, jobId),
     })
-  }
+  }, [activeOrganizationId, queryClient])
 
   useSocketSubscription<ImageGenerationLifecycleEventPayload>(
     "image:generation:created",
@@ -126,5 +128,11 @@ export const useImageGenerationLifecycleSubscriptions = ({
     if (selectedJobId) {
       invalidateSelectedDetail(selectedJobId)
     }
-  }, [lastConnectedAt, queryClient, selectedJobId, socketStatus])
+  }, [
+    invalidateHistory,
+    invalidateSelectedDetail,
+    lastConnectedAt,
+    selectedJobId,
+    socketStatus,
+  ])
 }

@@ -11,6 +11,7 @@ import type {
   ConversationListParams,
   ConversationListResponse,
 } from "@/features/super-agent/types/conversation.types"
+import { useActiveOrganizationId } from "@/hooks/use-active-organization-id"
 
 const DEFAULT_SKIP = 0
 const DEFAULT_LIMIT = 20
@@ -37,6 +38,7 @@ type UseConversationsQueryResult = ConversationListQueryResult & {
 export const useConversations = (
   params: ConversationListParams = {},
 ): UseConversationsQueryResult => {
+  const activeOrganizationId = useActiveOrganizationId()
   const normalizedParams = normalizeParams(params)
   const { skip: initialSkip, ...baseParams } = normalizedParams
 
@@ -57,7 +59,10 @@ export const useConversations = (
         ...baseParams,
         skip: pageParam,
       }),
-    queryKey: superAgentQueryKeys.conversationsList(normalizedParams),
+    queryKey: superAgentQueryKeys.conversationsList(
+      activeOrganizationId,
+      normalizedParams,
+    ),
   })
 
   const seenConversationIds = new Set<string>()
