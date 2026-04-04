@@ -1,9 +1,12 @@
-import { BotIcon, BoxesIcon, LayersIcon, WrenchIcon } from "lucide-react"
+"use client"
+
+import { BotIcon, BoxesIcon, ChevronDownIcon, LayersIcon, WrenchIcon } from "lucide-react"
 import type { ComponentType, ReactNode } from "react"
 
 import {
   ChainOfThoughtStep,
 } from "@/components/ai/chain-of-thought"
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { Badge } from "@/components/ui/badge"
 import {
   Card,
@@ -16,6 +19,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import {
   formatAiToolArgumentsSummary,
+  getAiToolTodoItems,
   getAiToolNavigationTarget,
   getAiToolPresentation,
 } from "@/lib/ai-tool-presentation"
@@ -36,6 +40,8 @@ type MetadataSectionProps = {
   meta?: ReactNode
   title: string
 }
+
+type PlanTodoStatus = "completed" | "in_progress" | "pending" | "unknown"
 
 const MetadataPill = ({
   children,
@@ -75,6 +81,67 @@ const MetadataSection = ({
     {children}
   </section>
 )
+
+const normalizePlanTodoStatus = (status: string): PlanTodoStatus => {
+  const normalizedStatus = status.trim().toLowerCase().replace(/\s+/g, "_")
+
+  if (normalizedStatus === "completed") {
+    return "completed"
+  }
+
+  if (normalizedStatus === "in_progress") {
+    return "in_progress"
+  }
+
+  if (normalizedStatus === "pending") {
+    return "pending"
+  }
+
+  return "unknown"
+}
+
+const getPlanTodoStatusLabel = (status: PlanTodoStatus): string => {
+  switch (status) {
+    case "completed":
+      return "Completed"
+    case "in_progress":
+      return "In Progress"
+    case "pending":
+      return "Pending"
+    default:
+      return "Unknown"
+  }
+}
+
+const getPlanTodoStatusStyles = (status: PlanTodoStatus) => {
+  switch (status) {
+    case "completed":
+      return {
+        badgeClassName:
+          "border-emerald-500/20 bg-emerald-500/5 text-emerald-300 dark:border-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-200",
+        dotClassName: "bg-emerald-400/90",
+        textClassName: "text-foreground/80",
+      }
+    case "in_progress":
+      return {
+        badgeClassName: "border-primary/30 text-foreground",
+        dotClassName: "bg-primary/80",
+        textClassName: "text-foreground",
+      }
+    case "pending":
+      return {
+        badgeClassName: "border-border/70 text-muted-foreground",
+        dotClassName: "bg-muted-foreground/40",
+        textClassName: "text-foreground",
+      }
+    default:
+      return {
+        badgeClassName: "text-muted-foreground",
+        dotClassName: "bg-muted-foreground/50",
+        textClassName: "text-foreground",
+      }
+  }
+}
 
 export const AiMessageMetadataInspector = ({
   className,
@@ -165,6 +232,8 @@ export const AiMessageMetadataInspector = ({
                 {metadata.toolCalls.map((toolCall, index) => {
                   const presentation = getAiToolPresentation(toolCall.name)
                   const summary = formatAiToolArgumentsSummary(toolCall.name, toolCall.arguments)
+                  const planTodos = getAiToolTodoItems(toolCall.name, toolCall.arguments)
+                  const isPlanTool = planTodos.length > 0
                   const navigationTarget = getAiToolNavigationTarget(
                     toolCall.name,
                     toolCall.arguments,
@@ -193,6 +262,88 @@ export const AiMessageMetadataInspector = ({
                       ) : null}
                     </>
                   )
+
+                  if (isPlanTool) {
+                    return (
+                      <ChainOfThoughtStep
+                        className={cn(
+                          "gap-3 text-sm [&>div:last-child]:min-w-0 [&>div:last-child]:overflow-hidden [&_svg]:shrink-0",
+                          index === metadata.toolCalls.length - 1
+                            ? "[&>div:first-child>div]:hidden"
+                            : "[&>div:first-child>div]:block",
+                        )}
+                        icon={presentation.icon}
+                        key={toolCall.id}
+                        label={
+                          <Collapsible>
+                            <CollapsibleTrigger
+                              className="group flex w-full items-start gap-3 rounded-md py-0.5 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring"
+                            >
+                              <div className="min-w-0 flex-1 space-y-1">
+                                <div className="font-medium text-foreground transition-colors group-hover:text-primary group-focus-visible:text-primary">
+                                  {presentation.label}
+                                </div>
+                                {summary ? (
+                                  <div className="text-muted-foreground text-xs transition-colors group-hover:text-primary/80 group-focus-visible:text-primary/80">
+                                    {summary}
+                                  </div>
+                                ) : null}
+                              </div>
+                              <ChevronDownIcon className="mt-0.5 size-4 shrink-0 text-muted-foreground transition-transform group-data-[state=open]:rotate-180" />
+                            </CollapsibleTrigger>
+
+                            <CollapsibleContent
+                              className={cn(
+                                "data-[state=closed]:fade-out-0 data-[state=closed]:slide-out-to-top-2 data-[state=open]:slide-in-from-top-2 overflow-hidden pt-2 outline-none data-[state=closed]:animate-out data-[state=open]:animate-in",
+                              )}
+                            >
+                              <div className="space-y-2 pl-0.5">
+                                {planTodos.map((todo, todoIndex) => {
+                                  const status = normalizePlanTodoStatus(todo.status)
+                                  const statusStyles = getPlanTodoStatusStyles(status)
+
+                                  return (
+                                    <div
+                                      className="flex items-start gap-2.5 rounded-md border border-border/50 bg-background/40 px-2.5 py-2"
+                                      key={`${toolCall.id}-${todoIndex}-${todo.content}`}
+                                    >
+                                      <span
+                                        aria-hidden="true"
+                                        className={cn(
+                                          "mt-1.5 size-1.5 shrink-0 rounded-full",
+                                          statusStyles.dotClassName,
+                                        )}
+                                      />
+                                      <div className="min-w-0 flex-1">
+                                        <div
+                                          className={cn(
+                                            "text-sm leading-5",
+                                            statusStyles.textClassName,
+                                          )}
+                                        >
+                                          {todo.content}
+                                        </div>
+                                      </div>
+                                      <Badge
+                                        className={cn(
+                                          "shrink-0 rounded-md px-2 py-0.5 font-normal text-[11px]",
+                                          statusStyles.badgeClassName,
+                                        )}
+                                        variant="outline"
+                                      >
+                                        {getPlanTodoStatusLabel(status)}
+                                      </Badge>
+                                    </div>
+                                  )
+                                })}
+                              </div>
+                            </CollapsibleContent>
+                          </Collapsible>
+                        }
+                        status="complete"
+                      />
+                    )
+                  }
 
                   return (
                     <ChainOfThoughtStep

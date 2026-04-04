@@ -10,6 +10,11 @@ import {
 
 type ToolArgumentFormatter = (argumentsValue: Record<string, unknown>) => string | null
 
+export interface AiToolTodoItem {
+  content: string
+  status: string
+}
+
 export interface AiToolPresentation {
   formatArguments: ToolArgumentFormatter
   icon: LucideIcon
@@ -17,6 +22,8 @@ export interface AiToolPresentation {
 }
 
 const isHttpUrl = (value: string): boolean => value.startsWith("http://") || value.startsWith("https://")
+const isRecord = (value: unknown): value is Record<string, unknown> =>
+  Boolean(value) && typeof value === "object" && !Array.isArray(value)
 
 const MAX_VALUE_LENGTH = 48
 const MAX_SUMMARY_LENGTH = 120
@@ -91,6 +98,56 @@ const formatFetchContentArguments: ToolArgumentFormatter = (argumentsValue) =>
 const formatLoadSkillArguments: ToolArgumentFormatter = (argumentsValue) =>
   joinSummaryParts([formatUnknownValue(argumentsValue.skill_id)])
 
+const normalizeTodoItems = (value: unknown): AiToolTodoItem[] => {
+  if (!Array.isArray(value)) {
+    return []
+  }
+
+  return value
+    .map((item) => {
+      if (!isRecord(item)) {
+        return null
+      }
+
+      const content =
+        typeof item.content === "string" && item.content.trim().length > 0
+          ? item.content.trim()
+          : null
+      const status =
+        typeof item.status === "string" && item.status.trim().length > 0 ? item.status.trim() : null
+
+      if (!content || !status) {
+        return null
+      }
+
+      return { content, status }
+    })
+    .filter((item): item is AiToolTodoItem => Boolean(item))
+}
+
+const normalizeTodoStatus = (status: string): string => status.trim().toLowerCase().replace(/\s+/g, "_")
+
+const formatWriteTodosArguments: ToolArgumentFormatter = (argumentsValue) => {
+  const todos = normalizeTodoItems(argumentsValue.todos)
+
+  if (todos.length === 0) {
+    return formatFallbackArguments(argumentsValue)
+  }
+
+  const completedCount = todos.filter((todo) => normalizeTodoStatus(todo.status) === "completed").length
+  const inProgressCount = todos.filter(
+    (todo) => normalizeTodoStatus(todo.status) === "in_progress",
+  ).length
+  const pendingCount = todos.filter((todo) => normalizeTodoStatus(todo.status) === "pending").length
+
+  return joinSummaryParts([
+    `${todos.length} ${todos.length === 1 ? "task" : "tasks"}`,
+    completedCount > 0 ? `${completedCount} completed` : null,
+    inProgressCount > 0 ? `${inProgressCount} in progress` : null,
+    pendingCount > 0 ? `${pendingCount} pending` : null,
+  ])
+}
+
 const formatFallbackArguments: ToolArgumentFormatter = (argumentsValue) => {
   const entries = Object.entries(argumentsValue).slice(0, 3)
   return joinSummaryParts(entries.map(([key, value]) => formatKeyValue(key, value)))
@@ -113,7 +170,7 @@ const TOOL_PRESENTATION_REGISTRY: Record<string, AiToolPresentation> = {
     label: "Search",
   },
   write_todos: {
-    formatArguments: formatFallbackArguments,
+    formatArguments: formatWriteTodosArguments,
     icon: ListTodo,
     label: "Update Plan",
   },
@@ -144,6 +201,11 @@ export const formatAiToolArgumentsSummary = (
   toolName: string,
   argumentsValue: Record<string, unknown>,
 ): string | null => getAiToolPresentation(toolName).formatArguments(argumentsValue)
+
+export const getAiToolTodoItems = (
+  toolName: string,
+  argumentsValue: Record<string, unknown>,
+): AiToolTodoItem[] => (toolName === "write_todos" ? normalizeTodoItems(argumentsValue.todos) : [])
 
 export const getAiToolNavigationTarget = (
   _toolName: string,
