@@ -288,6 +288,7 @@ export const AiMessageMetadataInspector = ({
                       <ChainOfThoughtStep
                         className={cn(
                           "gap-3 text-sm [&>div:last-child]:min-w-0 [&>div:last-child]:overflow-hidden [&_svg]:shrink-0",
+                          "group cursor-pointer [&>div:first-child]:transition-colors [&>div:first-child]:group-hover:text-primary",
                           index === metadata.toolCalls.length - 1
                             ? "[&>div:first-child>div]:hidden"
                             : "[&>div:first-child>div]:block",
@@ -297,7 +298,7 @@ export const AiMessageMetadataInspector = ({
                         label={
                           <Collapsible>
                             <CollapsibleTrigger
-                              className="group flex w-full items-start gap-3 rounded-md py-0.5 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring"
+                              className="flex w-full cursor-pointer items-start gap-3 rounded-md py-0.5 text-left outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring"
                             >
                               <div className="min-w-0 flex-1 space-y-1">
                                 <div className="font-medium text-foreground transition-colors group-hover:text-primary group-focus-visible:text-primary">
