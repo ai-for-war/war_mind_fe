@@ -143,6 +143,26 @@ const getPlanTodoStatusStyles = (status: PlanTodoStatus) => {
   }
 }
 
+const PlanTodoStatusDot = ({ status }: { status: PlanTodoStatus }) => {
+  const { dotClassName } = getPlanTodoStatusStyles(status)
+
+  if (status === "in_progress") {
+    return (
+      <span aria-hidden="true" className="relative mt-1.5 size-2.5 shrink-0">
+        <span className="absolute inset-0 animate-ping rounded-full bg-primary/30" />
+        <span className={cn("absolute inset-0 m-auto size-1.5 rounded-full", dotClassName)} />
+      </span>
+    )
+  }
+
+  return (
+    <span
+      aria-hidden="true"
+      className={cn("mt-1.5 size-1.5 shrink-0 rounded-full", dotClassName)}
+    />
+  )
+}
+
 export const AiMessageMetadataInspector = ({
   className,
   description = "Model, skill, and tools used for this response.",
@@ -307,13 +327,7 @@ export const AiMessageMetadataInspector = ({
                                       className="flex items-start gap-2.5 rounded-md border border-border/50 bg-background/40 px-2.5 py-2"
                                       key={`${toolCall.id}-${todoIndex}-${todo.content}`}
                                     >
-                                      <span
-                                        aria-hidden="true"
-                                        className={cn(
-                                          "mt-1.5 size-1.5 shrink-0 rounded-full",
-                                          statusStyles.dotClassName,
-                                        )}
-                                      />
+                                      <PlanTodoStatusDot status={status} />
                                       <div className="min-w-0 flex-1">
                                         <div
                                           className={cn(
