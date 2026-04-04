@@ -69,9 +69,12 @@ export const ConversationRail = ({
       <ConversationList
         activeConversationId={activeConversationId}
         conversations={conversationsQuery.conversations}
+        hasNextPage={conversationsQuery.hasNextPage}
         isEmpty={conversationsQuery.isEmpty}
         isError={conversationsQuery.isError}
+        isFetchingNextPage={conversationsQuery.isFetchingNextPage}
         isPending={conversationsQuery.isPending}
+        onLoadMore={() => void conversationsQuery.fetchNextPage()}
         onRetry={() => void conversationsQuery.refetch()}
         onSelectConversation={handleSelectConversation}
       />

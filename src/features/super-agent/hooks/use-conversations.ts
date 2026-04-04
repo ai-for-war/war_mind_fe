@@ -1,4 +1,8 @@
-import { useQuery, type UseQueryResult } from "@tanstack/react-query"
+import {
+  useInfiniteQuery,
+  type InfiniteData,
+  type UseInfiniteQueryResult,
+} from "@tanstack/react-query"
 
 import { conversationsApi } from "@/features/super-agent/api/conversations-api"
 import { superAgentQueryKeys } from "@/features/super-agent/query-keys"
@@ -18,29 +22,63 @@ const normalizeParams = (params: ConversationListParams): Required<ConversationL
   status: params.status ?? "active",
 })
 
-type ConversationListQueryResult = UseQueryResult<ConversationListResponse, Error>
+type ConversationListQueryResult = UseInfiniteQueryResult<
+  InfiniteData<ConversationListResponse>,
+  Error
+>
 
 type UseConversationsQueryResult = ConversationListQueryResult & {
   conversations: ConversationListItem[]
+  hasNextPage: boolean
   isEmpty: boolean
+  isFetchingNextPage: boolean
 }
 
 export const useConversations = (
   params: ConversationListParams = {},
 ): UseConversationsQueryResult => {
   const normalizedParams = normalizeParams(params)
+  const { skip: initialSkip, ...baseParams } = normalizedParams
 
-  const query = useQuery({
-    queryFn: () => conversationsApi.listConversations(normalizedParams),
+  const query = useInfiniteQuery<
+    ConversationListResponse,
+    Error,
+    InfiniteData<ConversationListResponse>,
+    ReturnType<typeof superAgentQueryKeys.conversationsList>,
+    number
+  >({
+    getNextPageParam: (lastPage) => {
+      const nextSkip = lastPage.skip + lastPage.items.length
+      return nextSkip < lastPage.total ? nextSkip : undefined
+    },
+    initialPageParam: initialSkip,
+    queryFn: ({ pageParam }) =>
+      conversationsApi.listConversations({
+        ...baseParams,
+        skip: pageParam,
+      }),
     queryKey: superAgentQueryKeys.conversationsList(normalizedParams),
   })
 
-  const conversations = query.data?.items ?? []
+  const seenConversationIds = new Set<string>()
+  const conversations =
+    query.data?.pages.flatMap((page) =>
+      page.items.filter((conversation) => {
+        if (seenConversationIds.has(conversation.id)) {
+          return false
+        }
+
+        seenConversationIds.add(conversation.id)
+        return true
+      }),
+    ) ?? []
   const isEmpty = !query.isPending && !query.isError && conversations.length === 0
 
   return {
     ...query,
     conversations,
+    hasNextPage: query.hasNextPage ?? false,
     isEmpty,
+    isFetchingNextPage: query.isFetchingNextPage,
   }
 }

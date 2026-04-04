@@ -3,15 +3,19 @@ import { AlertCircle, RefreshCw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useScrollAreaInfiniteScroll } from "@/hooks/use-scroll-area-infinite-scroll"
 import { ConversationListItemRow } from "@/features/multi-agent/components/conversation-list-item"
 import type { ConversationListItem } from "@/features/multi-agent/types/conversation.types"
 
 type ConversationListProps = {
   activeConversationId: string | null
   conversations: ConversationListItem[]
+  hasNextPage: boolean
   isEmpty: boolean
   isError: boolean
+  isFetchingNextPage: boolean
   isPending: boolean
+  onLoadMore: () => void
   onRetry: () => void
   onSelectConversation: (conversationId: string) => void
 }
@@ -31,52 +35,70 @@ const ConversationListSkeleton = () => (
 export const ConversationList = ({
   activeConversationId,
   conversations,
+  hasNextPage,
   isEmpty,
   isError,
+  isFetchingNextPage,
   isPending,
+  onLoadMore,
   onRetry,
   onSelectConversation,
-}: ConversationListProps) => (
-  <div className="min-h-0 flex-1">
-    {isError ? (
-      <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-destructive">
-        <div className="flex items-start gap-2">
-          <AlertCircle className="mt-0.5 size-4 shrink-0" />
-          <div className="space-y-2">
-            <p className="text-sm">Unable to load conversations.</p>
-            <Button type="button" variant="outline" size="sm" onClick={onRetry}>
-              <RefreshCw className="size-4" />
-              Retry
-            </Button>
+}: ConversationListProps) => {
+  const { scrollAreaRef, sentinelRef } = useScrollAreaInfiniteScroll({
+    hasNextPage,
+    isEnabled: !isPending && !isError && !isEmpty,
+    isFetchingNextPage,
+    onLoadMore,
+  })
+
+  return (
+    <div className="min-h-0 flex-1">
+      {isError ? (
+        <div className="rounded-lg border border-destructive/40 bg-destructive/10 p-3 text-destructive">
+          <div className="flex items-start gap-2">
+            <AlertCircle className="mt-0.5 size-4 shrink-0" />
+            <div className="space-y-2">
+              <p className="text-sm">Unable to load conversations.</p>
+              <Button type="button" variant="outline" size="sm" onClick={onRetry}>
+                <RefreshCw className="size-4" />
+                Retry
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
-    ) : null}
+      ) : null}
 
-    {isPending ? <ConversationListSkeleton /> : null}
+      {isPending ? <ConversationListSkeleton /> : null}
 
-    {!isPending && !isError && isEmpty ? (
-      <div className="rounded-lg border border-dashed bg-muted/30 p-6 text-center">
-        <p className="text-sm font-medium">No conversations found</p>
-        <p className="mt-1 text-xs text-muted-foreground">
-          Try another search or start a new chat.
-        </p>
-      </div>
-    ) : null}
-
-    {!isPending && !isError && !isEmpty ? (
-      <ScrollArea className="h-[26rem] pr-2 xl:h-[calc(100vh-16rem)]">
-        <div className="space-y-2">
-          {conversations.map((conversation) => (
-            <ConversationListItemRow
-              key={conversation.id}
-              conversation={conversation}
-              isActive={conversation.id === activeConversationId}
-              onSelect={onSelectConversation}
-            />
-          ))}
+      {!isPending && !isError && isEmpty ? (
+        <div className="rounded-lg border border-dashed bg-muted/30 p-6 text-center">
+          <p className="text-sm font-medium">No conversations found</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            Try another search or start a new chat.
+          </p>
         </div>
-      </ScrollArea>
-    ) : null}
-  </div>
-)
+      ) : null}
+
+      {!isPending && !isError && !isEmpty ? (
+        <ScrollArea
+          ref={scrollAreaRef}
+          className="h-[26rem] pr-2 xl:h-[calc(100vh-16rem)]"
+        >
+          <div className="space-y-2">
+            {conversations.map((conversation) => (
+              <ConversationListItemRow
+                key={conversation.id}
+                conversation={conversation}
+                isActive={conversation.id === activeConversationId}
+                onSelect={onSelectConversation}
+              />
+            ))}
+
+            {isFetchingNextPage ? <ConversationListSkeleton /> : null}
+            <div ref={sentinelRef} aria-hidden="true" className="h-1" />
+          </div>
+        </ScrollArea>
+      ) : null}
+    </div>
+  )
+}
