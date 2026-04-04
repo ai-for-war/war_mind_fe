@@ -32,7 +32,7 @@ export const MultiAgentPage = () => {
         </Button>
       </header> */}
 
-      <div className="flex min-h-[calc(100vh-12rem)] min-w-0 flex-col gap-4 lg:flex-row">
+      <div className="flex min-h-[calc(100vh-12rem)] min-w-0 flex-col gap-4 lg:h-[calc(100dvh-6rem)] lg:min-h-[40rem] lg:flex-row">
         <ConversationRail className="hidden lg:flex" />
 
         <Sheet open={isRailSheetOpen} onOpenChange={setRailSheetOpen}>

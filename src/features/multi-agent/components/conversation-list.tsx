@@ -82,7 +82,7 @@ export const ConversationList = ({
       {!isPending && !isError && !isEmpty ? (
         <ScrollArea
           ref={scrollAreaRef}
-          className="h-[26rem] pr-2 xl:h-[calc(100vh-16rem)]"
+          className="h-full min-h-0 pr-2"
         >
           <div className="space-y-2">
             {conversations.map((conversation) => (

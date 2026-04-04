@@ -373,7 +373,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
 
   return (
     <main className={cn("flex min-h-0 min-w-0 flex-1", className)}>
-      <Card className="flex h-[calc(100dvh-6rem)] min-h-[34rem] min-w-0 w-full max-h-[calc(100dvh-6rem)] flex-col gap-0 overflow-hidden pb-0">
+      <Card className="flex h-[calc(100dvh-6rem)] min-h-[34rem] min-w-0 w-full max-h-[calc(100dvh-6rem)] flex-col gap-0 overflow-hidden pb-0 lg:h-full lg:max-h-none">
         <CardHeader className="mb-2">
           <div className="flex flex-col justify-between gap-4 xl:flex-row xl:items-start">
             <div className="space-y-1">
