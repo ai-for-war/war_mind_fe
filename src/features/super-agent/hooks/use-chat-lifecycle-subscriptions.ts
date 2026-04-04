@@ -7,6 +7,7 @@ import { useSocketSubscription, useSocketTransportStore } from "@/features/socke
 import type {
   ChatMessageCompletedPayload,
   ChatMessageFailedPayload,
+  ChatMessagePlanUpdatedPayload,
   ChatMessageStartedPayload,
   ChatMessageTokenPayload,
   ChatMessageToolEndPayload,
@@ -36,6 +37,7 @@ export const useChatLifecycleSubscriptions = ({
     (state) => state.setInlineActivityTraceStatus,
   )
   const setRunStatus = useSuperAgentChatWorkspaceStore((state) => state.setRunStatus)
+  const setPlan = useSuperAgentChatWorkspaceStore((state) => state.setPlan)
   const setStreamingAssistant = useSuperAgentChatWorkspaceStore(
     (state) => state.setStreamingAssistant,
   )
@@ -67,6 +69,17 @@ export const useChatLifecycleSubscriptions = ({
     ({ conversation_id, token }) => {
       setRunStatus(conversation_id, "streaming")
       appendStreamingAssistantToken(conversation_id, token)
+    },
+    { organizationScoped: true },
+  )
+
+  useSocketSubscription<ChatMessagePlanUpdatedPayload>(
+    "chat:message:plan_updated",
+    ({ conversation_id, summary, todos }) => {
+      setPlan(conversation_id, {
+        summary,
+        todos,
+      })
     },
     { organizationScoped: true },
   )

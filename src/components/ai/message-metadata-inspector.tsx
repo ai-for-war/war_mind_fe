@@ -24,6 +24,12 @@ import {
   getAiToolPresentation,
 } from "@/lib/ai-tool-presentation"
 import type { NormalizedAssistantMessageMetadata } from "@/lib/ai-message-metadata"
+import {
+  getPlanTodoStatusLabel,
+  getPlanTodoStatusStyles,
+  normalizePlanTodoStatus,
+  type PlanTodoStatus,
+} from "@/common/plan-todo"
 import { cn } from "@/lib/utils"
 
 type AiMessageMetadataInspectorProps = {
@@ -40,8 +46,6 @@ type MetadataSectionProps = {
   meta?: ReactNode
   title: string
 }
-
-type PlanTodoStatus = "completed" | "in_progress" | "pending" | "unknown"
 
 const MetadataPill = ({
   children,
@@ -81,67 +85,6 @@ const MetadataSection = ({
     {children}
   </section>
 )
-
-const normalizePlanTodoStatus = (status: string): PlanTodoStatus => {
-  const normalizedStatus = status.trim().toLowerCase().replace(/\s+/g, "_")
-
-  if (normalizedStatus === "completed") {
-    return "completed"
-  }
-
-  if (normalizedStatus === "in_progress") {
-    return "in_progress"
-  }
-
-  if (normalizedStatus === "pending") {
-    return "pending"
-  }
-
-  return "unknown"
-}
-
-const getPlanTodoStatusLabel = (status: PlanTodoStatus): string => {
-  switch (status) {
-    case "completed":
-      return "Completed"
-    case "in_progress":
-      return "In Progress"
-    case "pending":
-      return "Pending"
-    default:
-      return "Unknown"
-  }
-}
-
-const getPlanTodoStatusStyles = (status: PlanTodoStatus) => {
-  switch (status) {
-    case "completed":
-      return {
-        badgeClassName:
-          "border-emerald-500/20 bg-emerald-500/5 text-emerald-300 dark:border-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-200",
-        dotClassName: "bg-emerald-400/90",
-        textClassName: "text-foreground/80",
-      }
-    case "in_progress":
-      return {
-        badgeClassName: "border-primary/30 text-foreground",
-        dotClassName: "bg-primary/80",
-        textClassName: "text-foreground",
-      }
-    case "pending":
-      return {
-        badgeClassName: "border-border/70 text-muted-foreground",
-        dotClassName: "bg-muted-foreground/40",
-        textClassName: "text-foreground",
-      }
-    default:
-      return {
-        badgeClassName: "text-muted-foreground",
-        dotClassName: "bg-muted-foreground/50",
-        textClassName: "text-foreground",
-      }
-  }
-}
 
 const PlanTodoStatusDot = ({ status }: { status: PlanTodoStatus }) => {
   const { dotClassName } = getPlanTodoStatusStyles(status)
