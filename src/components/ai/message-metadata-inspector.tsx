@@ -16,6 +16,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import {
   formatAiToolArgumentsSummary,
+  getAiToolNavigationTarget,
   getAiToolPresentation,
 } from "@/lib/ai-tool-presentation"
 import type { NormalizedAssistantMessageMetadata } from "@/lib/ai-message-metadata"
@@ -164,19 +165,61 @@ export const AiMessageMetadataInspector = ({
                 {metadata.toolCalls.map((toolCall, index) => {
                   const presentation = getAiToolPresentation(toolCall.name)
                   const summary = formatAiToolArgumentsSummary(toolCall.name, toolCall.arguments)
+                  const navigationTarget = getAiToolNavigationTarget(
+                    toolCall.name,
+                    toolCall.arguments,
+                  )
+                  const isNavigable = Boolean(navigationTarget)
+                  const content = (
+                    <>
+                      <div
+                        className={cn(
+                          "font-medium text-foreground transition-colors",
+                          isNavigable && "group-hover:text-primary group-focus-visible:text-primary",
+                        )}
+                      >
+                        {presentation.label}
+                      </div>
+                      {summary ? (
+                        <div
+                          className={cn(
+                            "text-muted-foreground text-xs transition-colors",
+                            isNavigable &&
+                              "group-hover:text-primary/80 group-focus-visible:text-primary/80",
+                          )}
+                        >
+                          {summary}
+                        </div>
+                      ) : null}
+                    </>
+                  )
 
                   return (
                     <ChainOfThoughtStep
                       className={cn(
                         "gap-3 text-sm [&>div:last-child]:min-w-0 [&>div:last-child]:overflow-hidden [&>div:last-child>div:last-child]:break-all [&>div:last-child>div:last-child]:whitespace-normal [&_svg]:shrink-0",
+                        isNavigable &&
+                          "group cursor-pointer [&>div:first-child]:transition-colors [&>div:first-child]:group-hover:text-primary [&>div:first-child]:group-focus-visible:text-primary",
                         index === metadata.toolCalls.length - 1
                           ? "[&>div:first-child>div]:hidden"
                           : "[&>div:first-child>div]:block",
                       )}
-                      description={summary ?? undefined}
                       icon={presentation.icon}
                       key={toolCall.id}
-                      label={<span className="font-medium text-foreground">{presentation.label}</span>}
+                      label={
+                        navigationTarget ? (
+                          <a
+                            className="block rounded-md outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring"
+                            href={navigationTarget}
+                            rel="noreferrer"
+                            target="_blank"
+                          >
+                            {content}
+                          </a>
+                        ) : (
+                          content
+                        )
+                      }
                       status="complete"
                     />
                   )

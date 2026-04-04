@@ -16,6 +16,8 @@ export interface AiToolPresentation {
   label: string
 }
 
+const isHttpUrl = (value: string): boolean => value.startsWith("http://") || value.startsWith("https://")
+
 const MAX_VALUE_LENGTH = 48
 const MAX_SUMMARY_LENGTH = 120
 
@@ -142,3 +144,18 @@ export const formatAiToolArgumentsSummary = (
   toolName: string,
   argumentsValue: Record<string, unknown>,
 ): string | null => getAiToolPresentation(toolName).formatArguments(argumentsValue)
+
+export const getAiToolNavigationTarget = (
+  _toolName: string,
+  argumentsValue: Record<string, unknown>,
+): string | null => {
+  if (
+    typeof argumentsValue.url === "string" &&
+    argumentsValue.url.trim().length > 0 &&
+    isHttpUrl(argumentsValue.url)
+  ) {
+    return argumentsValue.url
+  }
+
+  return null
+}
