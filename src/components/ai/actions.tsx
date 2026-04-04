@@ -3,10 +3,10 @@
 import {
   CheckIcon,
   CopyIcon,
-  PanelRightOpenIcon,
   RefreshCcwIcon,
   ThumbsDownIcon,
   ThumbsUpIcon,
+  WorkflowIcon,
 } from "lucide-react"
 import type { ComponentProps } from "react"
 import { useCallback, useEffect, useState } from "react"
@@ -128,12 +128,12 @@ export const CopyAction = ({
 export type MetadataActionProps = Omit<ActionProps, "children">
 
 export const MetadataAction = ({
-  label = "View metadata",
-  tooltip = "View metadata",
+  label = "View process",
+  tooltip = "View process",
   ...props
 }: MetadataActionProps) => (
   <Action aria-label={label} label={label} tooltip={tooltip} {...props}>
-    <PanelRightOpenIcon className="size-4" />
+    <WorkflowIcon className="size-4" />
   </Action>
 )
 

@@ -2,6 +2,7 @@ import {
   FileSearch,
   Globe,
   Layers,
+  ListTodo,
   Search,
   Wrench,
   type LucideIcon,
@@ -108,6 +109,11 @@ const TOOL_PRESENTATION_REGISTRY: Record<string, AiToolPresentation> = {
     formatArguments: formatSearchArguments,
     icon: Search,
     label: "Search",
+  },
+  write_todos: {
+    formatArguments: formatFallbackArguments,
+    icon: ListTodo,
+    label: "Update Plan",
   },
 }
 
