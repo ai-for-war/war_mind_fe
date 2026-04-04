@@ -51,6 +51,7 @@ type ChatWorkspaceProps = {
 }
 
 const DESKTOP_METADATA_INSPECTOR_BREAKPOINT = "(min-width: 1280px)"
+const DESKTOP_METADATA_INSPECTOR_WIDTH = "clamp(18rem, 24vw, 22rem)"
 
 const ChatWorkspaceLoading = () => (
   <div className="flex h-full min-h-0 flex-1 flex-col rounded-lg border border-border/60 p-6">
@@ -268,8 +269,8 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   }
 
   return (
-    <main className={cn("flex min-h-0 flex-1", className)}>
-      <Card className="flex h-[calc(100dvh-6rem)]  min-h-[34rem] w-full max-h-[calc(100dvh-6rem)] flex-col gap-0 overflow-hidden pb-0">
+    <main className={cn("flex min-h-0 min-w-0 flex-1", className)}>
+      <Card className="flex h-[calc(100dvh-6rem)] min-h-[34rem] min-w-0 w-full max-h-[calc(100dvh-6rem)] flex-col gap-0 overflow-hidden pb-0">
         <CardHeader className="mb-2">
           <div className="flex flex-col justify-between gap-4 xl:flex-row xl:items-start">
             <div className="space-y-1">
@@ -288,8 +289,8 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
         </CardHeader>
 
         <CardContent className="flex min-h-0 flex-1 flex-col gap-2 overflow-hidden px-0">
-          <div className="flex min-h-0 flex-1 gap-2 overflow-hidden">
-            <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
+          <div className="flex min-h-0 min-w-0 flex-1 gap-2 overflow-hidden">
+            <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
               {!activeConversationId && !freshChatOptimisticMessage ? (
                 <FreshChatState onSuggestionClick={handleSuggestionClick} />
               ) : activeConversationId && messagesQuery.isPending ? (
@@ -312,14 +313,17 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
             <div className="hidden min-h-0 shrink-0 xl:block">
               <motion.div
                 animate={{
-                  width: selectedMetadata ? "22rem" : 0,
+                  width: selectedMetadata ? DESKTOP_METADATA_INSPECTOR_WIDTH : 0,
                   x: selectedMetadata ? 0 : 24,
                 }}
                 className="h-full overflow-hidden"
                 initial={false}
                 transition={{ type: "tween", duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
               >
-                <div className="h-full w-[22rem]">
+                <div
+                  className="h-full"
+                  style={{ width: DESKTOP_METADATA_INSPECTOR_WIDTH }}
+                >
                   {selectedMetadata ? (
                     <AiMessageMetadataInspector
                       className="border-border/60"
