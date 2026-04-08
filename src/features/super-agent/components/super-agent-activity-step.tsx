@@ -4,7 +4,7 @@ import { ChainOfThoughtStep } from "@/components/ai/chain-of-thought"
 import { Badge } from "@/components/ui/badge"
 import type { SuperAgentInlineActivityStep } from "@/features/super-agent/types/chat-workspace.types"
 import {
-  formatSuperAgentToolArgumentsSummary,
+  formatSuperAgentToolStepSummary,
   getSuperAgentToolPresentation,
 } from "@/features/super-agent/utils/tool-presentation"
 import { cn } from "@/lib/utils"
@@ -21,7 +21,7 @@ export const SuperAgentActivityStep = ({
   step,
 }: SuperAgentActivityStepProps) => {
   const presentation = getSuperAgentToolPresentation(step.toolName)
-  const summary = formatSuperAgentToolArgumentsSummary(step.toolName, step.arguments)
+  const summary = formatSuperAgentToolStepSummary(step.toolName, step.arguments, step.result)
   const isFailed = step.status === "failed"
   const isActive = step.status === "active"
   const StepIcon = isFailed ? CircleAlert : isActive ? LoaderCircle : presentation.icon

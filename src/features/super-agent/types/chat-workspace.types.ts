@@ -28,6 +28,7 @@ export interface SendMessageRequest {
   provider: string
   model: string
   reasoning?: string
+  subagent_enabled: boolean
 }
 
 export interface SendMessageResponse {
@@ -75,9 +76,35 @@ export interface ChatMessageFailedPayload {
   organization_id?: string
 }
 
+export interface SuperAgentPlanTodo {
+  content: string
+  status: string
+}
+
+export interface SuperAgentPlanSummary {
+  completed: number
+  in_progress: number
+  pending: number
+  total: number
+}
+
+export interface SuperAgentPlanSnapshot {
+  summary: SuperAgentPlanSummary
+  todos: SuperAgentPlanTodo[]
+  updatedAt: string
+}
+
+export interface ChatMessagePlanUpdatedPayload {
+  conversation_id: string
+  organization_id?: string
+  summary?: Partial<SuperAgentPlanSummary> | null
+  todos: SuperAgentPlanTodo[]
+}
+
 export type SuperAgentSocketLifecyclePayload =
   | ChatMessageStartedPayload
   | ChatMessageTokenPayload
+  | ChatMessagePlanUpdatedPayload
   | ChatMessageToolStartPayload
   | ChatMessageToolEndPayload
   | ChatMessageCompletedPayload
@@ -92,6 +119,7 @@ export type SuperAgentInlineActivityTraceStatus = "streaming" | "completed" | "f
 export interface SuperAgentInlineActivityStep {
   arguments: Record<string, unknown>
   completedAt: string | null
+  result: string | null
   startedAt: string
   status: SuperAgentInlineActivityStepStatus
   toolCallId: string

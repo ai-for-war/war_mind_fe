@@ -6,6 +6,7 @@ import type {
   ConversationMessagesResponse,
   MultiAgentMessageRecord,
 } from "@/features/multi-agent/types/chat-workspace.types"
+import { useActiveOrganizationId } from "@/hooks/use-active-organization-id"
 
 type ConversationMessagesQueryResult = UseQueryResult<ConversationMessagesResponse, Error>
 
@@ -17,13 +18,17 @@ type UseConversationMessagesQueryResult = ConversationMessagesQueryResult & {
 export const useConversationMessages = (
   conversationId: string | null,
 ): UseConversationMessagesQueryResult => {
+  const activeOrganizationId = useActiveOrganizationId()
   const query = useQuery({
     enabled: typeof conversationId === "string" && conversationId.length > 0,
     queryFn: () => messagesApi.listConversationMessages(conversationId as string),
     queryKey:
       typeof conversationId === "string" && conversationId.length > 0
-        ? multiAgentQueryKeys.conversationMessages(conversationId)
-        : multiAgentQueryKeys.conversationMessagesPlaceholder,
+        ? multiAgentQueryKeys.conversationMessages(
+            activeOrganizationId,
+            conversationId,
+          )
+        : multiAgentQueryKeys.conversationMessagesPlaceholder(activeOrganizationId),
   })
 
   const messages = query.data?.messages ?? []

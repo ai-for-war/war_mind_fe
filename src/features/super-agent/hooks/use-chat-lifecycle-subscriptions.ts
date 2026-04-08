@@ -7,11 +7,13 @@ import { useSocketSubscription, useSocketTransportStore } from "@/features/socke
 import type {
   ChatMessageCompletedPayload,
   ChatMessageFailedPayload,
+  ChatMessagePlanUpdatedPayload,
   ChatMessageStartedPayload,
   ChatMessageTokenPayload,
   ChatMessageToolEndPayload,
   ChatMessageToolStartPayload,
 } from "@/features/super-agent/types/chat-workspace.types"
+import { useActiveOrganizationId } from "@/hooks/use-active-organization-id"
 
 type UseChatLifecycleSubscriptionsOptions = {
   activeConversationId: string | null
@@ -20,6 +22,7 @@ type UseChatLifecycleSubscriptionsOptions = {
 export const useChatLifecycleSubscriptions = ({
   activeConversationId,
 }: UseChatLifecycleSubscriptionsOptions): void => {
+  const activeOrganizationId = useActiveOrganizationId()
   const appendStreamingAssistantToken = useSuperAgentChatWorkspaceStore(
     (state) => state.appendStreamingAssistantToken,
   )
@@ -34,6 +37,7 @@ export const useChatLifecycleSubscriptions = ({
     (state) => state.setInlineActivityTraceStatus,
   )
   const setRunStatus = useSuperAgentChatWorkspaceStore((state) => state.setRunStatus)
+  const setPlan = useSuperAgentChatWorkspaceStore((state) => state.setPlan)
   const setStreamingAssistant = useSuperAgentChatWorkspaceStore(
     (state) => state.setStreamingAssistant,
   )
@@ -69,6 +73,17 @@ export const useChatLifecycleSubscriptions = ({
     { organizationScoped: true },
   )
 
+  useSocketSubscription<ChatMessagePlanUpdatedPayload>(
+    "chat:message:plan_updated",
+    ({ conversation_id, summary, todos }) => {
+      setPlan(conversation_id, {
+        summary,
+        todos,
+      })
+    },
+    { organizationScoped: true },
+  )
+
   useSocketSubscription<ChatMessageToolStartPayload>(
     "chat:message:tool_start",
     ({ arguments: toolArguments, conversation_id, tool_call_id, tool_name }) => {
@@ -86,8 +101,8 @@ export const useChatLifecycleSubscriptions = ({
 
   useSocketSubscription<ChatMessageToolEndPayload>(
     "chat:message:tool_end",
-    ({ conversation_id, tool_call_id }) => {
-      setInlineActivityStepStatus(conversation_id, tool_call_id, "complete")
+    ({ conversation_id, result, tool_call_id }) => {
+      setInlineActivityStepStatus(conversation_id, tool_call_id, "complete", result)
     },
     { organizationScoped: true },
   )
@@ -102,10 +117,13 @@ export const useChatLifecycleSubscriptions = ({
 
       void Promise.all([
         queryClient.invalidateQueries({
-          queryKey: superAgentQueryKeys.conversationMessages(conversation_id),
+          queryKey: superAgentQueryKeys.conversationMessages(
+            activeOrganizationId,
+            conversation_id,
+          ),
         }),
         queryClient.invalidateQueries({
-          queryKey: superAgentQueryKeys.conversationsAll,
+          queryKey: superAgentQueryKeys.conversationsAll(activeOrganizationId),
         }),
       ])
     },
@@ -130,7 +148,10 @@ export const useChatLifecycleSubscriptions = ({
       clearStreamingAssistant(conversation_id)
 
       void queryClient.invalidateQueries({
-        queryKey: superAgentQueryKeys.conversationMessages(conversation_id),
+        queryKey: superAgentQueryKeys.conversationMessages(
+          activeOrganizationId,
+          conversation_id,
+        ),
       })
     },
     { organizationScoped: true },
@@ -149,11 +170,14 @@ export const useChatLifecycleSubscriptions = ({
 
     void Promise.all([
       queryClient.invalidateQueries({
-        queryKey: superAgentQueryKeys.conversationMessages(activeConversationId),
+        queryKey: superAgentQueryKeys.conversationMessages(
+          activeOrganizationId,
+          activeConversationId,
+        ),
       }),
       queryClient.invalidateQueries({
-        queryKey: superAgentQueryKeys.conversationsAll,
+        queryKey: superAgentQueryKeys.conversationsAll(activeOrganizationId),
       }),
     ])
-  }, [activeConversationId, lastConnectedAt, queryClient, status])
+  }, [activeConversationId, activeOrganizationId, lastConnectedAt, queryClient, status])
 }

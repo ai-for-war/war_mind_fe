@@ -1,6 +1,13 @@
 "use client"
 
-import { BotIcon, BoxesIcon, ChevronDownIcon, LayersIcon, WrenchIcon } from "lucide-react"
+import {
+  BotIcon,
+  BoxesIcon,
+  ChevronDownIcon,
+  GitBranchIcon,
+  LayersIcon,
+  WrenchIcon,
+} from "lucide-react"
 import type { ComponentType, ReactNode } from "react"
 
 import {
@@ -24,6 +31,12 @@ import {
   getAiToolPresentation,
 } from "@/lib/ai-tool-presentation"
 import type { NormalizedAssistantMessageMetadata } from "@/lib/ai-message-metadata"
+import {
+  getPlanTodoStatusLabel,
+  getPlanTodoStatusStyles,
+  normalizePlanTodoStatus,
+  type PlanTodoStatus,
+} from "@/common/plan-todo"
 import { cn } from "@/lib/utils"
 
 type AiMessageMetadataInspectorProps = {
@@ -40,8 +53,6 @@ type MetadataSectionProps = {
   meta?: ReactNode
   title: string
 }
-
-type PlanTodoStatus = "completed" | "in_progress" | "pending" | "unknown"
 
 const MetadataPill = ({
   children,
@@ -82,67 +93,6 @@ const MetadataSection = ({
   </section>
 )
 
-const normalizePlanTodoStatus = (status: string): PlanTodoStatus => {
-  const normalizedStatus = status.trim().toLowerCase().replace(/\s+/g, "_")
-
-  if (normalizedStatus === "completed") {
-    return "completed"
-  }
-
-  if (normalizedStatus === "in_progress") {
-    return "in_progress"
-  }
-
-  if (normalizedStatus === "pending") {
-    return "pending"
-  }
-
-  return "unknown"
-}
-
-const getPlanTodoStatusLabel = (status: PlanTodoStatus): string => {
-  switch (status) {
-    case "completed":
-      return "Completed"
-    case "in_progress":
-      return "In Progress"
-    case "pending":
-      return "Pending"
-    default:
-      return "Unknown"
-  }
-}
-
-const getPlanTodoStatusStyles = (status: PlanTodoStatus) => {
-  switch (status) {
-    case "completed":
-      return {
-        badgeClassName:
-          "border-emerald-500/20 bg-emerald-500/5 text-emerald-300 dark:border-emerald-500/25 dark:bg-emerald-500/10 dark:text-emerald-200",
-        dotClassName: "bg-emerald-400/90",
-        textClassName: "text-foreground/80",
-      }
-    case "in_progress":
-      return {
-        badgeClassName: "border-primary/30 text-foreground",
-        dotClassName: "bg-primary/80",
-        textClassName: "text-foreground",
-      }
-    case "pending":
-      return {
-        badgeClassName: "border-border/70 text-muted-foreground",
-        dotClassName: "bg-muted-foreground/40",
-        textClassName: "text-foreground",
-      }
-    default:
-      return {
-        badgeClassName: "text-muted-foreground",
-        dotClassName: "bg-muted-foreground/50",
-        textClassName: "text-foreground",
-      }
-  }
-}
-
 const PlanTodoStatusDot = ({ status }: { status: PlanTodoStatus }) => {
   const { dotClassName } = getPlanTodoStatusStyles(status)
 
@@ -176,6 +126,31 @@ export const AiMessageMetadataInspector = ({
   const hasSkillSection = Boolean(
     metadata.skillId || metadata.skillVersion || metadata.loadedSkills.length > 0,
   )
+  const hasOrchestrationSection = Boolean(
+    metadata.subagentEnabled !== null ||
+      metadata.orchestrationMode ||
+      metadata.delegationDepth !== null,
+  )
+  const orchestrationModeLabel =
+    metadata.orchestrationMode === "subagent"
+      ? "Subagent"
+      : metadata.orchestrationMode === "direct"
+        ? "Direct"
+        : metadata.orchestrationMode
+  const delegationDepthLabel =
+    metadata.delegationDepth === null
+      ? null
+      : metadata.delegationDepth > 0
+        ? `Worker run (${metadata.delegationDepth})`
+        : null
+  const orchestrationSummary = [
+    metadata.subagentEnabled === true ? "Subagent orchestration was enabled for this response." : null,
+    metadata.subagentEnabled === false ? "Subagent orchestration was disabled for this response." : null,
+    orchestrationModeLabel ? `Mode: ${orchestrationModeLabel}.` : null,
+    delegationDepthLabel ? `Depth: ${delegationDepthLabel}.` : null,
+  ]
+    .filter((value): value is string => Boolean(value))
+    .join(" ")
 
   return (
     <Card className={cn("h-full gap-0 overflow-hidden", className)}>
@@ -194,7 +169,58 @@ export const AiMessageMetadataInspector = ({
             </MetadataSection>
           ) : null}
 
-          {metadata.model && (hasSkillSection || metadata.toolCalls.length > 0) ? <Separator /> : null}
+          {metadata.model &&
+          (hasOrchestrationSection || hasSkillSection || metadata.toolCalls.length > 0) ? (
+            <Separator />
+          ) : null}
+
+          {hasOrchestrationSection ? (
+            <MetadataSection icon={GitBranchIcon} title="Orchestration">
+              <div className="space-y-3 rounded-lg border border-border/50 bg-muted/15 p-3">
+                <div className="flex flex-wrap gap-2">
+                  {metadata.subagentEnabled !== null ? (
+                    <Badge
+                      className={cn(
+                        "rounded-full px-2.5 py-0.5 text-xs",
+                        metadata.subagentEnabled
+                          ? "border-cyan-400/30 bg-cyan-400/15 text-cyan-200 hover:bg-cyan-400/15"
+                          : "border-border/70 bg-background/70 text-muted-foreground hover:bg-background/70",
+                      )}
+                      variant="outline"
+                    >
+                      {metadata.subagentEnabled ? "Enabled" : "Disabled"}
+                    </Badge>
+                  ) : null}
+
+                  {orchestrationModeLabel ? (
+                    <Badge
+                      className="rounded-full border-border/70 bg-background/70 px-2.5 py-0.5 text-xs text-foreground hover:bg-background/70"
+                      variant="outline"
+                    >
+                      {orchestrationModeLabel}
+                    </Badge>
+                  ) : null}
+
+                  {delegationDepthLabel ? (
+                    <Badge
+                      className="rounded-full border-border/70 bg-background/70 px-2.5 py-0.5 text-xs text-foreground hover:bg-background/70"
+                      variant="outline"
+                    >
+                      {delegationDepthLabel}
+                    </Badge>
+                  ) : null}
+                </div>
+
+                {orchestrationSummary ? (
+                  <p className="text-xs leading-5 text-muted-foreground">
+                    {orchestrationSummary}
+                  </p>
+                ) : null}
+              </div>
+            </MetadataSection>
+          ) : null}
+
+          {hasOrchestrationSection && (hasSkillSection || metadata.toolCalls.length > 0) ? <Separator /> : null}
 
           {hasSkillSection ? (
             <MetadataSection

@@ -1,10 +1,14 @@
 import { create } from "zustand"
 
+import { summarizePlanTodos } from "@/common/plan-todo"
 import type {
   SuperAgentInlineActivityStep,
   SuperAgentInlineActivityStepStatus,
   SuperAgentInlineActivityTrace,
   SuperAgentInlineActivityTraceStatus,
+  SuperAgentPlanSnapshot,
+  SuperAgentPlanSummary,
+  SuperAgentPlanTodo,
   SuperAgentRunStatus,
   SuperAgentStreamingAssistantState,
 } from "@/features/super-agent/types/chat-workspace.types"
@@ -36,6 +40,8 @@ type SuperAgentChatWorkspaceState = {
   composerDraftByConversation: Record<string, string>
   composerRuntimeNoticeByConversation: Record<string, string | null>
   composerRuntimeSelectionByConversation: Record<string, SuperAgentRuntimeSelection>
+  composerSubagentEnabledByConversation: Record<string, boolean>
+  planByConversation: Record<string, SuperAgentPlanSnapshot>
   runStatusByConversation: Record<string, SuperAgentRunStatus>
   streamingAssistantByConversation: Record<string, SuperAgentStreamingAssistantState>
   threadErrorByConversation: Record<string, string | null>
@@ -47,9 +53,15 @@ type SuperAgentChatWorkspaceActions = {
   clearComposerDraft: (conversationId: string | null) => void
   clearComposerRuntimeNotice: (conversationId: string | null) => void
   clearComposerRuntimeSelection: (conversationId: string | null) => void
+  clearComposerSubagentEnabled: (conversationId: string | null) => void
+  clearPlan: (conversationId: string | null) => void
   clearStreamingAssistant: (conversationId: string) => void
   clearThreadError: (conversationId: string) => void
   rekeyComposerRuntimeSelection: (
+    fromConversationId: string | null,
+    toConversationId: string,
+  ) => void
+  rekeyComposerSubagentEnabled: (
     fromConversationId: string | null,
     toConversationId: string,
   ) => void
@@ -61,6 +73,7 @@ type SuperAgentChatWorkspaceActions = {
     conversationId: string | null,
     selection: SuperAgentRuntimeSelection,
   ) => void
+  setComposerSubagentEnabled: (conversationId: string | null, enabled: boolean) => void
   setComposerRuntimeModel: (
     conversationId: string | null,
     args: {
@@ -73,6 +86,13 @@ type SuperAgentChatWorkspaceActions = {
     conversationId: string | null,
     reasoning: string | null,
   ) => void
+  setPlan: (
+    conversationId: string | null,
+    plan: {
+      summary?: Partial<SuperAgentPlanSummary> | null
+      todos: SuperAgentPlanTodo[]
+    },
+  ) => void
   setInlineActivityTraceStatus: (
     conversationId: string,
     status: SuperAgentInlineActivityTraceStatus,
@@ -81,6 +101,7 @@ type SuperAgentChatWorkspaceActions = {
     conversationId: string,
     toolCallId: string,
     status: SuperAgentInlineActivityStepStatus,
+    result?: string | null,
   ) => void
   setRunStatus: (conversationId: string, status: SuperAgentRunStatus) => void
   setStreamingAssistant: (
@@ -99,6 +120,8 @@ const initialState: SuperAgentChatWorkspaceState = {
   composerDraftByConversation: {},
   composerRuntimeNoticeByConversation: {},
   composerRuntimeSelectionByConversation: {},
+  composerSubagentEnabledByConversation: {},
+  planByConversation: {},
   runStatusByConversation: {},
   streamingAssistantByConversation: {},
   threadErrorByConversation: {},
@@ -165,6 +188,24 @@ export const useSuperAgentChatWorkspaceStore = create<
         ),
       }
     }),
+  clearComposerSubagentEnabled: (conversationId) =>
+    set((state) => {
+      const conversationKey = toConversationKey(conversationId)
+      return {
+        composerSubagentEnabledByConversation: omitKey(
+          state.composerSubagentEnabledByConversation,
+          conversationKey,
+        ),
+      }
+    }),
+  clearPlan: (conversationId) =>
+    set((state) => {
+      const conversationKey = toConversationKey(conversationId)
+
+      return {
+        planByConversation: omitKey(state.planByConversation, conversationKey),
+      }
+    }),
   clearStreamingAssistant: (conversationId) =>
     set((state) => ({
       streamingAssistantByConversation: omitKey(
@@ -198,6 +239,21 @@ export const useSuperAgentChatWorkspaceStore = create<
           : omitKey(state.composerRuntimeSelectionByConversation, fromKey),
       }
     }),
+  rekeyComposerSubagentEnabled: (fromConversationId, toConversationId) =>
+    set((state) => {
+      const fromKey = toConversationKey(fromConversationId)
+      const toKey = toConversationKey(toConversationId)
+      const isEnabled = state.composerSubagentEnabledByConversation[fromKey]
+
+      return {
+        composerSubagentEnabledByConversation: isEnabled
+          ? {
+              ...omitKey(state.composerSubagentEnabledByConversation, fromKey),
+              [toKey]: isEnabled,
+            }
+          : omitKey(state.composerSubagentEnabledByConversation, fromKey),
+      }
+    }),
   resetConversationWorkspaceState: (conversationId) =>
     set((state) => {
       const conversationKey = toConversationKey(conversationId)
@@ -219,6 +275,11 @@ export const useSuperAgentChatWorkspaceStore = create<
           state.composerRuntimeSelectionByConversation,
           conversationKey,
         ),
+        composerSubagentEnabledByConversation: omitKey(
+          state.composerSubagentEnabledByConversation,
+          conversationKey,
+        ),
+        planByConversation: omitKey(state.planByConversation, conversationKey),
         runStatusByConversation: omitKey(state.runStatusByConversation, conversationKey),
         streamingAssistantByConversation: omitKey(
           state.streamingAssistantByConversation,
@@ -258,6 +319,17 @@ export const useSuperAgentChatWorkspaceStore = create<
         composerRuntimeSelectionByConversation: {
           ...state.composerRuntimeSelectionByConversation,
           [conversationKey]: selection,
+        },
+      }
+    }),
+  setComposerSubagentEnabled: (conversationId, enabled) =>
+    set((state) => {
+      const conversationKey = toConversationKey(conversationId)
+
+      return {
+        composerSubagentEnabledByConversation: {
+          ...state.composerSubagentEnabledByConversation,
+          [conversationKey]: enabled,
         },
       }
     }),
@@ -318,6 +390,34 @@ export const useSuperAgentChatWorkspaceStore = create<
         },
       }
     }),
+  setPlan: (conversationId, plan) =>
+    set((state) => {
+      const conversationKey = toConversationKey(conversationId)
+      if (plan.todos.length === 0) {
+        return {
+          planByConversation: omitKey(state.planByConversation, conversationKey),
+        }
+      }
+
+      const normalizedSummary = summarizePlanTodos(plan.todos)
+      const nextSummary: SuperAgentPlanSummary = {
+        completed: plan.summary?.completed ?? normalizedSummary.completed,
+        in_progress: plan.summary?.in_progress ?? normalizedSummary.in_progress,
+        pending: plan.summary?.pending ?? normalizedSummary.pending,
+        total: plan.summary?.total ?? normalizedSummary.total,
+      }
+
+      return {
+        planByConversation: {
+          ...state.planByConversation,
+          [conversationKey]: {
+            summary: nextSummary,
+            todos: plan.todos,
+            updatedAt: new Date().toISOString(),
+          },
+        },
+      }
+    }),
   setInlineActivityTraceStatus: (conversationId, status) =>
     set((state) => {
       const currentTrace = state.activityTraceByConversation[conversationId]
@@ -338,7 +438,7 @@ export const useSuperAgentChatWorkspaceStore = create<
         },
       }
     }),
-  setInlineActivityStepStatus: (conversationId, toolCallId, status) =>
+  setInlineActivityStepStatus: (conversationId, toolCallId, status, result = null) =>
     set((state) => {
       const currentTrace = state.activityTraceByConversation[conversationId]
       if (!currentTrace) {
@@ -351,6 +451,7 @@ export const useSuperAgentChatWorkspaceStore = create<
           ? {
               ...step,
               completedAt: status === "active" ? null : step.completedAt ?? now,
+              result: result ?? step.result,
               status,
             }
           : step,
@@ -398,6 +499,7 @@ export const useSuperAgentChatWorkspaceStore = create<
       const nextStep: SuperAgentInlineActivityStep = {
         arguments: step.arguments,
         completedAt: step.status === "active" ? null : now,
+        result: null,
         startedAt:
           currentTrace?.steps.find((currentStep) => currentStep.toolCallId === step.toolCallId)
             ?.startedAt ?? now,
