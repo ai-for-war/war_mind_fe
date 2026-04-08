@@ -28,6 +28,7 @@ export interface SendMessageRequest {
   provider: string
   model: string
   reasoning?: string
+  subagent_enabled: boolean
 }
 
 export interface SendMessageResponse {
@@ -118,6 +119,7 @@ export type SuperAgentInlineActivityTraceStatus = "streaming" | "completed" | "f
 export interface SuperAgentInlineActivityStep {
   arguments: Record<string, unknown>
   completedAt: string | null
+  result: string | null
   startedAt: string
   status: SuperAgentInlineActivityStepStatus
   toolCallId: string

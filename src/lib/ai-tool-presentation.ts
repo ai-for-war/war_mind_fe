@@ -1,4 +1,5 @@
 import {
+  Bot,
   FileSearch,
   Globe,
   Layers,
@@ -98,6 +99,19 @@ const formatFetchContentArguments: ToolArgumentFormatter = (argumentsValue) =>
 const formatLoadSkillArguments: ToolArgumentFormatter = (argumentsValue) =>
   joinSummaryParts([formatUnknownValue(argumentsValue.skill_id)])
 
+const formatDelegateTasksArguments: ToolArgumentFormatter = (argumentsValue) => {
+  const task = isRecord(argumentsValue.task) ? argumentsValue.task : null
+
+  if (!task) {
+    return formatFallbackArguments(argumentsValue)
+  }
+
+  return joinSummaryParts([
+    typeof task.objective === "string" ? task.objective : null,
+    typeof task.expected_output === "string" ? task.expected_output : null,
+  ])
+}
+
 const normalizeTodoItems = (value: unknown): AiToolTodoItem[] => {
   if (!Array.isArray(value)) {
     return []
@@ -158,6 +172,11 @@ const TOOL_PRESENTATION_REGISTRY: Record<string, AiToolPresentation> = {
     formatArguments: formatFetchContentArguments,
     icon: Globe,
     label: "Crawl",
+  },
+  delegate_tasks: {
+    formatArguments: formatDelegateTasksArguments,
+    icon: Bot,
+    label: "Subagent",
   },
   load_skill: {
     formatArguments: formatLoadSkillArguments,

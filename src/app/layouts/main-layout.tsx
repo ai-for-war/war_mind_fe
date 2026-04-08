@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react"
 import { Outlet } from "react-router-dom"
 
+import backgroundImage from "@/assets/images/bg.jpg"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import { useInterviewSessionStore } from "@/features/interview-lab/stores"
 import { useMeetingSessionStore } from "@/features/meeting-recorder/stores"
@@ -44,14 +45,24 @@ export const MainLayout = () => {
     <SidebarProvider
       open={isSidebarOpen}
       onOpenChange={setSidebarOpen}
-      className="min-h-svh bg-background text-foreground"
+      className="relative min-h-svh overflow-hidden bg-background text-foreground"
     >
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-30 saturate-125 transition-opacity"
+          style={{ backgroundImage: `url(${backgroundImage})` }}
+        />
+        <div className="glass-scene absolute inset-0" />
+        <div className="glass-scene-grid absolute inset-0 opacity-40" />
+        <div className="glass-scene-noise absolute inset-0 mix-blend-soft-light opacity-30" />
+        <div className="glass-scene-vignette absolute inset-0" />
+      </div>
       <AppSidebar />
-      <SidebarInset className="min-h-svh overflow-hidden bg-background">
+      <SidebarInset className="min-h-svh overflow-hidden bg-transparent">
         <AppHeader />
         <div
           key={organizationScopeKey}
-          className="flex min-h-0 flex-1 flex-col overflow-hidden p-4 md:p-6"
+          className="relative z-10 flex min-h-0 flex-1 flex-col overflow-hidden p-4 md:p-6"
         >
           <Outlet />
         </div>
