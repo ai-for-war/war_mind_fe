@@ -170,12 +170,18 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   const composerRuntimeSelectionByConversation = useSuperAgentChatWorkspaceStore(
     (state) => state.composerRuntimeSelectionByConversation,
   )
+  const composerSubagentEnabledByConversation = useSuperAgentChatWorkspaceStore(
+    (state) => state.composerSubagentEnabledByConversation,
+  )
   const activityTraceByConversation = useSuperAgentChatWorkspaceStore(
     (state) => state.activityTraceByConversation,
   )
   const planByConversation = useSuperAgentChatWorkspaceStore((state) => state.planByConversation)
   const rekeyComposerRuntimeSelection = useSuperAgentChatWorkspaceStore(
     (state) => state.rekeyComposerRuntimeSelection,
+  )
+  const rekeyComposerSubagentEnabled = useSuperAgentChatWorkspaceStore(
+    (state) => state.rekeyComposerSubagentEnabled,
   )
   const runStatusByConversation = useSuperAgentChatWorkspaceStore(
     (state) => state.runStatusByConversation,
@@ -191,6 +197,9 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   )
   const setComposerRuntimeSelection = useSuperAgentChatWorkspaceStore(
     (state) => state.setComposerRuntimeSelection,
+  )
+  const setComposerSubagentEnabled = useSuperAgentChatWorkspaceStore(
+    (state) => state.setComposerSubagentEnabled,
   )
   const streamingAssistantByConversation = useSuperAgentChatWorkspaceStore(
     (state) => state.streamingAssistantByConversation,
@@ -217,6 +226,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
   const draft = composerDraftByConversation[conversationKey] ?? ""
   const runtimeNotice = composerRuntimeNoticeByConversation[conversationKey] ?? null
   const activeRuntimeSelection = composerRuntimeSelectionByConversation[conversationKey] ?? null
+  const isSubagentEnabled = composerSubagentEnabledByConversation[conversationKey] ?? false
   const runStatus = (runStatusByConversation[conversationKey] ?? "idle") satisfies SuperAgentRunStatus
   const isSubmitting = runStatus === "submitting"
 
@@ -322,6 +332,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
       const result = await sendMessageMutation.mutateAsync({
         content: prompt,
         conversation_id: activeConversationId,
+        subagent_enabled: isSubagentEnabled,
         ...normalizedRuntime.runtime,
       })
 
@@ -330,6 +341,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
       if (!activeConversationId) {
         setFreshChatOptimisticMessage(null)
         rekeyComposerRuntimeSelection(null, result.conversation_id)
+        rekeyComposerSubagentEnabled(null, result.conversation_id)
         setRunStatus(result.conversation_id, "submitting")
         setThreadError(result.conversation_id, null)
         setRunStatus(submitKey, "idle")
@@ -467,6 +479,7 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
             isRuntimeReady={isRuntimeReady}
             isRuntimeRetrying={runtimeCatalogQuery.isRefetching}
             isSubmitting={isSubmitting}
+            isSubagentEnabled={isSubagentEnabled}
             onDraftChange={(value) => setComposerDraft(activeConversationId, value)}
             onRetryRuntime={() => void runtimeCatalogQuery.refetchCatalog()}
             onSelectModel={({ model, provider }) => {
@@ -485,6 +498,9 @@ export const ChatWorkspace = ({ className }: ChatWorkspaceProps) => {
               setComposerRuntimeReasoning(activeConversationId, reasoning)
               clearComposerRuntimeNotice(activeConversationId)
             }}
+            onSubagentEnabledChange={(checked) =>
+              setComposerSubagentEnabled(activeConversationId, checked)
+            }
             onSubmit={(text) => void handleSubmitPrompt(text)}
             runtimeError={runtimeError}
             runtimeSelection={activeRuntimeSelection}

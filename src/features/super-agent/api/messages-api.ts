@@ -30,6 +30,7 @@ const sendMessage = async (payload: SendMessageRequest): Promise<SendMessageResp
     model: payload.model,
     provider: payload.provider,
     reasoning: payload.reasoning,
+    subagent_enabled: payload.subagent_enabled,
   })
 
   return response.data

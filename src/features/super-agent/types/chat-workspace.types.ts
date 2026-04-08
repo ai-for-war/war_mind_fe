@@ -28,6 +28,7 @@ export interface SendMessageRequest {
   provider: string
   model: string
   reasoning?: string
+  subagent_enabled: boolean
 }
 
 export interface SendMessageResponse {

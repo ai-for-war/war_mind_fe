@@ -1,3 +1,4 @@
+import { Bot } from "lucide-react"
 import { useState } from "react"
 
 import {
@@ -8,6 +9,8 @@ import {
   PromptInputTextarea,
   PromptInputTools,
 } from "@/components/ai/prompt-input"
+import { Label } from "@/components/ui/label"
+import { Switch } from "@/components/ui/switch"
 import { SuperAgentRuntimePicker } from "@/features/super-agent/components/super-agent-runtime-picker"
 import type {
   LeadAgentRuntimeCatalogResponse,
@@ -23,10 +26,12 @@ type ComposerPanelProps = {
   isRuntimeRetrying?: boolean
   isRuntimeLoading?: boolean
   isSubmitting: boolean
+  isSubagentEnabled: boolean
   onDraftChange: (value: string) => void
   onRetryRuntime: () => void
   onSelectModel: (args: { model: string; provider: string }) => void
   onSelectReasoning: (reasoning: string) => void
+  onSubagentEnabledChange: (checked: boolean) => void
   onSubmit: (text: string) => void
   runtimeError?: string | null
   runtimeSelection: SuperAgentRuntimeSelection | null
@@ -40,10 +45,12 @@ export const ComposerPanel = ({
   isRuntimeRetrying = false,
   isRuntimeLoading = false,
   isSubmitting,
+  isSubagentEnabled,
   onDraftChange,
   onRetryRuntime,
   onSelectModel,
   onSelectReasoning,
+  onSubagentEnabledChange,
   onSubmit,
   runtimeError,
   runtimeSelection,
@@ -93,6 +100,35 @@ export const ComposerPanel = ({
 
         <PromptInputFooter className="mt-1">
           <PromptInputTools>
+            <Label
+              htmlFor="super-agent-subagent-toggle"
+              className={cn(
+                "flex h-8 items-center gap-2 rounded-md border px-2.5 text-xs sm:text-sm",
+                "cursor-pointer transition-colors",
+                isSubagentEnabled
+                  ? "border-primary/30 bg-primary/10 text-foreground"
+                  : "border-input bg-transparent text-muted-foreground hover:bg-accent/40 hover:text-foreground",
+                isSubmitting && "cursor-not-allowed opacity-70",
+              )}
+            >
+              <Bot
+                className={cn(
+                  "size-3.5 shrink-0",
+                  isSubagentEnabled ? "text-primary" : "text-muted-foreground",
+                )}
+              />
+              <span className="whitespace-nowrap font-medium">
+                {isSubagentEnabled ? "Subagent" : "Agent"}
+              </span>
+              <Switch
+                id="super-agent-subagent-toggle"
+                checked={isSubagentEnabled}
+                className="ml-1 data-[state=checked]:bg-primary data-[state=unchecked]:bg-foreground/15"
+                disabled={isSubmitting}
+                onCheckedChange={onSubagentEnabledChange}
+                size="sm"
+              />
+            </Label>
             <SuperAgentRuntimePicker
               catalog={catalog}
               isLoading={isRuntimeLoading}
