@@ -1,6 +1,5 @@
-import { useTheme } from "next-themes";
+import sidebarBackgroundImage from "@/assets/images/bg.jpg";
 import darkLogo from "@/assets/images/darklogopng.png";
-import lightLogo from "@/assets/images/lightlogopng.png";
 
 import {
   Sidebar,
@@ -17,16 +16,13 @@ import { OrgSwitcher } from "@/widgets/sidebar/components/org-switcher";
 import { cn } from "@/lib/utils";
 
 export const AppSidebar = () => {
-  const { resolvedTheme } = useTheme();
-  const currentTheme = resolvedTheme ?? "dark";
-  const logoSrc = currentTheme === "dark" ? darkLogo : lightLogo;
-  const textColor =
-    currentTheme === "dark"
-      ? "bg-gradient-to-r  from-[#7EC8FF] via-[#4AA3FF] to-[#00E0FF]"
-      : "bg-gradient-to-r from-[#0A1A2F] via-[#2A7FD1] to-[#6FD6FF]";
+  const textColor = "bg-gradient-to-r from-[#7EC8FF] via-[#4AA3FF] to-[#00E0FF]";
 
   return (
-    <Sidebar>
+    <Sidebar
+      className="app-sidebar-shell"
+      style={{ "--sidebar-bg-image": `url(${sidebarBackgroundImage})` } as React.CSSProperties}
+    >
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -35,7 +31,7 @@ export const AppSidebar = () => {
                 <div className="flex aspect-square size-14 items-center justify-center rounded-lg">
                   {/* <BrainCircuit className="size-4" /> */}
                   <img
-                    src={logoSrc}
+                    src={darkLogo}
                     alt="RecapAI Logo"
                     className="h-14 w-14 object-contain"
                   />

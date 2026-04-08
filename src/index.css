@@ -221,6 +221,30 @@
     background: color-mix(in oklab, var(--primary) 28%, transparent);
     color: var(--foreground);
   }
+
+  .dark [data-slot="sidebar"],
+  .dark [data-slot="sidebar-inner"] {
+    background-color: color-mix(in oklab, var(--sidebar) 78%, transparent);
+  }
+
+  .dark [data-slot="sidebar-inset"] {
+    background-color: transparent;
+  }
+
+  .app-sidebar-shell [data-slot="sidebar-inner"] {
+    background-image:
+      linear-gradient(180deg, rgb(244 250 252 / 0.68) 0%, rgb(237 246 248 / 0.56) 38%, rgb(228 240 244 / 0.72) 100%),
+      var(--sidebar-bg-image);
+    background-position: center, left center;
+    background-repeat: no-repeat, no-repeat;
+    background-size: auto, cover;
+  }
+
+  .dark .app-sidebar-shell [data-slot="sidebar-inner"] {
+    background-image:
+      linear-gradient(180deg, rgb(4 12 24 / 0.82) 0%, rgb(4 12 24 / 0.68) 38%, rgb(2 8 18 / 0.86) 100%),
+      var(--sidebar-bg-image);
+  }
 }
 
 @layer components {
