@@ -101,8 +101,8 @@ export const useChatLifecycleSubscriptions = ({
 
   useSocketSubscription<ChatMessageToolEndPayload>(
     "chat:message:tool_end",
-    ({ conversation_id, tool_call_id }) => {
-      setInlineActivityStepStatus(conversation_id, tool_call_id, "complete")
+    ({ conversation_id, result, tool_call_id }) => {
+      setInlineActivityStepStatus(conversation_id, tool_call_id, "complete", result)
     },
     { organizationScoped: true },
   )

@@ -119,6 +119,7 @@ export type SuperAgentInlineActivityTraceStatus = "streaming" | "completed" | "f
 export interface SuperAgentInlineActivityStep {
   arguments: Record<string, unknown>
   completedAt: string | null
+  result: string | null
   startedAt: string
   status: SuperAgentInlineActivityStepStatus
   toolCallId: string

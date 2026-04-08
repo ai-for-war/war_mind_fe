@@ -101,6 +101,7 @@ type SuperAgentChatWorkspaceActions = {
     conversationId: string,
     toolCallId: string,
     status: SuperAgentInlineActivityStepStatus,
+    result?: string | null,
   ) => void
   setRunStatus: (conversationId: string, status: SuperAgentRunStatus) => void
   setStreamingAssistant: (
@@ -437,7 +438,7 @@ export const useSuperAgentChatWorkspaceStore = create<
         },
       }
     }),
-  setInlineActivityStepStatus: (conversationId, toolCallId, status) =>
+  setInlineActivityStepStatus: (conversationId, toolCallId, status, result = null) =>
     set((state) => {
       const currentTrace = state.activityTraceByConversation[conversationId]
       if (!currentTrace) {
@@ -450,6 +451,7 @@ export const useSuperAgentChatWorkspaceStore = create<
           ? {
               ...step,
               completedAt: status === "active" ? null : step.completedAt ?? now,
+              result: result ?? step.result,
               status,
             }
           : step,
@@ -497,6 +499,7 @@ export const useSuperAgentChatWorkspaceStore = create<
       const nextStep: SuperAgentInlineActivityStep = {
         arguments: step.arguments,
         completedAt: step.status === "active" ? null : now,
+        result: null,
         startedAt:
           currentTrace?.steps.find((currentStep) => currentStep.toolCallId === step.toolCallId)
             ?.startedAt ?? now,
