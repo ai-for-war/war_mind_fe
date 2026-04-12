@@ -22,10 +22,10 @@
 
 ## 4. Infinite scroll and catalog states
 
-- [ ] 4.1 Wire the stock table container to the existing `useScrollAreaInfiniteScroll` hook and load the next API page when the sentinel becomes visible
-- [ ] 4.2 Ensure changing search, exchange, or group filters resets the visible list back to the first loaded page of results
-- [ ] 4.3 Implement the initial loading state, empty catalog state, filtered no-results state, and inline error state without unmounting the filter controls
-- [ ] 4.4 Prevent additional page requests once the accumulated loaded items reach the API `total`
+- [x] 4.1 Wire the stock table container to the existing `useScrollAreaInfiniteScroll` hook and load the next API page when the sentinel becomes visible
+- [x] 4.2 Ensure changing search, exchange, or group filters resets the visible list back to the first loaded page of results
+- [x] 4.3 Implement the initial loading state, empty catalog state, filtered no-results state, and inline error state without unmounting the filter controls
+- [x] 4.4 Prevent additional page requests once the accumulated loaded items reach the API `total`
 
 ## 5. App shell integration
 

@@ -15,6 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { StocksFilterBar } from "@/features/stocks/components/stocks-filter-bar"
 import { StocksTable } from "@/features/stocks/components/stocks-table"
 import { useStockCatalog } from "@/features/stocks/hooks"
+import { useScrollAreaInfiniteScroll } from "@/hooks/use-scroll-area-infinite-scroll"
 import type {
   StockCatalogFilters,
   StockExchangeOption,
@@ -90,6 +91,17 @@ export const StocksPage = () => {
   const freshnessLabel = stockCatalogQuery.snapshotAt
     ? formatAbsoluteDateTime(stockCatalogQuery.snapshotAt)
     : null
+  const { scrollAreaRef, sentinelRef } = useScrollAreaInfiniteScroll({
+    hasNextPage: Boolean(stockCatalogQuery.hasNextPage),
+    isEnabled:
+      !stockCatalogQuery.isLoading &&
+      !stockCatalogQuery.isError &&
+      stockCatalogQuery.items.length > 0,
+    isFetchingNextPage: stockCatalogQuery.isFetchingNextPage,
+    onLoadMore: () => {
+      void stockCatalogQuery.fetchNextPage()
+    },
+  })
 
   return (
     <section className="flex min-h-0 flex-1 flex-col gap-4">
@@ -182,8 +194,27 @@ export const StocksPage = () => {
         {!stockCatalogQuery.isLoading &&
         !stockCatalogQuery.isError &&
         stockCatalogQuery.items.length > 0 ? (
-          <ScrollArea className="min-h-0 flex-1">
-            <StocksTable items={stockCatalogQuery.items} />
+          <ScrollArea ref={scrollAreaRef} className="min-h-0 flex-1">
+            <div className="min-w-full">
+              <StocksTable items={stockCatalogQuery.items} />
+
+              <div className="flex flex-col items-center gap-3 px-4 py-4">
+                {stockCatalogQuery.isFetchingNextPage ? (
+                  <div className="flex w-full max-w-sm items-center gap-3 rounded-xl border border-border/50 bg-background/50 px-4 py-3 text-sm text-muted-foreground">
+                    <RefreshCw className="size-4 animate-spin" />
+                    Loading more market symbols...
+                  </div>
+                ) : null}
+
+                {!stockCatalogQuery.hasNextPage ? (
+                  <div className="text-xs tracking-wide text-muted-foreground uppercase">
+                    All {stockCatalogQuery.total} instruments loaded
+                  </div>
+                ) : null}
+
+                <div ref={sentinelRef} aria-hidden="true" className="h-1 w-full" />
+              </div>
+            </div>
           </ScrollArea>
         ) : null}
       </div>
