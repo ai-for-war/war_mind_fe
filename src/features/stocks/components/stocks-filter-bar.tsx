@@ -9,11 +9,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Input } from "@/components/ui/input"
-import { STOCK_EXCHANGE_OPTIONS, STOCK_GROUP_OPTIONS } from "@/features/stocks/constants"
+import {
+  STOCK_EXCHANGE_OPTIONS,
+  STOCK_GROUP_OPTIONS,
+  STOCK_INDUSTRY_OPTIONS,
+} from "@/features/stocks/constants"
 import type {
   StockCatalogFilters,
   StockExchangeOption,
   StockGroupOption,
+  StockIndustryCode,
 } from "@/features/stocks/types"
 import { cn } from "@/lib/utils"
 
@@ -22,6 +27,7 @@ type StocksFilterBarProps = {
   hasActiveFilters: boolean
   onExchangeChange: (value: StockExchangeOption | null) => void
   onGroupChange: (value: StockGroupOption | null) => void
+  onIndustryCodeChange: (value: StockIndustryCode | null) => void
   onReset: () => void
   onSearchChange: (value: string) => void
 }
@@ -31,11 +37,15 @@ export const StocksFilterBar = ({
   hasActiveFilters,
   onExchangeChange,
   onGroupChange,
+  onIndustryCodeChange,
   onReset,
   onSearchChange,
 }: StocksFilterBarProps) => {
   const selectedGroupLabel =
     STOCK_GROUP_OPTIONS.find((option) => option.value === filters.group)?.label ?? "All groups"
+  const selectedIndustryLabel =
+    STOCK_INDUSTRY_OPTIONS.find((option) => option.industryCode === filters.industryCode)
+      ?.industryName ?? "All industries"
 
   return (
     <div className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-background/40 p-4 backdrop-blur">
@@ -113,6 +123,44 @@ export const StocksFilterBar = ({
                   {STOCK_GROUP_OPTIONS.map((option) => (
                     <DropdownMenuRadioItem key={option.value} value={option.value}>
                       {option.label}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+              Industry
+            </span>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="min-w-48 justify-between rounded-full border-border/60 bg-background/60"
+                >
+                  {selectedIndustryLabel}
+                  <ChevronDown className="size-4 text-muted-foreground" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="min-w-64">
+                <DropdownMenuRadioGroup
+                  value={filters.industryCode?.toString() ?? "ALL"}
+                  onValueChange={(value) =>
+                    onIndustryCodeChange(
+                      value === "ALL" ? null : (Number(value) as StockIndustryCode),
+                    )
+                  }
+                >
+                  <DropdownMenuRadioItem value="ALL">All industries</DropdownMenuRadioItem>
+                  {STOCK_INDUSTRY_OPTIONS.map((option) => (
+                    <DropdownMenuRadioItem
+                      key={option.industryCode}
+                      value={option.industryCode.toString()}
+                    >
+                      {option.industryName}
                     </DropdownMenuRadioItem>
                   ))}
                 </DropdownMenuRadioGroup>

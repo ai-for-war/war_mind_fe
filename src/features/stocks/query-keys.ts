@@ -18,6 +18,7 @@ export const stocksQueryKeys = {
       filters.q,
       filters.exchange,
       filters.group,
+      filters.industryCode,
       filters.pageSize,
     ] as const,
 }

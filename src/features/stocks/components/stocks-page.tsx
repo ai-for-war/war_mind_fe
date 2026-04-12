@@ -21,6 +21,7 @@ import type {
   StockCatalogFilters,
   StockExchangeOption,
   StockGroupOption,
+  StockIndustryCode,
 } from "@/features/stocks/types"
 import { formatAbsoluteDateTime } from "@/lib/date"
 
@@ -47,6 +48,7 @@ export const StocksPage = () => {
   const [filters, setFilters] = useState<StockCatalogFilters>({
     exchange: null,
     group: null,
+    industryCode: null,
     q: "",
   })
   const debouncedSearch = useDebouncedValue(filters.q ?? "", 300)
@@ -62,9 +64,12 @@ export const StocksPage = () => {
   const hasActiveFilters = useMemo(
     () =>
       Boolean(
-        (filters.q?.trim() ?? "").length > 0 || filters.exchange != null || filters.group != null,
+        (filters.q?.trim() ?? "").length > 0 ||
+          filters.exchange != null ||
+          filters.group != null ||
+          filters.industryCode != null,
       ),
-    [filters.exchange, filters.group, filters.q],
+    [filters.exchange, filters.group, filters.industryCode, filters.q],
   )
 
   const handleSearchChange = (value: string) => {
@@ -88,10 +93,18 @@ export const StocksPage = () => {
     }))
   }
 
+  const handleIndustryCodeChange = (value: StockIndustryCode | null) => {
+    setFilters((current) => ({
+      ...current,
+      industryCode: value,
+    }))
+  }
+
   const handleReset = () => {
     setFilters({
       exchange: null,
       group: null,
+      industryCode: null,
       q: "",
     })
   }
@@ -145,6 +158,7 @@ export const StocksPage = () => {
         hasActiveFilters={hasActiveFilters}
         onExchangeChange={handleExchangeChange}
         onGroupChange={handleGroupChange}
+        onIndustryCodeChange={handleIndustryCodeChange}
         onReset={handleReset}
         onSearchChange={handleSearchChange}
       />

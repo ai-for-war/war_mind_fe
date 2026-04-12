@@ -20,6 +20,7 @@ const getStockCatalog = async (
         ? { exchange: API_EXCHANGE_PARAM_MAP[filters.exchange] ?? filters.exchange }
         : {}),
       ...(filters.group ? { group: filters.group } : {}),
+      ...(filters.industryCode != null ? { industry_code: filters.industryCode } : {}),
       page: filters.page,
       page_size: filters.pageSize,
     },

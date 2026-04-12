@@ -2,6 +2,7 @@ export {
   DEFAULT_STOCK_PAGE_SIZE,
   STOCK_EXCHANGE_OPTIONS,
   STOCK_GROUP_OPTIONS,
+  STOCK_INDUSTRY_OPTIONS,
 } from "@/features/stocks/constants"
 export { stocksApi } from "@/features/stocks/api"
 export { StocksPage } from "@/features/stocks/components"
@@ -16,6 +17,7 @@ export type {
   StockCatalogFilters,
   StockExchangeOption,
   StockGroupOption,
+  StockIndustryCode,
   StockListItem,
   StockListResponse,
 } from "@/features/stocks/types"

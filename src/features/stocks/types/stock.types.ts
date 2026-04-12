@@ -2,10 +2,12 @@ import {
   DEFAULT_STOCK_PAGE_SIZE,
   STOCK_EXCHANGE_OPTIONS,
   STOCK_GROUP_OPTIONS,
+  STOCK_INDUSTRY_OPTIONS,
 } from "@/features/stocks/constants"
 
 export type StockExchangeOption = (typeof STOCK_EXCHANGE_OPTIONS)[number]["value"]
 export type StockGroupOption = (typeof STOCK_GROUP_OPTIONS)[number]["value"]
+export type StockIndustryCode = (typeof STOCK_INDUSTRY_OPTIONS)[number]["industryCode"]
 
 export type StockListItem = {
   symbol: string
@@ -30,6 +32,7 @@ export type StockCatalogFilters = {
   q?: string | null
   exchange?: StockExchangeOption | null
   group?: StockGroupOption | null
+  industryCode?: StockIndustryCode | null
   pageSize?: number
 }
 
@@ -37,6 +40,7 @@ export type NormalizedStockCatalogFilters = {
   q: string | null
   exchange: StockExchangeOption | null
   group: StockGroupOption | null
+  industryCode: StockIndustryCode | null
   page: number
   pageSize: number
 }
@@ -50,6 +54,7 @@ export const normalizeStockCatalogFilters = (
     q: trimmedQuery && trimmedQuery.length > 0 ? trimmedQuery : null,
     exchange: filters?.exchange ?? null,
     group: filters?.group ?? null,
+    industryCode: filters?.industryCode ?? null,
     page: 1,
     pageSize: filters?.pageSize ?? DEFAULT_STOCK_PAGE_SIZE,
   }

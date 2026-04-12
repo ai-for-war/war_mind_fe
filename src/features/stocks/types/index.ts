@@ -7,6 +7,7 @@ export type {
   StockCatalogFilters,
   StockExchangeOption,
   StockGroupOption,
+  StockIndustryCode,
   StockListItem,
   StockListResponse,
 } from "@/features/stocks/types/stock.types"
