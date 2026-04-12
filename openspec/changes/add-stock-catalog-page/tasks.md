@@ -14,11 +14,11 @@
 
 ## 3. Stock catalog page UI
 
-- [ ] 3.1 Build the protected `Stock Catalog` page container that owns filter state, query orchestration, flattened rows, and content-state branching
-- [ ] 3.2 Implement the stock filter bar with a text search input, exchange chip or badge controls, a group dropdown, and a reset action for active filters
-- [ ] 3.3 Implement the stock table with TanStack Table column definitions for symbol, company, exchange, groups, industry, source, snapshot, and updated fields
-- [ ] 3.4 Render safe fallbacks for nullable fields and compact group badges that handle empty arrays without breaking layout
-- [ ] 3.5 Add a page-level freshness summary using `snapshot_at` while still showing row-level `updated_at` values in the table
+- [x] 3.1 Build the protected `Stock Catalog` page container that owns filter state, query orchestration, flattened rows, and content-state branching
+- [x] 3.2 Implement the stock filter bar with a text search input, exchange chip or badge controls, a group dropdown, and a reset action for active filters
+- [x] 3.3 Implement the stock table with TanStack Table column definitions for symbol, company, exchange, groups, industry, source, snapshot, and updated fields
+- [x] 3.4 Render safe fallbacks for nullable fields and compact group badges that handle empty arrays without breaking layout
+- [x] 3.5 Add a page-level freshness summary using `snapshot_at` while still showing row-level `updated_at` values in the table
 
 ## 4. Infinite scroll and catalog states
 
