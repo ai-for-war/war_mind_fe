@@ -29,9 +29,9 @@
 
 ## 5. App shell integration
 
-- [ ] 5.1 Add the protected `/stocks` route in `src/app/router.tsx` and render the new stocks page under `MainLayout`
-- [ ] 5.2 Add the `Stock Catalog` navigation item to the sidebar configuration with an appropriate icon and active-route handling for `/stocks`
-- [ ] 5.3 Export the stocks page from the feature barrel so router integration follows the repo's existing feature pattern
+- [x] 5.1 Add the protected `/stocks` route in `src/app/router.tsx` and render the new stocks page under `MainLayout`
+- [x] 5.2 Add the `Stock Catalog` navigation item to the sidebar configuration with an appropriate icon and active-route handling for `/stocks`
+- [x] 5.3 Export the stocks page from the feature barrel so router integration follows the repo's existing feature pattern
 
 ## 6. Verification
 

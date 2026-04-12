@@ -7,10 +7,11 @@ import { LoginPage } from "@/features/auth/components/login-page"
 import { InterviewLabPage } from "@/features/interview-lab"
 import { MeetingRecorderPage } from "@/features/meeting-recorder"
 import { MultiAgentPage } from "@/features/multi-agent"
-import { TextToImagePage } from "@/features/text-to-image"
-import { SuperAgentPage } from "@/features/super-agent"
-import { SocketProvider } from "@/features/socket"
 import { SkillPluginsPage } from "@/features/skill-plugins"
+import { SocketProvider } from "@/features/socket"
+import { StocksPage } from "@/features/stocks"
+import { SuperAgentPage } from "@/features/super-agent"
+import { TextToImagePage } from "@/features/text-to-image"
 import { TtsPage } from "@/features/tts"
 import { VoiceCloningPage } from "@/features/voice-cloning"
 import { useHydrateAuth } from "@/hooks/use-hydrate-auth"
@@ -99,6 +100,10 @@ export const router = createBrowserRouter([
           {
             path: "/skill-plugins",
             element: <SkillPluginsPage />,
+          },
+          {
+            path: "/stocks",
+            element: <StocksPage />,
           },
         ],
       },
