@@ -1,9 +1,9 @@
 ## 1. Feature setup and shared foundations
 
-- [ ] 1.1 Add `@tanstack/react-table` to the frontend dependencies and ensure the project lockfile is updated
-- [ ] 1.2 Create the `src/features/stocks/` module structure with `api`, `components`, `hooks`, `types`, `query-keys.ts`, and `index.ts`
-- [ ] 1.3 Add the approved stock group constants and exchange filter options in the stocks feature so the page uses one centralized source of truth
-- [ ] 1.4 Add or reuse the minimal table-rendering primitive needed for stock-table markup so TanStack Table can render with the app's existing shadcn-style UI
+- [x] 1.1 Add `@tanstack/react-table` to the frontend dependencies and ensure the project lockfile is updated
+- [x] 1.2 Create the `src/features/stocks/` module structure with `api`, `components`, `hooks`, `types`, `query-keys.ts`, and `index.ts`
+- [x] 1.3 Add the approved stock group constants and exchange filter options in the stocks feature so the page uses one centralized source of truth
+- [x] 1.4 Add or reuse the minimal table-rendering primitive needed for stock-table markup so TanStack Table can render with the app's existing shadcn-style UI
 
 ## 2. Stock catalog data layer
 
