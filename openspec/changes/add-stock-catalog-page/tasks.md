@@ -7,10 +7,10 @@
 
 ## 2. Stock catalog data layer
 
-- [ ] 2.1 Define stock catalog request and response types that match `GET /api/v1/stocks`, including nullable item fields and paged response metadata
-- [ ] 2.2 Implement the stock catalog API adapter that calls `GET /api/v1/stocks` through the shared `apiClient` and only sends meaningful `q`, `exchange`, `group`, `page`, and fixed `page_size` values
-- [ ] 2.3 Add stable TanStack Query keys for stock catalog requests based on normalized search, exchange, and group filters
-- [ ] 2.4 Implement a stock catalog infinite-query hook that fetches the first page, computes next-page params, and flattens paged results into a single row list
+- [x] 2.1 Define stock catalog request and response types that match `GET /api/v1/stocks`, including nullable item fields and paged response metadata
+- [x] 2.2 Implement the stock catalog API adapter that calls `GET /api/v1/stocks` through the shared `apiClient` and only sends meaningful `q`, `exchange`, `group`, `page`, and fixed `page_size` values
+- [x] 2.3 Add stable TanStack Query keys for stock catalog requests based on normalized search, exchange, and group filters
+- [x] 2.4 Implement a stock catalog infinite-query hook that fetches the first page, computes next-page params, and flattens paged results into a single row list
 
 ## 3. Stock catalog page UI
 

@@ -1,3 +1,5 @@
+export const DEFAULT_STOCK_PAGE_SIZE = 20
+
 export const STOCK_EXCHANGE_OPTIONS = [
   { label: "HOSE", value: "HOSE" },
   { label: "HNX", value: "HNX" },
