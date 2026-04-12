@@ -1,14 +1,14 @@
-import { RotateCcw, Search } from "lucide-react"
+import { ChevronDown, RotateCcw, Search } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Input } from "@/components/ui/input"
 import { STOCK_EXCHANGE_OPTIONS, STOCK_GROUP_OPTIONS } from "@/features/stocks/constants"
 import type {
   StockCatalogFilters,
@@ -34,6 +34,9 @@ export const StocksFilterBar = ({
   onReset,
   onSearchChange,
 }: StocksFilterBarProps) => {
+  const selectedGroupLabel =
+    STOCK_GROUP_OPTIONS.find((option) => option.value === filters.group)?.label ?? "All groups"
+
   return (
     <div className="flex flex-col gap-3 rounded-2xl border border-border/60 bg-background/40 p-4 backdrop-blur">
       <div className="relative">
@@ -88,24 +91,33 @@ export const StocksFilterBar = ({
             <span className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
               Group
             </span>
-            <Select
-              value={filters.group ?? "ALL"}
-              onValueChange={(value) =>
-                onGroupChange(value === "ALL" ? null : (value as StockGroupOption))
-              }
-            >
-              <SelectTrigger className="min-w-40 rounded-full border-border/60 bg-background/60">
-                <SelectValue placeholder="All groups" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ALL">All groups</SelectItem>
-                {STOCK_GROUP_OPTIONS.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="min-w-40 justify-between rounded-full border-border/60 bg-background/60"
+                >
+                  {selectedGroupLabel}
+                  <ChevronDown className="size-4 text-muted-foreground" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="min-w-48">
+                <DropdownMenuRadioGroup
+                  value={filters.group ?? "ALL"}
+                  onValueChange={(value) =>
+                    onGroupChange(value === "ALL" ? null : (value as StockGroupOption))
+                  }
+                >
+                  <DropdownMenuRadioItem value="ALL">All groups</DropdownMenuRadioItem>
+                  {STOCK_GROUP_OPTIONS.map((option) => (
+                    <DropdownMenuRadioItem key={option.value} value={option.value}>
+                      {option.label}
+                    </DropdownMenuRadioItem>
+                  ))}
+                </DropdownMenuRadioGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 

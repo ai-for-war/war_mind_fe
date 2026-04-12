@@ -5,7 +5,10 @@ import type {
   StockListResponse,
 } from "@/features/stocks/types"
 
-const STOCKS_ENDPOINT = "/api/v1/stocks"
+const STOCKS_ENDPOINT = "/stocks"
+const API_EXCHANGE_PARAM_MAP: Record<string, string> = {
+  HOSE: "HSX",
+}
 
 const getStockCatalog = async (
   filters: NormalizedStockCatalogFilters,
@@ -13,7 +16,9 @@ const getStockCatalog = async (
   const response = await apiClient.get<StockListResponse>(STOCKS_ENDPOINT, {
     params: {
       ...(filters.q ? { q: filters.q } : {}),
-      ...(filters.exchange ? { exchange: filters.exchange } : {}),
+      ...(filters.exchange
+        ? { exchange: API_EXCHANGE_PARAM_MAP[filters.exchange] ?? filters.exchange }
+        : {}),
       ...(filters.group ? { group: filters.group } : {}),
       page: filters.page,
       page_size: filters.pageSize,

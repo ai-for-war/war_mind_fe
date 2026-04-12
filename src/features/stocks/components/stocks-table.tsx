@@ -14,6 +14,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import type { StockListItem } from "@/features/stocks/types"
 import { formatAbsoluteDateTime } from "@/lib/date"
 
@@ -60,6 +66,7 @@ const columns: ColumnDef<StockListItem>[] = [
     header: "Groups",
     cell: ({ row }) => {
       const visibleGroups = row.original.groups.slice(0, 2)
+      const hiddenGroups = row.original.groups.slice(2)
       const remainingCount = row.original.groups.length - visibleGroups.length
 
       if (row.original.groups.length === 0) {
@@ -78,9 +85,20 @@ const columns: ColumnDef<StockListItem>[] = [
             </Badge>
           ))}
           {remainingCount > 0 ? (
-            <Badge variant="outline" className="rounded-full text-[11px]">
-              +{remainingCount}
-            </Badge>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Badge variant="outline" className="cursor-help rounded-full text-[11px]">
+                  +{remainingCount}
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent side="top" sideOffset={6} className="max-w-56">
+                <div className="flex flex-wrap gap-1">
+                  {hiddenGroups.map((group) => (
+                    <span key={group}>{group}</span>
+                  ))}
+                </div>
+              </TooltipContent>
+            </Tooltip>
           ) : null}
         </div>
       )
@@ -123,31 +141,33 @@ export const StocksTable = ({ items }: StocksTableProps) => {
   })
 
   return (
-    <Table>
-      <TableHeader>
-        {table.getHeaderGroups().map((headerGroup) => (
-          <TableRow key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <TableHead key={header.id}>
-                {header.isPlaceholder
-                  ? null
-                  : flexRender(header.column.columnDef.header, header.getContext())}
-              </TableHead>
-            ))}
-          </TableRow>
-        ))}
-      </TableHeader>
-      <TableBody>
-        {table.getRowModel().rows.map((row) => (
-          <TableRow key={row.id}>
-            {row.getVisibleCells().map((cell) => (
-              <TableCell key={cell.id}>
-                {flexRender(cell.column.columnDef.cell, cell.getContext())}
-              </TableCell>
-            ))}
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <TooltipProvider>
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(header.column.columnDef.header, header.getContext())}
+                </TableHead>
+              ))}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows.map((row) => (
+            <TableRow key={row.id}>
+              {row.getVisibleCells().map((cell) => (
+                <TableCell key={cell.id}>
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                </TableCell>
+              ))}
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TooltipProvider>
   )
 }

@@ -1,5 +1,5 @@
 import { AlertCircle, DatabaseZap, RefreshCw } from "lucide-react"
-import { useDeferredValue, useMemo, useState } from "react"
+import { useMemo, useState } from "react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -15,6 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { StocksFilterBar } from "@/features/stocks/components/stocks-filter-bar"
 import { StocksTable } from "@/features/stocks/components/stocks-table"
 import { useStockCatalog } from "@/features/stocks/hooks"
+import { useDebouncedValue } from "@/hooks/use-debounced-value"
 import { useScrollAreaInfiniteScroll } from "@/hooks/use-scroll-area-infinite-scroll"
 import type {
   StockCatalogFilters,
@@ -23,9 +24,9 @@ import type {
 } from "@/features/stocks/types"
 import { formatAbsoluteDateTime } from "@/lib/date"
 
-const StockRowsSkeleton = () => (
+const StockRowsSkeleton = ({ count = 8 }: { count?: number }) => (
   <div className="space-y-2 p-4">
-    {Array.from({ length: 8 }).map((_, index) => (
+    {Array.from({ length: count }).map((_, index) => (
       <div
         key={`stock-row-skeleton-${index}`}
         className="grid grid-cols-[0.8fr_1.8fr_0.8fr_1.2fr_1fr_1fr_1fr] gap-3 rounded-xl border border-border/40 px-4 py-3"
@@ -48,8 +49,15 @@ export const StocksPage = () => {
     group: null,
     q: "",
   })
-  const deferredFilters = useDeferredValue(filters)
-  const stockCatalogQuery = useStockCatalog(deferredFilters)
+  const debouncedSearch = useDebouncedValue(filters.q ?? "", 300)
+  const debouncedFilters = useMemo(
+    () => ({
+      ...filters,
+      q: debouncedSearch,
+    }),
+    [debouncedSearch, filters],
+  )
+  const stockCatalogQuery = useStockCatalog(debouncedFilters)
 
   const hasActiveFilters = useMemo(
     () =>
@@ -104,7 +112,7 @@ export const StocksPage = () => {
   })
 
   return (
-    <section className="flex min-h-0 flex-1 flex-col gap-4">
+    <section className="flex h-full min-h-0 min-w-0 max-h-[calc(100dvh-6rem)] flex-1 flex-col gap-4 overflow-hidden">
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
@@ -141,7 +149,7 @@ export const StocksPage = () => {
         onSearchChange={handleSearchChange}
       />
 
-      <div className="flex min-h-0 flex-1 overflow-hidden rounded-2xl border border-border/60 bg-background/50 backdrop-blur">
+      <div className="flex h-full min-h-0 min-w-0 flex-1 overflow-hidden rounded-2xl border border-border/60 bg-background/50 backdrop-blur">
         {stockCatalogQuery.isLoading ? <StockRowsSkeleton /> : null}
 
         {!stockCatalogQuery.isLoading && stockCatalogQuery.isError ? (
@@ -194,17 +202,12 @@ export const StocksPage = () => {
         {!stockCatalogQuery.isLoading &&
         !stockCatalogQuery.isError &&
         stockCatalogQuery.items.length > 0 ? (
-          <ScrollArea ref={scrollAreaRef} className="min-h-0 flex-1">
+          <ScrollArea ref={scrollAreaRef} className="h-full min-h-0 flex-1 pr-2">
             <div className="min-w-full">
               <StocksTable items={stockCatalogQuery.items} />
 
               <div className="flex flex-col items-center gap-3 px-4 py-4">
-                {stockCatalogQuery.isFetchingNextPage ? (
-                  <div className="flex w-full max-w-sm items-center gap-3 rounded-xl border border-border/50 bg-background/50 px-4 py-3 text-sm text-muted-foreground">
-                    <RefreshCw className="size-4 animate-spin" />
-                    Loading more market symbols...
-                  </div>
-                ) : null}
+                {stockCatalogQuery.isFetchingNextPage ? <StockRowsSkeleton count={3} /> : null}
 
                 {!stockCatalogQuery.hasNextPage ? (
                   <div className="text-xs tracking-wide text-muted-foreground uppercase">
