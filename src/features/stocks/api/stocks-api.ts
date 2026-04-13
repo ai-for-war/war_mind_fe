@@ -2,8 +2,10 @@ import { apiClient } from "@/lib/api-client"
 
 import type {
   NormalizedStockCatalogFilters,
+  StockCompanyOverviewResponse,
   StockListResponse,
 } from "@/features/stocks/types"
+import { normalizeStockCompanySymbol } from "@/features/stocks/types"
 
 const STOCKS_ENDPOINT = "/stocks"
 const API_EXCHANGE_PARAM_MAP: Record<string, string> = {
@@ -29,6 +31,23 @@ const getStockCatalog = async (
   return response.data
 }
 
+const getStockCompanyOverview = async (
+  symbol: string,
+): Promise<StockCompanyOverviewResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock company overview requires a non-empty symbol")
+  }
+
+  const response = await apiClient.get<StockCompanyOverviewResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/company/overview`,
+  )
+
+  return response.data
+}
+
 export const stocksApi = {
   getStockCatalog,
+  getStockCompanyOverview,
 }

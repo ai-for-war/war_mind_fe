@@ -2,6 +2,7 @@ export {
   getNextStockCatalogPage,
   normalizeStockCatalogFilters,
 } from "@/features/stocks/types/stock.types"
+export { normalizeStockCompanySymbol } from "@/features/stocks/types/stock-company.types"
 export type {
   NormalizedStockCatalogFilters,
   StockCatalogFilters,
@@ -11,3 +12,8 @@ export type {
   StockListItem,
   StockListResponse,
 } from "@/features/stocks/types/stock.types"
+export type {
+  StockCompanyOverviewItem,
+  StockCompanyOverviewResponse,
+  StockCompanyResponseBase,
+} from "@/features/stocks/types/stock-company.types"

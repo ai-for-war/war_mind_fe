@@ -1,4 +1,5 @@
 import type { NormalizedStockCatalogFilters } from "@/features/stocks/types"
+import { normalizeStockCompanySymbol } from "@/features/stocks/types"
 import { getOrganizationQueryScope } from "@/lib/organization-query"
 
 const STOCKS_QUERY_KEY = ["stocks"] as const
@@ -20,5 +21,13 @@ export const stocksQueryKeys = {
       filters.group,
       filters.industryCode,
       filters.pageSize,
+    ] as const,
+  companyDetails: (organizationId?: string | null) =>
+    [...stocksQueryKeys.scoped(organizationId), "company"] as const,
+  companyOverview: (organizationId: string | null | undefined, symbol?: string | null) =>
+    [
+      ...stocksQueryKeys.companyDetails(organizationId),
+      "overview",
+      normalizeStockCompanySymbol(symbol),
     ] as const,
 }

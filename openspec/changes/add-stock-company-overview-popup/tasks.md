@@ -1,8 +1,8 @@
 ## 1. Stock Company Overview Data Layer
 
-- [ ] 1.1 Add stock-company overview response and item types under the existing `stocks` feature, using the documented `overview` snapshot envelope and nullable field semantics from the backend guide
-- [ ] 1.2 Extend the stocks API adapter with a `getStockCompanyOverview(symbol)` function that calls `GET /api/v1/stocks/{symbol}/company/overview` with a stable uppercase symbol input
-- [ ] 1.3 Add a dedicated stock-company overview query key and a React Query hook that only enables the request when a selected symbol exists and the popup is open
+- [x] 1.1 Add stock-company overview response and item types under the existing `stocks` feature, using the documented `overview` snapshot envelope and nullable field semantics from the backend guide
+- [x] 1.2 Extend the stocks API adapter with a `getStockCompanyOverview(symbol)` function that calls `GET /api/v1/stocks/{symbol}/company/overview` with a stable uppercase symbol input
+- [x] 1.3 Add a dedicated stock-company overview query key and a React Query hook that only enables the request when a selected symbol exists and the popup is open
 
 ## 2. Stock Catalog Row Activation And Popup State
 
