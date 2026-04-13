@@ -2,6 +2,7 @@ import { apiClient } from "@/lib/api-client"
 
 import type {
   NormalizedStockCatalogFilters,
+  StockCompanyAffiliateResponse,
   StockCompanyOfficersFilter,
   StockCompanyOfficersResponse,
   StockCompanyOverviewResponse,
@@ -118,7 +119,24 @@ const getStockCompanySubsidiaries = async (
   return response.data
 }
 
+const getStockCompanyAffiliate = async (
+  symbol: string,
+): Promise<StockCompanyAffiliateResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock company affiliate requires a non-empty symbol")
+  }
+
+  const response = await apiClient.get<StockCompanyAffiliateResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/company/affiliate`,
+  )
+
+  return response.data
+}
+
 export const stocksApi = {
+  getStockCompanyAffiliate,
   getStockCatalog,
   getStockCompanyOfficers,
   getStockCompanyOverview,

@@ -8,6 +8,7 @@ export { stocksApi } from "@/features/stocks/api"
 export { StocksPage } from "@/features/stocks/components"
 export {
   useStockCatalog,
+  useStockCompanyAffiliate,
   useStockCompanyOverview,
   useStockCompanyShareholders,
 } from "@/features/stocks/hooks"
@@ -20,6 +21,8 @@ export {
 export type {
   NormalizedStockCatalogFilters,
   StockCatalogFilters,
+  StockCompanyAffiliateItem,
+  StockCompanyAffiliateResponse,
   StockCompanyOverviewItem,
   StockCompanyOverviewResponse,
   StockCompanyShareholderItem,

@@ -1,3 +1,4 @@
+export { useStockCompanyAffiliate } from "@/features/stocks/hooks/use-stock-company-affiliate"
 export { useStockCatalog } from "@/features/stocks/hooks/use-stock-catalog"
 export { useStockCompanyOfficers } from "@/features/stocks/hooks/use-stock-company-officers"
 export { useStockCompanyOverview } from "@/features/stocks/hooks/use-stock-company-overview"

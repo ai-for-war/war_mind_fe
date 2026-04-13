@@ -65,6 +65,17 @@ export type StockCompanySubsidiariesResponse = StockCompanyResponseBase & {
   items: StockCompanySubsidiaryItem[]
 }
 
+export type StockCompanyAffiliateItem = {
+  id: number | null
+  sub_organ_code: string | null
+  organ_name: string | null
+  ownership_percent: number | null
+}
+
+export type StockCompanyAffiliateResponse = StockCompanyResponseBase & {
+  items: StockCompanyAffiliateItem[]
+}
+
 export const normalizeStockCompanySymbol = (symbol?: string | null): string | null => {
   const trimmedSymbol = symbol?.trim()
 

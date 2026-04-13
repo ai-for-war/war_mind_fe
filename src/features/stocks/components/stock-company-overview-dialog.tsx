@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { StockCompanyAffiliatePanel } from "@/features/stocks/components/stock-company-affiliate-panel"
 import { StockCompanyOfficersPanel } from "@/features/stocks/components/stock-company-officers-panel"
 import { StockCompanyOverviewPanel } from "@/features/stocks/components/stock-company-overview-panel"
 import { StockCompanyShareholdersPanel } from "@/features/stocks/components/stock-company-shareholders-panel"
@@ -22,14 +23,19 @@ type StockCompanyOverviewDialogProps = {
   selectedStock: StockListItem | null
 }
 
-type CompanyDetailTab = "overview" | "shareholders" | "officers" | "subsidiaries"
+type CompanyDetailTab =
+  | "overview"
+  | "shareholders"
+  | "officers"
+  | "subsidiaries"
+  | "affiliate"
 
 const COMPANY_DETAIL_TABS = [
   { value: "overview", label: "Overview", isDisabled: false },
   { value: "shareholders", label: "Shareholders", isDisabled: false },
   { value: "officers", label: "Officers", isDisabled: false },
   { value: "subsidiaries", label: "Subsidiaries", isDisabled: false },
-  { value: "affiliate", label: "Affiliate", isDisabled: true },
+  { value: "affiliate", label: "Affiliate", isDisabled: false },
   { value: "events", label: "Events", isDisabled: true },
   { value: "news", label: "News", isDisabled: true },
   { value: "reports", label: "Reports", isDisabled: true },
@@ -72,7 +78,8 @@ const StockCompanyOverviewDialogBody = ({
       value !== "overview" &&
       value !== "shareholders" &&
       value !== "officers" &&
-      value !== "subsidiaries"
+      value !== "subsidiaries" &&
+      value !== "affiliate"
     ) {
       return
     }
@@ -155,6 +162,13 @@ const StockCompanyOverviewDialogBody = ({
             {activeTab === "subsidiaries" ? (
               <StockCompanySubsidiariesPanel
                 isActive={activeTab === "subsidiaries"}
+                selectedStock={selectedStock}
+              />
+            ) : null}
+
+            {activeTab === "affiliate" ? (
+              <StockCompanyAffiliatePanel
+                isActive={activeTab === "affiliate"}
                 selectedStock={selectedStock}
               />
             ) : null}

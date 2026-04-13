@@ -17,6 +17,8 @@ export type {
   StockListResponse,
 } from "@/features/stocks/types/stock.types"
 export type {
+  StockCompanyAffiliateItem,
+  StockCompanyAffiliateResponse,
   StockCompanyOfficerItem,
   StockCompanyOfficersFilter,
   StockCompanyOfficersResponse,
