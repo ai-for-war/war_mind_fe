@@ -10,6 +10,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { StockCompanyAffiliatePanel } from "@/features/stocks/components/stock-company-affiliate-panel"
+import { StockCompanyEventsPanel } from "@/features/stocks/components/stock-company-events-panel"
 import { StockCompanyOfficersPanel } from "@/features/stocks/components/stock-company-officers-panel"
 import { StockCompanyOverviewPanel } from "@/features/stocks/components/stock-company-overview-panel"
 import { StockCompanyShareholdersPanel } from "@/features/stocks/components/stock-company-shareholders-panel"
@@ -29,6 +30,7 @@ type CompanyDetailTab =
   | "officers"
   | "subsidiaries"
   | "affiliate"
+  | "events"
 
 const COMPANY_DETAIL_TABS = [
   { value: "overview", label: "Overview", isDisabled: false },
@@ -36,7 +38,7 @@ const COMPANY_DETAIL_TABS = [
   { value: "officers", label: "Officers", isDisabled: false },
   { value: "subsidiaries", label: "Subsidiaries", isDisabled: false },
   { value: "affiliate", label: "Affiliate", isDisabled: false },
-  { value: "events", label: "Events", isDisabled: true },
+  { value: "events", label: "Events", isDisabled: false },
   { value: "news", label: "News", isDisabled: true },
   { value: "reports", label: "Reports", isDisabled: true },
   { value: "ratio-summary", label: "Ratio Summary", isDisabled: true },
@@ -79,7 +81,8 @@ const StockCompanyOverviewDialogBody = ({
       value !== "shareholders" &&
       value !== "officers" &&
       value !== "subsidiaries" &&
-      value !== "affiliate"
+      value !== "affiliate" &&
+      value !== "events"
     ) {
       return
     }
@@ -169,6 +172,13 @@ const StockCompanyOverviewDialogBody = ({
             {activeTab === "affiliate" ? (
               <StockCompanyAffiliatePanel
                 isActive={activeTab === "affiliate"}
+                selectedStock={selectedStock}
+              />
+            ) : null}
+
+            {activeTab === "events" ? (
+              <StockCompanyEventsPanel
+                isActive={activeTab === "events"}
                 selectedStock={selectedStock}
               />
             ) : null}

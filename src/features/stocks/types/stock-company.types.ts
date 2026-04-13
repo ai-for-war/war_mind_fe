@@ -76,6 +76,24 @@ export type StockCompanyAffiliateResponse = StockCompanyResponseBase & {
   items: StockCompanyAffiliateItem[]
 }
 
+export type StockCompanyEventItem = {
+  id: number | null
+  event_title: string | null
+  public_date: string | null
+  issue_date: string | null
+  source_url: string | null
+  event_list_code: string | null
+  ratio: number | null
+  value: number | null
+  record_date: string | null
+  exright_date: string | null
+  event_list_name: string | null
+}
+
+export type StockCompanyEventsResponse = StockCompanyResponseBase & {
+  items: StockCompanyEventItem[]
+}
+
 export const normalizeStockCompanySymbol = (symbol?: string | null): string | null => {
   const trimmedSymbol = symbol?.trim()
 
