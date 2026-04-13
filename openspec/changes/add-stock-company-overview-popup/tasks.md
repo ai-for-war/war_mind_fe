@@ -18,9 +18,9 @@
 
 ## 4. Overview Tab Content And States
 
-- [ ] 4.1 Implement the hybrid overview layout with structured facts for approved overview fields and separate narrative sections for `Company profile` and `History`
-- [ ] 4.2 Surface overview metadata such as `source`, `fetched_at`, and low-emphasis cache context while intentionally excluding ambiguous fields that do not yet have approved product labels
-- [ ] 4.3 Add loading, empty, and error states scoped to the overview content area so the popup shell remains mounted while overview data is pending, missing, or failed
+- [x] 4.1 Implement the hybrid overview layout with structured facts for approved overview fields and separate narrative sections for `Company profile` and `History`
+- [x] 4.2 Surface overview metadata such as `source`, `fetched_at`, and low-emphasis cache context while intentionally excluding ambiguous fields that do not yet have approved product labels
+- [x] 4.3 Add loading, empty, and error states scoped to the overview content area so the popup shell remains mounted while overview data is pending, missing, or failed
 
 ## 5. Verification
 
