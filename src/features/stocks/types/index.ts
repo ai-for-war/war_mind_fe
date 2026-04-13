@@ -15,5 +15,7 @@ export type {
 export type {
   StockCompanyOverviewItem,
   StockCompanyOverviewResponse,
+  StockCompanyShareholderItem,
+  StockCompanyShareholdersResponse,
   StockCompanyResponseBase,
 } from "@/features/stocks/types/stock-company.types"

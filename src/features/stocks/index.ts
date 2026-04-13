@@ -6,7 +6,11 @@ export {
 } from "@/features/stocks/constants"
 export { stocksApi } from "@/features/stocks/api"
 export { StocksPage } from "@/features/stocks/components"
-export { useStockCatalog, useStockCompanyOverview } from "@/features/stocks/hooks"
+export {
+  useStockCatalog,
+  useStockCompanyOverview,
+  useStockCompanyShareholders,
+} from "@/features/stocks/hooks"
 export { stocksQueryKeys } from "@/features/stocks/query-keys"
 export {
   getNextStockCatalogPage,
@@ -18,6 +22,8 @@ export type {
   StockCatalogFilters,
   StockCompanyOverviewItem,
   StockCompanyOverviewResponse,
+  StockCompanyShareholderItem,
+  StockCompanyShareholdersResponse,
   StockCompanyResponseBase,
   StockExchangeOption,
   StockGroupOption,

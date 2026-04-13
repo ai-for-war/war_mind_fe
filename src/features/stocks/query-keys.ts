@@ -30,4 +30,10 @@ export const stocksQueryKeys = {
       "overview",
       normalizeStockCompanySymbol(symbol),
     ] as const,
+  companyShareholders: (organizationId: string | null | undefined, symbol?: string | null) =>
+    [
+      ...stocksQueryKeys.companyDetails(organizationId),
+      "shareholders",
+      normalizeStockCompanySymbol(symbol),
+    ] as const,
 }

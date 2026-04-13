@@ -22,6 +22,18 @@ export type StockCompanyOverviewResponse = StockCompanyResponseBase & {
   item: StockCompanyOverviewItem
 }
 
+export type StockCompanyShareholderItem = {
+  id: number | null
+  share_holder: string | null
+  quantity: number | null
+  share_own_percent: number | null
+  update_date: string | null
+}
+
+export type StockCompanyShareholdersResponse = StockCompanyResponseBase & {
+  items: StockCompanyShareholderItem[]
+}
+
 export const normalizeStockCompanySymbol = (symbol?: string | null): string | null => {
   const trimmedSymbol = symbol?.trim()
 
