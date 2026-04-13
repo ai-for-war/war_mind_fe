@@ -12,9 +12,9 @@
 
 ## 3. Company Detail Popup Shell
 
-- [ ] 3.1 Create a company detail popup component under the stocks feature that uses the selected stock row as its immediate header model and renders inside a large dialog shell
-- [ ] 3.2 Implement the beta tab shell with `Overview` enabled by default and the remaining company tabs visible but disabled without triggering any non-overview requests
-- [ ] 3.3 Render popup header metadata from the selected stock row with null-safe fallbacks for company name, exchange, groups, and industry
+- [x] 3.1 Create a company detail popup component under the stocks feature that uses the selected stock row as its immediate header model and renders inside a large dialog shell
+- [x] 3.2 Implement the beta tab shell with `Overview` enabled by default and the remaining company tabs visible but disabled without triggering any non-overview requests
+- [x] 3.3 Render popup header metadata from the selected stock row with null-safe fallbacks for company name, exchange, groups, and industry
 
 ## 4. Overview Tab Content And States
 
