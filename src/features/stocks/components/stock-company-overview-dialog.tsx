@@ -12,6 +12,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { StockCompanyOfficersPanel } from "@/features/stocks/components/stock-company-officers-panel"
 import { StockCompanyOverviewPanel } from "@/features/stocks/components/stock-company-overview-panel"
 import { StockCompanyShareholdersPanel } from "@/features/stocks/components/stock-company-shareholders-panel"
+import { StockCompanySubsidiariesPanel } from "@/features/stocks/components/stock-company-subsidiaries-panel"
 import { formatNullableValue } from "@/features/stocks/components/stock-company-dialog.utils"
 import type { StockListItem } from "@/features/stocks/types"
 
@@ -21,13 +22,13 @@ type StockCompanyOverviewDialogProps = {
   selectedStock: StockListItem | null
 }
 
-type CompanyDetailTab = "overview" | "shareholders" | "officers"
+type CompanyDetailTab = "overview" | "shareholders" | "officers" | "subsidiaries"
 
 const COMPANY_DETAIL_TABS = [
   { value: "overview", label: "Overview", isDisabled: false },
   { value: "shareholders", label: "Shareholders", isDisabled: false },
   { value: "officers", label: "Officers", isDisabled: false },
-  { value: "subsidiaries", label: "Subsidiaries", isDisabled: true },
+  { value: "subsidiaries", label: "Subsidiaries", isDisabled: false },
   { value: "affiliate", label: "Affiliate", isDisabled: true },
   { value: "events", label: "Events", isDisabled: true },
   { value: "news", label: "News", isDisabled: true },
@@ -67,7 +68,12 @@ const StockCompanyOverviewDialogBody = ({
   const visibleGroups = useMemo(() => selectedStock?.groups ?? [], [selectedStock?.groups])
 
   const handleTabChange = (value: string) => {
-    if (value !== "overview" && value !== "shareholders" && value !== "officers") {
+    if (
+      value !== "overview" &&
+      value !== "shareholders" &&
+      value !== "officers" &&
+      value !== "subsidiaries"
+    ) {
       return
     }
 
@@ -142,6 +148,13 @@ const StockCompanyOverviewDialogBody = ({
             {activeTab === "officers" ? (
               <StockCompanyOfficersPanel
                 isActive={activeTab === "officers"}
+                selectedStock={selectedStock}
+              />
+            ) : null}
+
+            {activeTab === "subsidiaries" ? (
+              <StockCompanySubsidiariesPanel
+                isActive={activeTab === "subsidiaries"}
                 selectedStock={selectedStock}
               />
             ) : null}

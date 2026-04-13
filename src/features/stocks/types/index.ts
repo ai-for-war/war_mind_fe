@@ -4,6 +4,7 @@ export {
 } from "@/features/stocks/types/stock.types"
 export {
   normalizeStockCompanyOfficersFilter,
+  normalizeStockCompanySubsidiariesFilter,
   normalizeStockCompanySymbol,
 } from "@/features/stocks/types/stock-company.types"
 export type {
@@ -23,5 +24,8 @@ export type {
   StockCompanyOverviewResponse,
   StockCompanyShareholderItem,
   StockCompanyShareholdersResponse,
+  StockCompanySubsidiariesFilter,
+  StockCompanySubsidiariesResponse,
+  StockCompanySubsidiaryItem,
   StockCompanyResponseBase,
 } from "@/features/stocks/types/stock-company.types"

@@ -1,6 +1,7 @@
 import type { NormalizedStockCatalogFilters } from "@/features/stocks/types"
 import {
   normalizeStockCompanyOfficersFilter,
+  normalizeStockCompanySubsidiariesFilter,
   normalizeStockCompanySymbol,
 } from "@/features/stocks/types"
 import { getOrganizationQueryScope } from "@/lib/organization-query"
@@ -49,5 +50,16 @@ export const stocksQueryKeys = {
       "officers",
       normalizeStockCompanySymbol(symbol),
       normalizeStockCompanyOfficersFilter(filterBy),
+    ] as const,
+  companySubsidiaries: (
+    organizationId: string | null | undefined,
+    symbol?: string | null,
+    filterBy?: string | null,
+  ) =>
+    [
+      ...stocksQueryKeys.companyDetails(organizationId),
+      "subsidiaries",
+      normalizeStockCompanySymbol(symbol),
+      normalizeStockCompanySubsidiariesFilter(filterBy),
     ] as const,
 }

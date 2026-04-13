@@ -51,6 +51,20 @@ export type StockCompanyOfficersResponse = StockCompanyResponseBase & {
   items: StockCompanyOfficerItem[]
 }
 
+export type StockCompanySubsidiariesFilter = "all" | "subsidiary"
+
+export type StockCompanySubsidiaryItem = {
+  id: number | null
+  sub_organ_code: string | null
+  organ_name: string | null
+  ownership_percent: number | null
+  type: string | null
+}
+
+export type StockCompanySubsidiariesResponse = StockCompanyResponseBase & {
+  items: StockCompanySubsidiaryItem[]
+}
+
 export const normalizeStockCompanySymbol = (symbol?: string | null): string | null => {
   const trimmedSymbol = symbol?.trim()
 
@@ -69,4 +83,14 @@ export const normalizeStockCompanyOfficersFilter = (
   }
 
   return "working"
+}
+
+export const normalizeStockCompanySubsidiariesFilter = (
+  filterBy?: string | null,
+): StockCompanySubsidiariesFilter => {
+  if (filterBy === "subsidiary") {
+    return filterBy
+  }
+
+  return "all"
 }
