@@ -34,6 +34,23 @@ export type StockCompanyShareholdersResponse = StockCompanyResponseBase & {
   items: StockCompanyShareholderItem[]
 }
 
+export type StockCompanyOfficersFilter = "working" | "resigned" | "all"
+
+export type StockCompanyOfficerItem = {
+  id: number | null
+  officer_name: string | null
+  officer_position: string | null
+  position_short_name: string | null
+  update_date: string | null
+  officer_own_percent: number | null
+  quantity: number | null
+  type: string | null
+}
+
+export type StockCompanyOfficersResponse = StockCompanyResponseBase & {
+  items: StockCompanyOfficerItem[]
+}
+
 export const normalizeStockCompanySymbol = (symbol?: string | null): string | null => {
   const trimmedSymbol = symbol?.trim()
 
@@ -42,4 +59,14 @@ export const normalizeStockCompanySymbol = (symbol?: string | null): string | nu
   }
 
   return trimmedSymbol.toUpperCase()
+}
+
+export const normalizeStockCompanyOfficersFilter = (
+  filterBy?: string | null,
+): StockCompanyOfficersFilter => {
+  if (filterBy === "resigned" || filterBy === "all") {
+    return filterBy
+  }
+
+  return "working"
 }

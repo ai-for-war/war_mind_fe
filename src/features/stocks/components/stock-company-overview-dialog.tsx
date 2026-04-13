@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { StockCompanyOfficersPanel } from "@/features/stocks/components/stock-company-officers-panel"
 import { StockCompanyOverviewPanel } from "@/features/stocks/components/stock-company-overview-panel"
 import { StockCompanyShareholdersPanel } from "@/features/stocks/components/stock-company-shareholders-panel"
 import { formatNullableValue } from "@/features/stocks/components/stock-company-dialog.utils"
@@ -20,12 +21,12 @@ type StockCompanyOverviewDialogProps = {
   selectedStock: StockListItem | null
 }
 
-type CompanyDetailTab = "overview" | "shareholders"
+type CompanyDetailTab = "overview" | "shareholders" | "officers"
 
 const COMPANY_DETAIL_TABS = [
   { value: "overview", label: "Overview", isDisabled: false },
   { value: "shareholders", label: "Shareholders", isDisabled: false },
-  { value: "officers", label: "Officers", isDisabled: true },
+  { value: "officers", label: "Officers", isDisabled: false },
   { value: "subsidiaries", label: "Subsidiaries", isDisabled: true },
   { value: "affiliate", label: "Affiliate", isDisabled: true },
   { value: "events", label: "Events", isDisabled: true },
@@ -66,7 +67,7 @@ const StockCompanyOverviewDialogBody = ({
   const visibleGroups = useMemo(() => selectedStock?.groups ?? [], [selectedStock?.groups])
 
   const handleTabChange = (value: string) => {
-    if (value !== "overview" && value !== "shareholders") {
+    if (value !== "overview" && value !== "shareholders" && value !== "officers") {
       return
     }
 
@@ -134,6 +135,13 @@ const StockCompanyOverviewDialogBody = ({
             {activeTab === "shareholders" ? (
               <StockCompanyShareholdersPanel
                 isActive={activeTab === "shareholders"}
+                selectedStock={selectedStock}
+              />
+            ) : null}
+
+            {activeTab === "officers" ? (
+              <StockCompanyOfficersPanel
+                isActive={activeTab === "officers"}
                 selectedStock={selectedStock}
               />
             ) : null}

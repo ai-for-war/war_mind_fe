@@ -2,11 +2,16 @@ import { apiClient } from "@/lib/api-client"
 
 import type {
   NormalizedStockCatalogFilters,
+  StockCompanyOfficersFilter,
+  StockCompanyOfficersResponse,
   StockCompanyOverviewResponse,
   StockCompanyShareholdersResponse,
   StockListResponse,
 } from "@/features/stocks/types"
-import { normalizeStockCompanySymbol } from "@/features/stocks/types"
+import {
+  normalizeStockCompanyOfficersFilter,
+  normalizeStockCompanySymbol,
+} from "@/features/stocks/types"
 
 const STOCKS_ENDPOINT = "/stocks"
 const API_EXCHANGE_PARAM_MAP: Record<string, string> = {
@@ -64,8 +69,32 @@ const getStockCompanyShareholders = async (
   return response.data
 }
 
+const getStockCompanyOfficers = async (
+  symbol: string,
+  filterBy?: StockCompanyOfficersFilter,
+): Promise<StockCompanyOfficersResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+  const normalizedFilter = normalizeStockCompanyOfficersFilter(filterBy)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock company officers requires a non-empty symbol")
+  }
+
+  const response = await apiClient.get<StockCompanyOfficersResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/company/officers`,
+    {
+      params: {
+        filter_by: normalizedFilter,
+      },
+    },
+  )
+
+  return response.data
+}
+
 export const stocksApi = {
   getStockCatalog,
+  getStockCompanyOfficers,
   getStockCompanyOverview,
   getStockCompanyShareholders,
 }
