@@ -7,6 +7,7 @@ import {
   Mic,
   Plug,
   Sparkles,
+  TrendingUp,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -58,6 +59,16 @@ const navItems = [
         title: "Skill",
         url: "/skill-plugins",
         icon: Plug,
+      }
+    ],
+  },
+  {
+    title: "Markets",
+    items: [
+      {
+        title: "Stock Catalog",
+        url: "/stocks",
+        icon: TrendingUp,
       }
     ],
   },
