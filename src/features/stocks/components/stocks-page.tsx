@@ -4,6 +4,13 @@ import { useMemo, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import {
   Empty,
   EmptyDescription,
   EmptyHeader,
@@ -22,6 +29,7 @@ import type {
   StockExchangeOption,
   StockGroupOption,
   StockIndustryCode,
+  StockListItem,
 } from "@/features/stocks/types"
 import { formatAbsoluteDateTime } from "@/lib/date"
 
@@ -51,6 +59,8 @@ export const StocksPage = () => {
     industryCode: null,
     q: "",
   })
+  const [isCompanyOverviewOpen, setIsCompanyOverviewOpen] = useState(false)
+  const [selectedStock, setSelectedStock] = useState<StockListItem | null>(null)
   const debouncedSearch = useDebouncedValue(filters.q ?? "", 300)
   const debouncedFilters = useMemo(
     () => ({
@@ -107,6 +117,21 @@ export const StocksPage = () => {
       industryCode: null,
       q: "",
     })
+  }
+
+  const handleStockSelect = (item: StockListItem) => {
+    setSelectedStock(item)
+    setIsCompanyOverviewOpen(true)
+  }
+
+  const handleCompanyOverviewOpenChange = (open: boolean) => {
+    setIsCompanyOverviewOpen(open)
+
+    if (open) {
+      return
+    }
+
+    setSelectedStock(null)
   }
 
   const freshnessLabel = stockCatalogQuery.snapshotAt
@@ -218,7 +243,11 @@ export const StocksPage = () => {
         stockCatalogQuery.items.length > 0 ? (
           <ScrollArea ref={scrollAreaRef} className="h-full min-h-0 flex-1 pr-2">
             <div className="min-w-full">
-              <StocksTable items={stockCatalogQuery.items} />
+              <StocksTable
+                items={stockCatalogQuery.items}
+                onRowSelect={handleStockSelect}
+                selectedSymbol={isCompanyOverviewOpen ? selectedStock?.symbol ?? null : null}
+              />
 
               <div className="flex flex-col items-center gap-3 px-4 py-4">
                 {stockCatalogQuery.isFetchingNextPage ? <StockRowsSkeleton count={3} /> : null}
@@ -235,6 +264,64 @@ export const StocksPage = () => {
           </ScrollArea>
         ) : null}
       </div>
+
+      <Dialog open={isCompanyOverviewOpen} onOpenChange={handleCompanyOverviewOpenChange}>
+        <DialogContent
+          className="max-h-[88vh] max-w-[min(88vw,72rem)] overflow-hidden border-border/60 bg-background/95 p-0 backdrop-blur-xl"
+          showCloseButton
+        >
+          <div className="flex h-full min-h-0 flex-col">
+            <DialogHeader className="border-b border-border/60 px-6 py-5 text-left">
+              <div className="flex flex-wrap items-center gap-2">
+                <Badge
+                  variant="outline"
+                  className="border-cyan-400/30 bg-cyan-400/10 text-cyan-100"
+                >
+                  {selectedStock?.symbol ?? "--"}
+                </Badge>
+                {selectedStock?.exchange ? (
+                  <Badge variant="secondary" className="rounded-full bg-secondary/70">
+                    {selectedStock.exchange}
+                  </Badge>
+                ) : null}
+                {selectedStock?.industry_name ? (
+                  <Badge variant="outline" className="rounded-full border-border/70 bg-background/40">
+                    {selectedStock.industry_name}
+                  </Badge>
+                ) : null}
+              </div>
+              <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground">
+                {selectedStock?.organ_name?.trim() || selectedStock?.symbol || "Company overview"}
+              </DialogTitle>
+              <DialogDescription className="max-w-3xl text-sm text-muted-foreground">
+                Company detail popup is now wired to stock-row selection. The full beta shell and
+                overview content land in the next implementation task.
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-auto px-6 py-5">
+              {selectedStock?.groups?.length ? (
+                <div className="flex flex-wrap gap-2">
+                  {selectedStock.groups.map((group) => (
+                    <Badge
+                      key={group}
+                      variant="secondary"
+                      className="rounded-full bg-secondary/70 text-secondary-foreground"
+                    >
+                      {group}
+                    </Badge>
+                  ))}
+                </div>
+              ) : null}
+
+              <div className="rounded-2xl border border-dashed border-border/60 bg-background/40 p-6 text-sm text-muted-foreground">
+                Selected stock context is preserved behind this dialog, including current filters,
+                loaded rows, and scroll position.
+              </div>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   )
 }

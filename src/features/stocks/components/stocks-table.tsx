@@ -4,6 +4,7 @@ import {
   useReactTable,
   type ColumnDef,
 } from "@tanstack/react-table"
+import { useCallback } from "react"
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -21,10 +22,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import type { StockListItem } from "@/features/stocks/types"
+import { cn } from "@/lib/utils"
 import { formatAbsoluteDateTime } from "@/lib/date"
 
 type StocksTableProps = {
   items: StockListItem[]
+  onRowSelect?: ((item: StockListItem) => void) | undefined
+  selectedSymbol?: string | null
 }
 
 const formatNullableValue = (value: string | number | null | undefined): string =>
@@ -133,12 +137,28 @@ const columns: ColumnDef<StockListItem>[] = [
   },
 ]
 
-export const StocksTable = ({ items }: StocksTableProps) => {
+export const StocksTable = ({ items, onRowSelect, selectedSymbol }: StocksTableProps) => {
   const table = useReactTable({
     columns,
     data: items,
     getCoreRowModel: getCoreRowModel(),
   })
+
+  const handleRowKeyDown = useCallback(
+    (event: React.KeyboardEvent<HTMLTableRowElement>, item: StockListItem) => {
+      if (!onRowSelect) {
+        return
+      }
+
+      if (event.key !== "Enter" && event.key !== " ") {
+        return
+      }
+
+      event.preventDefault()
+      onRowSelect(item)
+    },
+    [onRowSelect],
+  )
 
   return (
     <TooltipProvider>
@@ -158,7 +178,19 @@ export const StocksTable = ({ items }: StocksTableProps) => {
         </TableHeader>
         <TableBody>
           {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
+            <TableRow
+              key={row.id}
+              aria-label={`Open company overview for ${row.original.symbol}`}
+              className={cn(
+                onRowSelect
+                  ? "cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background hover:bg-accent/35"
+                  : null,
+              )}
+              data-state={selectedSymbol === row.original.symbol ? "selected" : undefined}
+              onClick={onRowSelect ? () => onRowSelect(row.original) : undefined}
+              onKeyDown={onRowSelect ? (event) => handleRowKeyDown(event, row.original) : undefined}
+              tabIndex={onRowSelect ? 0 : undefined}
+            >
               {row.getVisibleCells().map((cell) => (
                 <TableCell key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}

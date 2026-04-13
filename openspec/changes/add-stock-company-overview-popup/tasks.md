@@ -6,9 +6,9 @@
 
 ## 2. Stock Catalog Row Activation And Popup State
 
-- [ ] 2.1 Add page-local selection and open/close state to the stocks page so the currently selected `StockListItem` can drive the company popup lifecycle
-- [ ] 2.2 Extend the stock table to expose a row activation callback and apply explicit interactive affordances to clickable rows without changing the existing catalog filter or infinite-scroll behavior
-- [ ] 2.3 Wire the stocks page and stocks table together so clicking a stock row opens the company detail popup and closing it preserves the current stock list context
+- [x] 2.1 Add page-local selection and open/close state to the stocks page so the currently selected `StockListItem` can drive the company popup lifecycle
+- [x] 2.2 Extend the stock table to expose a row activation callback and apply explicit interactive affordances to clickable rows without changing the existing catalog filter or infinite-scroll behavior
+- [x] 2.3 Wire the stocks page and stocks table together so clicking a stock row opens the company detail popup and closing it preserves the current stock list context
 
 ## 3. Company Detail Popup Shell
 
