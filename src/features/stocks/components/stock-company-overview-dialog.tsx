@@ -11,6 +11,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { StockCompanyAffiliatePanel } from "@/features/stocks/components/stock-company-affiliate-panel"
 import { StockCompanyEventsPanel } from "@/features/stocks/components/stock-company-events-panel"
+import { StockCompanyNewsPanel } from "@/features/stocks/components/stock-company-news-panel"
 import { StockCompanyOfficersPanel } from "@/features/stocks/components/stock-company-officers-panel"
 import { StockCompanyOverviewPanel } from "@/features/stocks/components/stock-company-overview-panel"
 import { StockCompanyShareholdersPanel } from "@/features/stocks/components/stock-company-shareholders-panel"
@@ -31,6 +32,7 @@ type CompanyDetailTab =
   | "subsidiaries"
   | "affiliate"
   | "events"
+  | "news"
 
 const COMPANY_DETAIL_TABS = [
   { value: "overview", label: "Overview", isDisabled: false },
@@ -39,7 +41,7 @@ const COMPANY_DETAIL_TABS = [
   { value: "subsidiaries", label: "Subsidiaries", isDisabled: false },
   { value: "affiliate", label: "Affiliate", isDisabled: false },
   { value: "events", label: "Events", isDisabled: false },
-  { value: "news", label: "News", isDisabled: true },
+  { value: "news", label: "News", isDisabled: false },
   { value: "reports", label: "Reports", isDisabled: true },
   { value: "ratio-summary", label: "Ratio Summary", isDisabled: true },
   { value: "trading-stats", label: "Trading Stats", isDisabled: true },
@@ -82,7 +84,8 @@ const StockCompanyOverviewDialogBody = ({
       value !== "officers" &&
       value !== "subsidiaries" &&
       value !== "affiliate" &&
-      value !== "events"
+      value !== "events" &&
+      value !== "news"
     ) {
       return
     }
@@ -179,6 +182,13 @@ const StockCompanyOverviewDialogBody = ({
             {activeTab === "events" ? (
               <StockCompanyEventsPanel
                 isActive={activeTab === "events"}
+                selectedStock={selectedStock}
+              />
+            ) : null}
+
+            {activeTab === "news" ? (
+              <StockCompanyNewsPanel
+                isActive={activeTab === "news"}
                 selectedStock={selectedStock}
               />
             ) : null}

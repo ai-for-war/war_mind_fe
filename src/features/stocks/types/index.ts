@@ -21,6 +21,8 @@ export type {
   StockCompanyAffiliateResponse,
   StockCompanyEventItem,
   StockCompanyEventsResponse,
+  StockCompanyNewsItem,
+  StockCompanyNewsResponse,
   StockCompanyOfficerItem,
   StockCompanyOfficersFilter,
   StockCompanyOfficersResponse,

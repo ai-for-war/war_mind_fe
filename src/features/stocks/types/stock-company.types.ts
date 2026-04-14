@@ -94,6 +94,31 @@ export type StockCompanyEventsResponse = StockCompanyResponseBase & {
   items: StockCompanyEventItem[]
 }
 
+export type StockCompanyNewsItem = {
+  id: number | null
+  news_title: string | null
+  news_sub_title: string | null
+  friendly_sub_title: string | null
+  news_image_url: string | null
+  news_source_link: string | null
+  created_at: string | null
+  public_date: string | null
+  updated_at: string | null
+  lang_code: string | null
+  news_id: number | null
+  news_short_content: string | null
+  news_full_content: string | null
+  close_price: number | null
+  ref_price: number | null
+  floor: number | null
+  ceiling: number | null
+  price_change_pct: number | null
+}
+
+export type StockCompanyNewsResponse = StockCompanyResponseBase & {
+  items: StockCompanyNewsItem[]
+}
+
 export const normalizeStockCompanySymbol = (symbol?: string | null): string | null => {
   const trimmedSymbol = symbol?.trim()
 

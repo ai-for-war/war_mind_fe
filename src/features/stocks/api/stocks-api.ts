@@ -4,6 +4,7 @@ import type {
   NormalizedStockCatalogFilters,
   StockCompanyAffiliateResponse,
   StockCompanyEventsResponse,
+  StockCompanyNewsResponse,
   StockCompanyOfficersFilter,
   StockCompanyOfficersResponse,
   StockCompanyOverviewResponse,
@@ -152,9 +153,26 @@ const getStockCompanyEvents = async (
   return response.data
 }
 
+const getStockCompanyNews = async (
+  symbol: string,
+): Promise<StockCompanyNewsResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock company news requires a non-empty symbol")
+  }
+
+  const response = await apiClient.get<StockCompanyNewsResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/company/news`,
+  )
+
+  return response.data
+}
+
 export const stocksApi = {
   getStockCompanyAffiliate,
   getStockCompanyEvents,
+  getStockCompanyNews,
   getStockCatalog,
   getStockCompanyOfficers,
   getStockCompanyOverview,

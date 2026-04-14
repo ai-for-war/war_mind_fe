@@ -1,6 +1,7 @@
 export { useStockCompanyAffiliate } from "@/features/stocks/hooks/use-stock-company-affiliate"
 export { useStockCatalog } from "@/features/stocks/hooks/use-stock-catalog"
 export { useStockCompanyEvents } from "@/features/stocks/hooks/use-stock-company-events"
+export { useStockCompanyNews } from "@/features/stocks/hooks/use-stock-company-news"
 export { useStockCompanyOfficers } from "@/features/stocks/hooks/use-stock-company-officers"
 export { useStockCompanyOverview } from "@/features/stocks/hooks/use-stock-company-overview"
 export { useStockCompanyShareholders } from "@/features/stocks/hooks/use-stock-company-shareholders"
