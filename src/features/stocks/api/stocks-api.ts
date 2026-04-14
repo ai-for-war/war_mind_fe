@@ -2,7 +2,23 @@ import { apiClient } from "@/lib/api-client"
 
 import type {
   NormalizedStockCatalogFilters,
+  StockCompanyAffiliateResponse,
+  StockCompanyEventsResponse,
+  StockCompanyNewsResponse,
+  StockCompanyOfficersFilter,
+  StockCompanyOfficersResponse,
+  StockCompanyOverviewResponse,
+  StockCompanyRatioSummaryResponse,
+  StockCompanyReportsResponse,
+  StockCompanyShareholdersResponse,
+  StockCompanySubsidiariesFilter,
+  StockCompanySubsidiariesResponse,
   StockListResponse,
+} from "@/features/stocks/types"
+import {
+  normalizeStockCompanyOfficersFilter,
+  normalizeStockCompanySubsidiariesFilter,
+  normalizeStockCompanySymbol,
 } from "@/features/stocks/types"
 
 const STOCKS_ENDPOINT = "/stocks"
@@ -29,6 +45,173 @@ const getStockCatalog = async (
   return response.data
 }
 
+const getStockCompanyOverview = async (
+  symbol: string,
+): Promise<StockCompanyOverviewResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock company overview requires a non-empty symbol")
+  }
+
+  const response = await apiClient.get<StockCompanyOverviewResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/company/overview`,
+  )
+
+  return response.data
+}
+
+const getStockCompanyShareholders = async (
+  symbol: string,
+): Promise<StockCompanyShareholdersResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock company shareholders requires a non-empty symbol")
+  }
+
+  const response = await apiClient.get<StockCompanyShareholdersResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/company/shareholders`,
+  )
+
+  return response.data
+}
+
+const getStockCompanyOfficers = async (
+  symbol: string,
+  filterBy?: StockCompanyOfficersFilter,
+): Promise<StockCompanyOfficersResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+  const normalizedFilter = normalizeStockCompanyOfficersFilter(filterBy)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock company officers requires a non-empty symbol")
+  }
+
+  const response = await apiClient.get<StockCompanyOfficersResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/company/officers`,
+    {
+      params: {
+        filter_by: normalizedFilter,
+      },
+    },
+  )
+
+  return response.data
+}
+
+const getStockCompanySubsidiaries = async (
+  symbol: string,
+  filterBy?: StockCompanySubsidiariesFilter,
+): Promise<StockCompanySubsidiariesResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+  const normalizedFilter = normalizeStockCompanySubsidiariesFilter(filterBy)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock company subsidiaries requires a non-empty symbol")
+  }
+
+  const response = await apiClient.get<StockCompanySubsidiariesResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/company/subsidiaries`,
+    {
+      params: {
+        filter_by: normalizedFilter,
+      },
+    },
+  )
+
+  return response.data
+}
+
+const getStockCompanyAffiliate = async (
+  symbol: string,
+): Promise<StockCompanyAffiliateResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock company affiliate requires a non-empty symbol")
+  }
+
+  const response = await apiClient.get<StockCompanyAffiliateResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/company/affiliate`,
+  )
+
+  return response.data
+}
+
+const getStockCompanyEvents = async (
+  symbol: string,
+): Promise<StockCompanyEventsResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock company events requires a non-empty symbol")
+  }
+
+  const response = await apiClient.get<StockCompanyEventsResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/company/events`,
+  )
+
+  return response.data
+}
+
+const getStockCompanyNews = async (
+  symbol: string,
+): Promise<StockCompanyNewsResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock company news requires a non-empty symbol")
+  }
+
+  const response = await apiClient.get<StockCompanyNewsResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/company/news`,
+  )
+
+  return response.data
+}
+
+const getStockCompanyReports = async (
+  symbol: string,
+): Promise<StockCompanyReportsResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock company reports requires a non-empty symbol")
+  }
+
+  const response = await apiClient.get<StockCompanyReportsResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/company/reports`,
+  )
+
+  return response.data
+}
+
+const getStockCompanyRatioSummary = async (
+  symbol: string,
+): Promise<StockCompanyRatioSummaryResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock company ratio summary requires a non-empty symbol")
+  }
+
+  const response = await apiClient.get<StockCompanyRatioSummaryResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/company/ratio-summary`,
+  )
+
+  return response.data
+}
+
 export const stocksApi = {
+  getStockCompanyAffiliate,
+  getStockCompanyEvents,
+  getStockCompanyNews,
+  getStockCompanyRatioSummary,
+  getStockCompanyReports,
   getStockCatalog,
+  getStockCompanyOfficers,
+  getStockCompanyOverview,
+  getStockCompanyShareholders,
+  getStockCompanySubsidiaries,
 }

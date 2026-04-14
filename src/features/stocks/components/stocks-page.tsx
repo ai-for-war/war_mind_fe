@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/empty"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
+import { StockCompanyOverviewDialog } from "@/features/stocks/components/stock-company-overview-dialog"
 import { StocksFilterBar } from "@/features/stocks/components/stocks-filter-bar"
 import { StocksTable } from "@/features/stocks/components/stocks-table"
 import { useStockCatalog } from "@/features/stocks/hooks"
@@ -22,6 +23,7 @@ import type {
   StockExchangeOption,
   StockGroupOption,
   StockIndustryCode,
+  StockListItem,
 } from "@/features/stocks/types"
 import { formatAbsoluteDateTime } from "@/lib/date"
 
@@ -51,6 +53,8 @@ export const StocksPage = () => {
     industryCode: null,
     q: "",
   })
+  const [isCompanyOverviewOpen, setIsCompanyOverviewOpen] = useState(false)
+  const [selectedStock, setSelectedStock] = useState<StockListItem | null>(null)
   const debouncedSearch = useDebouncedValue(filters.q ?? "", 300)
   const debouncedFilters = useMemo(
     () => ({
@@ -107,6 +111,21 @@ export const StocksPage = () => {
       industryCode: null,
       q: "",
     })
+  }
+
+  const handleStockSelect = (item: StockListItem) => {
+    setSelectedStock(item)
+    setIsCompanyOverviewOpen(true)
+  }
+
+  const handleCompanyOverviewOpenChange = (open: boolean) => {
+    setIsCompanyOverviewOpen(open)
+
+    if (open) {
+      return
+    }
+
+    setSelectedStock(null)
   }
 
   const freshnessLabel = stockCatalogQuery.snapshotAt
@@ -218,7 +237,11 @@ export const StocksPage = () => {
         stockCatalogQuery.items.length > 0 ? (
           <ScrollArea ref={scrollAreaRef} className="h-full min-h-0 flex-1 pr-2">
             <div className="min-w-full">
-              <StocksTable items={stockCatalogQuery.items} />
+              <StocksTable
+                items={stockCatalogQuery.items}
+                onRowSelect={handleStockSelect}
+                selectedSymbol={isCompanyOverviewOpen ? selectedStock?.symbol ?? null : null}
+              />
 
               <div className="flex flex-col items-center gap-3 px-4 py-4">
                 {stockCatalogQuery.isFetchingNextPage ? <StockRowsSkeleton count={3} /> : null}
@@ -235,6 +258,12 @@ export const StocksPage = () => {
           </ScrollArea>
         ) : null}
       </div>
+
+      <StockCompanyOverviewDialog
+        isOpen={isCompanyOverviewOpen}
+        onOpenChange={handleCompanyOverviewOpenChange}
+        selectedStock={selectedStock}
+      />
     </section>
   )
 }

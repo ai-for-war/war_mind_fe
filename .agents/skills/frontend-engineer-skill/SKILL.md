@@ -47,21 +47,6 @@ const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
 - Prefer use useQuery to cache data and avoid unnecessary re-fetching
 - Prefer use useMutation for POST/PUT/DELETE operations
 
-### When implementing the UI with shadcn:
-
-Get a Demo First: Before using a component, you must call the get_component_demo(component_name) tool. This is critical for understanding how the component is used, its required props, and its structure.
-Retrieve the Code:
-For a single component, call get_component(component_name).
-For a composite block, call get_block(block_name).
-Implement Correctly: Integrate the retrieved code into the application, customizing it with the necessary props and logic to fulfill the user's request.
-
-### When you implement a UI with AI features
-- Use shadcn.io getComponent with the parameter {
-
-"component": "ai"
-
-} to get the AI-related components and how to use them
-
 ### Note:
 
 - when you do not understand or unclear about something, ask me again, do not assume

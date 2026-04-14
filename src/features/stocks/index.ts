@@ -6,15 +6,28 @@ export {
 } from "@/features/stocks/constants"
 export { stocksApi } from "@/features/stocks/api"
 export { StocksPage } from "@/features/stocks/components"
-export { useStockCatalog } from "@/features/stocks/hooks"
+export {
+  useStockCatalog,
+  useStockCompanyAffiliate,
+  useStockCompanyOverview,
+  useStockCompanyShareholders,
+} from "@/features/stocks/hooks"
 export { stocksQueryKeys } from "@/features/stocks/query-keys"
 export {
   getNextStockCatalogPage,
   normalizeStockCatalogFilters,
+  normalizeStockCompanySymbol,
 } from "@/features/stocks/types"
 export type {
   NormalizedStockCatalogFilters,
   StockCatalogFilters,
+  StockCompanyAffiliateItem,
+  StockCompanyAffiliateResponse,
+  StockCompanyOverviewItem,
+  StockCompanyOverviewResponse,
+  StockCompanyShareholderItem,
+  StockCompanyShareholdersResponse,
+  StockCompanyResponseBase,
   StockExchangeOption,
   StockGroupOption,
   StockIndustryCode,
