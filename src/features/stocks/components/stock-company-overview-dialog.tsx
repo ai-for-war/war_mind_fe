@@ -14,6 +14,7 @@ import { StockCompanyEventsPanel } from "@/features/stocks/components/stock-comp
 import { StockCompanyNewsPanel } from "@/features/stocks/components/stock-company-news-panel"
 import { StockCompanyOfficersPanel } from "@/features/stocks/components/stock-company-officers-panel"
 import { StockCompanyOverviewPanel } from "@/features/stocks/components/stock-company-overview-panel"
+import { StockCompanyReportsPanel } from "@/features/stocks/components/stock-company-reports-panel"
 import { StockCompanyShareholdersPanel } from "@/features/stocks/components/stock-company-shareholders-panel"
 import { StockCompanySubsidiariesPanel } from "@/features/stocks/components/stock-company-subsidiaries-panel"
 import { formatNullableValue } from "@/features/stocks/components/stock-company-dialog.utils"
@@ -33,6 +34,7 @@ type CompanyDetailTab =
   | "affiliate"
   | "events"
   | "news"
+  | "reports"
 
 const COMPANY_DETAIL_TABS = [
   { value: "overview", label: "Overview", isDisabled: false },
@@ -42,7 +44,7 @@ const COMPANY_DETAIL_TABS = [
   { value: "affiliate", label: "Affiliate", isDisabled: false },
   { value: "events", label: "Events", isDisabled: false },
   { value: "news", label: "News", isDisabled: false },
-  { value: "reports", label: "Reports", isDisabled: true },
+  { value: "reports", label: "Reports", isDisabled: false },
   { value: "ratio-summary", label: "Ratio Summary", isDisabled: true },
   { value: "trading-stats", label: "Trading Stats", isDisabled: true },
 ] as const
@@ -85,7 +87,8 @@ const StockCompanyOverviewDialogBody = ({
       value !== "subsidiaries" &&
       value !== "affiliate" &&
       value !== "events" &&
-      value !== "news"
+      value !== "news" &&
+      value !== "reports"
     ) {
       return
     }
@@ -189,6 +192,13 @@ const StockCompanyOverviewDialogBody = ({
             {activeTab === "news" ? (
               <StockCompanyNewsPanel
                 isActive={activeTab === "news"}
+                selectedStock={selectedStock}
+              />
+            ) : null}
+
+            {activeTab === "reports" ? (
+              <StockCompanyReportsPanel
+                isActive={activeTab === "reports"}
                 selectedStock={selectedStock}
               />
             ) : null}

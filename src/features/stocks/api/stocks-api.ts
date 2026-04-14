@@ -8,6 +8,7 @@ import type {
   StockCompanyOfficersFilter,
   StockCompanyOfficersResponse,
   StockCompanyOverviewResponse,
+  StockCompanyReportsResponse,
   StockCompanyShareholdersResponse,
   StockCompanySubsidiariesFilter,
   StockCompanySubsidiariesResponse,
@@ -169,10 +170,27 @@ const getStockCompanyNews = async (
   return response.data
 }
 
+const getStockCompanyReports = async (
+  symbol: string,
+): Promise<StockCompanyReportsResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock company reports requires a non-empty symbol")
+  }
+
+  const response = await apiClient.get<StockCompanyReportsResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/company/reports`,
+  )
+
+  return response.data
+}
+
 export const stocksApi = {
   getStockCompanyAffiliate,
   getStockCompanyEvents,
   getStockCompanyNews,
+  getStockCompanyReports,
   getStockCatalog,
   getStockCompanyOfficers,
   getStockCompanyOverview,

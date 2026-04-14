@@ -119,6 +119,17 @@ export type StockCompanyNewsResponse = StockCompanyResponseBase & {
   items: StockCompanyNewsItem[]
 }
 
+export type StockCompanyReportItem = {
+  date: string | null
+  description: string | null
+  link: string | null
+  name: string | null
+}
+
+export type StockCompanyReportsResponse = StockCompanyResponseBase & {
+  items: StockCompanyReportItem[]
+}
+
 export const normalizeStockCompanySymbol = (symbol?: string | null): string | null => {
   const trimmedSymbol = symbol?.trim()
 
