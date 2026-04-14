@@ -14,6 +14,7 @@ import { StockCompanyEventsPanel } from "@/features/stocks/components/stock-comp
 import { StockCompanyNewsPanel } from "@/features/stocks/components/stock-company-news-panel"
 import { StockCompanyOfficersPanel } from "@/features/stocks/components/stock-company-officers-panel"
 import { StockCompanyOverviewPanel } from "@/features/stocks/components/stock-company-overview-panel"
+import { StockCompanyRatioSummaryPanel } from "@/features/stocks/components/stock-company-ratio-summary-panel"
 import { StockCompanyReportsPanel } from "@/features/stocks/components/stock-company-reports-panel"
 import { StockCompanyShareholdersPanel } from "@/features/stocks/components/stock-company-shareholders-panel"
 import { StockCompanySubsidiariesPanel } from "@/features/stocks/components/stock-company-subsidiaries-panel"
@@ -35,6 +36,7 @@ type CompanyDetailTab =
   | "events"
   | "news"
   | "reports"
+  | "ratio-summary"
 
 const COMPANY_DETAIL_TABS = [
   { value: "overview", label: "Overview", isDisabled: false },
@@ -45,7 +47,7 @@ const COMPANY_DETAIL_TABS = [
   { value: "events", label: "Events", isDisabled: false },
   { value: "news", label: "News", isDisabled: false },
   { value: "reports", label: "Reports", isDisabled: false },
-  { value: "ratio-summary", label: "Ratio Summary", isDisabled: true },
+  { value: "ratio-summary", label: "Ratio Summary", isDisabled: false },
   { value: "trading-stats", label: "Trading Stats", isDisabled: true },
 ] as const
 
@@ -88,7 +90,8 @@ const StockCompanyOverviewDialogBody = ({
       value !== "affiliate" &&
       value !== "events" &&
       value !== "news" &&
-      value !== "reports"
+      value !== "reports" &&
+      value !== "ratio-summary"
     ) {
       return
     }
@@ -199,6 +202,13 @@ const StockCompanyOverviewDialogBody = ({
             {activeTab === "reports" ? (
               <StockCompanyReportsPanel
                 isActive={activeTab === "reports"}
+                selectedStock={selectedStock}
+              />
+            ) : null}
+
+            {activeTab === "ratio-summary" ? (
+              <StockCompanyRatioSummaryPanel
+                isActive={activeTab === "ratio-summary"}
                 selectedStock={selectedStock}
               />
             ) : null}

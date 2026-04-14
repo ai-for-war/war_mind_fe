@@ -23,6 +23,8 @@ export type {
   StockCompanyEventsResponse,
   StockCompanyNewsItem,
   StockCompanyNewsResponse,
+  StockCompanyRatioSummaryItem,
+  StockCompanyRatioSummaryResponse,
   StockCompanyReportItem,
   StockCompanyReportsResponse,
   StockCompanyOfficerItem,

@@ -130,6 +130,30 @@ export type StockCompanyReportsResponse = StockCompanyResponseBase & {
   items: StockCompanyReportItem[]
 }
 
+export type StockCompanyRatioSummaryItem = {
+  symbol: string
+  year_report: number | null
+  length_report: number | null
+  update_date: string | null
+  revenue: number | null
+  revenue_growth: number | null
+  net_profit: number | null
+  net_profit_growth: number | null
+  roe: number | null
+  roa: number | null
+  pe: number | null
+  pb: number | null
+  eps: number | null
+  issue_share: number | null
+  charter_capital: number | null
+  dividend: number | null
+  de: number | null
+}
+
+export type StockCompanyRatioSummaryResponse = StockCompanyResponseBase & {
+  item: StockCompanyRatioSummaryItem
+}
+
 export const normalizeStockCompanySymbol = (symbol?: string | null): string | null => {
   const trimmedSymbol = symbol?.trim()
 
