@@ -101,8 +101,8 @@ export const StockCompanyPriceIntradayView = ({
   })
 
   return (
-    <div className={cn("flex min-h-0 flex-col", className)}>
-      <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border/60 bg-background/30 p-4">
+    <div className={cn("flex h-[30rem] min-h-[30rem] max-h-[30rem] min-h-0 flex-col", className)}>
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/30 p-4">
         <div className="mb-4 flex flex-wrap items-center gap-3">
           <div className="space-y-1">
             <div className="text-sm font-semibold tracking-wide text-foreground uppercase">Intraday Tape</div>

@@ -292,7 +292,13 @@ export const StockCompanyPriceHistoryView = ({
       </EmptyHeader>
     </Empty>
   ) : (
-    <div className="space-y-4">
+    <div className="rounded-2xl border border-border/60 bg-background/30 p-4">
+      <OhlcvChart items={historyItems} />
+    </div>
+  )
+
+  const historySummaryContent =
+    !historyQuery.isLoading && !historyQuery.isError && historyItems.length > 0 ? (
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
         <PriceSummaryMetric label="Last Close" value={formatMetricNumber(lastHistoryCandle?.close)} />
         <PriceSummaryMetric
@@ -314,12 +320,7 @@ export const StockCompanyPriceHistoryView = ({
         />
         <PriceSummaryMetric label="Total Volume" value={formatMetricNumber(historyTotalVolume, 0)} />
       </div>
-
-      <div className="rounded-2xl border border-border/60 bg-background/30 p-4">
-        <OhlcvChart items={historyItems} />
-      </div>
-    </div>
-  )
+    ) : null
 
   return (
     <div className="space-y-4">
@@ -451,6 +452,8 @@ export const StockCompanyPriceHistoryView = ({
           </div>
         )}
       </div>
+
+      {historySummaryContent}
 
       <div className="hidden min-h-0 xl:block">
         <ResizablePanelGroup className="h-[44rem] min-h-0" orientation="horizontal">
