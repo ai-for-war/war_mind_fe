@@ -64,6 +64,8 @@ export const StockCompanyOverviewDialog = ({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
         className="h-[88vh] w-[96vw] max-w-[96vw] overflow-hidden border-border/60 bg-background/95 p-0 backdrop-blur-xl sm:w-[min(96vw,96rem)] sm:max-w-[min(96vw,96rem)]"
+        onInteractOutside={(event) => event.preventDefault()}
+        onPointerDownOutside={(event) => event.preventDefault()}
         showCloseButton
       >
         <StockCompanyOverviewDialogBody key={dialogContentKey} selectedStock={selectedStock} />
