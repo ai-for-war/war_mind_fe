@@ -19,6 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { cn } from "@/lib/utils"
 import { formatNullableValue } from "@/features/stocks/components/stock-company-dialog.utils"
 import {
   IntradayTableSkeleton,
@@ -36,11 +37,13 @@ import { useScrollAreaInfiniteScroll } from "@/hooks/use-scroll-area-infinite-sc
 import { DEFAULT_STOCK_PRICE_INTRADAY_PAGE_SIZE } from "@/features/stocks/types"
 
 type StockCompanyPriceIntradayViewProps = {
+  className?: string
   isActive: boolean
   symbol: string
 }
 
 export const StockCompanyPriceIntradayView = ({
+  className,
   isActive,
   symbol,
 }: StockCompanyPriceIntradayViewProps) => {
@@ -98,15 +101,13 @@ export const StockCompanyPriceIntradayView = ({
   })
 
   return (
-    <div className="space-y-4">
-      <div className="rounded-2xl border border-border/60 bg-background/30 p-4">
-        <div className="flex flex-wrap items-center gap-3">
+    <div className={cn("flex min-h-0 flex-col", className)}>
+      <div className="flex min-h-0 flex-1 flex-col rounded-2xl border border-border/60 bg-background/30 p-4">
+        <div className="mb-4 flex flex-wrap items-center gap-3">
           <div className="space-y-1">
-            <div className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-              Intraday Slice
-            </div>
+            <div className="text-sm font-semibold tracking-wide text-foreground uppercase">Intraday Tape</div>
             <div className="text-sm text-muted-foreground">
-              Latest tape first in the table. Load older trades with the provider cursor.
+              Latest prints first. Older trades continue loading as you scroll.
             </div>
           </div>
 
@@ -122,36 +123,34 @@ export const StockCompanyPriceIntradayView = ({
             </Button>
           </div>
         </div>
-      </div>
 
-      {intradayQuery.isLoading ? <IntradayTableSkeleton /> : null}
+        {intradayQuery.isLoading ? <IntradayTableSkeleton /> : null}
 
-      {!intradayQuery.isLoading && intradayQuery.isError ? (
-        <PricesErrorState
-          title="Unable to load intraday prints"
-          description="Retry the intraday request when the upstream provider is reachable again."
-          onRetry={handleRefreshIntraday}
-        />
-      ) : null}
+        {!intradayQuery.isLoading && intradayQuery.isError ? (
+          <PricesErrorState
+            title="Unable to load intraday prints"
+            description="Retry the intraday request when the upstream provider is reachable again."
+            onRetry={handleRefreshIntraday}
+          />
+        ) : null}
 
-      {!intradayQuery.isLoading && !intradayQuery.isError && intradayItemsDescending.length === 0 ? (
-        <Empty className="border-border/60 bg-background/20">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <Clock3 className="size-5" />
-            </EmptyMedia>
-            <EmptyTitle>No intraday trades found</EmptyTitle>
-            <EmptyDescription>
-              The intraday endpoint returned no trade rows for the selected symbol and current cursor slice.
-            </EmptyDescription>
-          </EmptyHeader>
-        </Empty>
-      ) : null}
+        {!intradayQuery.isLoading && !intradayQuery.isError && intradayItemsDescending.length === 0 ? (
+          <Empty className="border-border/60 bg-background/20">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <Clock3 className="size-5" />
+              </EmptyMedia>
+              <EmptyTitle>No intraday trades found</EmptyTitle>
+              <EmptyDescription>
+                The intraday endpoint returned no trade rows for the selected symbol and current cursor slice.
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        ) : null}
 
-      {!intradayQuery.isLoading && !intradayQuery.isError && intradayItemsDescending.length > 0 ? (
-        <div className="space-y-4">
-          <div className="rounded-2xl border border-border/60 bg-background/30 p-4">
-            <ScrollArea ref={scrollAreaRef} className="h-[32rem] min-h-0 pr-2">
+        {!intradayQuery.isLoading && !intradayQuery.isError && intradayItemsDescending.length > 0 ? (
+          <div className="min-h-0 flex-1">
+            <ScrollArea ref={scrollAreaRef} className="h-full min-h-0 pr-2">
               <Table>
                 <TableHeader>
                   <TableRow>
@@ -201,8 +200,8 @@ export const StockCompanyPriceIntradayView = ({
               </div>
             </ScrollArea>
           </div>
-        </div>
-      ) : null}
+        ) : null}
+      </div>
     </div>
   )
 }

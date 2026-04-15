@@ -17,7 +17,9 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty"
 import { Input } from "@/components/ui/input"
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { StockCompanyPriceIntradayView } from "@/features/stocks/components/stock-company-price-intraday-view"
 import {
   PricePanelSkeleton,
   PriceSummaryMetric,
@@ -269,6 +271,56 @@ export const StockCompanyPriceHistoryView = ({
     setHistoryQueryMode(value)
   }, [])
 
+  const historyWorkspaceContent = historyQuery.isLoading ? (
+    <PricePanelSkeleton />
+  ) : historyQuery.isError ? (
+    <PricesErrorState
+      title="Unable to load price history"
+      description="Keep the selected symbol visible and retry this history query when the upstream service is reachable."
+      onRetry={handleRefreshHistory}
+    />
+  ) : historyItems.length === 0 ? (
+    <Empty className="border-border/60 bg-background/20">
+      <EmptyHeader>
+        <EmptyMedia variant="icon">
+          <DatabaseZap className="size-5" />
+        </EmptyMedia>
+        <EmptyTitle>No history candles found</EmptyTitle>
+        <EmptyDescription>
+          This history query returned an empty item list for the current interval and range selection.
+        </EmptyDescription>
+      </EmptyHeader>
+    </Empty>
+  ) : (
+    <div className="space-y-4">
+      <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+        <PriceSummaryMetric label="Last Close" value={formatMetricNumber(lastHistoryCandle?.close)} />
+        <PriceSummaryMetric
+          accent={getMetricAccent(historyPriceChange)}
+          label="Change"
+          value={
+            historyPriceChange == null
+              ? "--"
+              : `${formatMetricSignedValue(historyPriceChange)} (${formatMetricSignedPercent(historyPriceChangePercent)})`
+          }
+        />
+        <PriceSummaryMetric
+          label="Range"
+          value={
+            historyHigh == null || historyLow == null
+              ? "--"
+              : `${formatMetricNumber(historyLow)} - ${formatMetricNumber(historyHigh)}`
+          }
+        />
+        <PriceSummaryMetric label="Total Volume" value={formatMetricNumber(historyTotalVolume, 0)} />
+      </div>
+
+      <div className="rounded-2xl border border-border/60 bg-background/30 p-4">
+        <OhlcvChart items={historyItems} />
+      </div>
+    </div>
+  )
+
   return (
     <div className="space-y-4">
       <div className="rounded-2xl border border-border/60 bg-background/30 p-4">
@@ -400,59 +452,22 @@ export const StockCompanyPriceHistoryView = ({
         )}
       </div>
 
-      {historyQuery.isLoading ? <PricePanelSkeleton /> : null}
+      <div className="hidden min-h-0 xl:block">
+        <ResizablePanelGroup className="h-[44rem] min-h-0" orientation="horizontal">
+          <ResizablePanel defaultSize={62} minSize={42}>
+            <div className="h-full min-h-0 pr-2">{historyWorkspaceContent}</div>
+          </ResizablePanel>
+          <ResizableHandle withHandle />
+          <ResizablePanel defaultSize={38} minSize={28}>
+            <StockCompanyPriceIntradayView className="h-full min-h-0 pl-2" isActive={isActive} symbol={symbol} />
+          </ResizablePanel>
+        </ResizablePanelGroup>
+      </div>
 
-      {!historyQuery.isLoading && historyQuery.isError ? (
-        <PricesErrorState
-          title="Unable to load price history"
-          description="Keep the selected symbol visible and retry this history query when the upstream service is reachable."
-          onRetry={handleRefreshHistory}
-        />
-      ) : null}
-
-      {!historyQuery.isLoading && !historyQuery.isError && historyItems.length === 0 ? (
-        <Empty className="border-border/60 bg-background/20">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <DatabaseZap className="size-5" />
-            </EmptyMedia>
-            <EmptyTitle>No history candles found</EmptyTitle>
-            <EmptyDescription>
-              This history query returned an empty item list for the current interval and range selection.
-            </EmptyDescription>
-          </EmptyHeader>
-        </Empty>
-      ) : null}
-
-      {!historyQuery.isLoading && !historyQuery.isError && historyItems.length > 0 ? (
-        <div className="space-y-4">
-          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-            <PriceSummaryMetric label="Last Close" value={formatMetricNumber(lastHistoryCandle?.close)} />
-            <PriceSummaryMetric
-              accent={getMetricAccent(historyPriceChange)}
-              label="Change"
-              value={
-                historyPriceChange == null
-                  ? "--"
-                  : `${formatMetricSignedValue(historyPriceChange)} (${formatMetricSignedPercent(historyPriceChangePercent)})`
-              }
-            />
-            <PriceSummaryMetric
-              label="Range"
-              value={
-                historyHigh == null || historyLow == null
-                  ? "--"
-                  : `${formatMetricNumber(historyLow)} - ${formatMetricNumber(historyHigh)}`
-              }
-            />
-            <PriceSummaryMetric label="Total Volume" value={formatMetricNumber(historyTotalVolume, 0)} />
-          </div>
-
-          <div className="rounded-2xl border border-border/60 bg-background/30 p-4">
-            <OhlcvChart items={historyItems} />
-          </div>
-        </div>
-      ) : null}
+      <div className="space-y-4 xl:hidden">
+        {historyWorkspaceContent}
+        <StockCompanyPriceIntradayView isActive={isActive} symbol={symbol} />
+      </div>
     </div>
   )
 }
