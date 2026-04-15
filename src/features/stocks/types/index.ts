@@ -12,6 +12,7 @@ export {
   DEFAULT_STOCK_PRICE_INTRADAY_PAGE_SIZE,
   DEFAULT_STOCK_PRICE_LOOKBACK_LENGTH,
   normalizeStockPriceHistoryInterval,
+  normalizeStockPriceIntradayCursor,
   normalizeStockPriceIntradayPageSize,
   normalizeStockPriceLookbackLength,
   STOCK_PRICE_HISTORY_INTERVALS,

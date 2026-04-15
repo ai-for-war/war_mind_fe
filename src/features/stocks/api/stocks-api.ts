@@ -21,6 +21,7 @@ import type {
 } from "@/features/stocks/types"
 import {
   normalizeStockPriceHistoryInterval,
+  normalizeStockPriceIntradayCursor,
   normalizeStockPriceIntradayPageSize,
   normalizeStockCompanyOfficersFilter,
   normalizeStockCompanySubsidiariesFilter,
@@ -251,15 +252,19 @@ const getStockPriceIntraday = async (
     throw new Error("Stock price intraday requires a non-empty symbol")
   }
 
+  const normalizedCursor = normalizeStockPriceIntradayCursor(query?.lastTime)
+
   const response = await apiClient.get<StockPriceIntradayResponse>(
     `${STOCKS_ENDPOINT}/${normalizedSymbol}/prices/intraday`,
     {
       params: {
         page_size: normalizeStockPriceIntradayPageSize(query?.pageSize),
-        ...(query?.lastTime?.trim() ? { last_time: query.lastTime.trim() } : {}),
+        ...(normalizedCursor.lastTime ? { last_time: normalizedCursor.lastTime } : {}),
         ...(query?.lastTimeFormat?.trim()
           ? { last_time_format: query.lastTimeFormat.trim() }
-          : {}),
+          : normalizedCursor.lastTimeFormat
+            ? { last_time_format: normalizedCursor.lastTimeFormat }
+            : {}),
       },
     },
   )

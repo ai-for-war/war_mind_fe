@@ -68,6 +68,12 @@ export const DEFAULT_STOCK_PRICE_HISTORY_INTERVAL: StockPriceHistoryInterval = "
 export const DEFAULT_STOCK_PRICE_LOOKBACK_LENGTH = 120
 export const DEFAULT_STOCK_PRICE_INTRADAY_PAGE_SIZE = 100
 
+const STOCK_PRICE_INTRADAY_SPACE_TIME_PATTERN = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/
+const STOCK_PRICE_INTRADAY_ISO_NO_OFFSET_PATTERN =
+  /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2}:\d{2})(?:\.\d+)?$/
+const STOCK_PRICE_INTRADAY_ISO_OFFSET_PATTERN =
+  /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}:?\d{2})$/
+
 export const normalizeStockPriceHistoryInterval = (
   interval?: string | null,
 ): StockPriceHistoryInterval => {
@@ -96,4 +102,44 @@ export const normalizeStockPriceIntradayPageSize = (value?: number | string | nu
   }
 
   return Math.min(30000, Math.floor(parsedValue))
+}
+
+export const normalizeStockPriceIntradayCursor = (
+  value?: string | null,
+): {
+  lastTime: string | null
+  lastTimeFormat?: string
+} => {
+  const trimmedValue = value?.trim()
+
+  if (!trimmedValue) {
+    return {
+      lastTime: null,
+    }
+  }
+
+  if (STOCK_PRICE_INTRADAY_SPACE_TIME_PATTERN.test(trimmedValue)) {
+    return {
+      lastTime: trimmedValue,
+    }
+  }
+
+  const isoWithoutOffsetMatch = trimmedValue.match(STOCK_PRICE_INTRADAY_ISO_NO_OFFSET_PATTERN)
+
+  if (isoWithoutOffsetMatch) {
+    return {
+      lastTime: `${isoWithoutOffsetMatch[1]} ${isoWithoutOffsetMatch[2]}`,
+    }
+  }
+
+  if (STOCK_PRICE_INTRADAY_ISO_OFFSET_PATTERN.test(trimmedValue) || trimmedValue.includes("T")) {
+    return {
+      lastTime: trimmedValue,
+      lastTimeFormat: "%Y-%m-%dT%H:%M:%S%z",
+    }
+  }
+
+  return {
+    lastTime: trimmedValue,
+  }
 }

@@ -1,5 +1,5 @@
 import { Clock3, RefreshCw } from "lucide-react"
-import { useCallback, useMemo, useState } from "react"
+import { useCallback, useMemo } from "react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -10,13 +10,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Table,
   TableBody,
@@ -36,9 +30,9 @@ import {
   formatMetricNumber,
   getIntradayItemKey,
   getVietnamTimestamp,
-  INTRADAY_PAGE_SIZE_OPTIONS,
 } from "@/features/stocks/components/stock-company-prices-panel.utils"
 import { useStockPriceIntraday } from "@/features/stocks/hooks"
+import { useScrollAreaInfiniteScroll } from "@/hooks/use-scroll-area-infinite-scroll"
 import { DEFAULT_STOCK_PRICE_INTRADAY_PAGE_SIZE } from "@/features/stocks/types"
 
 type StockCompanyPriceIntradayViewProps = {
@@ -50,11 +44,9 @@ export const StockCompanyPriceIntradayView = ({
   isActive,
   symbol,
 }: StockCompanyPriceIntradayViewProps) => {
-  const [intradayPageSize, setIntradayPageSize] = useState<number>(DEFAULT_STOCK_PRICE_INTRADAY_PAGE_SIZE)
-
   const intradayQuery = useStockPriceIntraday({
     isEnabled: isActive,
-    pageSize: intradayPageSize,
+    pageSize: DEFAULT_STOCK_PRICE_INTRADAY_PAGE_SIZE,
     symbol,
   })
 
@@ -94,6 +86,17 @@ export const StockCompanyPriceIntradayView = ({
     void intradayQuery.fetchPreviousPage()
   }, [intradayQuery])
 
+  const { scrollAreaRef, sentinelRef } = useScrollAreaInfiniteScroll({
+    hasNextPage: Boolean(intradayQuery.hasPreviousPage),
+    isEnabled:
+      isActive &&
+      !intradayQuery.isLoading &&
+      !intradayQuery.isError &&
+      intradayItemsDescending.length > 0,
+    isFetchingNextPage: intradayQuery.isFetchingPreviousPage,
+    onLoadMore: handleLoadOlderTrades,
+  })
+
   return (
     <div className="space-y-4">
       <div className="rounded-2xl border border-border/60 bg-background/30 p-4">
@@ -108,22 +111,6 @@ export const StockCompanyPriceIntradayView = ({
           </div>
 
           <div className="ml-auto flex flex-wrap items-center gap-2">
-            <Select
-              value={`${intradayPageSize}`}
-              onValueChange={(value) => setIntradayPageSize(Number(value))}
-            >
-              <SelectTrigger className="min-w-36">
-                <SelectValue placeholder="Page size" />
-              </SelectTrigger>
-              <SelectContent>
-                {INTRADAY_PAGE_SIZE_OPTIONS.map((option) => (
-                  <SelectItem key={option} value={`${option}`}>
-                    {option} rows
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
             <Button
               type="button"
               variant="outline"
@@ -164,50 +151,55 @@ export const StockCompanyPriceIntradayView = ({
       {!intradayQuery.isLoading && !intradayQuery.isError && intradayItemsDescending.length > 0 ? (
         <div className="space-y-4">
           <div className="rounded-2xl border border-border/60 bg-background/30 p-4">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Time</TableHead>
-                  <TableHead className="text-right">Price</TableHead>
-                  <TableHead className="text-right">Volume</TableHead>
-                  <TableHead>Match Type</TableHead>
-                  <TableHead className="text-right">ID</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {intradayItemsDescending.map((item, index) => (
-                  <TableRow key={getIntradayItemKey(item, index)}>
-                    <TableCell className="font-medium text-foreground tabular-nums">
-                      {formatIntradayTimeLabel(item.time)}
-                    </TableCell>
-                    <TableCell className="text-right tabular-nums">{formatMetricNumber(item.price)}</TableCell>
-                    <TableCell className="text-right tabular-nums">{formatMetricNumber(item.volume, 0)}</TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="rounded-full border-border/60 bg-background/20">
-                        {formatNullableValue(item.match_type)}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-right tabular-nums">
-                      {item.id == null ? "--" : item.id}
-                    </TableCell>
+            <ScrollArea ref={scrollAreaRef} className="h-[32rem] min-h-0 pr-2">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Time</TableHead>
+                    <TableHead className="text-right">Price</TableHead>
+                    <TableHead className="text-right">Volume</TableHead>
+                    <TableHead>Match Type</TableHead>
+                    <TableHead className="text-right">ID</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {intradayItemsDescending.map((item, index) => (
+                    <TableRow key={getIntradayItemKey(item, index)}>
+                      <TableCell className="font-medium text-foreground tabular-nums">
+                        {formatIntradayTimeLabel(item.time)}
+                      </TableCell>
+                      <TableCell className="text-right tabular-nums">{formatMetricNumber(item.price)}</TableCell>
+                      <TableCell className="text-right tabular-nums">{formatMetricNumber(item.volume, 0)}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline" className="rounded-full border-border/60 bg-background/20">
+                          {formatNullableValue(item.match_type)}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right tabular-nums">
+                        {item.id == null ? "--" : item.id}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
 
-            <div className="mt-4 flex justify-center">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleLoadOlderTrades}
-                disabled={!intradayQuery.hasPreviousPage || intradayQuery.isFetchingPreviousPage}
-              >
-                <RefreshCw
-                  className={intradayQuery.isFetchingPreviousPage ? "size-4 animate-spin" : "size-4"}
-                />
-                {intradayQuery.isFetchingPreviousPage ? "Loading older trades" : "Load older trades"}
-              </Button>
-            </div>
+              <div className="flex flex-col items-center gap-3 px-4 py-4">
+                {intradayQuery.isFetchingPreviousPage ? (
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <RefreshCw className="size-4 animate-spin" />
+                    Loading older trades
+                  </div>
+                ) : null}
+
+                {!intradayQuery.hasPreviousPage ? (
+                  <div className="text-xs tracking-wide text-muted-foreground uppercase">
+                    Loaded all available trades for this cursor chain
+                  </div>
+                ) : null}
+
+                <div ref={sentinelRef} aria-hidden="true" className="h-1 w-full" />
+              </div>
+            </ScrollArea>
           </div>
         </div>
       ) : null}
