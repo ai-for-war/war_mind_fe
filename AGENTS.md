@@ -9,3 +9,9 @@
   3. Installed package source/runtime in the local environment
 - When docs and runtime differ, record the mismatch in code comments near the integration point and optimize for the runtime currently installed.
 - Prefer a canonical field mapping derived from the exact provider and method scope in use. Example: for `vnstock` VCI listing methods, map only the documented VCI columns instead of speculative aliases like `ticker`, `code`, `name`, or `market`.
+
+## Frontend File Organization
+
+- Prefer splitting frontend UI into smaller child components early instead of waiting for one file to become large.
+- Move pure formatting, parsing, mapping, and transformation logic into nearby `*.utils.ts` files by default rather than keeping those helpers inside component files.
+- Keep the top-level component focused on composition, state wiring, and event flow; place chart rendering, table views, summary cards, and reusable sections in dedicated child components whenever possible.

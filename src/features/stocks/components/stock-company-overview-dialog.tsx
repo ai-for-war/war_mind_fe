@@ -14,6 +14,7 @@ import { StockCompanyEventsPanel } from "@/features/stocks/components/stock-comp
 import { StockCompanyNewsPanel } from "@/features/stocks/components/stock-company-news-panel"
 import { StockCompanyOfficersPanel } from "@/features/stocks/components/stock-company-officers-panel"
 import { StockCompanyOverviewPanel } from "@/features/stocks/components/stock-company-overview-panel"
+import { StockCompanyPricesPanel } from "@/features/stocks/components/stock-company-prices-panel"
 import { StockCompanyRatioSummaryPanel } from "@/features/stocks/components/stock-company-ratio-summary-panel"
 import { StockCompanyReportsPanel } from "@/features/stocks/components/stock-company-reports-panel"
 import { StockCompanyShareholdersPanel } from "@/features/stocks/components/stock-company-shareholders-panel"
@@ -37,6 +38,7 @@ type CompanyDetailTab =
   | "news"
   | "reports"
   | "ratio-summary"
+  | "prices"
 
 const COMPANY_DETAIL_TABS = [
   { value: "overview", label: "Overview", isDisabled: false },
@@ -48,7 +50,7 @@ const COMPANY_DETAIL_TABS = [
   { value: "news", label: "News", isDisabled: false },
   { value: "reports", label: "Reports", isDisabled: false },
   { value: "ratio-summary", label: "Ratio Summary", isDisabled: false },
-  { value: "trading-stats", label: "Trading Stats", isDisabled: true },
+  { value: "prices", label: "Prices", isDisabled: false },
 ] as const
 
 export const StockCompanyOverviewDialog = ({
@@ -62,6 +64,8 @@ export const StockCompanyOverviewDialog = ({
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent
         className="h-[88vh] w-[96vw] max-w-[96vw] overflow-hidden border-border/60 bg-background/95 p-0 backdrop-blur-xl sm:w-[min(96vw,96rem)] sm:max-w-[min(96vw,96rem)]"
+        onInteractOutside={(event) => event.preventDefault()}
+        onPointerDownOutside={(event) => event.preventDefault()}
         showCloseButton
       >
         <StockCompanyOverviewDialogBody key={dialogContentKey} selectedStock={selectedStock} />
@@ -77,13 +81,13 @@ type StockCompanyOverviewDialogBodyProps = {
 const StockCompanyOverviewDialogBody = ({
   selectedStock,
 }: StockCompanyOverviewDialogBodyProps) => {
-  const [activeTab, setActiveTab] = useState<CompanyDetailTab>("overview")
+  const [activeTab, setActiveTab] = useState<CompanyDetailTab>("prices")
 
   const visibleGroups = useMemo(() => selectedStock?.groups ?? [], [selectedStock?.groups])
 
   const handleTabChange = (value: string) => {
     if (
-      value !== "overview" &&
+      value !== "prices" &&
       value !== "shareholders" &&
       value !== "officers" &&
       value !== "subsidiaries" &&
@@ -91,7 +95,8 @@ const StockCompanyOverviewDialogBody = ({
       value !== "events" &&
       value !== "news" &&
       value !== "reports" &&
-      value !== "ratio-summary"
+      value !== "ratio-summary" &&
+      value !== "overview"
     ) {
       return
     }
@@ -211,6 +216,10 @@ const StockCompanyOverviewDialogBody = ({
                 isActive={activeTab === "ratio-summary"}
                 selectedStock={selectedStock}
               />
+            ) : null}
+
+            {activeTab === "prices" ? (
+              <StockCompanyPricesPanel isActive={activeTab === "prices"} selectedStock={selectedStock} />
             ) : null}
           </div>
         </ScrollArea>

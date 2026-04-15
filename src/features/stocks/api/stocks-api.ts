@@ -14,8 +14,15 @@ import type {
   StockCompanySubsidiariesFilter,
   StockCompanySubsidiariesResponse,
   StockListResponse,
+  StockPriceHistoryQuery,
+  StockPriceHistoryResponse,
+  StockPriceIntradayQuery,
+  StockPriceIntradayResponse,
 } from "@/features/stocks/types"
 import {
+  normalizeStockPriceHistoryInterval,
+  normalizeStockPriceIntradayCursor,
+  normalizeStockPriceIntradayPageSize,
   normalizeStockCompanyOfficersFilter,
   normalizeStockCompanySubsidiariesFilter,
   normalizeStockCompanySymbol,
@@ -203,6 +210,68 @@ const getStockCompanyRatioSummary = async (
   return response.data
 }
 
+const getStockPriceHistory = async (
+  symbol: string,
+  query: StockPriceHistoryQuery,
+): Promise<StockPriceHistoryResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock price history requires a non-empty symbol")
+  }
+
+  const params =
+    "length" in query
+      ? {
+          interval: normalizeStockPriceHistoryInterval(query.interval),
+          length: query.length,
+        }
+      : {
+          interval: normalizeStockPriceHistoryInterval(query.interval),
+          start: query.start,
+          ...(query.end?.trim() ? { end: query.end.trim() } : {}),
+        }
+
+  const response = await apiClient.get<StockPriceHistoryResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/prices/history`,
+    {
+      params,
+    },
+  )
+
+  return response.data
+}
+
+const getStockPriceIntraday = async (
+  symbol: string,
+  query?: StockPriceIntradayQuery,
+): Promise<StockPriceIntradayResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock price intraday requires a non-empty symbol")
+  }
+
+  const normalizedCursor = normalizeStockPriceIntradayCursor(query?.lastTime)
+
+  const response = await apiClient.get<StockPriceIntradayResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/prices/intraday`,
+    {
+      params: {
+        page_size: normalizeStockPriceIntradayPageSize(query?.pageSize),
+        ...(normalizedCursor.lastTime ? { last_time: normalizedCursor.lastTime } : {}),
+        ...(query?.lastTimeFormat?.trim()
+          ? { last_time_format: query.lastTimeFormat.trim() }
+          : normalizedCursor.lastTimeFormat
+            ? { last_time_format: normalizedCursor.lastTimeFormat }
+            : {}),
+      },
+    },
+  )
+
+  return response.data
+}
+
 export const stocksApi = {
   getStockCompanyAffiliate,
   getStockCompanyEvents,
@@ -214,4 +283,6 @@ export const stocksApi = {
   getStockCompanyOverview,
   getStockCompanyShareholders,
   getStockCompanySubsidiaries,
+  getStockPriceHistory,
+  getStockPriceIntraday,
 }

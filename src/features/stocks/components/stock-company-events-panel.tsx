@@ -155,18 +155,6 @@ const getEventActivityTimestamp = (item: StockCompanyEventItem): number | null =
   return Math.max(...timestamps)
 }
 
-const getUpcomingKeyTimestamp = (item: StockCompanyEventItem): number | null => {
-  const upcomingTimestamps = [item.exright_date, item.record_date]
-    .map((value) => parseDateValue(value))
-    .filter((value): value is number => value != null)
-
-  if (upcomingTimestamps.length === 0) {
-    return null
-  }
-
-  return Math.min(...upcomingTimestamps)
-}
-
 const getEventPreviewDates = (item: StockCompanyEventItem): EventDateEntry[] => {
   const primaryDates: EventDateEntry[] = []
 
@@ -231,7 +219,7 @@ export const StockCompanyEventsPanel = ({
     symbol: selectedStock?.symbol,
   })
 
-  const eventItems = eventsQuery.data?.items ?? []
+  const eventItems = useMemo(() => eventsQuery.data?.items ?? [], [eventsQuery.data?.items])
 
   const sortedEvents = useMemo(() => {
     const decoratedItems = eventItems.map((item, index) => ({

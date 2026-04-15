@@ -1,5 +1,8 @@
 import type { NormalizedStockCatalogFilters } from "@/features/stocks/types"
 import {
+  normalizeStockPriceHistoryInterval,
+  normalizeStockPriceIntradayPageSize,
+  normalizeStockPriceLookbackLength,
   normalizeStockCompanyOfficersFilter,
   normalizeStockCompanySubsidiariesFilter,
   normalizeStockCompanySymbol,
@@ -91,5 +94,39 @@ export const stocksQueryKeys = {
       ...stocksQueryKeys.companyDetails(organizationId),
       "ratio-summary",
       normalizeStockCompanySymbol(symbol),
+    ] as const,
+  priceDetails: (organizationId?: string | null) =>
+    [...stocksQueryKeys.scoped(organizationId), "prices"] as const,
+  priceHistory: (
+    organizationId: string | null | undefined,
+    symbol: string | null | undefined,
+    options: {
+      end?: string | null
+      interval?: string | null
+      length?: number | string | null
+      start?: string | null
+    },
+  ) =>
+    [
+      ...stocksQueryKeys.priceDetails(organizationId),
+      "history",
+      normalizeStockCompanySymbol(symbol),
+      normalizeStockPriceHistoryInterval(options.interval),
+      options.start?.trim() || null,
+      options.end?.trim() || null,
+      options.start ? null : normalizeStockPriceLookbackLength(options.length),
+    ] as const,
+  priceIntraday: (
+    organizationId: string | null | undefined,
+    symbol: string | null | undefined,
+    options: {
+      pageSize?: number | string | null
+    },
+  ) =>
+    [
+      ...stocksQueryKeys.priceDetails(organizationId),
+      "intraday",
+      normalizeStockCompanySymbol(symbol),
+      normalizeStockPriceIntradayPageSize(options.pageSize),
     ] as const,
 }
