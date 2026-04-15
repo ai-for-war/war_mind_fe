@@ -8,7 +8,6 @@ import { useTheme } from "next-themes"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Empty,
@@ -18,14 +17,6 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty"
 import { Input } from "@/components/ui/input"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import {
   PricePanelSkeleton,
@@ -36,7 +27,6 @@ import {
   buildParsedCandles,
   buildVolumeData,
   createDefaultRangeDraft,
-  formatHistoryTimeLabel,
   formatMetricNumber,
   formatMetricSignedPercent,
   formatMetricSignedValue,
@@ -460,66 +450,6 @@ export const StockCompanyPriceHistoryView = ({
 
           <div className="rounded-2xl border border-border/60 bg-background/30 p-4">
             <OhlcvChart items={historyItems} />
-
-            <div className="mt-4 flex flex-wrap items-center gap-2">
-              <Badge variant="outline" className="rounded-full border-cyan-400/30 bg-cyan-400/10 text-cyan-100">
-                Source {historyQuery.data?.source ?? "VCI"}
-              </Badge>
-              <Badge variant="secondary" className="rounded-full bg-secondary/70">
-                Interval {historyQuery.data?.interval ?? historyInterval}
-              </Badge>
-              <Badge variant="outline" className="rounded-full border-border/60 bg-background/20">
-                {historyItems.length} candles
-              </Badge>
-              <Badge variant="outline" className="rounded-full border-border/60 bg-background/20">
-                {historyQuery.data?.cache_hit ? "Cache hit" : "Fresh fetch"}
-              </Badge>
-              <Badge variant="outline" className="rounded-full border-border/60 bg-background/20">
-                {formatHistoryTimeLabel(historyItems[0]?.time)} to {formatHistoryTimeLabel(historyItems.at(-1)?.time)}
-              </Badge>
-            </div>
-          </div>
-
-          <div className="rounded-2xl border border-border/60 bg-background/30 p-4">
-            <div className="mb-4 flex items-center justify-between gap-3">
-              <div>
-                <div className="text-sm font-semibold tracking-wide text-foreground uppercase">Raw Candles</div>
-                <div className="text-sm text-muted-foreground">
-                  Inspect the raw response rows returned by the history endpoint.
-                </div>
-              </div>
-            </div>
-
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Time</TableHead>
-                  <TableHead className="text-right">Open</TableHead>
-                  <TableHead className="text-right">High</TableHead>
-                  <TableHead className="text-right">Low</TableHead>
-                  <TableHead className="text-right">Close</TableHead>
-                  <TableHead className="text-right">Volume</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {historyItems
-                  .slice()
-                  .reverse()
-                  .slice(0, 20)
-                  .map((item, index) => (
-                    <TableRow key={`${item.time ?? "history"}-${index}`}>
-                      <TableCell className="font-medium text-foreground">
-                        {formatHistoryTimeLabel(item.time)}
-                      </TableCell>
-                      <TableCell className="text-right tabular-nums">{formatMetricNumber(item.open)}</TableCell>
-                      <TableCell className="text-right tabular-nums">{formatMetricNumber(item.high)}</TableCell>
-                      <TableCell className="text-right tabular-nums">{formatMetricNumber(item.low)}</TableCell>
-                      <TableCell className="text-right tabular-nums">{formatMetricNumber(item.close)}</TableCell>
-                      <TableCell className="text-right tabular-nums">{formatMetricNumber(item.volume, 0)}</TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
           </div>
         </div>
       ) : null}
