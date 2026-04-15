@@ -12,6 +12,6 @@
 
 ## Frontend File Organization
 
-- When a frontend component grows large or mixes multiple concerns, split it into smaller view components instead of keeping one long file.
-- Move pure formatting, parsing, mapping, and transformation logic into nearby `*.utils.ts` files once that logic starts to crowd the component.
-- Keep the top-level component focused on composition, state wiring, and event flow; push chart rendering, table views, and reusable states into dedicated child components when that improves readability.
+- Prefer splitting frontend UI into smaller child components early instead of waiting for one file to become large.
+- Move pure formatting, parsing, mapping, and transformation logic into nearby `*.utils.ts` files by default rather than keeping those helpers inside component files.
+- Keep the top-level component focused on composition, state wiring, and event flow; place chart rendering, table views, summary cards, and reusable sections in dedicated child components whenever possible.
