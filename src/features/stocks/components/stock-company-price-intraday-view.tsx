@@ -28,16 +28,13 @@ import {
 import { formatNullableValue } from "@/features/stocks/components/stock-company-dialog.utils"
 import {
   IntradayTableSkeleton,
-  PriceSummaryMetric,
   PricesErrorState,
 } from "@/features/stocks/components/stock-company-prices-panel.shared"
 import {
   dedupeIntradayItems,
   formatIntradayTimeLabel,
   formatMetricNumber,
-  formatMetricSignedValue,
   getIntradayItemKey,
-  getMetricAccent,
   getVietnamTimestamp,
   INTRADAY_PAGE_SIZE_OPTIONS,
 } from "@/features/stocks/components/stock-company-prices-panel.utils"
@@ -89,20 +86,6 @@ export const StockCompanyPriceIntradayView = ({
     () => [...intradayItemsAscending].reverse(),
     [intradayItemsAscending],
   )
-
-  const latestIntradayItem = intradayItemsAscending.at(-1) ?? null
-  const previousIntradayItem = intradayItemsAscending.at(-2) ?? null
-  const intradayPriceChange =
-    latestIntradayItem?.price != null && previousIntradayItem?.price != null
-      ? latestIntradayItem.price - previousIntradayItem.price
-      : null
-  const intradayTotalVolume = useMemo(
-    () => intradayItemsAscending.reduce((sum, item) => sum + (item.volume ?? 0), 0),
-    [intradayItemsAscending],
-  )
-  const intradayFirstTime = intradayItemsAscending[0]?.time ?? null
-  const intradayLastTime = latestIntradayItem?.time ?? null
-
   const handleRefreshIntraday = useCallback(() => {
     void intradayQuery.refetch()
   }, [intradayQuery])
@@ -180,38 +163,7 @@ export const StockCompanyPriceIntradayView = ({
 
       {!intradayQuery.isLoading && !intradayQuery.isError && intradayItemsDescending.length > 0 ? (
         <div className="space-y-4">
-          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-            <PriceSummaryMetric label="Latest Price" value={formatMetricNumber(latestIntradayItem?.price)} />
-            <PriceSummaryMetric
-              accent={getMetricAccent(intradayPriceChange)}
-              label="Last Tick Change"
-              value={formatMetricSignedValue(intradayPriceChange)}
-            />
-            <PriceSummaryMetric label="Volume Loaded" value={formatMetricNumber(intradayTotalVolume, 0)} />
-            <PriceSummaryMetric
-              label="Trades Loaded"
-              value={formatMetricNumber(intradayItemsAscending.length, 0)}
-            />
-          </div>
-
           <div className="rounded-2xl border border-border/60 bg-background/30 p-4">
-            <div className="mb-4 flex flex-wrap items-center gap-2">
-              <Badge variant="outline" className="rounded-full border-cyan-400/30 bg-cyan-400/10 text-cyan-100">
-                Source {intradayQuery.data?.pages[0]?.source ?? "VCI"}
-              </Badge>
-              <Badge variant="secondary" className="rounded-full bg-secondary/70">
-                Page size {intradayPageSize}
-              </Badge>
-              <Badge variant="outline" className="rounded-full border-border/60 bg-background/20">
-                {intradayQuery.data?.pages[0]?.cache_hit ? "Cache hit" : "Fresh fetch"}
-              </Badge>
-              {intradayFirstTime ? (
-                <Badge variant="outline" className="rounded-full border-border/60 bg-background/20">
-                  {formatIntradayTimeLabel(intradayFirstTime)} to {formatIntradayTimeLabel(intradayLastTime)}
-                </Badge>
-              ) : null}
-            </div>
-
             <Table>
               <TableHeader>
                 <TableRow>
