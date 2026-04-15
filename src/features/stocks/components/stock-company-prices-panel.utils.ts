@@ -12,7 +12,6 @@ export type ParsedCandleDatum = CandlestickData<Time> & {
   volume: number | null
 }
 
-export const LOOKBACK_LENGTH_OPTIONS = [30, 60, 120, 250, 500] as const
 export const INTRADAY_PAGE_SIZE_OPTIONS = [100, 500, 1000, 5000] as const
 
 const DATE_ONLY_PATTERN = /^\d{4}-\d{2}-\d{2}$/

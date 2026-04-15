@@ -65,7 +65,7 @@ export type StockPriceIntradayQuery = {
 }
 
 export const DEFAULT_STOCK_PRICE_HISTORY_INTERVAL: StockPriceHistoryInterval = "1D"
-export const DEFAULT_STOCK_PRICE_LOOKBACK_LENGTH = 120
+export const DEFAULT_STOCK_PRICE_LOOKBACK_LENGTH = 500
 export const DEFAULT_STOCK_PRICE_INTRADAY_PAGE_SIZE = 100
 
 const STOCK_PRICE_INTRADAY_SPACE_TIME_PATTERN = /^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}$/

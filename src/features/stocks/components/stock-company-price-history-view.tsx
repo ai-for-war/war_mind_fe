@@ -19,6 +19,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty"
+import { Input } from "@/components/ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -37,7 +38,6 @@ import {
   formatMetricSignedValue,
   getMetricAccent,
   type HistoryQueryMode,
-  LOOKBACK_LENGTH_OPTIONS,
 } from "@/features/stocks/components/stock-company-prices-panel.utils"
 import { useStockPriceHistory } from "@/features/stocks/hooks"
 import {
@@ -262,6 +262,7 @@ export const StockCompanyPriceHistoryView = ({
   const [historyInterval, setHistoryInterval] = useState<StockPriceHistoryInterval>("1D")
   const [historyQueryMode, setHistoryQueryMode] = useState<HistoryQueryMode>("lookback")
   const [lookbackLength, setLookbackLength] = useState<number>(DEFAULT_STOCK_PRICE_LOOKBACK_LENGTH)
+  const [lookbackDraft, setLookbackDraft] = useState<string>(() => String(DEFAULT_STOCK_PRICE_LOOKBACK_LENGTH))
   const [rangeDraft, setRangeDraft] = useState(createDefaultRangeDraft)
   const [appliedRange, setAppliedRange] = useState(createDefaultRangeDraft)
 
@@ -359,6 +360,27 @@ export const StockCompanyPriceHistoryView = ({
 
     setHistoryQueryMode(value)
   }, [])
+
+  const commitLookbackDraft = useCallback(() => {
+    const trimmedDraft = lookbackDraft.trim()
+
+    if (!trimmedDraft) {
+      setLookbackDraft(String(lookbackLength))
+      return
+    }
+
+    const nextLength = Number.parseInt(trimmedDraft, 10)
+
+    if (!Number.isFinite(nextLength) || nextLength <= 0) {
+      setLookbackDraft(String(lookbackLength))
+      return
+    }
+
+    const normalizedLength = Math.floor(nextLength)
+
+    setLookbackLength(normalizedLength)
+    setLookbackDraft(String(normalizedLength))
+  }, [lookbackDraft, lookbackLength])
 
   const historyWorkspaceContent = historyQuery.isLoading ? (
     <PricePanelSkeleton />
@@ -473,23 +495,25 @@ export const StockCompanyPriceHistoryView = ({
         </div>
 
         {historyQueryMode === "lookback" ? (
-          <div className="mt-4 flex flex-wrap items-center gap-2">
-            {LOOKBACK_LENGTH_OPTIONS.map((option) => (
-              <Button
-                key={option}
-                type="button"
-                size="sm"
-                variant={lookbackLength === option ? "secondary" : "outline"}
-                className={
-                  lookbackLength === option
-                    ? "border-emerald-400/30 bg-emerald-400/10 text-emerald-100 hover:bg-emerald-400/15"
-                    : "border-border/60 bg-background/10"
-                }
-                onClick={() => setLookbackLength(option)}
-              >
-                {option} bars
-              </Button>
-            ))}
+          <div className="mt-4 max-w-md space-y-2">
+            <label className="flex items-center gap-3 text-sm">
+              <span className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">Bars</span>
+              <Input
+                type="number"
+                min={1}
+                step={1}
+                value={lookbackDraft}
+                className="w-32 border-border/60 bg-background/10"
+                onChange={(event) => setLookbackDraft(event.target.value)}
+                onBlur={commitLookbackDraft}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    commitLookbackDraft()
+                  }
+                }}
+              />
+            </label>
+            <div className="text-xs text-muted-foreground">Set how many candles to request. Default is 500.</div>
           </div>
         ) : (
           <div className="mt-4 space-y-3">
