@@ -42,6 +42,20 @@ type StockCompanyPriceIntradayViewProps = {
   symbol: string
 }
 
+const getMatchTypeBadgeClassName = (matchType: string | null | undefined) => {
+  const normalizedMatchType = matchType?.trim().toLowerCase()
+
+  if (normalizedMatchType === "buy") {
+    return "border-emerald-400/30 bg-emerald-400/10 text-emerald-100"
+  }
+
+  if (normalizedMatchType === "sell") {
+    return "border-red-400/30 bg-red-400/10 text-red-100"
+  }
+
+  return "border-border/60 bg-background/20"
+}
+
 export const StockCompanyPriceIntradayView = ({
   className,
   isActive,
@@ -170,7 +184,10 @@ export const StockCompanyPriceIntradayView = ({
                       <TableCell className="text-right tabular-nums">{formatMetricNumber(item.price)}</TableCell>
                       <TableCell className="text-right tabular-nums">{formatMetricNumber(item.volume, 0)}</TableCell>
                       <TableCell>
-                        <Badge variant="outline" className="rounded-full border-border/60 bg-background/20">
+                        <Badge
+                          variant="outline"
+                          className={`rounded-full ${getMatchTypeBadgeClassName(item.match_type)}`}
+                        >
                           {formatNullableValue(item.match_type)}
                         </Badge>
                       </TableCell>
