@@ -10,6 +10,8 @@ export {
   useStockCatalog,
   useStockCompanyAffiliate,
   useStockCompanyOverview,
+  useStockPriceHistory,
+  useStockPriceIntraday,
   useStockCompanyShareholders,
 } from "@/features/stocks/hooks"
 export { stocksQueryKeys } from "@/features/stocks/query-keys"
@@ -25,6 +27,11 @@ export type {
   StockCompanyAffiliateResponse,
   StockCompanyOverviewItem,
   StockCompanyOverviewResponse,
+  StockPriceHistoryInterval,
+  StockPriceHistoryItem,
+  StockPriceHistoryResponse,
+  StockPriceIntradayItem,
+  StockPriceIntradayResponse,
   StockCompanyShareholderItem,
   StockCompanyShareholdersResponse,
   StockCompanyResponseBase,
