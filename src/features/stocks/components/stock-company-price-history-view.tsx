@@ -1,14 +1,17 @@
-import { Activity, AlertCircle, DatabaseZap, RefreshCw } from "lucide-react"
+import { format, isValid, parseISO } from "date-fns"
+import { Activity, AlertCircle, CalendarDays, DatabaseZap, RefreshCw } from "lucide-react"
 import {
   CandlestickSeries,
   HistogramSeries,
   createChart,
 } from "lightweight-charts"
 import { useTheme } from "next-themes"
+import type { Matcher } from "react-day-picker"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
 import {
   Empty,
   EmptyDescription,
@@ -16,7 +19,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty"
-import { Input } from "@/components/ui/input"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/components/ui/resizable"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { StockCompanyPriceIntradayView } from "@/features/stocks/components/stock-company-price-intraday-view"
@@ -43,6 +46,7 @@ import {
   type StockPriceHistoryInterval,
   type StockPriceHistoryItem,
 } from "@/features/stocks/types"
+import { cn } from "@/lib/utils"
 
 type StockCompanyPriceHistoryViewProps = {
   isActive: boolean
@@ -51,6 +55,88 @@ type StockCompanyPriceHistoryViewProps = {
 
 type OhlcvChartProps = {
   items: StockPriceHistoryItem[]
+}
+
+type HistoryDateFieldProps = {
+  label: string
+  onChange: (value: string) => void
+  value: string
+  minDate?: Date
+  maxDate?: Date
+}
+
+const parseHistoryRangeDate = (value: string): Date | undefined => {
+  if (!value.trim()) {
+    return undefined
+  }
+
+  const parsedDate = parseISO(value)
+
+  return isValid(parsedDate) ? parsedDate : undefined
+}
+
+const HistoryDateField = ({
+  label,
+  onChange,
+  value,
+  minDate,
+  maxDate,
+}: HistoryDateFieldProps) => {
+  const [isOpen, setIsOpen] = useState(false)
+
+  const selectedDate = useMemo(() => parseHistoryRangeDate(value), [value])
+  const disabledDays = useMemo(() => {
+    const matchers: Matcher[] = []
+
+    if (minDate) {
+      matchers.push({ before: minDate })
+    }
+
+    if (maxDate) {
+      matchers.push({ after: maxDate })
+    }
+
+    return matchers.length > 0 ? matchers : undefined
+  }, [maxDate, minDate])
+
+  const handleSelectDate = useCallback(
+    (nextDate: Date | undefined) => {
+      onChange(nextDate ? format(nextDate, "yyyy-MM-dd") : "")
+      setIsOpen(false)
+    },
+    [onChange],
+  )
+
+  return (
+    <label className="space-y-2 text-sm">
+      <span className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">{label}</span>
+      <Popover open={isOpen} onOpenChange={setIsOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            type="button"
+            variant="outline"
+            className={cn(
+              "w-full justify-between border-border/60 bg-background/10 text-left font-normal hover:bg-background/20",
+              !selectedDate && "text-muted-foreground",
+            )}
+          >
+            {selectedDate ? format(selectedDate, "MMM d, yyyy") : "Select date"}
+            <CalendarDays className="size-4 shrink-0 text-muted-foreground" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="start">
+          <Calendar
+            initialFocus
+            mode="single"
+            selected={selectedDate}
+            defaultMonth={selectedDate}
+            onSelect={handleSelectDate}
+            disabled={disabledDays}
+          />
+        </PopoverContent>
+      </Popover>
+    </label>
+  )
 }
 
 const OhlcvChart = ({ items }: OhlcvChartProps) => {
@@ -178,6 +264,9 @@ export const StockCompanyPriceHistoryView = ({
   const [lookbackLength, setLookbackLength] = useState<number>(DEFAULT_STOCK_PRICE_LOOKBACK_LENGTH)
   const [rangeDraft, setRangeDraft] = useState(createDefaultRangeDraft)
   const [appliedRange, setAppliedRange] = useState(createDefaultRangeDraft)
+
+  const draftStartDate = useMemo(() => parseHistoryRangeDate(rangeDraft.start), [rangeDraft.start])
+  const draftEndDate = useMemo(() => parseHistoryRangeDate(rangeDraft.end), [rangeDraft.end])
 
   const historyRangeError = useMemo(() => {
     if (historyQueryMode !== "range") {
@@ -405,37 +494,29 @@ export const StockCompanyPriceHistoryView = ({
         ) : (
           <div className="mt-4 space-y-3">
             <div className="grid gap-3 md:grid-cols-[minmax(0,14rem)_minmax(0,14rem)_auto] md:items-end">
-              <label className="space-y-2 text-sm">
-                <span className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                  Start Date
-                </span>
-                <Input
-                  type="date"
-                  value={rangeDraft.start}
-                  onChange={(event) =>
-                    setRangeDraft((current) => ({
-                      ...current,
-                      start: event.target.value,
-                    }))
-                  }
-                />
-              </label>
+              <HistoryDateField
+                label="Start Date"
+                value={rangeDraft.start}
+                maxDate={draftEndDate}
+                onChange={(start) =>
+                  setRangeDraft((current) => ({
+                    ...current,
+                    start,
+                  }))
+                }
+              />
 
-              <label className="space-y-2 text-sm">
-                <span className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
-                  End Date
-                </span>
-                <Input
-                  type="date"
-                  value={rangeDraft.end}
-                  onChange={(event) =>
-                    setRangeDraft((current) => ({
-                      ...current,
-                      end: event.target.value,
-                    }))
-                  }
-                />
-              </label>
+              <HistoryDateField
+                label="End Date"
+                value={rangeDraft.end}
+                minDate={draftStartDate}
+                onChange={(end) =>
+                  setRangeDraft((current) => ({
+                    ...current,
+                    end,
+                  }))
+                }
+              />
 
               <Button type="button" onClick={handleApplyRange} disabled={historyRangeError != null}>
                 Apply Range
