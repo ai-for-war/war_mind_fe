@@ -1,5 +1,6 @@
 import {
   AudioLines,
+  Bookmark,
   Bot,
   CircleDot,
   ImagePlus,
@@ -69,7 +70,12 @@ const navItems = [
         title: "Stock Catalog",
         url: "/stocks",
         icon: TrendingUp,
-      }
+      },
+      {
+        title: "Watchlists",
+        url: "/stocks/watchlists",
+        icon: Bookmark,
+      },
     ],
   },
   {

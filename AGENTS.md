@@ -15,3 +15,14 @@
 - Prefer splitting frontend UI into smaller child components early instead of waiting for one file to become large.
 - Move pure formatting, parsing, mapping, and transformation logic into nearby `*.utils.ts` files by default rather than keeping those helpers inside component files.
 - Keep the top-level component focused on composition, state wiring, and event flow; place chart rendering, table views, summary cards, and reusable sections in dedicated child components whenever possible.
+
+## Error and Warning UX
+
+- When handling user-facing errors or warning states in the UI, use the existing `sonner` toast pattern (`toast(...)` with the app-level `Toaster` from `@/components/ui/sonner`) instead of introducing inline error/warning messages by default.
+- Do not introduce inline error or warning blocks unless the specific UX requires persistent in-context guidance that a toast alone cannot provide, such as field-level validation tied directly to an input.
+
+## Frontend Layout and Scroll
+
+- For desktop workspace pages rendered inside `MainLayout`, constrain the page shell with the same viewport cap pattern used by stable pages such as `StocksPage`: `min-w-0 max-h-[calc(100dvh-6rem)] min-h-0 overflow-hidden`.
+- When a panel is supposed to scroll internally instead of stretching the whole page, every parent layer down to the `ScrollArea` must preserve `min-h-0` and usually `flex-1 overflow-hidden`.
+- Do not assume adding `ScrollArea` alone is enough. Verify the full layout chain so long tables/lists scroll inside their panel rather than extending the route height.
