@@ -5,3 +5,4 @@ export { useRemoveStockWatchlistItem } from "@/features/stock-watchlists/hooks/u
 export { useRenameStockWatchlist } from "@/features/stock-watchlists/hooks/use-rename-stock-watchlist"
 export { useStockWatchlistItems } from "@/features/stock-watchlists/hooks/use-stock-watchlist-items"
 export { useStockWatchlists } from "@/features/stock-watchlists/hooks/use-stock-watchlists"
+export { useStockWatchlistsWorkspace } from "@/features/stock-watchlists/hooks/use-stock-watchlists-workspace"

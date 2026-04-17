@@ -9,6 +9,7 @@ import { MeetingRecorderPage } from "@/features/meeting-recorder"
 import { MultiAgentPage } from "@/features/multi-agent"
 import { SkillPluginsPage } from "@/features/skill-plugins"
 import { SocketProvider } from "@/features/socket"
+import { StockWatchlistsPage } from "@/features/stock-watchlists"
 import { StocksPage } from "@/features/stocks"
 import { SuperAgentPage } from "@/features/super-agent"
 import { TextToImagePage } from "@/features/text-to-image"
@@ -104,6 +105,10 @@ export const router = createBrowserRouter([
           {
             path: "/stocks",
             element: <StocksPage />,
+          },
+          {
+            path: "/stocks/watchlists",
+            element: <StockWatchlistsPage />,
           },
         ],
       },

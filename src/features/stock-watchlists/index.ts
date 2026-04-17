@@ -1,4 +1,5 @@
 export { stockWatchlistsApi } from "@/features/stock-watchlists/api"
+export { StockWatchlistsPage } from "@/features/stock-watchlists/components"
 export {
   useAddStockWatchlistItem,
   useCreateStockWatchlist,
@@ -7,6 +8,7 @@ export {
   useRenameStockWatchlist,
   useStockWatchlistItems,
   useStockWatchlists,
+  useStockWatchlistsWorkspace,
 } from "@/features/stock-watchlists/hooks"
 export { stockWatchlistsQueryKeys } from "@/features/stock-watchlists/query-keys"
 export {

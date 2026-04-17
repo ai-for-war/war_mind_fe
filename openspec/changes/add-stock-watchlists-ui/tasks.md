@@ -6,9 +6,9 @@
 
 ## 2. Watchlists route and navigation
 
-- [ ] 2.1 Add the protected `/stocks/watchlists` route and export a dedicated watchlists page from a new stock watchlists feature area.
-- [ ] 2.2 Update sidebar navigation so the `Markets` group includes `Watchlists` and highlights the route correctly.
-- [ ] 2.3 Add any shared page-level state needed to select and switch the active watchlist from the route workspace.
+- [x] 2.1 Add the protected `/stocks/watchlists` route and export a dedicated watchlists page from a new stock watchlists feature area.
+- [x] 2.2 Update sidebar navigation so the `Markets` group includes `Watchlists` and highlights the route correctly.
+- [x] 2.3 Add any shared page-level state needed to select and switch the active watchlist from the route workspace.
 
 ## 3. Watchlists page UI
 
