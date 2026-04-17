@@ -12,10 +12,10 @@
 
 ## 3. Watchlists page UI
 
-- [ ] 3.1 Build the desktop-first watchlists page shell with a watchlist directory rail and active-watchlist content panel.
-- [ ] 3.2 Add create, rename, and delete watchlist dialogs using the shadcn `Field` component and backend-aligned validation/error feedback.
-- [ ] 3.3 Build the active-watchlist items table with null-safe metadata rendering, empty states, loading states, error states, and remove-item actions.
-- [ ] 3.4 Add the watchlist-page `Add Symbol` dialog with direct symbol input only and mutation handling for duplicate and not-found responses.
+- [x] 3.1 Build the desktop-first watchlists page shell with a watchlist directory rail and active-watchlist content panel.
+- [x] 3.2 Add create, rename, and delete watchlist dialogs using the shadcn `Field` component and backend-aligned validation/error feedback.
+- [x] 3.3 Build the active-watchlist items table with null-safe metadata rendering, empty states, loading states, error states, and remove-item actions.
+- [x] 3.4 Add the watchlist-page `Add Symbol` dialog with direct symbol input only and mutation handling for duplicate and not-found responses.
 
 ## 4. Cross-surface add-to-watchlist actions
 
