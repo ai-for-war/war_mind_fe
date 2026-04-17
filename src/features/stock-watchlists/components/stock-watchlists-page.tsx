@@ -137,6 +137,11 @@ export const StockWatchlistsPage = () => {
     setIsAddSymbolDialogOpen(true)
   }
 
+  const handleAddSymbolInputChange = (value: string) => {
+    setAddSymbolError(null)
+    setSymbolValue(value)
+  }
+
   const handleCreateDialogOpenChange = (open: boolean) => {
     setIsCreateDialogOpen(open)
 
@@ -667,10 +672,11 @@ export const StockWatchlistsPage = () => {
         open={isAddSymbolDialogOpen}
         onOpenChange={handleAddSymbolDialogOpenChange}
         onSubmit={handleAddSymbolSubmit}
-        onSymbolChange={setSymbolValue}
+        onSymbolChange={handleAddSymbolInputChange}
         symbolValue={symbolValue}
         error={addSymbolError}
         isPending={addStockWatchlistItemMutation.isPending}
+        savedSymbols={activeWatchlistItemsQuery.items.map((item) => item.symbol)}
         watchlistName={activeWatchlist?.name ?? "this watchlist"}
       />
 

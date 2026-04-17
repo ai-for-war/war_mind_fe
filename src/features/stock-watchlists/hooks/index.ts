@@ -4,5 +4,6 @@ export { useDeleteStockWatchlist } from "@/features/stock-watchlists/hooks/use-d
 export { useRemoveStockWatchlistItem } from "@/features/stock-watchlists/hooks/use-remove-stock-watchlist-item"
 export { useRenameStockWatchlist } from "@/features/stock-watchlists/hooks/use-rename-stock-watchlist"
 export { useStockWatchlistItems } from "@/features/stock-watchlists/hooks/use-stock-watchlist-items"
+export { useStockWatchlistSymbolSearch } from "@/features/stock-watchlists/hooks/use-stock-watchlist-symbol-search"
 export { useStockWatchlists } from "@/features/stock-watchlists/hooks/use-stock-watchlists"
 export { useStockWatchlistsWorkspace } from "@/features/stock-watchlists/hooks/use-stock-watchlists-workspace"
