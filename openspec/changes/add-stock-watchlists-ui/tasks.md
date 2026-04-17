@@ -19,9 +19,9 @@
 
 ## 4. Cross-surface add-to-watchlist actions
 
-- [ ] 4.1 Add a row-level `Add to watchlist` action to the stock catalog table without disrupting existing catalog interactions.
-- [ ] 4.2 Add an `Add to watchlist` action to the stock company overview popup header while preserving popup state and layout.
-- [ ] 4.3 Reuse a shared watchlist selection flow across catalog and popup actions, including the empty-watchlist case.
+- [x] 4.1 Add a row-level `Add to watchlist` action to the stock catalog table without disrupting existing catalog interactions.
+- [x] 4.2 Add an `Add to watchlist` action to the stock company overview popup header while preserving popup state and layout.
+- [x] 4.3 Reuse a shared watchlist selection flow across catalog and popup actions, including the empty-watchlist case.
 
 ## 5. Verification
 

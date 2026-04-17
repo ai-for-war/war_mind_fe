@@ -1,4 +1,5 @@
 export { StockWatchlistsPage } from "@/features/stock-watchlists/components/stock-watchlists-page"
+export { StockAddToWatchlistDialog } from "@/features/stock-watchlists/components/stock-add-to-watchlist-dialog"
 export { StockWatchlistsDirectoryRail } from "@/features/stock-watchlists/components/stock-watchlists-directory-rail"
 export {
   StockWatchlistItemsTable,

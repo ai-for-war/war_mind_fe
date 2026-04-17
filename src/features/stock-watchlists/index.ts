@@ -1,5 +1,8 @@
 export { stockWatchlistsApi } from "@/features/stock-watchlists/api"
-export { StockWatchlistsPage } from "@/features/stock-watchlists/components"
+export {
+  StockAddToWatchlistDialog,
+  StockWatchlistsPage,
+} from "@/features/stock-watchlists/components"
 export {
   useAddStockWatchlistItem,
   useCreateStockWatchlist,

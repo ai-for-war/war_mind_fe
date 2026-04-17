@@ -4,9 +4,17 @@ import {
   useReactTable,
   type ColumnDef,
 } from "@tanstack/react-table"
-import { useCallback } from "react"
+import { BookmarkPlus, MoreHorizontal } from "lucide-react"
+import { useCallback, useMemo } from "react"
 
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   Table,
   TableBody,
@@ -27,6 +35,7 @@ import { formatAbsoluteDateTime } from "@/lib/date"
 
 type StocksTableProps = {
   items: StockListItem[]
+  onAddToWatchlist?: ((item: StockListItem) => void) | undefined
   onRowSelect?: ((item: StockListItem) => void) | undefined
   selectedSymbol?: string | null
 }
@@ -34,7 +43,7 @@ type StocksTableProps = {
 const formatNullableValue = (value: string | number | null | undefined): string =>
   value == null || `${value}`.trim().length === 0 ? "--" : `${value}`
 
-const columns: ColumnDef<StockListItem>[] = [
+const baseColumns: ColumnDef<StockListItem>[] = [
   {
     accessorKey: "symbol",
     header: "Symbol",
@@ -137,7 +146,64 @@ const columns: ColumnDef<StockListItem>[] = [
   },
 ]
 
-export const StocksTable = ({ items, onRowSelect, selectedSymbol }: StocksTableProps) => {
+export const StocksTable = ({
+  items,
+  onAddToWatchlist,
+  onRowSelect,
+  selectedSymbol,
+}: StocksTableProps) => {
+  const columns = useMemo<ColumnDef<StockListItem>[]>(() => {
+    if (!onAddToWatchlist) {
+      return baseColumns
+    }
+
+    return [
+      ...baseColumns,
+      {
+        id: "actions",
+        header: () => <div className="text-right">Action</div>,
+        cell: ({ row }) => (
+          <div className="flex justify-end">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  type="button"
+                  size="icon-sm"
+                  variant="ghost"
+                  className="text-muted-foreground hover:text-foreground"
+                  onClick={(event) => {
+                    event.stopPropagation()
+                  }}
+                  onKeyDown={(event) => {
+                    event.stopPropagation()
+                  }}
+                  aria-label={`Open actions for ${row.original.symbol}`}
+                >
+                  <MoreHorizontal className="size-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent
+                align="end"
+                onClick={(event) => {
+                  event.stopPropagation()
+                }}
+              >
+                <DropdownMenuItem
+                  onClick={() => {
+                    onAddToWatchlist(row.original)
+                  }}
+                >
+                  <BookmarkPlus className="size-4" />
+                  Add to watchlist
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        ),
+      },
+    ]
+  }, [onAddToWatchlist])
+
   const table = useReactTable({
     columns,
     data: items,
