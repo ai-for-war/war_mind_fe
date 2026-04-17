@@ -1,5 +1,11 @@
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   Table,
@@ -10,12 +16,9 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import type { StockWatchlistItemResponse } from "@/features/stock-watchlists/types"
-import {
-  formatStockWatchlistDateTime,
-  formatStockWatchlistValue,
-} from "@/features/stock-watchlists/stock-watchlists.utils"
+import { formatStockWatchlistValue } from "@/features/stock-watchlists/stock-watchlists.utils"
 import { cn } from "@/lib/utils"
-import { Trash2 } from "lucide-react"
+import { MoreHorizontal, Trash2 } from "lucide-react"
 
 type StockWatchlistItemsTableProps = {
   items: StockWatchlistItemResponse[]
@@ -29,15 +32,13 @@ export const StockWatchlistItemsTableSkeleton = ({ count = 8 }: { count?: number
     {Array.from({ length: count }).map((_, index) => (
       <div
         key={`watchlist-item-skeleton-${index}`}
-        className="grid grid-cols-[0.8fr_1.8fr_0.8fr_1.1fr_1fr_1fr_1fr_0.6fr] gap-3 rounded-xl border border-border/40 px-4 py-3"
+        className="grid grid-cols-[0.8fr_1.8fr_0.8fr_1.1fr_1fr_0.6fr] gap-3 rounded-xl border border-border/40 px-4 py-3"
       >
         <Skeleton className="h-4 w-16" />
         <Skeleton className="h-4 w-40" />
         <Skeleton className="h-4 w-16" />
         <Skeleton className="h-4 w-24" />
         <Skeleton className="h-4 w-24" />
-        <Skeleton className="h-4 w-28" />
-        <Skeleton className="h-4 w-28" />
         <Skeleton className="h-8 w-8 rounded-md" />
       </div>
     ))}
@@ -59,8 +60,6 @@ export const StockWatchlistItemsTable = ({
           <TableHead>Exchange</TableHead>
           <TableHead>Groups</TableHead>
           <TableHead>Industry</TableHead>
-          <TableHead>Saved At</TableHead>
-          <TableHead>Snapshot</TableHead>
           <TableHead className="w-16 text-right">Action</TableHead>
         </TableRow>
       </TableHeader>
@@ -152,26 +151,42 @@ export const StockWatchlistItemsTable = ({
               <TableCell className="text-sm text-muted-foreground">
                 {formatStockWatchlistValue(item.stock?.industry_name)}
               </TableCell>
-              <TableCell className="text-sm text-muted-foreground">
-                {formatStockWatchlistDateTime(item.saved_at)}
-              </TableCell>
-              <TableCell className="text-sm text-muted-foreground">
-                {formatStockWatchlistDateTime(item.stock?.snapshot_at)}
-              </TableCell>
               <TableCell className="text-right">
-                <Button
-                  type="button"
-                  size="icon-sm"
-                  variant="ghost"
-                  className="text-muted-foreground hover:text-destructive"
-                  onClick={(event) => {
-                    event.stopPropagation()
-                    onRemoveItem(item)
-                  }}
-                  aria-label={`Remove ${item.symbol} from watchlist`}
-                >
-                  <Trash2 className="size-4" />
-                </Button>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      type="button"
+                      size="icon-sm"
+                      variant="ghost"
+                      className="text-muted-foreground hover:text-foreground"
+                      onClick={(event) => {
+                        event.stopPropagation()
+                      }}
+                      onKeyDown={(event) => {
+                        event.stopPropagation()
+                      }}
+                      aria-label={`Open actions for ${item.symbol}`}
+                    >
+                      <MoreHorizontal className="size-4" />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent
+                    align="end"
+                    onClick={(event) => {
+                      event.stopPropagation()
+                    }}
+                  >
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onClick={() => {
+                        onRemoveItem(item)
+                      }}
+                    >
+                      <Trash2 className="size-4" />
+                      Remove from watchlist
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </TableCell>
             </TableRow>
           )

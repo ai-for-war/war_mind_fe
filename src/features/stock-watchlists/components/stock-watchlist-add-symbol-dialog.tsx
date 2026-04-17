@@ -12,7 +12,6 @@ import {
 import {
   Field,
   FieldContent,
-  FieldDescription,
   FieldError,
   FieldLabel,
 } from "@/components/ui/field"
@@ -69,9 +68,6 @@ export const StockWatchlistAddSymbolDialog = ({
                 autoCapitalize="characters"
                 autoFocus
               />
-              <FieldDescription>
-                The backend normalizes symbol casing and rejects duplicates or missing symbols.
-              </FieldDescription>
               <FieldError>{error}</FieldError>
             </FieldContent>
           </Field>
