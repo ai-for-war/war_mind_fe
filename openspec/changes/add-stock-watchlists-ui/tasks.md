@@ -1,8 +1,8 @@
 ## 1. Watchlist data layer
 
-- [ ] 1.1 Add stock watchlist types that mirror the backend request and response contracts, including nullable `stock` metadata handling.
-- [ ] 1.2 Implement stock watchlist API functions for list, create, rename, delete, list items, add item, and remove item using the organization-aware API client.
-- [ ] 1.3 Add React Query keys and hooks for watchlist summaries, active watchlist items, and watchlist mutations with refetch-safe invalidation.
+- [x] 1.1 Add stock watchlist types that mirror the backend request and response contracts, including nullable `stock` metadata handling.
+- [x] 1.2 Implement stock watchlist API functions for list, create, rename, delete, list items, add item, and remove item using the organization-aware API client.
+- [x] 1.3 Add React Query keys and hooks for watchlist summaries, active watchlist items, and watchlist mutations with refetch-safe invalidation.
 
 ## 2. Watchlists route and navigation
 
