@@ -338,7 +338,7 @@ export const StockWatchlistsPage = () => {
 
   if (watchlistsQuery.isError) {
     return (
-      <section className="flex h-full min-h-0 flex-1 flex-col gap-4">
+      <section className="flex h-full min-h-0 min-w-0 max-h-[calc(100dvh-6rem)] flex-1 flex-col gap-4 overflow-hidden">
         <header className="flex flex-wrap items-start justify-between gap-4">
           <div className="space-y-2">
             <Badge variant="outline" className="border-cyan-400/30 bg-cyan-400/10 text-cyan-100">
@@ -389,7 +389,7 @@ export const StockWatchlistsPage = () => {
 
   if (watchlistsQuery.items.length === 0) {
     return (
-      <section className="flex h-full min-h-0 flex-1 flex-col gap-4">
+      <section className="flex h-full min-h-0 min-w-0 max-h-[calc(100dvh-6rem)] flex-1 flex-col gap-4 overflow-hidden">
         <header className="flex flex-wrap items-start justify-between gap-4">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
@@ -449,7 +449,7 @@ export const StockWatchlistsPage = () => {
 
   return (
     <>
-      <section className="flex h-full min-h-0 flex-1 flex-col gap-4 overflow-hidden">
+      <section className="flex h-full min-h-0 min-w-0 max-h-[calc(100dvh-6rem)] flex-1 flex-col gap-4 overflow-hidden">
         <header className="flex flex-wrap items-start justify-between gap-4">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
