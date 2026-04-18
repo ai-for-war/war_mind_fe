@@ -20,4 +20,4 @@
 
 - When requirements, behavior, or scope are unclear, ask the user to clarify instead of making assumptions.
 - Design and implementation must stay grounded in the backend endpoints and contracts that are actually supported; do not invent unsupported capabilities.
-- Prefer using the shadcn MCP flow to discover, add, and reuse existing components before building custom UI primitives.
+- Prefer using the shadcn MCP flow to discover, add, and reuse SHADCN components before building custom UI primitives.
