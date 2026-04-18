@@ -15,3 +15,9 @@
 - Prefer splitting frontend UI into smaller child components early instead of waiting for one file to become large.
 - Move pure formatting, parsing, mapping, and transformation logic into nearby `*.utils.ts` files by default rather than keeping those helpers inside component files.
 - Keep the top-level component focused on composition, state wiring, and event flow; place chart rendering, table views, summary cards, and reusable sections in dedicated child components whenever possible.
+
+## Product Design and Collaboration
+
+- When requirements, behavior, or scope are unclear, ask the user to clarify instead of making assumptions.
+- Design and implementation must stay grounded in the backend endpoints and contracts that are actually supported; do not invent unsupported capabilities.
+- Prefer using the shadcn MCP flow to discover, add, and reuse existing components before building custom UI primitives.
