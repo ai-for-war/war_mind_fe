@@ -163,8 +163,8 @@ export const BacktestWorkspace = ({
     <div className={cn("flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden", className)}>
       <div className="hidden min-h-0 min-w-0 flex-1 overflow-hidden xl:grid xl:grid-cols-[24rem_minmax(0,1fr)] xl:gap-4">
         <div className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
-          <div className="min-h-0 flex-1 overflow-y-auto pr-3">
-            <div className="flex flex-col gap-4">
+          <ScrollArea className="h-full min-h-0 flex-1 pr-2">
+            <div className="flex min-w-0 flex-col gap-4">
               <div className="space-y-1">
                 <h2 className="text-lg font-semibold">Setup</h2>
                 <p className="text-sm text-muted-foreground">
@@ -179,16 +179,16 @@ export const BacktestWorkspace = ({
                 templates={backtestTemplatesQuery.items}
               />
             </div>
-          </div>
+          </ScrollArea>
         </div>
 
         <div className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
-          <div className="min-h-0 flex-1 overflow-y-auto pr-3">
+          <ScrollArea className="h-full min-h-0 flex-1 pr-2">
             <BacktestResultPanel
               isPending={runBacktestMutation.isPending || isTransitionPending}
               result={selectedResult}
             />
-          </div>
+          </ScrollArea>
         </div>
       </div>
 
