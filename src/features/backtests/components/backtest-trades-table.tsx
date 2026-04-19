@@ -8,7 +8,6 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty"
 import {
-  Table,
   TableBody,
   TableCell,
   TableHead,
@@ -47,23 +46,24 @@ export const BacktestTradesTable = ({ result }: BacktestTradesTableProps) => {
   }
 
   return (
-    <div className="rounded-xl border border-border/60 bg-card/70">
-      <Table>
+    <div className="min-w-0 overflow-x-auto rounded-xl border border-border/60 bg-card/70">
+      <div className="min-w-full w-max">
+        <table data-slot="table" className="w-full caption-bottom text-sm">
         <TableHeader>
           <TableRow>
-            <TableHead>Entry</TableHead>
-            <TableHead>Exit</TableHead>
-            <TableHead className="text-right">Shares</TableHead>
-            <TableHead className="text-right">Invested</TableHead>
-            <TableHead className="text-right">PnL</TableHead>
-            <TableHead className="text-right">PnL %</TableHead>
-            <TableHead>Exit Reason</TableHead>
+            <TableHead className="min-w-[13rem] whitespace-nowrap">Entry</TableHead>
+            <TableHead className="min-w-[13rem] whitespace-nowrap">Exit</TableHead>
+            <TableHead className="whitespace-nowrap text-right">Shares</TableHead>
+            <TableHead className="whitespace-nowrap text-right">Invested</TableHead>
+            <TableHead className="whitespace-nowrap text-right">PnL</TableHead>
+            <TableHead className="whitespace-nowrap text-right">PnL %</TableHead>
+            <TableHead className="min-w-[16rem] whitespace-nowrap">Exit Reason</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {tradeRows.map((trade) => (
             <TableRow key={trade.id}>
-              <TableCell>
+              <TableCell className="whitespace-nowrap">
                 <div className="flex flex-col gap-0.5">
                   <span>{trade.entry_time}</span>
                   <span className="text-xs text-muted-foreground">
@@ -71,7 +71,7 @@ export const BacktestTradesTable = ({ result }: BacktestTradesTableProps) => {
                   </span>
                 </div>
               </TableCell>
-              <TableCell>
+              <TableCell className="whitespace-nowrap">
                 <div className="flex flex-col gap-0.5">
                   <span>{trade.exit_time}</span>
                   <span className="text-xs text-muted-foreground">
@@ -79,19 +79,20 @@ export const BacktestTradesTable = ({ result }: BacktestTradesTableProps) => {
                   </span>
                 </div>
               </TableCell>
-              <TableCell className="text-right">
+              <TableCell className="whitespace-nowrap text-right">
                 {formatBacktestNumber(trade.shares, { maximumFractionDigits: 0 })}
               </TableCell>
-              <TableCell className="text-right">
+              <TableCell className="whitespace-nowrap text-right">
                 {formatBacktestCurrency(trade.invested_capital)}
               </TableCell>
-              <TableCell className="text-right">{formatBacktestCurrency(trade.pnl)}</TableCell>
-              <TableCell className="text-right">{formatBacktestPercent(trade.pnl_pct)}</TableCell>
-              <TableCell>{trade.exit_reason}</TableCell>
+              <TableCell className="whitespace-nowrap text-right">{formatBacktestCurrency(trade.pnl)}</TableCell>
+              <TableCell className="whitespace-nowrap text-right">{formatBacktestPercent(trade.pnl_pct)}</TableCell>
+              <TableCell className="min-w-[16rem] whitespace-nowrap">{trade.exit_reason}</TableCell>
             </TableRow>
           ))}
         </TableBody>
-      </Table>
+        </table>
+      </div>
     </div>
   )
 }

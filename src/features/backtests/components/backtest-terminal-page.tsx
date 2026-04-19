@@ -189,7 +189,7 @@ export const BacktestTerminalPage = () => {
 
       <div className="hidden min-h-0 min-w-0 flex-1 overflow-hidden xl:grid xl:grid-cols-[24rem_minmax(0,1fr)] xl:gap-4">
         <div className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
-          <ScrollArea className="min-h-0 flex-1 pr-3">
+          <div className="min-h-0 flex-1 overflow-y-auto pr-3">
             <div className="flex flex-col gap-4">
               <div className="space-y-1">
                 <h2 className="text-lg font-semibold">Setup</h2>
@@ -205,16 +205,16 @@ export const BacktestTerminalPage = () => {
                 templates={backtestTemplatesQuery.items}
               />
             </div>
-          </ScrollArea>
+          </div>
         </div>
 
         <div className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
-          <ScrollArea className="min-h-0 flex-1 pr-3">
+          <div className="min-h-0 flex-1 overflow-y-auto pr-3">
             <BacktestResultPanel
               isPending={runBacktestMutation.isPending || isTransitionPending}
               result={selectedResult}
             />
-          </ScrollArea>
+          </div>
         </div>
       </div>
 
