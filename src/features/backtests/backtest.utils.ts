@@ -54,6 +54,24 @@ export const formatBacktestCurrency = (
   return formatSignedValue(value, formatter)
 }
 
+export const formatBacktestCompactCurrency = (
+  value: number,
+  options?: {
+    currency?: string
+    locale?: string
+    maximumFractionDigits?: number
+  },
+) => {
+  const formatter = new Intl.NumberFormat(options?.locale ?? "vi-VN", {
+    style: "currency",
+    currency: options?.currency ?? "VND",
+    notation: "compact",
+    maximumFractionDigits: options?.maximumFractionDigits ?? 1,
+  })
+
+  return formatSignedValue(value, formatter)
+}
+
 export const formatBacktestNumber = (
   value: number,
   options?: {

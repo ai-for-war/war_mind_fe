@@ -18,14 +18,30 @@ type BacktestEquityChartProps = {
   result: BacktestResult
 }
 
+const getEquityAxisMin = (value: number) => {
+  if (!Number.isFinite(value)) {
+    return 0
+  }
+
+  return Math.max(0, value * 0.98)
+}
+
+const getEquityAxisMax = (value: number) => {
+  if (!Number.isFinite(value)) {
+    return 0
+  }
+
+  return value * 1.04
+}
+
 const backtestChartConfig = {
   equity: {
     label: "Equity",
-    color: "hsl(var(--primary))",
+    color: "var(--chart-1)",
   },
   drawdownPct: {
     label: "Drawdown %",
-    color: "hsl(var(--destructive))",
+    color: "var(--destructive)",
   },
 } as const
 
@@ -42,27 +58,26 @@ export const BacktestEquityChart = ({ result }: BacktestEquityChartProps) => {
       </CardHeader>
       <CardContent>
         <ChartContainer className="h-[320px] w-full" config={backtestChartConfig}>
-          <AreaChart accessibilityLayer data={chartData} margin={{ left: 8, right: 8, top: 8 }}>
+          <AreaChart
+            accessibilityLayer
+            data={chartData}
+            margin={{ left: 8, right: 20, top: 16, bottom: 8 }}
+          >
             <defs>
               <linearGradient id="backtest-equity-fill" x1="0" x2="0" y1="0" y2="1">
-                <stop offset="5%" stopColor="var(--color-equity)" stopOpacity={0.4} />
-                <stop offset="95%" stopColor="var(--color-equity)" stopOpacity={0.02} />
+                <stop offset="5%" stopColor="var(--color-equity)" stopOpacity={0.48} />
+                <stop offset="95%" stopColor="var(--color-equity)" stopOpacity={0.08} />
               </linearGradient>
             </defs>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="time"
               minTickGap={48}
+              padding={{ left: 12, right: 12 }}
+              tickMargin={8}
               tickFormatter={(value) => formatAbsoluteDateTime(value, value)}
             />
-            <YAxis
-              tickFormatter={(value) =>
-                formatBacktestCurrency(Number(value), {
-                  maximumFractionDigits: 0,
-                })
-              }
-              yAxisId="equity"
-            />
+            <YAxis domain={[getEquityAxisMin, getEquityAxisMax]} hide yAxisId="equity" />
             <YAxis
               dataKey="drawdownPct"
               domain={["auto", "auto"]}
@@ -123,7 +138,7 @@ export const BacktestEquityChart = ({ result }: BacktestEquityChartProps) => {
               fill="url(#backtest-equity-fill)"
               fillOpacity={1}
               stroke="var(--color-equity)"
-              strokeWidth={2}
+              strokeWidth={2.25}
               type="monotone"
               yAxisId="equity"
             />
