@@ -21,6 +21,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { MeetingAiNotes } from "@/features/meeting-recorder/components/meeting-ai-notes";
 import { MeetingCommittedTranscript } from "@/features/meeting-recorder/components/meeting-committed-transcript";
 import { MeetingSessionControlPlane } from "@/features/meeting-recorder/components/meeting-session-control-plane";
@@ -74,6 +75,7 @@ export const MeetingRecorderPage = () => {
   const sessionControlPlaneCard = (
     <MeetingSessionControlPlane
       acceptedConfig={acceptedConfig}
+      desktop
       draftUtterances={Object.values(draftUtterances)}
       identifiers={identifiers}
       lastEventAt={lastEventAt}
@@ -83,10 +85,34 @@ export const MeetingRecorderPage = () => {
   );
 
   const transcriptMonitorCard = (
-    <MeetingCommittedTranscript committedUtterances={committedUtterances} />
+    <MeetingCommittedTranscript committedUtterances={committedUtterances} desktop />
   );
 
   const aiNotesCard = (
+    <MeetingAiNotes
+      desktop
+      derivedNotes={derivedNotes}
+      isWaitingForFinalNotes={isWaitingForFinalNotes}
+      noteChunks={noteChunks}
+    />
+  );
+
+  const mobileSessionControlPlaneCard = (
+    <MeetingSessionControlPlane
+      acceptedConfig={acceptedConfig}
+      draftUtterances={Object.values(draftUtterances)}
+      identifiers={identifiers}
+      lastEventAt={lastEventAt}
+      selectedLanguage={selectedLanguage}
+      sourceReadiness={sourceReadiness}
+    />
+  );
+
+  const mobileTranscriptMonitorCard = (
+    <MeetingCommittedTranscript committedUtterances={committedUtterances} />
+  );
+
+  const mobileAiNotesCard = (
     <MeetingAiNotes
       derivedNotes={derivedNotes}
       isWaitingForFinalNotes={isWaitingForFinalNotes}
@@ -205,23 +231,35 @@ export const MeetingRecorderPage = () => {
           orientation="horizontal"
         >
           <ResizablePanel defaultSize={30} minSize={24}>
-            <div className="h-full min-h-0">{sessionControlPlaneCard}</div>
+            <div className="flex h-full min-h-0">
+              <ScrollArea className="h-full min-h-0 flex-1 pr-2">
+                <div className="min-h-full">{sessionControlPlaneCard}</div>
+              </ScrollArea>
+            </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={35} minSize={26}>
-            <div className="h-full min-h-0">{transcriptMonitorCard}</div>
+            <div className="flex h-full min-h-0">
+              <ScrollArea className="h-full min-h-0 flex-1 pr-2">
+                <div className="min-h-full">{transcriptMonitorCard}</div>
+              </ScrollArea>
+            </div>
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel defaultSize={35} minSize={26}>
-            <div className="h-full min-h-0">{aiNotesCard}</div>
+            <div className="flex h-full min-h-0">
+              <ScrollArea className="h-full min-h-0 flex-1 pr-2">
+                <div className="min-h-full">{aiNotesCard}</div>
+              </ScrollArea>
+            </div>
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
 
       <div className="space-y-4 xl:hidden">
-        {sessionControlPlaneCard}
-        {transcriptMonitorCard}
-        {aiNotesCard}
+        {mobileSessionControlPlaneCard}
+        {mobileTranscriptMonitorCard}
+        {mobileAiNotesCard}
       </div>
     </section>
   );
