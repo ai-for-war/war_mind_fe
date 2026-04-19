@@ -28,6 +28,10 @@ export const backtestsQueryKeys = {
   all: BACKTESTS_QUERY_KEY,
   scoped: (organizationId?: string | null) =>
     [...BACKTESTS_QUERY_KEY, "organization", getOrganizationQueryScope(organizationId)] as const,
+  symbols: (organizationId?: string | null) =>
+    [...backtestsQueryKeys.scoped(organizationId), "symbols"] as const,
+  symbolSearch: (organizationId: string | null | undefined, query?: string | null) =>
+    [...backtestsQueryKeys.symbols(organizationId), query?.trim() ?? ""] as const,
   templates: (organizationId?: string | null) =>
     [...backtestsQueryKeys.scoped(organizationId), "templates"] as const,
   runs: (organizationId?: string | null) =>

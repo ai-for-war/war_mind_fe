@@ -7,10 +7,10 @@
 
 ## 2. Setup workspace
 
-- [ ] 2.1 Build the backtest setup form with `react-hook-form`, shadcn field primitives, and the documented local validation rules
-- [ ] 2.2 Implement the searchable symbol picker backed by existing stock catalog data
-- [ ] 2.3 Implement the searchable strategy picker using backend template catalog items and add the selected-strategy summary card
-- [ ] 2.4 Render dynamic template parameter fields and reset parameter shape correctly when the selected template changes
+- [x] 2.1 Build the backtest setup form with `react-hook-form`, shadcn field primitives, and the documented local validation rules
+- [x] 2.2 Implement the searchable symbol picker backed by existing stock catalog data
+- [x] 2.3 Implement the searchable strategy picker using backend template catalog items and add the selected-strategy summary card
+- [x] 2.4 Render dynamic template parameter fields and reset parameter shape correctly when the selected template changes
 
 ## 3. Result workspace
 
