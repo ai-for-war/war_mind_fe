@@ -1,0 +1,224 @@
+"use client"
+
+import { useMemo, useState, useTransition } from "react"
+import { AlertCircle, RefreshCw } from "lucide-react"
+import { isAxiosError } from "axios"
+
+import { Button } from "@/components/ui/button"
+import {
+  Empty,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@/components/ui/empty"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Skeleton } from "@/components/ui/skeleton"
+import { getBacktestValidationErrors } from "@/features/backtests/backtest.utils"
+import { BacktestResultPanel } from "@/features/backtests/components/backtest-result-panel"
+import { BacktestSetupForm } from "@/features/backtests/components/backtest-setup-form"
+import { useBacktestTemplates, useRunBacktest } from "@/features/backtests/hooks"
+import type { BacktestResult, BacktestRunRequest } from "@/features/backtests/types"
+import type { ApiErrorResponse } from "@/types/api"
+
+const BacktestSetupSkeleton = () => (
+  <div className="flex flex-col gap-4">
+    <Skeleton className="h-10 w-full rounded-lg" />
+    <div className="grid gap-4 sm:grid-cols-2">
+      <Skeleton className="h-10 w-full rounded-lg" />
+      <Skeleton className="h-10 w-full rounded-lg" />
+    </div>
+    <Skeleton className="h-10 w-full rounded-lg" />
+    <Skeleton className="h-28 w-full rounded-xl" />
+    <Skeleton className="h-10 w-full rounded-lg" />
+    <Skeleton className="h-40 w-full rounded-xl" />
+    <div className="flex justify-end">
+      <Skeleton className="h-10 w-36 rounded-lg" />
+    </div>
+  </div>
+)
+
+const isRetryableBacktestError = (error: unknown) => {
+  if (!isAxiosError<ApiErrorResponse>(error)) {
+    return false
+  }
+
+  return error.response?.status === 502
+}
+
+const hasValidationBacktestError = (error: unknown) => getBacktestValidationErrors(error).length > 0
+
+export const BacktestTerminalPage = () => {
+  const [lastSuccessfulResult, setLastSuccessfulResult] = useState<BacktestResult | null>(null)
+  const [lastSubmittedRequest, setLastSubmittedRequest] = useState<BacktestRunRequest | null>(null)
+  const [isTransitionPending, startTransition] = useTransition()
+  const backtestTemplatesQuery = useBacktestTemplates()
+  const runBacktestMutation = useRunBacktest()
+
+  const selectedResult = useMemo(
+    () => runBacktestMutation.data?.result ?? lastSuccessfulResult,
+    [lastSuccessfulResult, runBacktestMutation.data?.result],
+  )
+
+  const handleRunBacktest = async (request: BacktestRunRequest) => {
+    setLastSubmittedRequest(request)
+    const response = await runBacktestMutation.runBacktest(request)
+
+    startTransition(() => {
+      setLastSuccessfulResult(response.result)
+    })
+  }
+
+  const handleRetryLatestRequest = () => {
+    if (!lastSubmittedRequest) {
+      return
+    }
+
+    void handleRunBacktest(lastSubmittedRequest)
+  }
+
+  if (backtestTemplatesQuery.isLoading) {
+    return (
+      <section className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden">
+        <header className="space-y-1">
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+            Backtest Terminal
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Run one strategy on one symbol and inspect performance, equity, and trades.
+          </p>
+        </header>
+        <div className="grid min-h-0 flex-1 gap-4 xl:grid-cols-[24rem_minmax(0,1fr)]">
+          <div className="rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
+            <BacktestSetupSkeleton />
+          </div>
+          <div className="rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
+            <BacktestResultPanel isPending />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  if (backtestTemplatesQuery.isError) {
+    return (
+      <section className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden">
+        <header className="space-y-1">
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+            Backtest Terminal
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Run one strategy on one symbol and inspect performance, equity, and trades.
+          </p>
+        </header>
+        <Empty className="min-h-[420px] border-border/60 bg-background/20">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <AlertCircle className="size-5 text-destructive" />
+            </EmptyMedia>
+            <EmptyTitle>Unable to load strategy templates</EmptyTitle>
+            <EmptyDescription>
+              The page needs the backend template catalog before a backtest can run.
+            </EmptyDescription>
+          </EmptyHeader>
+          <Button type="button" variant="outline" onClick={() => void backtestTemplatesQuery.refetch()}>
+            <RefreshCw />
+            Retry
+          </Button>
+        </Empty>
+      </section>
+    )
+  }
+
+  if (backtestTemplatesQuery.items.length === 0) {
+    return (
+      <section className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden">
+        <header className="space-y-1">
+          <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+            Backtest Terminal
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            Run one strategy on one symbol and inspect performance, equity, and trades.
+          </p>
+        </header>
+        <Empty className="min-h-[420px] border-border/60 bg-background/20">
+          <EmptyHeader>
+            <EmptyMedia variant="icon">
+              <AlertCircle className="size-5" />
+            </EmptyMedia>
+            <EmptyTitle>No backtest strategies available</EmptyTitle>
+            <EmptyDescription>
+              The backend template catalog is currently empty, so there is nothing to run yet.
+            </EmptyDescription>
+          </EmptyHeader>
+        </Empty>
+      </section>
+    )
+  }
+
+  return (
+    <section className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden">
+      <header className="space-y-1">
+        <h1 className="text-2xl font-semibold tracking-tight text-foreground">
+          Backtest Terminal
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          Run one strategy on one symbol and inspect performance, equity, and trades.
+        </p>
+      </header>
+
+      <div className="hidden min-h-0 flex-1 xl:grid xl:grid-cols-[24rem_minmax(0,1fr)] xl:gap-4">
+        <div className="h-full rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
+          <ScrollArea className="h-full pr-3">
+            <div className="space-y-4">
+              <div className="space-y-1">
+                <h2 className="text-lg font-semibold">Setup</h2>
+                <p className="text-sm text-muted-foreground">
+                  Adjust inputs, pick a strategy, and run the backtest without leaving the page.
+                </p>
+              </div>
+              <BacktestSetupForm
+                initialValues={lastSubmittedRequest ?? undefined}
+                isSubmitting={runBacktestMutation.isPending || isTransitionPending}
+                onSubmit={handleRunBacktest}
+                submissionError={hasValidationBacktestError(runBacktestMutation.error) ? runBacktestMutation.error : undefined}
+                templates={backtestTemplatesQuery.items}
+              />
+            </div>
+          </ScrollArea>
+        </div>
+
+        <div className="h-full rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
+          <ScrollArea className="h-full pr-3">
+            <BacktestResultPanel
+              error={runBacktestMutation.error}
+              isPending={runBacktestMutation.isPending || isTransitionPending}
+              onRetry={isRetryableBacktestError(runBacktestMutation.error) ? handleRetryLatestRequest : undefined}
+              result={selectedResult}
+            />
+          </ScrollArea>
+        </div>
+      </div>
+
+      <div className="grid min-h-0 flex-1 gap-4 xl:hidden">
+        <div className="rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
+          <BacktestSetupForm
+            initialValues={lastSubmittedRequest ?? undefined}
+            isSubmitting={runBacktestMutation.isPending || isTransitionPending}
+            onSubmit={handleRunBacktest}
+            submissionError={hasValidationBacktestError(runBacktestMutation.error) ? runBacktestMutation.error : undefined}
+            templates={backtestTemplatesQuery.items}
+          />
+        </div>
+        <div className="rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
+          <BacktestResultPanel
+            error={runBacktestMutation.error}
+            isPending={runBacktestMutation.isPending || isTransitionPending}
+            onRetry={isRetryableBacktestError(runBacktestMutation.error) ? handleRetryLatestRequest : undefined}
+            result={selectedResult}
+          />
+        </div>
+      </div>
+    </section>
+  )
+}

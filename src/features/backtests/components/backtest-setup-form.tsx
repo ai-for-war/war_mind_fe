@@ -16,6 +16,10 @@ import {
 import { Input } from "@/components/ui/input"
 import { Spinner } from "@/components/ui/spinner"
 import {
+  getBacktestFieldErrorPath,
+  getBacktestValidationErrors,
+} from "@/features/backtests/backtest.utils"
+import {
   buildBacktestSetupDefaultValues,
   buildBacktestSetupSubmitPayload,
   buildBacktestTemplateParamValues,
@@ -34,6 +38,7 @@ type BacktestSetupFormProps = {
   initialValues?: Partial<BacktestRunRequest>
   isSubmitting?: boolean
   onSubmit: (payload: BacktestRunRequest) => Promise<void> | void
+  submissionError?: unknown
   templates: BacktestTemplateItem[]
 }
 
@@ -41,6 +46,7 @@ export const BacktestSetupForm = ({
   initialValues,
   isSubmitting = false,
   onSubmit,
+  submissionError,
   templates,
 }: BacktestSetupFormProps) => {
   const validationSchema = useMemo(() => createBacktestSetupFormSchema(templates), [templates])
@@ -88,6 +94,31 @@ export const BacktestSetupForm = ({
       shouldValidate: true,
     })
   }, [form, selectedTemplate])
+
+  useEffect(() => {
+    if (!submissionError) {
+      return
+    }
+
+    const validationErrors = getBacktestValidationErrors(submissionError)
+
+    if (validationErrors.length === 0) {
+      return
+    }
+
+    validationErrors.forEach((validationError) => {
+      const fieldPath = getBacktestFieldErrorPath(validationError)
+
+      if (!fieldPath) {
+        return
+      }
+
+      form.setError(fieldPath as keyof BacktestSetupFormValues, {
+        message: validationError.msg,
+        type: "server",
+      })
+    })
+  }, [form, submissionError])
 
   const handleSubmit = form.handleSubmit(async (values) => {
     await onSubmit(buildBacktestSetupSubmitPayload(values, templates))

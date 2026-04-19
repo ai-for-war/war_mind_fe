@@ -14,10 +14,10 @@
 
 ## 3. Result workspace
 
-- [ ] 3.1 Build the desktop `Analyst Terminal` layout with a persistent configuration panel and result panel, plus a stacked responsive fallback
-- [ ] 3.2 Implement the successful-run KPI strip and equity-focused chart from `equity_curve`
-- [ ] 3.3 Implement `Overview` and `Trades` tabs with summary/performance content and the trade-log table
-- [ ] 3.4 Add loading, empty, and no-trade result states without rendering a visible assumptions section
+- [x] 3.1 Build the desktop `Analyst Terminal` layout with a persistent configuration panel and result panel, plus a stacked responsive fallback
+- [x] 3.2 Implement the successful-run KPI strip and equity-focused chart from `equity_curve`
+- [x] 3.3 Implement `Overview` and `Trades` tabs with summary/performance content and the trade-log table
+- [x] 3.4 Add loading, empty, and no-trade result states without rendering a visible assumptions section
 
 ## 4. Routing and feedback
 
