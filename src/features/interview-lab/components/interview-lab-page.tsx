@@ -367,7 +367,7 @@ export const InterviewLabPage = () => {
   );
 
   return (
-    <section className="flex flex-col gap-2 xl:min-h-0 xl:flex-1 xl:overflow-hidden">
+    <section className="flex h-full min-h-0 min-w-0 max-h-[calc(100dvh-6rem)] flex-1 flex-col gap-4 overflow-hidden">
       <header className="flex flex-col gap-4 xl:flex-row xl:items-end xl:justify-between">
         <div className="space-y-2">
           <div className="space-x-4 flex ">
