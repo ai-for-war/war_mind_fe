@@ -1,9 +1,9 @@
 ## 1. Backtest feature foundations
 
-- [ ] 1.1 Create the `src/features/backtests/` slice with page, components, hooks, API, types, query keys, and nearby `*.utils.ts` files
-- [ ] 1.2 Define template-catalog and run-response types that match `docs/backtest/frontend_integration_guide.md` without adding unsupported fields
-- [ ] 1.3 Implement the template-catalog and run-request API adapters for `GET /api/v1/backtests/templates` and `POST /api/v1/backtests/run`
-- [ ] 1.4 Add shared formatters and mappers for KPI values, chart series, trade rows, toast-friendly error messages, and template-driven parameter metadata
+- [x] 1.1 Create the `src/features/backtests/` slice with page, components, hooks, API, types, query keys, and nearby `*.utils.ts` files
+- [x] 1.2 Define template-catalog and run-response types that match `docs/backtest/frontend_integration_guide.md` without adding unsupported fields
+- [x] 1.3 Implement the template-catalog and run-request API adapters for `GET /api/v1/backtests/templates` and `POST /api/v1/backtests/run`
+- [x] 1.4 Add shared formatters and mappers for KPI values, chart series, trade rows, toast-friendly error messages, and template-driven parameter metadata
 
 ## 2. Setup workspace
 
