@@ -1,3 +1,4 @@
+export { BacktestDialog } from "@/features/backtests/components/backtest-dialog"
 export { BacktestDatePicker } from "@/features/backtests/components/backtest-date-picker"
 export { BacktestEquityChart } from "@/features/backtests/components/backtest-equity-chart"
 export { BacktestKpiStrip } from "@/features/backtests/components/backtest-kpi-strip"
@@ -10,3 +11,4 @@ export { BacktestSymbolPicker } from "@/features/backtests/components/backtest-s
 export { BacktestTerminalPage } from "@/features/backtests/components/backtest-terminal-page"
 export { BacktestTemplateParameterFields } from "@/features/backtests/components/backtest-template-parameter-fields"
 export { BacktestTradesTable } from "@/features/backtests/components/backtest-trades-table"
+export { BacktestWorkspace } from "@/features/backtests/components/backtest-workspace"

@@ -10,6 +10,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty"
+import { BacktestDialog } from "@/features/backtests"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
 import { StockCompanyOverviewDialog } from "@/features/stocks/components/stock-company-overview-dialog"
@@ -55,6 +56,7 @@ export const StocksPage = () => {
     q: "",
   })
   const [isCompanyOverviewOpen, setIsCompanyOverviewOpen] = useState(false)
+  const [backtestDialogSymbol, setBacktestDialogSymbol] = useState<string | null>(null)
   const [watchlistDialogStock, setWatchlistDialogStock] = useState<StockListItem | null>(null)
   const [selectedStock, setSelectedStock] = useState<StockListItem | null>(null)
   const debouncedSearch = useDebouncedValue(filters.q ?? "", 300)
@@ -128,6 +130,24 @@ export const StocksPage = () => {
     }
 
     setSelectedStock(null)
+  }
+
+  const handleBacktestDialogOpenChange = (open: boolean) => {
+    if (open) {
+      return
+    }
+
+    setBacktestDialogSymbol(null)
+  }
+
+  const handleOpenBacktest = (item: StockListItem) => {
+    setBacktestDialogSymbol(item.symbol)
+  }
+
+  const handleOpenBacktestFromCompany = (item: StockListItem) => {
+    setIsCompanyOverviewOpen(false)
+    setSelectedStock(null)
+    setBacktestDialogSymbol(item.symbol)
   }
 
   const handleWatchlistDialogOpenChange = (open: boolean) => {
@@ -248,6 +268,7 @@ export const StocksPage = () => {
               <StocksTable
                 items={stockCatalogQuery.items}
                 onAddToWatchlist={setWatchlistDialogStock}
+                onBacktest={handleOpenBacktest}
                 onRowSelect={handleStockSelect}
                 selectedSymbol={isCompanyOverviewOpen ? selectedStock?.symbol ?? null : null}
               />
@@ -271,12 +292,18 @@ export const StocksPage = () => {
       <StockCompanyOverviewDialog
         isOpen={isCompanyOverviewOpen}
         onOpenChange={handleCompanyOverviewOpenChange}
+        onOpenBacktest={handleOpenBacktestFromCompany}
         selectedStock={selectedStock}
       />
       <StockAddToWatchlistDialog
         open={watchlistDialogStock != null}
         onOpenChange={handleWatchlistDialogOpenChange}
         symbol={watchlistDialogStock?.symbol ?? null}
+      />
+      <BacktestDialog
+        open={backtestDialogSymbol != null}
+        onOpenChange={handleBacktestDialogOpenChange}
+        initialValues={backtestDialogSymbol ? { symbol: backtestDialogSymbol } : undefined}
       />
     </section>
   )
