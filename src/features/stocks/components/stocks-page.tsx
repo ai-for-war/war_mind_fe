@@ -15,6 +15,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { StockCompanyOverviewDialog } from "@/features/stocks/components/stock-company-overview-dialog"
 import { StocksFilterBar } from "@/features/stocks/components/stocks-filter-bar"
 import { StocksTable } from "@/features/stocks/components/stocks-table"
+import { StockAddToWatchlistDialog } from "@/features/stock-watchlists"
 import { useStockCatalog } from "@/features/stocks/hooks"
 import { useDebouncedValue } from "@/hooks/use-debounced-value"
 import { useScrollAreaInfiniteScroll } from "@/hooks/use-scroll-area-infinite-scroll"
@@ -54,6 +55,7 @@ export const StocksPage = () => {
     q: "",
   })
   const [isCompanyOverviewOpen, setIsCompanyOverviewOpen] = useState(false)
+  const [watchlistDialogStock, setWatchlistDialogStock] = useState<StockListItem | null>(null)
   const [selectedStock, setSelectedStock] = useState<StockListItem | null>(null)
   const debouncedSearch = useDebouncedValue(filters.q ?? "", 300)
   const debouncedFilters = useMemo(
@@ -126,6 +128,12 @@ export const StocksPage = () => {
     }
 
     setSelectedStock(null)
+  }
+
+  const handleWatchlistDialogOpenChange = (open: boolean) => {
+    if (!open) {
+      setWatchlistDialogStock(null)
+    }
   }
 
   const freshnessLabel = stockCatalogQuery.snapshotAt
@@ -239,6 +247,7 @@ export const StocksPage = () => {
             <div className="min-w-full">
               <StocksTable
                 items={stockCatalogQuery.items}
+                onAddToWatchlist={setWatchlistDialogStock}
                 onRowSelect={handleStockSelect}
                 selectedSymbol={isCompanyOverviewOpen ? selectedStock?.symbol ?? null : null}
               />
@@ -263,6 +272,11 @@ export const StocksPage = () => {
         isOpen={isCompanyOverviewOpen}
         onOpenChange={handleCompanyOverviewOpenChange}
         selectedStock={selectedStock}
+      />
+      <StockAddToWatchlistDialog
+        open={watchlistDialogStock != null}
+        onOpenChange={handleWatchlistDialogOpenChange}
+        symbol={watchlistDialogStock?.symbol ?? null}
       />
     </section>
   )

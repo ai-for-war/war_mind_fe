@@ -1,6 +1,8 @@
+import { BookmarkPlus } from "lucide-react"
 import { useMemo, useState } from "react"
 
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import {
   Dialog,
   DialogContent,
@@ -9,6 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { StockAddToWatchlistDialog } from "@/features/stock-watchlists"
 import { StockCompanyAffiliatePanel } from "@/features/stocks/components/stock-company-affiliate-panel"
 import { StockCompanyEventsPanel } from "@/features/stocks/components/stock-company-events-panel"
 import { StockCompanyNewsPanel } from "@/features/stocks/components/stock-company-news-panel"
@@ -82,6 +85,7 @@ const StockCompanyOverviewDialogBody = ({
   selectedStock,
 }: StockCompanyOverviewDialogBodyProps) => {
   const [activeTab, setActiveTab] = useState<CompanyDetailTab>("prices")
+  const [isAddToWatchlistOpen, setIsAddToWatchlistOpen] = useState(false)
 
   const visibleGroups = useMemo(() => selectedStock?.groups ?? [], [selectedStock?.groups])
 
@@ -107,30 +111,45 @@ const StockCompanyOverviewDialogBody = ({
   return (
     <div className="flex h-full min-h-0 flex-col">
       <DialogHeader className="border-b border-border/60 px-6 py-5 text-left">
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge variant="outline" className="border-cyan-400/30 bg-cyan-400/10 text-cyan-100">
-            {formatNullableValue(selectedStock?.symbol)}
-          </Badge>
-          <Badge variant="secondary" className="rounded-full bg-secondary/70">
-            {formatNullableValue(selectedStock?.exchange)}
-          </Badge>
-          <Badge variant="outline" className="rounded-full border-border/70 bg-background/40">
-            {formatNullableValue(selectedStock?.industry_name)}
-          </Badge>
-          {visibleGroups.map((group) => (
-            <Badge
-              key={group}
-              variant="secondary"
-              className="rounded-full bg-secondary/70 text-secondary-foreground"
-            >
-              {group}
-            </Badge>
-          ))}
-        </div>
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="space-y-3">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge variant="outline" className="border-cyan-400/30 bg-cyan-400/10 text-cyan-100">
+                {formatNullableValue(selectedStock?.symbol)}
+              </Badge>
+              <Badge variant="secondary" className="rounded-full bg-secondary/70">
+                {formatNullableValue(selectedStock?.exchange)}
+              </Badge>
+              <Badge variant="outline" className="rounded-full border-border/70 bg-background/40">
+                {formatNullableValue(selectedStock?.industry_name)}
+              </Badge>
+              {visibleGroups.map((group) => (
+                <Badge
+                  key={group}
+                  variant="secondary"
+                  className="rounded-full bg-secondary/70 text-secondary-foreground"
+                >
+                  {group}
+                </Badge>
+              ))}
+            </div>
 
-        <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground">
-          {selectedStock?.organ_name?.trim() || selectedStock?.symbol || "Company overview"}
-        </DialogTitle>
+            <DialogTitle className="text-2xl font-semibold tracking-tight text-foreground">
+              {selectedStock?.organ_name?.trim() || selectedStock?.symbol || "Company overview"}
+            </DialogTitle>
+          </div>
+
+          {selectedStock?.symbol ? (
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setIsAddToWatchlistOpen(true)}
+            >
+              <BookmarkPlus className="size-4" />
+              Add to Watchlist
+            </Button>
+          ) : null}
+        </div>
       </DialogHeader>
 
       <Tabs className="flex min-h-0 flex-1 flex-col" onValueChange={handleTabChange} value={activeTab}>
@@ -224,6 +243,12 @@ const StockCompanyOverviewDialogBody = ({
           </div>
         </ScrollArea>
       </Tabs>
+
+      <StockAddToWatchlistDialog
+        open={isAddToWatchlistOpen}
+        onOpenChange={setIsAddToWatchlistOpen}
+        symbol={selectedStock?.symbol ?? null}
+      />
     </div>
   )
 }

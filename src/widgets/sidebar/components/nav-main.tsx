@@ -1,5 +1,6 @@
 import {
   AudioLines,
+  Bookmark,
   Bot,
   CircleDot,
   ImagePlus,
@@ -75,7 +76,12 @@ const navItems = [
         title: "Backtest",
         url: "/backtests",
         icon: Waypoints,
-      }
+      },
+      {
+        title: "Watchlists",
+        url: "/stocks/watchlists",
+        icon: Bookmark,
+      },
     ],
   },
   {
