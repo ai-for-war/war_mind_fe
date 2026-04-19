@@ -1,3 +1,4 @@
+export { BacktestDatePicker } from "@/features/backtests/components/backtest-date-picker"
 export { BacktestEquityChart } from "@/features/backtests/components/backtest-equity-chart"
 export { BacktestKpiStrip } from "@/features/backtests/components/backtest-kpi-strip"
 export { BacktestOverviewPanel } from "@/features/backtests/components/backtest-overview-panel"

@@ -31,6 +31,7 @@ import { getBacktestTemplateById } from "@/features/backtests/backtest.utils"
 import { BacktestStrategyPicker } from "@/features/backtests/components/backtest-strategy-picker"
 import { BacktestStrategySummaryCard } from "@/features/backtests/components/backtest-strategy-summary-card"
 import { BacktestSymbolPicker } from "@/features/backtests/components/backtest-symbol-picker"
+import { BacktestDatePicker } from "@/features/backtests/components/backtest-date-picker"
 import { BacktestTemplateParameterFields } from "@/features/backtests/components/backtest-template-parameter-fields"
 import type { BacktestRunRequest, BacktestTemplateItem } from "@/features/backtests/types"
 
@@ -65,6 +66,14 @@ export const BacktestSetupForm = ({
   const selectedSymbol = useWatch({
     control: form.control,
     name: "symbol",
+  })
+  const selectedDateFrom = useWatch({
+    control: form.control,
+    name: "date_from",
+  })
+  const selectedDateTo = useWatch({
+    control: form.control,
+    name: "date_to",
   })
   const selectedTemplate = useMemo(
     () => getBacktestTemplateById(templates, selectedTemplateId),
@@ -148,11 +157,17 @@ export const BacktestSetupForm = ({
           <Field data-invalid={form.formState.errors.date_from ? true : undefined}>
             <FieldLabel htmlFor="backtest-date-from">Date from</FieldLabel>
             <FieldContent>
-              <Input
+              <BacktestDatePicker
                 id="backtest-date-from"
-                type="date"
-                aria-invalid={form.formState.errors.date_from ? true : undefined}
-                {...form.register("date_from")}
+                value={selectedDateFrom}
+                placeholder="Select start date"
+                invalid={form.formState.errors.date_from ? true : undefined}
+                onChange={(dateFrom) => {
+                  form.setValue("date_from", dateFrom, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  })
+                }}
               />
               <FieldError errors={form.formState.errors.date_from ? [form.formState.errors.date_from] : undefined} />
             </FieldContent>
@@ -161,11 +176,17 @@ export const BacktestSetupForm = ({
           <Field data-invalid={form.formState.errors.date_to ? true : undefined}>
             <FieldLabel htmlFor="backtest-date-to">Date to</FieldLabel>
             <FieldContent>
-              <Input
+              <BacktestDatePicker
                 id="backtest-date-to"
-                type="date"
-                aria-invalid={form.formState.errors.date_to ? true : undefined}
-                {...form.register("date_to")}
+                value={selectedDateTo}
+                placeholder="Select end date"
+                invalid={form.formState.errors.date_to ? true : undefined}
+                onChange={(dateTo) => {
+                  form.setValue("date_to", dateTo, {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  })
+                }}
               />
               <FieldError errors={form.formState.errors.date_to ? [form.formState.errors.date_to] : undefined} />
             </FieldContent>
