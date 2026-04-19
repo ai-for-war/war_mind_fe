@@ -1,8 +1,7 @@
 "use client"
 
-import { useMemo, useState, useTransition } from "react"
+import { useEffect, useMemo, useRef, useState, useTransition } from "react"
 import { AlertCircle, RefreshCw } from "lucide-react"
-import { isAxiosError } from "axios"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -14,12 +13,15 @@ import {
 } from "@/components/ui/empty"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
-import { getBacktestValidationErrors } from "@/features/backtests/backtest.utils"
+import {
+  getBacktestApiErrorMessage,
+  getBacktestValidationErrors,
+} from "@/features/backtests/backtest.utils"
 import { BacktestResultPanel } from "@/features/backtests/components/backtest-result-panel"
 import { BacktestSetupForm } from "@/features/backtests/components/backtest-setup-form"
 import { useBacktestTemplates, useRunBacktest } from "@/features/backtests/hooks"
 import type { BacktestResult, BacktestRunRequest } from "@/features/backtests/types"
-import type { ApiErrorResponse } from "@/types/api"
+import { toast } from "sonner"
 
 const BacktestSetupSkeleton = () => (
   <div className="flex flex-col gap-4">
@@ -38,20 +40,14 @@ const BacktestSetupSkeleton = () => (
   </div>
 )
 
-const isRetryableBacktestError = (error: unknown) => {
-  if (!isAxiosError<ApiErrorResponse>(error)) {
-    return false
-  }
-
-  return error.response?.status === 502
-}
-
 const hasValidationBacktestError = (error: unknown) => getBacktestValidationErrors(error).length > 0
 
 export const BacktestTerminalPage = () => {
   const [lastSuccessfulResult, setLastSuccessfulResult] = useState<BacktestResult | null>(null)
   const [lastSubmittedRequest, setLastSubmittedRequest] = useState<BacktestRunRequest | null>(null)
   const [isTransitionPending, startTransition] = useTransition()
+  const lastTemplateErrorMessageRef = useRef<string | null>(null)
+  const lastRunErrorMessageRef = useRef<string | null>(null)
   const backtestTemplatesQuery = useBacktestTemplates()
   const runBacktestMutation = useRunBacktest()
 
@@ -69,13 +65,37 @@ export const BacktestTerminalPage = () => {
     })
   }
 
-  const handleRetryLatestRequest = () => {
-    if (!lastSubmittedRequest) {
+  useEffect(() => {
+    if (!backtestTemplatesQuery.isError) {
+      lastTemplateErrorMessageRef.current = null
       return
     }
 
-    void handleRunBacktest(lastSubmittedRequest)
-  }
+    const nextErrorMessage = getBacktestApiErrorMessage(backtestTemplatesQuery.error)
+
+    if (lastTemplateErrorMessageRef.current === nextErrorMessage) {
+      return
+    }
+
+    lastTemplateErrorMessageRef.current = nextErrorMessage
+    toast.error(nextErrorMessage)
+  }, [backtestTemplatesQuery.error, backtestTemplatesQuery.isError])
+
+  useEffect(() => {
+    if (!runBacktestMutation.isError) {
+      lastRunErrorMessageRef.current = null
+      return
+    }
+
+    const nextErrorMessage = getBacktestApiErrorMessage(runBacktestMutation.error)
+
+    if (lastRunErrorMessageRef.current === nextErrorMessage) {
+      return
+    }
+
+    lastRunErrorMessageRef.current = nextErrorMessage
+    toast.error(nextErrorMessage)
+  }, [runBacktestMutation.error, runBacktestMutation.isError])
 
   if (backtestTemplatesQuery.isLoading) {
     return (
@@ -190,12 +210,10 @@ export const BacktestTerminalPage = () => {
 
         <div className="h-full rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
           <ScrollArea className="h-full pr-3">
-            <BacktestResultPanel
-              error={runBacktestMutation.error}
-              isPending={runBacktestMutation.isPending || isTransitionPending}
-              onRetry={isRetryableBacktestError(runBacktestMutation.error) ? handleRetryLatestRequest : undefined}
-              result={selectedResult}
-            />
+                <BacktestResultPanel
+                  isPending={runBacktestMutation.isPending || isTransitionPending}
+                  result={selectedResult}
+                />
           </ScrollArea>
         </div>
       </div>
@@ -212,9 +230,7 @@ export const BacktestTerminalPage = () => {
         </div>
         <div className="rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
           <BacktestResultPanel
-            error={runBacktestMutation.error}
             isPending={runBacktestMutation.isPending || isTransitionPending}
-            onRetry={isRetryableBacktestError(runBacktestMutation.error) ? handleRetryLatestRequest : undefined}
             result={selectedResult}
           />
         </div>

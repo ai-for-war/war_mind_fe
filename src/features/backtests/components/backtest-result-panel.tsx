@@ -1,6 +1,5 @@
-import { AlertCircle, LineChart, RefreshCw } from "lucide-react"
+import { LineChart } from "lucide-react"
 
-import { Button } from "@/components/ui/button"
 import {
   Empty,
   EmptyDescription,
@@ -10,7 +9,6 @@ import {
 } from "@/components/ui/empty"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { getBacktestApiErrorMessage } from "@/features/backtests/backtest.utils"
 import type { BacktestResult } from "@/features/backtests/types"
 import { BacktestEquityChart } from "@/features/backtests/components/backtest-equity-chart"
 import { BacktestKpiStrip } from "@/features/backtests/components/backtest-kpi-strip"
@@ -18,9 +16,7 @@ import { BacktestOverviewPanel } from "@/features/backtests/components/backtest-
 import { BacktestTradesTable } from "@/features/backtests/components/backtest-trades-table"
 
 type BacktestResultPanelProps = {
-  error?: unknown
   isPending?: boolean
-  onRetry?: () => void
   result?: BacktestResult | null
 }
 
@@ -37,33 +33,11 @@ const BacktestResultSkeleton = () => (
 )
 
 export const BacktestResultPanel = ({
-  error,
   isPending = false,
-  onRetry,
   result,
 }: BacktestResultPanelProps) => {
   if (isPending && !result) {
     return <BacktestResultSkeleton />
-  }
-
-  if (!result && error) {
-    return (
-      <Empty className="min-h-[420px] border-border/60 bg-background/20">
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <AlertCircle className="size-5 text-destructive" />
-          </EmptyMedia>
-          <EmptyTitle>Unable to run backtest</EmptyTitle>
-          <EmptyDescription>{getBacktestApiErrorMessage(error)}</EmptyDescription>
-        </EmptyHeader>
-        {onRetry ? (
-          <Button type="button" variant="outline" onClick={onRetry}>
-            <RefreshCw />
-            Retry
-          </Button>
-        ) : null}
-      </Empty>
-    )
   }
 
   if (!result) {

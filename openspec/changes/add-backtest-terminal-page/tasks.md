@@ -21,10 +21,10 @@
 
 ## 4. Routing and feedback
 
-- [ ] 4.1 Register the protected `/backtests` route in `src/app/router.tsx` and export the page from the backtests feature barrel
-- [ ] 4.2 Add the `Backtest` destination to the markets section of `NavMain` with correct active-route behavior
-- [ ] 4.3 Wire all request and validation failures to `sonner` toast notifications while preserving current setup values
-- [ ] 4.4 Ensure the latest successful result remains visible when a later run attempt fails
+- [x] 4.1 Register the protected `/backtests` route in `src/app/router.tsx` and export the page from the backtests feature barrel
+- [x] 4.2 Add the `Backtest` destination to the markets section of `NavMain` with correct active-route behavior
+- [x] 4.3 Wire all request and validation failures to `sonner` toast notifications while preserving current setup values
+- [x] 4.4 Ensure the latest successful result remains visible when a later run attempt fails
 
 ## 5. Verification
 

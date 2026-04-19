@@ -4,6 +4,7 @@ import { createBrowserRouter, Navigate, Outlet, useLocation } from "react-router
 import { MainLayout } from "@/app/layouts/main-layout"
 import { Spinner } from "@/components/ui/spinner"
 import { LoginPage } from "@/features/auth/components/login-page"
+import { BacktestTerminalPage } from "@/features/backtests"
 import { InterviewLabPage } from "@/features/interview-lab"
 import { MeetingRecorderPage } from "@/features/meeting-recorder"
 import { MultiAgentPage } from "@/features/multi-agent"
@@ -104,6 +105,10 @@ export const router = createBrowserRouter([
           {
             path: "/stocks",
             element: <StocksPage />,
+          },
+          {
+            path: "/backtests",
+            element: <BacktestTerminalPage />,
           },
         ],
       },
