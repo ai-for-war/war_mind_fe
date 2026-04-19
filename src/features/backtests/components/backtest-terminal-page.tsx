@@ -178,7 +178,7 @@ export const BacktestTerminalPage = () => {
 
   return (
     <section className="flex h-full min-h-0 min-w-0 max-h-[calc(100dvh-6rem)] flex-1 flex-col gap-4 overflow-hidden">
-      <header className="space-y-1">
+      <header className="shrink-0 space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight text-foreground">
           Backtest Terminal
         </h1>
@@ -187,10 +187,10 @@ export const BacktestTerminalPage = () => {
         </p>
       </header>
 
-      <div className="hidden min-h-0 flex-1 xl:grid xl:grid-cols-[24rem_minmax(0,1fr)] xl:gap-4">
-        <div className="h-full rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
-          <ScrollArea className="h-full pr-3">
-            <div className="space-y-4">
+      <div className="hidden min-h-0 min-w-0 flex-1 overflow-hidden xl:grid xl:grid-cols-[24rem_minmax(0,1fr)] xl:gap-4">
+        <div className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
+          <ScrollArea className="min-h-0 flex-1 pr-3">
+            <div className="flex flex-col gap-4">
               <div className="space-y-1">
                 <h2 className="text-lg font-semibold">Setup</h2>
                 <p className="text-sm text-muted-foreground">
@@ -208,33 +208,35 @@ export const BacktestTerminalPage = () => {
           </ScrollArea>
         </div>
 
-        <div className="h-full rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
-          <ScrollArea className="h-full pr-3">
-                <BacktestResultPanel
-                  isPending={runBacktestMutation.isPending || isTransitionPending}
-                  result={selectedResult}
-                />
+        <div className="flex min-h-0 min-w-0 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
+          <ScrollArea className="min-h-0 flex-1 pr-3">
+            <BacktestResultPanel
+              isPending={runBacktestMutation.isPending || isTransitionPending}
+              result={selectedResult}
+            />
           </ScrollArea>
         </div>
       </div>
 
-      <div className="grid min-h-0 flex-1 gap-4 xl:hidden">
-        <div className="rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
-          <BacktestSetupForm
-            initialValues={lastSubmittedRequest ?? undefined}
-            isSubmitting={runBacktestMutation.isPending || isTransitionPending}
-            onSubmit={handleRunBacktest}
-            submissionError={hasValidationBacktestError(runBacktestMutation.error) ? runBacktestMutation.error : undefined}
-            templates={backtestTemplatesQuery.items}
-          />
+      <ScrollArea className="min-h-0 flex-1 xl:hidden">
+        <div className="grid min-h-full min-w-0 gap-4 pr-3">
+          <div className="min-w-0 rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
+            <BacktestSetupForm
+              initialValues={lastSubmittedRequest ?? undefined}
+              isSubmitting={runBacktestMutation.isPending || isTransitionPending}
+              onSubmit={handleRunBacktest}
+              submissionError={hasValidationBacktestError(runBacktestMutation.error) ? runBacktestMutation.error : undefined}
+              templates={backtestTemplatesQuery.items}
+            />
+          </div>
+          <div className="min-w-0 rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
+            <BacktestResultPanel
+              isPending={runBacktestMutation.isPending || isTransitionPending}
+              result={selectedResult}
+            />
+          </div>
         </div>
-        <div className="rounded-2xl border border-border/60 bg-background/50 p-4 backdrop-blur">
-          <BacktestResultPanel
-            isPending={runBacktestMutation.isPending || isTransitionPending}
-            result={selectedResult}
-          />
-        </div>
-      </div>
+      </ScrollArea>
     </section>
   )
 }
