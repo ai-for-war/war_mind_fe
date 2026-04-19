@@ -8,6 +8,7 @@ import {
   Mic,
   Plug,
   Sparkles,
+  Waypoints,
   TrendingUp,
 } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -70,6 +71,11 @@ const navItems = [
         title: "Stock Catalog",
         url: "/stocks",
         icon: TrendingUp,
+      },
+      {
+        title: "Backtest",
+        url: "/backtests",
+        icon: Waypoints,
       },
       {
         title: "Watchlists",

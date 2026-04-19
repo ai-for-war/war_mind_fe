@@ -4,7 +4,7 @@ import {
   useReactTable,
   type ColumnDef,
 } from "@tanstack/react-table"
-import { BookmarkPlus, MoreHorizontal } from "lucide-react"
+import { BookmarkPlus, LineChart, MoreHorizontal } from "lucide-react"
 import { useCallback, useMemo } from "react"
 
 import { Badge } from "@/components/ui/badge"
@@ -36,6 +36,7 @@ import { formatAbsoluteDateTime } from "@/lib/date"
 type StocksTableProps = {
   items: StockListItem[]
   onAddToWatchlist?: ((item: StockListItem) => void) | undefined
+  onBacktest?: ((item: StockListItem) => void) | undefined
   onRowSelect?: ((item: StockListItem) => void) | undefined
   selectedSymbol?: string | null
 }
@@ -149,11 +150,12 @@ const baseColumns: ColumnDef<StockListItem>[] = [
 export const StocksTable = ({
   items,
   onAddToWatchlist,
+  onBacktest,
   onRowSelect,
   selectedSymbol,
 }: StocksTableProps) => {
   const columns = useMemo<ColumnDef<StockListItem>[]>(() => {
-    if (!onAddToWatchlist) {
+    if (!onAddToWatchlist && !onBacktest) {
       return baseColumns
     }
 
@@ -188,21 +190,33 @@ export const StocksTable = ({
                   event.stopPropagation()
                 }}
               >
-                <DropdownMenuItem
-                  onClick={() => {
-                    onAddToWatchlist(row.original)
-                  }}
-                >
-                  <BookmarkPlus className="size-4" />
-                  Add to watchlist
-                </DropdownMenuItem>
+                {onBacktest ? (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      onBacktest(row.original)
+                    }}
+                  >
+                    <LineChart className="size-4" />
+                    Backtest
+                  </DropdownMenuItem>
+                ) : null}
+                {onAddToWatchlist ? (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      onAddToWatchlist(row.original)
+                    }}
+                  >
+                    <BookmarkPlus className="size-4" />
+                    Add to watchlist
+                  </DropdownMenuItem>
+                ) : null}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         ),
       },
     ]
-  }, [onAddToWatchlist])
+  }, [onAddToWatchlist, onBacktest])
 
   const table = useReactTable({
     columns,

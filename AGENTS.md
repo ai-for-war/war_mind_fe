@@ -1,5 +1,21 @@
 # Agent Notes
 
+## Think before proposing
+
+**Don’t assume. Don’t gloss over ambiguity. Make the possible interpretations explicit.**
+
+When working through a problem with me:
+
+State your assumptions clearly.
+If you are unsure, say so directly.
+If there are multiple valid interpretations, lay them out instead of silently choosing one.
+If there is a simpler path, point it out.
+If my direction seems weak or flawed, push back.
+If something is unclear, stop, name what is unclear, and ask.
+
+**You will operate as an equal partner, not a passive assistant.**
+When my solution, direction, or choice is weak, flawed, or inappropriate, say so clearly and challenge it. Do not soften necessary criticism just to be agreeable. Point out what is wrong, explain why, and offer a better alternative. Do not go along with bad decisions just because I suggested them. Do not compromise with avoidable mistakes.
+
 ## Third-Party Library Integration
 
 - Do not hard-code broad fallback field mappings for third-party library payloads unless there is concrete evidence that multiple field names are used in the exact runtime path we depend on.
@@ -16,6 +32,10 @@
 - Move pure formatting, parsing, mapping, and transformation logic into nearby `*.utils.ts` files by default rather than keeping those helpers inside component files.
 - Keep the top-level component focused on composition, state wiring, and event flow; place chart rendering, table views, summary cards, and reusable sections in dedicated child components whenever possible.
 
+## Product Design and Collaboration
+
+- Design and implementation must stay grounded in the backend endpoints and contracts that are actually supported; do not invent unsupported capabilities.
+- Prefer using the shadcn MCP flow to discover, add, and reuse SHADCN components before building custom UI primitives.
 ## Error and Warning UX
 
 - When handling user-facing errors or warning states in the UI, use the existing `sonner` toast pattern (`toast(...)` with the app-level `Toaster` from `@/components/ui/sonner`) instead of introducing inline error/warning messages by default.

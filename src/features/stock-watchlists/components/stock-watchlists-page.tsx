@@ -24,6 +24,7 @@ import {
   EmptyTitle,
 } from "@/components/ui/empty"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { BacktestDialog } from "@/features/backtests"
 import { StockCompanyOverviewDialog } from "@/features/stocks/components"
 import type { StockListItem } from "@/features/stocks/types"
 import {
@@ -101,6 +102,7 @@ export const StockWatchlistsPage = () => {
   )
 
   const [isCompanyOverviewOpen, setIsCompanyOverviewOpen] = useState(false)
+  const [backtestDialogSymbol, setBacktestDialogSymbol] = useState<string | null>(null)
   const [selectedStock, setSelectedStock] = useState<StockListItem | null>(null)
 
   const openCreateDialog = () => {
@@ -184,6 +186,14 @@ export const StockWatchlistsPage = () => {
     if (!open) {
       setSelectedStock(null)
     }
+  }
+
+  const handleBacktestDialogOpenChange = (open: boolean) => {
+    if (open) {
+      return
+    }
+
+    setBacktestDialogSymbol(null)
   }
 
   const handleCreateWatchlistSubmit = async () => {
@@ -335,6 +345,16 @@ export const StockWatchlistsPage = () => {
 
     setSelectedStock(mapWatchlistStockMetadataToStockListItem(item.stock))
     setIsCompanyOverviewOpen(true)
+  }
+
+  const handleWatchlistItemBacktest = (item: StockWatchlistItemResponse) => {
+    setBacktestDialogSymbol(item.symbol)
+  }
+
+  const handleOpenBacktestFromCompany = (item: StockListItem) => {
+    setIsCompanyOverviewOpen(false)
+    setSelectedStock(null)
+    setBacktestDialogSymbol(item.symbol)
   }
 
   if (watchlistsQuery.isLoading) {
@@ -606,6 +626,7 @@ export const StockWatchlistsPage = () => {
                       <div className="min-w-full">
                         <StockWatchlistItemsTable
                           items={activeWatchlistItemsQuery.items}
+                          onBacktest={handleWatchlistItemBacktest}
                           onRemoveItem={setRemoveItemTarget}
                           onSelectItem={handleWatchlistItemSelect}
                           selectedSymbol={isCompanyOverviewOpen ? selectedStock?.symbol ?? null : null}
@@ -692,7 +713,13 @@ export const StockWatchlistsPage = () => {
       <StockCompanyOverviewDialog
         isOpen={isCompanyOverviewOpen}
         onOpenChange={handleCompanyOverviewOpenChange}
+        onOpenBacktest={handleOpenBacktestFromCompany}
         selectedStock={selectedStock}
+      />
+      <BacktestDialog
+        open={backtestDialogSymbol != null}
+        onOpenChange={handleBacktestDialogOpenChange}
+        initialValues={backtestDialogSymbol ? { symbol: backtestDialogSymbol } : undefined}
       />
     </>
   )

@@ -18,10 +18,11 @@ import {
 import type { StockWatchlistItemResponse } from "@/features/stock-watchlists/types"
 import { formatStockWatchlistValue } from "@/features/stock-watchlists/stock-watchlists.utils"
 import { cn } from "@/lib/utils"
-import { MoreHorizontal, Trash2 } from "lucide-react"
+import { LineChart, MoreHorizontal, Trash2 } from "lucide-react"
 
 type StockWatchlistItemsTableProps = {
   items: StockWatchlistItemResponse[]
+  onBacktest?: ((item: StockWatchlistItemResponse) => void) | undefined
   onRemoveItem: (item: StockWatchlistItemResponse) => void
   onSelectItem?: ((item: StockWatchlistItemResponse) => void) | undefined
   selectedSymbol?: string | null
@@ -47,6 +48,7 @@ export const StockWatchlistItemsTableSkeleton = ({ count = 8 }: { count?: number
 
 export const StockWatchlistItemsTable = ({
   items,
+  onBacktest,
   onRemoveItem,
   onSelectItem,
   selectedSymbol,
@@ -176,6 +178,16 @@ export const StockWatchlistItemsTable = ({
                       event.stopPropagation()
                     }}
                   >
+                    {onBacktest ? (
+                      <DropdownMenuItem
+                        onClick={() => {
+                          onBacktest(item)
+                        }}
+                      >
+                        <LineChart className="size-4" />
+                        Backtest
+                      </DropdownMenuItem>
+                    ) : null}
                     <DropdownMenuItem
                       variant="destructive"
                       onClick={() => {

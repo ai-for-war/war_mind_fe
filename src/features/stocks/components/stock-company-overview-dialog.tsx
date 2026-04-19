@@ -1,4 +1,4 @@
-import { BookmarkPlus } from "lucide-react"
+import { BookmarkPlus, LineChart } from "lucide-react"
 import { useMemo, useState } from "react"
 
 import { Badge } from "@/components/ui/badge"
@@ -28,6 +28,7 @@ import type { StockListItem } from "@/features/stocks/types"
 type StockCompanyOverviewDialogProps = {
   isOpen: boolean
   onOpenChange: (open: boolean) => void
+  onOpenBacktest?: ((stock: StockListItem) => void) | undefined
   selectedStock: StockListItem | null
 }
 
@@ -59,6 +60,7 @@ const COMPANY_DETAIL_TABS = [
 export const StockCompanyOverviewDialog = ({
   isOpen,
   onOpenChange,
+  onOpenBacktest,
   selectedStock,
 }: StockCompanyOverviewDialogProps) => {
   const dialogContentKey = selectedStock?.symbol ?? "company-overview"
@@ -71,17 +73,23 @@ export const StockCompanyOverviewDialog = ({
         onPointerDownOutside={(event) => event.preventDefault()}
         showCloseButton
       >
-        <StockCompanyOverviewDialogBody key={dialogContentKey} selectedStock={selectedStock} />
+        <StockCompanyOverviewDialogBody
+          key={dialogContentKey}
+          onOpenBacktest={onOpenBacktest}
+          selectedStock={selectedStock}
+        />
       </DialogContent>
     </Dialog>
   )
 }
 
 type StockCompanyOverviewDialogBodyProps = {
+  onOpenBacktest?: ((stock: StockListItem) => void) | undefined
   selectedStock: StockListItem | null
 }
 
 const StockCompanyOverviewDialogBody = ({
+  onOpenBacktest,
   selectedStock,
 }: StockCompanyOverviewDialogBodyProps) => {
   const [activeTab, setActiveTab] = useState<CompanyDetailTab>("prices")
@@ -140,14 +148,26 @@ const StockCompanyOverviewDialogBody = ({
           </div>
 
           {selectedStock?.symbol ? (
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setIsAddToWatchlistOpen(true)}
-            >
-              <BookmarkPlus className="size-4" />
-              Add to Watchlist
-            </Button>
+            <div className="flex flex-wrap items-center gap-2">
+              {onOpenBacktest ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => onOpenBacktest(selectedStock)}
+                >
+                  <LineChart className="size-4" />
+                  Backtest
+                </Button>
+              ) : null}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsAddToWatchlistOpen(true)}
+              >
+                <BookmarkPlus className="size-4" />
+                Add to Watchlist
+              </Button>
+            </div>
           ) : null}
         </div>
       </DialogHeader>

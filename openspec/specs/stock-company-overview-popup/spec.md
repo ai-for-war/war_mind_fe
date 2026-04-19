@@ -1,8 +1,6 @@
 ## Purpose
 Define the stock company detail popup launched from the stock catalog, including the beta company tab shell and the overview-specific reading experience.
-
 ## Requirements
-
 ### Requirement: Stock catalog launches a company overview popup
 The system SHALL let the user open a company detail popup directly from a stock item in the existing stock catalog experience. Opening the popup SHALL preserve the current stock catalog page context, including the user's active search, filters, loaded rows, and scroll position behind the overlay.
 
@@ -91,3 +89,30 @@ The popup SHALL handle asynchronous overview states without collapsing the surro
 - **THEN** the popup keeps the company detail shell visible
 - **AND** the overview content area shows an error state with a retry path
 - **AND** the selected stock identity remains visible in the popup header
+
+### Requirement: Company popup can launch a quick backtest dialog
+The stock company overview popup SHALL expose a quick backtest entry point using the currently selected stock symbol. Launching the quick action SHALL open the rich quick-run backtest dialog without dismissing the company popup shell behind it.
+
+#### Scenario: User launches quick backtest from the company popup
+- **WHEN** the user activates the company popup backtest quick action
+- **THEN** the application opens the rich quick-run backtest dialog with the popup's current stock symbol prefilled
+- **AND** the company popup remains preserved behind the quick-run dialog
+
+#### Scenario: User closes the quick backtest dialog from the company popup flow
+- **WHEN** the user closes the quick-run dialog that was launched from the company popup
+- **THEN** the dialog is dismissed
+- **AND** the company popup remains open on the previously active company context
+
+### Requirement: Company detail popup can save the active symbol to a watchlist
+The stock company detail popup SHALL provide an `Add to watchlist` action for the currently selected stock symbol while keeping the popup open. The action SHALL use the watchlist API to add the popup symbol to one selected watchlist.
+
+#### Scenario: User adds the popup symbol to a watchlist
+- **WHEN** the user activates the popup-level add-to-watchlist action and chooses a watchlist
+- **THEN** the frontend sends `POST /api/v1/stocks/watchlists/{watchlist_id}/items` for the selected popup symbol
+- **AND** the popup remains open after the mutation attempt completes
+
+#### Scenario: Duplicate symbol is rejected from the popup action
+- **WHEN** the popup-level add-to-watchlist request returns `409 Conflict`
+- **THEN** the company detail popup remains visible with its current tab state preserved
+- **AND** the user receives duplicate feedback for the selected watchlist
+

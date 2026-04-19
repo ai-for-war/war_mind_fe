@@ -1,8 +1,6 @@
 ## Purpose
 Define the protected stock catalog browsing experience, including filtering, infinite scroll, and catalog-state feedback inside the authenticated app shell.
-
 ## Requirements
-
 ### Requirement: Protected stock catalog browsing page
 The system SHALL provide a protected `Stock Catalog` page that renders inside `MainLayout` and reads persisted stock catalog data from `GET /api/v1/stocks`. The page SHALL present the catalog in a data-dense table optimized for scanning `symbol`, `organ_name`, `exchange`, `groups`, `industry_name`, `source`, `snapshot_at`, and `updated_at`, with safe fallbacks for nullable fields.
 
@@ -70,3 +68,29 @@ The page SHALL surface feedback states for loading, empty results, no filtered m
 - **WHEN** stock catalog data is loaded successfully
 - **THEN** the page displays freshness metadata derived from `snapshot_at` or `updated_at`
 - **AND** the freshness indicator remains visible while the user scrolls the catalog
+
+### Requirement: Stock catalog exposes an in-context backtest quick action
+The stock catalog page SHALL expose a quick backtest entry point for a selected stock item without forcing the user to navigate away from the catalog. Launching the quick action SHALL preserve the current stock catalog search, filters, loaded rows, and scroll context behind the overlay.
+
+#### Scenario: User launches quick backtest from the stock catalog
+- **WHEN** the user activates the stock catalog backtest quick action for a stock row
+- **THEN** the application opens the rich quick-run backtest dialog for that stock symbol
+- **AND** the stock catalog remains mounted behind the dialog with its current filters and loaded result state preserved
+
+#### Scenario: User closes the quick backtest dialog
+- **WHEN** the user closes the stock catalog backtest dialog
+- **THEN** the dialog is dismissed without resetting the stock catalog search, filters, loaded pages, or scroll context
+
+### Requirement: Stock catalog rows can save symbols to a watchlist
+The stock catalog page SHALL provide a row-level `Add to watchlist` action for each catalog item without leaving the catalog route. The action SHALL use the current stock symbol and the watchlist API to add that symbol to one selected watchlist.
+
+#### Scenario: User adds a catalog symbol to an existing watchlist
+- **WHEN** the user opens the row action for a stock catalog item and chooses a watchlist
+- **THEN** the frontend sends `POST /api/v1/stocks/watchlists/{watchlist_id}/items` for that row symbol
+- **AND** the action completes without navigating away from `/stocks`
+
+#### Scenario: Duplicate symbol is rejected from the catalog action
+- **WHEN** the row-level add-to-watchlist request returns `409 Conflict`
+- **THEN** the stock catalog remains visible in its current state
+- **AND** the user receives duplicate feedback for the selected watchlist
+
