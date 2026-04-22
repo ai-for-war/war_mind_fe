@@ -23,7 +23,6 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
 
 import {
-  formatStockResearchDateTime,
   getStockResearchStatusBadgeClassName,
   getStockResearchStatusLabel,
 } from "@/features/stock-research/components/stock-research-page.utils"
@@ -178,13 +177,6 @@ export const StockResearchDetailPanel = ({
               <PanelRight data-icon="inline-start" />
               {isSourcesCollapsed ? "Show Sources" : "Hide Sources"}
             </Button>
-          </div>
-
-          <div className="grid gap-2 text-sm text-muted-foreground md:grid-cols-2">
-            <div>Created {formatStockResearchDateTime(activeReport.created_at)}</div>
-            <div>Updated {formatStockResearchDateTime(activeReport.updated_at)}</div>
-            <div>Started {formatStockResearchDateTime(activeReport.started_at)}</div>
-            <div>Completed {formatStockResearchDateTime(activeReport.completed_at)}</div>
           </div>
         </div>
       </div>
