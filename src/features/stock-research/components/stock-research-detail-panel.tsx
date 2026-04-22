@@ -70,7 +70,7 @@ export const StockResearchDetailPanel = ({
 }: StockResearchDetailPanelProps) => {
   if (activeReportSummary == null) {
     return (
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45 p-6">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45 p-6">
         <Empty className="border-border/60 bg-background/20">
           <EmptyHeader>
             <EmptyMedia variant="icon">
@@ -88,7 +88,7 @@ export const StockResearchDetailPanel = ({
 
   if (isLoading) {
     return (
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45">
         <ScrollArea className="min-h-0 flex-1">
           <StockResearchDetailPanelSkeleton />
         </ScrollArea>
@@ -98,7 +98,7 @@ export const StockResearchDetailPanel = ({
 
   if (hasError || activeReport == null) {
     return (
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45 p-6">
+      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45 p-6">
         <Empty className="border-destructive/30 bg-destructive/5">
           <EmptyHeader>
             <EmptyMedia variant="icon">
@@ -124,9 +124,9 @@ export const StockResearchDetailPanel = ({
   const markdownContent = hasMarkdownContent ? activeReport.content : undefined
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45">
+    <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45">
       <ScrollArea className="min-h-0 flex-1">
-        <div className="flex flex-col gap-6 p-5">
+        <div className="flex min-w-0 flex-col gap-6 p-5">
           <div className="flex flex-col gap-3 border-b border-border/60 pb-5">
             <div className="flex flex-wrap items-center gap-3">
               <h2 className="text-2xl font-semibold tracking-tight text-foreground">
@@ -173,10 +173,9 @@ export const StockResearchDetailPanel = ({
           ) : null}
 
           {markdownContent ? (
-            <div className="flex flex-col gap-4">
-              <div className="text-sm font-medium text-foreground">Report</div>
+            <div className="flex min-w-0 flex-col gap-4">
               <Streamdown
-                className="flex flex-col gap-4 text-sm leading-7 text-foreground [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 [&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-4 [&_code]:rounded-sm [&_code]:bg-background/80 [&_code]:px-1.5 [&_code]:py-0.5 [&_h1]:text-2xl [&_h1]:font-semibold [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:text-lg [&_h3]:font-medium [&_li]:ml-5 [&_ul]:list-disc"
+                className="flex min-w-0 max-w-full flex-col gap-4 text-sm leading-7 text-foreground [overflow-wrap:anywhere] [&>*]:max-w-full [&>*]:min-w-0 [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_a]:break-words [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 [&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-4 [&_code]:break-words [&_code]:rounded-sm [&_code]:bg-background/80 [&_code]:px-1.5 [&_code]:py-0.5 [&_h1]:break-words [&_h1]:text-2xl [&_h1]:font-semibold [&_h2]:break-words [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:break-words [&_h3]:text-lg [&_h3]:font-medium [&_li]:ml-5 [&_li]:break-words [&_p]:break-words [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_ul]:list-disc"
               >
                 {markdownContent}
               </Streamdown>
@@ -195,26 +194,29 @@ export const StockResearchDetailPanel = ({
             </Empty>
           ) : null}
 
-          <div className="flex flex-col gap-3 border-t border-border/60 pt-5">
-            <div className="text-sm font-medium text-foreground">Sources</div>
+          <div className="flex min-w-0 flex-col gap-3 border-t border-border/60 pt-5">
             {activeReport.sources.length > 0 ? (
-              <div className="flex flex-col gap-3">
+              <div className="flex min-w-0 flex-col gap-3">
                 {activeReport.sources.map((source) => (
                   <a
                     key={source.source_id}
                     href={source.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-start justify-between gap-4 rounded-2xl border border-border/50 bg-background/30 px-4 py-4 transition-colors hover:border-border hover:bg-background/55"
+                    className="flex min-w-0 max-w-full items-start justify-between gap-4 rounded-2xl border border-border/50 bg-background/30 px-4 py-4 transition-colors hover:border-border hover:bg-background/55"
                   >
-                    <div className="flex min-w-0 flex-col gap-1">
+                    <div className="flex min-w-0 max-w-full flex-1 flex-col gap-1">
                       <div className="flex items-center gap-2">
                         <Badge variant="outline" className="rounded-full border-border/60">
                           {source.source_id}
                         </Badge>
                       </div>
-                      <div className="text-sm font-medium text-foreground">{source.title}</div>
-                      <div className="truncate text-xs text-muted-foreground">{source.url}</div>
+                      <div className="max-w-full break-words text-sm font-medium text-foreground">
+                        {source.title}
+                      </div>
+                      <div className="max-w-full break-all text-xs text-muted-foreground">
+                        {source.url}
+                      </div>
                     </div>
                     <ExternalLink className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
                   </a>
