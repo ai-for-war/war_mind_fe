@@ -1,4 +1,4 @@
-import { AlertCircle, Loader2, RefreshCw } from "lucide-react"
+import { AlertCircle, ChevronRight, Loader2, RefreshCw, Search } from "lucide-react"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
 
@@ -15,12 +15,10 @@ import {
 import {
   Field,
   FieldContent,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
 import {
   Select,
   SelectContent,
@@ -30,6 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { StockResearchSymbolPickerDialog } from "@/features/stock-research/components/stock-research-symbol-picker-dialog"
 import { useCreateStockResearchReport } from "@/features/stock-research/hooks/use-create-stock-research-report"
 import { useStockResearchCatalog } from "@/features/stock-research/hooks/use-stock-research-catalog"
 import {
@@ -43,6 +42,7 @@ import {
 } from "@/features/stock-research/stock-research.utils"
 import type { StockResearchReportCreateResponse } from "@/features/stock-research/types"
 import { normalizeStockResearchSymbol } from "@/features/stock-research/types"
+import { cn } from "@/lib/utils"
 
 type StockResearchCreateReportDialogProps = {
   description?: string
@@ -67,7 +67,7 @@ const fromReasoningSelectValue = (reasoning: string) =>
   reasoning === NO_REASONING_VALUE ? null : reasoning
 
 const StockResearchCreateReportDialogForm = ({
-  description = "Queue a new report for one symbol. Leave runtime untouched to use backend defaults.",
+  description = "Queue a new report for one symbol.",
   initialSymbol,
   onCreated,
   onOpenChange,
@@ -79,6 +79,7 @@ const StockResearchCreateReportDialogForm = ({
   const createReportMutation = useCreateStockResearchReport()
   const [symbolValue, setSymbolValue] = useState(normalizedInitialSymbol)
   const [symbolError, setSymbolError] = useState<string | null>(null)
+  const [isSymbolPickerOpen, setIsSymbolPickerOpen] = useState(false)
   const [providerDraftValue, setProviderDraftValue] = useState<string | null>(null)
   const [modelDraftValue, setModelDraftValue] = useState<string | null>(null)
   const [reasoningDraftValue, setReasoningDraftValue] = useState<string | null>(null)
@@ -147,6 +148,11 @@ const StockResearchCreateReportDialogForm = ({
     setReasoningDraftValue(null)
   }
 
+  const handleSelectSymbol = (symbol: string) => {
+    setSymbolValue(symbol)
+    setSymbolError(null)
+  }
+
   const handleSubmit = async () => {
     if (!normalizedSymbol) {
       setSymbolError("Symbol is required.")
@@ -190,25 +196,34 @@ const StockResearchCreateReportDialogForm = ({
       >
         <FieldGroup>
           <Field>
-            <FieldLabel htmlFor="stock-research-symbol">Symbol</FieldLabel>
+            <FieldLabel htmlFor="stock-research-symbol-trigger">Symbol</FieldLabel>
             <FieldContent>
-              <Input
-                id="stock-research-symbol"
-                value={symbolValue}
-                onChange={(event) => {
-                  setSymbolValue(event.target.value)
-                  setSymbolError(null)
-                }}
-                placeholder="FPT"
-                maxLength={32}
+              <Button
+                id="stock-research-symbol-trigger"
+                type="button"
+                variant="outline"
+                className={cn(
+                  "h-11 w-full items-center justify-between rounded-xl px-3 text-left",
+                  !normalizedSymbol && "text-muted-foreground",
+                )}
                 aria-invalid={symbolError ? "true" : undefined}
-                autoCapitalize="characters"
-                autoFocus
-              />
-              <FieldDescription>
-                The backend trims and normalizes the symbol to uppercase before queueing
-                the report.
-              </FieldDescription>
+                onClick={() => setIsSymbolPickerOpen(true)}
+              >
+                <span className="flex min-w-0 items-center gap-2">
+                  <Search className="size-4 shrink-0 text-muted-foreground" />
+                  {normalizedSymbol ? (
+                    <span className="truncate font-medium tracking-[0.12em] uppercase">
+                      {normalizedSymbol}
+                    </span>
+                  ) : (
+                    <span>Choose symbol</span>
+                  )}
+                </span>
+                <span className="flex shrink-0 items-center gap-1 text-xs text-muted-foreground">
+                  Browse
+                  <ChevronRight className="size-3.5" />
+                </span>
+              </Button>
               <FieldError>{symbolError}</FieldError>
             </FieldContent>
           </Field>
@@ -257,9 +272,6 @@ const StockResearchCreateReportDialogForm = ({
                     </SelectGroup>
                   </SelectContent>
                 </Select>
-                <FieldDescription>
-                  Leave the current runtime untouched to keep backend defaults.
-                </FieldDescription>
               </FieldContent>
             </Field>
 
@@ -322,10 +334,6 @@ const StockResearchCreateReportDialogForm = ({
                     </SelectGroup>
                   </SelectContent>
                 </Select>
-                <FieldDescription>
-                  The request omits `runtime_config` until you change runtime values away
-                  from the catalog defaults.
-                </FieldDescription>
               </FieldContent>
             </Field>
           </FieldGroup>
@@ -353,6 +361,13 @@ const StockResearchCreateReportDialogForm = ({
           </Button>
         </DialogFooter>
       </form>
+
+      <StockResearchSymbolPickerDialog
+        open={isSymbolPickerOpen}
+        onOpenChange={setIsSymbolPickerOpen}
+        onSelectSymbol={handleSelectSymbol}
+        selectedSymbol={symbolValue}
+      />
     </DialogContent>
   )
 }
