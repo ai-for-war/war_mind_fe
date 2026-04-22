@@ -2,3 +2,4 @@ export { useCreateStockResearchReport } from "@/features/stock-research/hooks/us
 export { useStockResearchCatalog } from "@/features/stock-research/hooks/use-stock-research-catalog"
 export { useStockResearchReport } from "@/features/stock-research/hooks/use-stock-research-report"
 export { useStockResearchReports } from "@/features/stock-research/hooks/use-stock-research-reports"
+export { useStockResearchWorkspace } from "@/features/stock-research/hooks/use-stock-research-workspace"

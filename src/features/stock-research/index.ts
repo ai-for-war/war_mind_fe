@@ -1,9 +1,11 @@
 export { stockResearchApi } from "@/features/stock-research/api"
+export { StockResearchPage } from "@/features/stock-research/components"
 export {
   useCreateStockResearchReport,
   useStockResearchCatalog,
   useStockResearchReport,
   useStockResearchReports,
+  useStockResearchWorkspace,
 } from "@/features/stock-research/hooks"
 export { stockResearchQueryKeys } from "@/features/stock-research/query-keys"
 export {

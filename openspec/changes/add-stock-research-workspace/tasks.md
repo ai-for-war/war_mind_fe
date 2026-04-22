@@ -6,9 +6,9 @@
 
 ## 2. Routing and navigation
 
-- [ ] 2.1 Add the protected `/stocks/research` route and export a dedicated stock research page from a new stock research feature area.
-- [ ] 2.2 Update sidebar navigation so the `Markets` group includes `Stock Research` and highlights `/stocks/research` correctly.
-- [ ] 2.3 Add any shared page-level state needed to keep the selected report and explicit refresh behavior scoped to the research workspace.
+- [x] 2.1 Add the protected `/stocks/research` route and export a dedicated stock research page from a new stock research feature area.
+- [x] 2.2 Update sidebar navigation so the `Markets` group includes `Stock Research` and highlights `/stocks/research` correctly.
+- [x] 2.3 Add any shared page-level state needed to keep the selected report and explicit refresh behavior scoped to the research workspace.
 
 ## 3. Shared create-report flow
 
