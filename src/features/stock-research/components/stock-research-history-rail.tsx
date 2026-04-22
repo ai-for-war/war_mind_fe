@@ -1,4 +1,4 @@
-import { AlertCircle, FileSearch, RefreshCw } from "lucide-react"
+import { AlertCircle, FileSearch, PanelLeft, RefreshCw } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -21,10 +21,11 @@ import {
 import type { StockResearchReportSummary } from "@/features/stock-research/types"
 
 type StockResearchHistoryRailProps = {
+  className?: string
   isLoading: boolean
-  isRefreshing?: boolean
   items: StockResearchReportSummary[]
   onRefresh: () => void
+  onToggleCollapse?: () => void
   onSelectReport: (reportId: string) => void
   selectedReportId?: string | null
   hasError?: boolean
@@ -48,28 +49,53 @@ const StockResearchHistoryRailSkeleton = () => (
   </div>
 )
 
+const StockResearchHistoryRailHeader = ({
+  description,
+  onToggleCollapse,
+}: {
+  description: string
+  onToggleCollapse?: () => void
+}) => (
+  <div className="flex items-center justify-between gap-3 border-b border-border/60 px-4 py-4">
+    <div className="flex flex-col gap-1">
+      <div className="text-sm font-medium text-foreground">History</div>
+      <div className="text-xs text-muted-foreground">{description}</div>
+    </div>
+    <Button
+      type="button"
+      variant="outline"
+      size="icon"
+      aria-label="Hide history"
+      className="hidden h-9 w-9 rounded-full border-border/70 bg-background/80 backdrop-blur-sm lg:inline-flex"
+      onClick={onToggleCollapse}
+    >
+      <PanelLeft />
+    </Button>
+  </div>
+)
+
 export const StockResearchHistoryRail = ({
+  className,
   hasError = false,
   isLoading,
-  isRefreshing = false,
   items,
   onRefresh,
+  onToggleCollapse,
   onSelectReport,
   selectedReportId,
 }: StockResearchHistoryRailProps) => {
   if (isLoading) {
     return (
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45">
-        <div className="flex items-center justify-between gap-3 border-b border-border/60 px-4 py-4">
-          <div className="flex flex-col gap-1">
-            <div className="text-sm font-medium text-foreground">History</div>
-            <div className="text-xs text-muted-foreground">Loading report summaries</div>
-          </div>
-          <Button type="button" variant="outline" size="sm" disabled>
-            <RefreshCw data-icon="inline-start" />
-            Refresh
-          </Button>
-        </div>
+      <div
+        className={cn(
+          "flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45",
+          className,
+        )}
+      >
+        <StockResearchHistoryRailHeader
+          description="Loading report summaries"
+          onToggleCollapse={onToggleCollapse}
+        />
         <ScrollArea className="min-h-0 flex-1">
           <StockResearchHistoryRailSkeleton />
         </ScrollArea>
@@ -79,59 +105,78 @@ export const StockResearchHistoryRail = ({
 
   if (hasError) {
     return (
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45 p-4">
-        <Empty className="border-destructive/30 bg-destructive/5">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <AlertCircle className="size-5 text-destructive" />
-            </EmptyMedia>
-            <EmptyTitle>Unable to load research history</EmptyTitle>
-            <EmptyDescription>
-              Keep the research page open and retry when the report service is reachable.
-            </EmptyDescription>
-          </EmptyHeader>
-          <Button type="button" variant="outline" onClick={onRefresh}>
-            <RefreshCw data-icon="inline-start" />
-            Retry
-          </Button>
-        </Empty>
+      <div
+        className={cn(
+          "flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45",
+          className,
+        )}
+      >
+        <StockResearchHistoryRailHeader
+          description="Research history is temporarily unavailable"
+          onToggleCollapse={onToggleCollapse}
+        />
+        <div className="p-4">
+          <Empty className="border-destructive/30 bg-destructive/5">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <AlertCircle className="size-5 text-destructive" />
+              </EmptyMedia>
+              <EmptyTitle>Unable to load research history</EmptyTitle>
+              <EmptyDescription>
+                Keep the research page open and retry when the report service is reachable.
+              </EmptyDescription>
+            </EmptyHeader>
+            <Button type="button" variant="outline" onClick={onRefresh}>
+              <RefreshCw data-icon="inline-start" />
+              Retry
+            </Button>
+          </Empty>
+        </div>
       </div>
     )
   }
 
   if (items.length === 0) {
     return (
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45 p-4">
-        <Empty className="border-border/60 bg-background/20">
-          <EmptyHeader>
-            <EmptyMedia variant="icon">
-              <FileSearch className="size-5" />
-            </EmptyMedia>
-            <EmptyTitle>No research reports yet</EmptyTitle>
-            <EmptyDescription>
-              Queue a report from this page, the stock catalog, or watchlists to start building
-              research history.
-            </EmptyDescription>
-          </EmptyHeader>
-        </Empty>
+      <div
+        className={cn(
+          "flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45",
+          className,
+        )}
+      >
+        <StockResearchHistoryRailHeader
+          description="No persisted reports yet"
+          onToggleCollapse={onToggleCollapse}
+        />
+        <div className="p-4">
+          <Empty className="border-border/60 bg-background/20">
+            <EmptyHeader>
+              <EmptyMedia variant="icon">
+                <FileSearch className="size-5" />
+              </EmptyMedia>
+              <EmptyTitle>No research reports yet</EmptyTitle>
+              <EmptyDescription>
+                Queue a report from this page, the stock catalog, or watchlists to start building
+                research history.
+              </EmptyDescription>
+            </EmptyHeader>
+          </Empty>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45">
-      <div className="flex items-center justify-between gap-3 border-b border-border/60 px-4 py-4">
-        <div className="flex flex-col gap-1">
-          <div className="text-sm font-medium text-foreground">History</div>
-          <div className="text-xs text-muted-foreground">
-            {items.length} persisted report{items.length === 1 ? "" : "s"}
-          </div>
-        </div>
-        <Button type="button" variant="outline" size="sm" onClick={onRefresh} disabled={isRefreshing}>
-          <RefreshCw data-icon="inline-start" className={cn(isRefreshing ? "animate-spin" : undefined)} />
-          Refresh
-        </Button>
-      </div>
+    <div
+      className={cn(
+        "flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45",
+        className,
+      )}
+    >
+      <StockResearchHistoryRailHeader
+        description={`${items.length} persisted report${items.length === 1 ? "" : "s"}`}
+        onToggleCollapse={onToggleCollapse}
+      />
 
       <ScrollArea className="min-h-0 flex-1">
         <div className="flex flex-col gap-3 p-4">

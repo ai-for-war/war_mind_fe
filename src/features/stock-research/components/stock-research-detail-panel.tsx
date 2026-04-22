@@ -34,6 +34,7 @@ import { cn } from "@/lib/utils"
 type StockResearchDetailPanelProps = {
   activeReport: StockResearchReportResponse | null
   activeReportSummary: StockResearchReportSummary | null
+  className?: string
   hasError?: boolean
   isLoading: boolean
   onRefresh: () => void
@@ -67,6 +68,7 @@ const StockResearchDetailPanelSkeleton = () => (
 export const StockResearchDetailPanel = ({
   activeReport,
   activeReportSummary,
+  className,
   hasError = false,
   isLoading,
   onRefresh,
@@ -75,7 +77,12 @@ export const StockResearchDetailPanel = ({
 
   if (activeReportSummary == null) {
     return (
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45 p-6">
+      <div
+        className={cn(
+          "flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45 p-6",
+          className,
+        )}
+      >
         <Empty className="border-border/60 bg-background/20">
           <EmptyHeader>
             <EmptyMedia variant="icon">
@@ -93,7 +100,12 @@ export const StockResearchDetailPanel = ({
 
   if (isLoading) {
     return (
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45">
+      <div
+        className={cn(
+          "flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45",
+          className,
+        )}
+      >
         <ScrollArea className="min-h-0 flex-1">
           <StockResearchDetailPanelSkeleton />
         </ScrollArea>
@@ -103,7 +115,12 @@ export const StockResearchDetailPanel = ({
 
   if (hasError || activeReport == null) {
     return (
-      <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45 p-6">
+      <div
+        className={cn(
+          "flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45 p-6",
+          className,
+        )}
+      >
         <Empty className="border-destructive/30 bg-destructive/5">
           <EmptyHeader>
             <EmptyMedia variant="icon">
@@ -129,7 +146,12 @@ export const StockResearchDetailPanel = ({
   const markdownContent = hasMarkdownContent ? activeReport.content : undefined
 
   return (
-    <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45">
+    <div
+      className={cn(
+        "flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45",
+        className,
+      )}
+    >
       <div className="border-b border-border/60 px-5 py-5">
         <div className="flex flex-col gap-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
