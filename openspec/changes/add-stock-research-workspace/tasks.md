@@ -25,9 +25,9 @@
 
 ## 5. Cross-surface research entry points
 
-- [ ] 5.1 Add a row-level `Research` action to the stock catalog page that opens the shared create-report dialog without losing current catalog context.
-- [ ] 5.2 Add a row-level `Research` action to the watchlists page that opens the shared create-report dialog without losing active watchlist context.
-- [ ] 5.3 Reuse the same stock research dialog behavior across the research page, stock catalog, and watchlists surfaces so runtime selection, submit semantics, and toast feedback stay consistent.
+- [x] 5.1 Add a row-level `Research` action to the stock catalog page that opens the shared create-report dialog without losing current catalog context.
+- [x] 5.2 Add a row-level `Research` action to the watchlists page that opens the shared create-report dialog without losing active watchlist context.
+- [x] 5.3 Reuse the same stock research dialog behavior across the research page, stock catalog, and watchlists surfaces so runtime selection, submit semantics, and toast feedback stay consistent.
 
 ## 6. Verification
 

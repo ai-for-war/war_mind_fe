@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/empty"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { BacktestDialog } from "@/features/backtests"
+import { StockResearchCreateReportDialog } from "@/features/stock-research"
 import { StockCompanyOverviewDialog } from "@/features/stocks/components"
 import type { StockListItem } from "@/features/stocks/types"
 import {
@@ -103,6 +104,7 @@ export const StockWatchlistsPage = () => {
 
   const [isCompanyOverviewOpen, setIsCompanyOverviewOpen] = useState(false)
   const [backtestDialogSymbol, setBacktestDialogSymbol] = useState<string | null>(null)
+  const [researchDialogSymbol, setResearchDialogSymbol] = useState<string | null>(null)
   const [selectedStock, setSelectedStock] = useState<StockListItem | null>(null)
 
   const openCreateDialog = () => {
@@ -194,6 +196,14 @@ export const StockWatchlistsPage = () => {
     }
 
     setBacktestDialogSymbol(null)
+  }
+
+  const handleResearchDialogOpenChange = (open: boolean) => {
+    if (open) {
+      return
+    }
+
+    setResearchDialogSymbol(null)
   }
 
   const handleCreateWatchlistSubmit = async () => {
@@ -349,6 +359,10 @@ export const StockWatchlistsPage = () => {
 
   const handleWatchlistItemBacktest = (item: StockWatchlistItemResponse) => {
     setBacktestDialogSymbol(item.symbol)
+  }
+
+  const handleWatchlistItemResearch = (item: StockWatchlistItemResponse) => {
+    setResearchDialogSymbol(item.symbol)
   }
 
   const handleOpenBacktestFromCompany = (item: StockListItem) => {
@@ -627,6 +641,7 @@ export const StockWatchlistsPage = () => {
                         <StockWatchlistItemsTable
                           items={activeWatchlistItemsQuery.items}
                           onBacktest={handleWatchlistItemBacktest}
+                          onResearch={handleWatchlistItemResearch}
                           onRemoveItem={setRemoveItemTarget}
                           onSelectItem={handleWatchlistItemSelect}
                           selectedSymbol={isCompanyOverviewOpen ? selectedStock?.symbol ?? null : null}
@@ -720,6 +735,12 @@ export const StockWatchlistsPage = () => {
         open={backtestDialogSymbol != null}
         onOpenChange={handleBacktestDialogOpenChange}
         initialValues={backtestDialogSymbol ? { symbol: backtestDialogSymbol } : undefined}
+      />
+      <StockResearchCreateReportDialog
+        open={researchDialogSymbol != null}
+        onOpenChange={handleResearchDialogOpenChange}
+        initialSymbol={researchDialogSymbol}
+        description="Queue a research report for the selected watchlist symbol without leaving the current watchlist."
       />
     </>
   )

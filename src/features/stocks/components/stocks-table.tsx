@@ -4,7 +4,7 @@ import {
   useReactTable,
   type ColumnDef,
 } from "@tanstack/react-table"
-import { BookmarkPlus, LineChart, MoreHorizontal } from "lucide-react"
+import { BookmarkPlus, FileSearch, LineChart, MoreHorizontal } from "lucide-react"
 import { useCallback, useMemo } from "react"
 
 import { Badge } from "@/components/ui/badge"
@@ -37,6 +37,7 @@ type StocksTableProps = {
   items: StockListItem[]
   onAddToWatchlist?: ((item: StockListItem) => void) | undefined
   onBacktest?: ((item: StockListItem) => void) | undefined
+  onResearch?: ((item: StockListItem) => void) | undefined
   onRowSelect?: ((item: StockListItem) => void) | undefined
   selectedSymbol?: string | null
 }
@@ -151,11 +152,12 @@ export const StocksTable = ({
   items,
   onAddToWatchlist,
   onBacktest,
+  onResearch,
   onRowSelect,
   selectedSymbol,
 }: StocksTableProps) => {
   const columns = useMemo<ColumnDef<StockListItem>[]>(() => {
-    if (!onAddToWatchlist && !onBacktest) {
+    if (!onAddToWatchlist && !onBacktest && !onResearch) {
       return baseColumns
     }
 
@@ -190,6 +192,16 @@ export const StocksTable = ({
                   event.stopPropagation()
                 }}
               >
+                {onResearch ? (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      onResearch(row.original)
+                    }}
+                  >
+                    <FileSearch className="size-4" />
+                    Research
+                  </DropdownMenuItem>
+                ) : null}
                 {onBacktest ? (
                   <DropdownMenuItem
                     onClick={() => {
@@ -216,7 +228,7 @@ export const StocksTable = ({
         ),
       },
     ]
-  }, [onAddToWatchlist, onBacktest])
+  }, [onAddToWatchlist, onBacktest, onResearch])
 
   const table = useReactTable({
     columns,

@@ -18,11 +18,12 @@ import {
 import type { StockWatchlistItemResponse } from "@/features/stock-watchlists/types"
 import { formatStockWatchlistValue } from "@/features/stock-watchlists/stock-watchlists.utils"
 import { cn } from "@/lib/utils"
-import { LineChart, MoreHorizontal, Trash2 } from "lucide-react"
+import { FileSearch, LineChart, MoreHorizontal, Trash2 } from "lucide-react"
 
 type StockWatchlistItemsTableProps = {
   items: StockWatchlistItemResponse[]
   onBacktest?: ((item: StockWatchlistItemResponse) => void) | undefined
+  onResearch?: ((item: StockWatchlistItemResponse) => void) | undefined
   onRemoveItem: (item: StockWatchlistItemResponse) => void
   onSelectItem?: ((item: StockWatchlistItemResponse) => void) | undefined
   selectedSymbol?: string | null
@@ -49,6 +50,7 @@ export const StockWatchlistItemsTableSkeleton = ({ count = 8 }: { count?: number
 export const StockWatchlistItemsTable = ({
   items,
   onBacktest,
+  onResearch,
   onRemoveItem,
   onSelectItem,
   selectedSymbol,
@@ -178,6 +180,16 @@ export const StockWatchlistItemsTable = ({
                       event.stopPropagation()
                     }}
                   >
+                    {onResearch ? (
+                      <DropdownMenuItem
+                        onClick={() => {
+                          onResearch(item)
+                        }}
+                      >
+                        <FileSearch className="size-4" />
+                        Research
+                      </DropdownMenuItem>
+                    ) : null}
                     {onBacktest ? (
                       <DropdownMenuItem
                         onClick={() => {

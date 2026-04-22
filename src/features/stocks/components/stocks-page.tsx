@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/empty"
 import { BacktestDialog } from "@/features/backtests"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { StockResearchCreateReportDialog } from "@/features/stock-research"
 import { Skeleton } from "@/components/ui/skeleton"
 import { StockCompanyOverviewDialog } from "@/features/stocks/components/stock-company-overview-dialog"
 import { StocksFilterBar } from "@/features/stocks/components/stocks-filter-bar"
@@ -57,6 +58,7 @@ export const StocksPage = () => {
   })
   const [isCompanyOverviewOpen, setIsCompanyOverviewOpen] = useState(false)
   const [backtestDialogSymbol, setBacktestDialogSymbol] = useState<string | null>(null)
+  const [researchDialogSymbol, setResearchDialogSymbol] = useState<string | null>(null)
   const [watchlistDialogStock, setWatchlistDialogStock] = useState<StockListItem | null>(null)
   const [selectedStock, setSelectedStock] = useState<StockListItem | null>(null)
   const debouncedSearch = useDebouncedValue(filters.q ?? "", 300)
@@ -142,6 +144,18 @@ export const StocksPage = () => {
 
   const handleOpenBacktest = (item: StockListItem) => {
     setBacktestDialogSymbol(item.symbol)
+  }
+
+  const handleResearchDialogOpenChange = (open: boolean) => {
+    if (open) {
+      return
+    }
+
+    setResearchDialogSymbol(null)
+  }
+
+  const handleOpenResearch = (item: StockListItem) => {
+    setResearchDialogSymbol(item.symbol)
   }
 
   const handleOpenBacktestFromCompany = (item: StockListItem) => {
@@ -269,6 +283,7 @@ export const StocksPage = () => {
                 items={stockCatalogQuery.items}
                 onAddToWatchlist={setWatchlistDialogStock}
                 onBacktest={handleOpenBacktest}
+                onResearch={handleOpenResearch}
                 onRowSelect={handleStockSelect}
                 selectedSymbol={isCompanyOverviewOpen ? selectedStock?.symbol ?? null : null}
               />
@@ -304,6 +319,12 @@ export const StocksPage = () => {
         open={backtestDialogSymbol != null}
         onOpenChange={handleBacktestDialogOpenChange}
         initialValues={backtestDialogSymbol ? { symbol: backtestDialogSymbol } : undefined}
+      />
+      <StockResearchCreateReportDialog
+        open={researchDialogSymbol != null}
+        onOpenChange={handleResearchDialogOpenChange}
+        initialSymbol={researchDialogSymbol}
+        description="Queue a research report for the selected symbol without leaving the stock catalog."
       />
     </section>
   )
