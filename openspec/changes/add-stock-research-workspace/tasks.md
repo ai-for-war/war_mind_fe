@@ -12,9 +12,9 @@
 
 ## 3. Shared create-report flow
 
-- [ ] 3.1 Build a reusable stock research create-report dialog using shadcn `Dialog`, `Field`, `Input`, and `Select`, with support for symbol prefills from calling surfaces.
-- [ ] 3.2 Load provider, model, and reasoning choices from the stock research catalog endpoint and ensure the submit payload omits `runtime_config` unless the user explicitly selects an override.
-- [ ] 3.3 Handle create success and failure with `sonner` toasts, close the dialog only after successful queueing, and avoid automatic navigation or polling after submit.
+- [x] 3.1 Build a reusable stock research create-report dialog using shadcn `Dialog`, `Field`, `Input`, and `Select`, with support for symbol prefills from calling surfaces.
+- [x] 3.2 Load provider, model, and reasoning choices from the stock research catalog endpoint and ensure the submit payload omits `runtime_config` unless the user explicitly selects an override.
+- [x] 3.3 Handle create success and failure with `sonner` toasts, close the dialog only after successful queueing, and avoid automatic navigation or polling after submit.
 
 ## 4. Stock research workspace UI
 

@@ -1,5 +1,8 @@
 export { stockResearchApi } from "@/features/stock-research/api"
-export { StockResearchPage } from "@/features/stock-research/components"
+export {
+  StockResearchCreateReportDialog,
+  StockResearchPage,
+} from "@/features/stock-research/components"
 export {
   useCreateStockResearchReport,
   useStockResearchCatalog,
