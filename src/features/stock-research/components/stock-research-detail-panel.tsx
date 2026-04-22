@@ -3,9 +3,11 @@ import {
   CircleAlert,
   Clock3,
   FileSearch,
+  PanelRight,
   RefreshCw,
 } from "lucide-react"
 import { Streamdown } from "streamdown"
+import { useState } from "react"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Badge } from "@/components/ui/badge"
@@ -27,6 +29,7 @@ import {
 } from "@/features/stock-research/components/stock-research-page.utils"
 import { StockResearchSourcesSidebar } from "@/features/stock-research/components/stock-research-sources-sidebar"
 import type { StockResearchReportResponse, StockResearchReportSummary } from "@/features/stock-research/types"
+import { cn } from "@/lib/utils"
 
 type StockResearchDetailPanelProps = {
   activeReport: StockResearchReportResponse | null
@@ -68,6 +71,8 @@ export const StockResearchDetailPanel = ({
   isLoading,
   onRefresh,
 }: StockResearchDetailPanelProps) => {
+  const [isSourcesCollapsed, setIsSourcesCollapsed] = useState(false)
+
   if (activeReportSummary == null) {
     return (
       <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45 p-6">
@@ -127,16 +132,30 @@ export const StockResearchDetailPanel = ({
     <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45">
       <div className="border-b border-border/60 px-5 py-5">
         <div className="flex flex-col gap-3">
-          <div className="flex flex-wrap items-center gap-3">
-            <h2 className="text-2xl font-semibold tracking-tight text-foreground">
-              {activeReport.symbol}
-            </h2>
-            <Badge
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <h2 className="text-2xl font-semibold tracking-tight text-foreground">
+                {activeReport.symbol}
+              </h2>
+              <Badge
+                variant="outline"
+                className={getStockResearchStatusBadgeClassName(activeReport.status)}
+              >
+                {getStockResearchStatusLabel(activeReport.status)}
+              </Badge>
+            </div>
+
+            <Button
+              type="button"
               variant="outline"
-              className={getStockResearchStatusBadgeClassName(activeReport.status)}
+              size="sm"
+              className="hidden lg:inline-flex"
+              aria-expanded={!isSourcesCollapsed}
+              onClick={() => setIsSourcesCollapsed((current) => !current)}
             >
-              {getStockResearchStatusLabel(activeReport.status)}
-            </Badge>
+              <PanelRight data-icon="inline-start" />
+              {isSourcesCollapsed ? "Show Sources" : "Hide Sources"}
+            </Button>
           </div>
 
           <div className="grid gap-2 text-sm text-muted-foreground md:grid-cols-2">
@@ -148,8 +167,8 @@ export const StockResearchDetailPanel = ({
         </div>
       </div>
 
-      <div className="grid min-h-0 flex-1 overflow-hidden lg:grid-cols-[minmax(0,1fr)_22rem]">
-        <ScrollArea className="min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden lg:flex-row">
+        <ScrollArea className="min-h-0 min-w-0 flex-1">
           <div className="flex min-w-0 flex-col gap-6 p-5">
             {isWaitingState ? (
               <Alert>
@@ -199,7 +218,24 @@ export const StockResearchDetailPanel = ({
           </div>
         </ScrollArea>
 
-        <StockResearchSourcesSidebar sources={activeReport.sources} />
+        <div
+          className={cn(
+            "min-h-0 overflow-hidden will-change-[flex-basis,max-width,max-height,opacity,transform] transition-[flex-basis,max-width,max-height,opacity,transform] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] lg:shrink-0",
+            isSourcesCollapsed
+              ? "max-h-0 -translate-y-2 opacity-0 lg:max-h-none lg:basis-0 lg:max-w-0 lg:translate-x-6 lg:translate-y-0"
+              : "max-h-80 translate-y-0 opacity-100 lg:max-h-none lg:basis-[22rem] lg:max-w-[22rem] lg:translate-x-0",
+          )}
+        >
+          <StockResearchSourcesSidebar
+            className={cn(
+              "h-full transition-[opacity,transform] duration-200 ease-out",
+              isSourcesCollapsed
+                ? "pointer-events-none translate-x-3 opacity-0"
+                : "translate-x-0 opacity-100",
+            )}
+            sources={activeReport.sources}
+          />
+        </div>
       </div>
     </div>
   )

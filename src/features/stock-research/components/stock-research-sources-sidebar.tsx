@@ -3,20 +3,24 @@ import { ExternalLink } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import type { StockResearchReportSourceResponse } from "@/features/stock-research/types"
+import { cn } from "@/lib/utils"
 
 type StockResearchSourcesSidebarProps = {
+  className?: string
   sources: StockResearchReportSourceResponse[]
 }
 
 export const StockResearchSourcesSidebar = ({
+  className,
   sources,
 }: StockResearchSourcesSidebarProps) => {
   return (
-    <aside className="flex min-h-0 min-w-0 flex-col overflow-hidden border-t border-border/60 lg:border-t-0 lg:border-l">
-      <div className="border-b border-border/60 px-4 py-4">
-        <div className="text-sm font-medium text-foreground">Sources</div>
-      </div>
-
+    <aside
+      className={cn(
+        "flex min-h-0 min-w-0 flex-col overflow-hidden border-t border-border/60 lg:border-t-0 lg:border-l",
+        className,
+      )}
+    >
       <ScrollArea className="min-h-0 flex-1">
         <div className="flex min-w-0 flex-col gap-3 p-4">
           {sources.length > 0 ? (
