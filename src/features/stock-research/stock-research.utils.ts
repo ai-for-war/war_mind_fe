@@ -66,6 +66,22 @@ export const getStockResearchDefaultProvider = (
   )
 }
 
+export const getStockResearchDefaultAvailableProvider = (
+  catalog: StockResearchCatalogResponse | undefined,
+): StockResearchCatalogProviderResponse | null => {
+  if (!catalog || catalog.providers.length === 0) {
+    return null
+  }
+
+  const defaultProvider = getStockResearchDefaultProvider(catalog)
+
+  if (defaultProvider && defaultProvider.models.length > 0) {
+    return defaultProvider
+  }
+
+  return catalog.providers.find((provider) => provider.models.length > 0) ?? defaultProvider
+}
+
 export const getStockResearchModelById = (
   provider: StockResearchCatalogProviderResponse | null | undefined,
   modelValue?: string | null,
@@ -120,7 +136,7 @@ export const getStockResearchDefaultReasoning = ({
 export const getStockResearchDefaultRuntimeSelection = (
   catalog: StockResearchCatalogResponse | undefined,
 ): StockResearchRuntimeSelection => {
-  const provider = getStockResearchDefaultProvider(catalog)
+  const provider = getStockResearchDefaultAvailableProvider(catalog)
   const model = getStockResearchDefaultModel(provider, catalog?.default_model)
 
   return {

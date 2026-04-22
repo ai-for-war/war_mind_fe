@@ -34,6 +34,7 @@ import { useStockResearchCatalog } from "@/features/stock-research/hooks/use-sto
 import {
   buildStockResearchRuntimeOverride,
   getStockResearchApiErrorMessage,
+  getStockResearchDefaultAvailableProvider,
   getStockResearchDefaultModel,
   getStockResearchDefaultReasoning,
   getStockResearchDefaultRuntimeSelection,
@@ -88,24 +89,25 @@ const StockResearchCreateReportDialogForm = ({
     () => getStockResearchDefaultRuntimeSelection(catalogQuery.data),
     [catalogQuery.data],
   )
+  const defaultAvailableProvider = useMemo(
+    () => getStockResearchDefaultAvailableProvider(catalogQuery.data),
+    [catalogQuery.data],
+  )
   const selectedProviderValue = providerDraftValue ?? defaultRuntimeSelection.provider
   const selectedProvider = useMemo(
     () => getStockResearchProviderById(catalogQuery.data, selectedProviderValue),
     [catalogQuery.data, selectedProviderValue],
   )
-  const fallbackModel = useMemo(
+  const selectedModel = useMemo(
     () =>
+      getStockResearchModelById(selectedProvider, modelDraftValue) ??
       getStockResearchDefaultModel(
         selectedProvider,
         providerDraftValue == null ? defaultRuntimeSelection.model : null,
       ),
-    [defaultRuntimeSelection.model, providerDraftValue, selectedProvider],
+    [defaultRuntimeSelection.model, modelDraftValue, providerDraftValue, selectedProvider],
   )
-  const selectedModelValue = modelDraftValue ?? fallbackModel?.model ?? null
-  const selectedModel = useMemo(
-    () => getStockResearchModelById(selectedProvider, selectedModelValue),
-    [selectedModelValue, selectedProvider],
-  )
+  const selectedModelValue = selectedModel?.model ?? null
   const selectedReasoningValue =
     reasoningDraftValue ??
     getStockResearchDefaultReasoning({
@@ -131,11 +133,12 @@ const StockResearchCreateReportDialogForm = ({
       selectedReasoningValue,
     ],
   )
+  const providerHasSelectableModels = (selectedProvider?.models.length ?? 0) > 0
   const hasIncompleteRuntimeSelection =
     catalogQuery.data != null &&
     selectedProviderValue != null &&
     selectedProviderValue.trim().length > 0 &&
-    (selectedProvider == null || selectedModel == null)
+    (selectedProvider == null || !providerHasSelectableModels || selectedModel == null)
 
   const handleProviderChange = (nextProviderValue: string) => {
     setProviderDraftValue(nextProviderValue)
@@ -265,13 +268,22 @@ const StockResearchCreateReportDialogForm = ({
                     <SelectGroup>
                       <SelectLabel>Providers</SelectLabel>
                       {catalogQuery.providers.map((provider) => (
-                        <SelectItem key={provider.provider} value={provider.provider}>
+                        <SelectItem
+                          key={provider.provider}
+                          value={provider.provider}
+                          disabled={provider.models.length === 0}
+                        >
                           {provider.display_name}
                         </SelectItem>
                       ))}
                     </SelectGroup>
                   </SelectContent>
                 </Select>
+                <FieldError>
+                  {defaultAvailableProvider == null && catalogQuery.providers.length > 0
+                    ? "No provider currently exposes a selectable model."
+                    : null}
+                </FieldError>
               </FieldContent>
             </Field>
 
