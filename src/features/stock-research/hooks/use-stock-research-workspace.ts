@@ -17,7 +17,7 @@ export const useStockResearchWorkspace = () => {
       return normalizedSelectedReportId
     }
 
-    return reportsQuery.items[0]?.id ?? null
+    return null
   }, [normalizedSelectedReportId, reportsQuery.items])
   const activeReportSummary = useMemo(
     () =>

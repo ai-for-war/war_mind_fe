@@ -18,10 +18,10 @@
 
 ## 4. Stock research workspace UI
 
-- [ ] 4.1 Build the desktop-first stock research page shell with a history rail, report detail panel, internal scrolling, and a page-level `New Report` action.
-- [ ] 4.2 Render report history entries with backend status metadata and selection behavior that loads detail on demand without inventing unsupported list semantics.
-- [ ] 4.3 Render report detail using the existing markdown renderer, show backend sources and failure states, and keep queued/running states snapshot-based with explicit refresh only.
-- [ ] 4.4 Add empty, loading, and retry-oriented error states for catalog loading, report history, unselected detail, selected report detail, and empty report history.
+- [x] 4.1 Build the desktop-first stock research page shell with a history rail, report detail panel, internal scrolling, and a page-level `New Report` action.
+- [x] 4.2 Render report history entries with backend status metadata and selection behavior that loads detail on demand without inventing unsupported list semantics.
+- [x] 4.3 Render report detail using the existing markdown renderer, show backend sources and failure states, and keep queued/running states snapshot-based with explicit refresh only.
+- [x] 4.4 Add empty, loading, and retry-oriented error states for catalog loading, report history, unselected detail, selected report detail, and empty report history.
 
 ## 5. Cross-surface research entry points
 
