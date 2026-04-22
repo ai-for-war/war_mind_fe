@@ -1,8 +1,8 @@
 ## 1. Stock research data layer
 
-- [ ] 1.1 Add stock research types that mirror the backend catalog, list, create, detail, source, and failure response contracts, including nullable `content`, `error`, `started_at`, `completed_at`, and schema-level `partial` status handling.
-- [ ] 1.2 Implement stock research API functions for catalog, create report, list reports, and get report detail using the organization-aware API client and backend-aligned normalization for symbol input only.
-- [ ] 1.3 Add React Query keys and hooks for the runtime catalog, report history, selected report detail, and create-report mutation with refetch-safe invalidation or refresh hooks.
+- [x] 1.1 Add stock research types that mirror the backend catalog, list, create, detail, source, and failure response contracts, including nullable `content`, `error`, `started_at`, `completed_at`, and schema-level `partial` status handling.
+- [x] 1.2 Implement stock research API functions for catalog, create report, list reports, and get report detail using the organization-aware API client and backend-aligned normalization for symbol input only.
+- [x] 1.3 Add React Query keys and hooks for the runtime catalog, report history, selected report detail, and create-report mutation with refetch-safe invalidation or refresh hooks.
 
 ## 2. Routing and navigation
 
