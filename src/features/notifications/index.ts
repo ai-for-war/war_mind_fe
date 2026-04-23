@@ -1,7 +1,13 @@
 export { notificationsApi } from "@/features/notifications/api"
 export {
+  resolveNotificationNavigationTarget,
+  type NotificationNavigationTarget,
+} from "@/features/notifications/notification-routing.utils"
+export {
+  useActivateNotification,
   useMarkAllNotificationsRead,
   useMarkNotificationRead,
+  useNotificationCreatedSubscription,
   useNotifications,
   useNotificationUnreadCount,
 } from "@/features/notifications/hooks"

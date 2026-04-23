@@ -6,9 +6,9 @@
 
 ## 2. Notification routing and realtime behavior
 
-- [ ] 2.1 Add a notification target resolver that prefers `target_type` plus `target_id`, falls back to `link`, and safely supports the no-navigation case.
-- [ ] 2.2 Add notification socket subscription handling for `notification:created` using the shared socket layer with active-organization scoping.
-- [ ] 2.3 Add toast behavior for every newly received notification and make toast clicks reuse the same mark-read and navigation flow as inbox item clicks.
+- [x] 2.1 Add a notification target resolver that prefers `target_type` plus `target_id`, falls back to `link`, and safely supports the no-navigation case.
+- [x] 2.2 Add notification socket subscription handling for `notification:created` using the shared socket layer with active-organization scoping.
+- [x] 2.3 Add toast behavior for every newly received notification and make toast clicks reuse the same mark-read and navigation flow as inbox item clicks.
 
 ## 3. Notification inbox UI
 
