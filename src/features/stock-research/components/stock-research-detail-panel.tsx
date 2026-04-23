@@ -26,8 +26,14 @@ import {
   getStockResearchStatusBadgeClassName,
   getStockResearchStatusLabel,
 } from "@/features/stock-research/components/stock-research-page.utils"
+import { StockResearchCitationLink } from "@/features/stock-research/components/stock-research-citation-link"
 import { StockResearchSourcesSidebar } from "@/features/stock-research/components/stock-research-sources-sidebar"
 import type { StockResearchReportResponse, StockResearchReportSummary } from "@/features/stock-research/types"
+import {
+  buildStockResearchSourcesById,
+  getStockResearchCitationSourceIdFromHref,
+  replaceStockResearchCitationMarkers,
+} from "@/features/stock-research/stock-research-citations.utils"
 import { cn } from "@/lib/utils"
 
 type StockResearchDetailPanelProps = {
@@ -142,7 +148,10 @@ export const StockResearchDetailPanel = ({
   const isWaitingState = activeReport.status === "queued" || activeReport.status === "running"
   const isFailedState = activeReport.status === "failed"
   const hasMarkdownContent = typeof activeReport.content === "string" && activeReport.content.trim().length > 0
-  const markdownContent = hasMarkdownContent ? activeReport.content : undefined
+  const markdownContent = hasMarkdownContent
+    ? replaceStockResearchCitationMarkers(activeReport.content)
+    : undefined
+  const sourcesById = buildStockResearchSourcesById(activeReport.sources)
 
   return (
     <div
@@ -211,6 +220,30 @@ export const StockResearchDetailPanel = ({
             {markdownContent ? (
               <div className="flex min-w-0 flex-col gap-4">
                 <Streamdown
+                  components={{
+                    a: ({ children, href, node, ...props }) => {
+                      void node
+                      const citationSourceId = getStockResearchCitationSourceIdFromHref(href)
+
+                      if (citationSourceId) {
+                        return (
+                          <StockResearchCitationLink
+                            {...props}
+                            sourceId={citationSourceId}
+                            source={sourcesById[citationSourceId] ?? null}
+                          >
+                            {children}
+                          </StockResearchCitationLink>
+                        )
+                      }
+
+                      return (
+                        <a href={href} {...props}>
+                          {children}
+                        </a>
+                      )
+                    },
+                  }}
                   className="flex min-w-0 max-w-full flex-col gap-4 text-sm leading-7 text-foreground [overflow-wrap:anywhere] [&>*]:max-w-full [&>*]:min-w-0 [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_a]:break-words [&_a]:text-primary [&_a]:underline [&_a]:underline-offset-4 [&_blockquote]:border-l-2 [&_blockquote]:border-border [&_blockquote]:pl-4 [&_code]:break-words [&_code]:rounded-sm [&_code]:bg-background/80 [&_code]:px-1.5 [&_code]:py-0.5 [&_h1]:break-words [&_h1]:text-2xl [&_h1]:font-semibold [&_h2]:break-words [&_h2]:text-xl [&_h2]:font-semibold [&_h3]:break-words [&_h3]:text-lg [&_h3]:font-medium [&_li]:ml-5 [&_li]:break-words [&_p]:break-words [&_pre]:max-w-full [&_pre]:overflow-x-auto [&_ul]:list-disc"
                 >
                   {markdownContent}
