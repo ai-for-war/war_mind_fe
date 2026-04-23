@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/empty"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
+import { useScrollAreaInfiniteScroll } from "@/hooks/use-scroll-area-infinite-scroll"
 import { cn } from "@/lib/utils"
 
 import {
@@ -22,12 +23,16 @@ import type { StockResearchReportSummary } from "@/features/stock-research/types
 
 type StockResearchHistoryRailProps = {
   className?: string
+  hasNextPage?: boolean
+  isFetchingNextPage?: boolean
   isLoading: boolean
   items: StockResearchReportSummary[]
+  onLoadMore?: () => void
   onRefresh: () => void
   onToggleCollapse?: () => void
   onSelectReport: (reportId: string) => void
   selectedReportId?: string | null
+  total?: number
   hasError?: boolean
 }
 
@@ -77,13 +82,26 @@ const StockResearchHistoryRailHeader = ({
 export const StockResearchHistoryRail = ({
   className,
   hasError = false,
+  hasNextPage = false,
+  isFetchingNextPage = false,
   isLoading,
   items,
+  onLoadMore,
   onRefresh,
   onToggleCollapse,
   onSelectReport,
   selectedReportId,
+  total,
 }: StockResearchHistoryRailProps) => {
+  const { scrollAreaRef, sentinelRef } = useScrollAreaInfiniteScroll({
+    hasNextPage,
+    isEnabled: !isLoading && !hasError && items.length > 0,
+    isFetchingNextPage,
+    onLoadMore: () => {
+      onLoadMore?.()
+    },
+  })
+
   if (isLoading) {
     return (
       <div
@@ -174,11 +192,11 @@ export const StockResearchHistoryRail = ({
       )}
     >
       <StockResearchHistoryRailHeader
-        description={`${items.length} persisted report${items.length === 1 ? "" : "s"}`}
+        description={`${total ?? items.length} persisted report${(total ?? items.length) === 1 ? "" : "s"}`}
         onToggleCollapse={onToggleCollapse}
       />
 
-      <ScrollArea className="min-h-0 flex-1">
+      <ScrollArea ref={scrollAreaRef} className="min-h-0 flex-1">
         <div className="flex flex-col gap-3 p-4">
           {items.map((report) => {
             const isSelected = report.id === selectedReportId
@@ -214,6 +232,14 @@ export const StockResearchHistoryRail = ({
               </button>
             )
           })}
+
+          {isFetchingNextPage ? <StockResearchHistoryRailSkeleton /> : null}
+          {!hasNextPage ? (
+            <div className="px-1 text-center text-[11px] tracking-wide text-muted-foreground uppercase">
+              All {total ?? items.length} reports loaded
+            </div>
+          ) : null}
+          <div ref={sentinelRef} aria-hidden="true" className="h-1 w-full" />
         </div>
       </ScrollArea>
     </div>

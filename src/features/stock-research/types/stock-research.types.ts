@@ -68,15 +68,22 @@ export type StockResearchReportCreateResponse = StockResearchReportSummary
 
 export type StockResearchReportListFilters = {
   symbol?: string | null
+  pageSize?: number | null
 }
 
 export type NormalizedStockResearchReportListFilters = {
   symbol: string | null
+  pageSize: number
 }
 
 export type StockResearchReportListResponse = {
   items: StockResearchReportSummary[]
+  total?: number
+  page: number
+  page_size: number
 }
+
+export const DEFAULT_STOCK_RESEARCH_REPORT_PAGE_SIZE = 20
 
 export const normalizeStockResearchSymbol = (symbol?: string | null): string | null => {
   const normalizedSymbol = symbol?.trim()
@@ -100,4 +107,39 @@ export const normalizeStockResearchReportListFilters = (
   filters?: StockResearchReportListFilters,
 ): NormalizedStockResearchReportListFilters => ({
   symbol: normalizeStockResearchSymbol(filters?.symbol),
+  pageSize: normalizeStockResearchReportPageSize(filters?.pageSize),
 })
+
+export const normalizeStockResearchReportPageSize = (
+  value?: number | string | null,
+): number => {
+  const numericValue =
+    typeof value === "number"
+      ? value
+      : typeof value === "string"
+        ? Number.parseInt(value, 10)
+        : Number.NaN
+
+  if (!Number.isFinite(numericValue) || numericValue < 1) {
+    return DEFAULT_STOCK_RESEARCH_REPORT_PAGE_SIZE
+  }
+
+  return Math.floor(numericValue)
+}
+
+export const getNextStockResearchReportsPage = (
+  lastPage: StockResearchReportListResponse,
+  allPages: StockResearchReportListResponse[],
+): number | undefined => {
+  const loadedItems = allPages.reduce((total, page) => total + page.items.length, 0)
+
+  if (typeof lastPage.total === "number" && loadedItems >= lastPage.total) {
+    return undefined
+  }
+
+  if (lastPage.items.length < lastPage.page_size) {
+    return undefined
+  }
+
+  return lastPage.page + 1
+}

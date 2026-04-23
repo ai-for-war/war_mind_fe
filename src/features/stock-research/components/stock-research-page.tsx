@@ -34,7 +34,7 @@ export const StockResearchPage = () => {
                 Markets
               </Badge>
               <Badge variant="secondary" className="rounded-full bg-secondary/70">
-                {reportsQuery.items.length} reports
+                {reportsQuery.total} reports
               </Badge>
             </div>
             <div className="space-y-1">
@@ -110,13 +110,17 @@ export const StockResearchPage = () => {
                     ? "pointer-events-none translate-x-3 opacity-0"
                     : "translate-x-0 opacity-100",
                 )}
+                hasNextPage={reportsQuery.hasNextPage}
                 hasError={reportsQuery.isError}
+                isFetchingNextPage={reportsQuery.isFetchingNextPage}
                 isLoading={reportsQuery.isLoading}
                 items={reportsQuery.items}
+                onLoadMore={() => void reportsQuery.fetchNextPage()}
                 onRefresh={() => void refreshWorkspace()}
                 onToggleCollapse={() => setIsHistoryCollapsed(true)}
                 onSelectReport={setActiveReportId}
                 selectedReportId={activeReportId}
+                total={reportsQuery.total}
               />
             </div>
           </div>

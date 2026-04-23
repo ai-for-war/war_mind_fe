@@ -73,15 +73,21 @@ const createStockResearchReport = async (
 }
 
 const listStockResearchReports = async (
-  filters?: StockResearchReportListFilters,
+  filters?: StockResearchReportListFilters & { page?: number | null },
 ): Promise<StockResearchReportListResponse> => {
   const normalizedFilters = normalizeStockResearchReportListFilters(filters)
+  const page =
+    typeof filters?.page === "number" && Number.isFinite(filters.page) && filters.page >= 1
+      ? Math.floor(filters.page)
+      : 1
 
   const response = await apiClient.get<StockResearchReportListResponse>(
     STOCK_RESEARCH_REPORTS_ENDPOINT,
     {
       params: {
         ...(normalizedFilters.symbol ? { symbol: normalizedFilters.symbol } : {}),
+        page,
+        page_size: normalizedFilters.pageSize,
       },
     },
   )

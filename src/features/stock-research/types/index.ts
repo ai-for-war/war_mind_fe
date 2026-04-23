@@ -1,6 +1,9 @@
 export {
+  DEFAULT_STOCK_RESEARCH_REPORT_PAGE_SIZE,
+  getNextStockResearchReportsPage,
   normalizeStockResearchReportId,
   normalizeStockResearchReportListFilters,
+  normalizeStockResearchReportPageSize,
   normalizeStockResearchSymbol,
 } from "@/features/stock-research/types/stock-research.types"
 export type {

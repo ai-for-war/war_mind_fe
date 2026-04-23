@@ -28,6 +28,7 @@ export const stockResearchQueryKeys = {
     return [
       ...stockResearchQueryKeys.reportLists(organizationId),
       normalizedFilters.symbol,
+      normalizedFilters.pageSize,
     ] as const
   },
   reportDetails: (organizationId?: string | null) =>
