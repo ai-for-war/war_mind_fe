@@ -12,9 +12,9 @@
 
 ## 3. Notification inbox UI
 
-- [ ] 3.1 Build the notification inbox components under a dedicated notifications feature area, including list row, empty state, loading state, and mark-all action.
-- [ ] 3.2 Implement the responsive inbox surfaces with `Popover` on desktop and `Drawer` on mobile while preserving the same data and actions.
-- [ ] 3.3 Ensure notification item interactions update read state correctly and render safe optional metadata without depending on unsupported payload shapes.
+- [x] 3.1 Build the notification inbox components under a dedicated notifications feature area, including list row, empty state, loading state, and mark-all action.
+- [x] 3.2 Implement the responsive inbox surfaces with `Popover` on desktop and `Drawer` on mobile while preserving the same data and actions.
+- [x] 3.3 Ensure notification item interactions update read state correctly and render safe optional metadata without depending on unsupported payload shapes.
 
 ## 4. Header integration
 

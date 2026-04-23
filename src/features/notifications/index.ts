@@ -1,8 +1,14 @@
 export { notificationsApi } from "@/features/notifications/api"
+export { getNotificationApiErrorMessage } from "@/features/notifications/notifications.utils"
 export {
   resolveNotificationNavigationTarget,
   type NotificationNavigationTarget,
 } from "@/features/notifications/notification-routing.utils"
+export {
+  NotificationInbox,
+  NotificationInboxContent,
+  NotificationInboxItem,
+} from "@/features/notifications/components"
 export {
   useActivateNotification,
   useMarkAllNotificationsRead,
