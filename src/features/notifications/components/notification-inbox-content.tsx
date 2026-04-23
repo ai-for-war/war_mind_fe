@@ -3,6 +3,7 @@
 import { Bell, CheckCheck, RefreshCw } from "lucide-react"
 import { toast } from "sonner"
 
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Empty,
@@ -79,16 +80,25 @@ export const NotificationInboxContent = ({
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
-      <div className="flex items-start justify-between gap-3 px-1 pb-4">
-        <div className="flex min-w-0 flex-col">
-          <h2 className="text-sm font-semibold tracking-tight text-foreground">
-            Notifications
-          </h2>
+      <div className="mb-3 flex items-center justify-between gap-3 rounded-[1.15rem] border border-border/45 bg-background/28 px-3 py-2.5">
+        <div className="flex min-w-0 items-center gap-2.5">
+          <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/12 text-primary">
+            <Bell className="size-4" />
+          </div>
+          <div className="flex min-w-0 items-center gap-2">
+            <h2 className="truncate text-sm font-semibold tracking-tight text-foreground">
+              Notifications
+            </h2>
+            <Badge variant="secondary" className="rounded-full bg-secondary/70">
+              {unreadCount}
+            </Badge>
+          </div>
         </div>
         <Button
           type="button"
           variant="ghost"
-          size="sm"
+          size="xs"
+          className="rounded-full px-2.5 text-muted-foreground hover:text-foreground"
           onClick={() => void handleMarkAllRead()}
           disabled={unreadCount < 1 || markAllNotificationsReadMutation.isPending}
         >
@@ -96,8 +106,6 @@ export const NotificationInboxContent = ({
           Mark all
         </Button>
       </div>
-
-      <Separator className="mb-3" />
 
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         {notificationsQuery.isLoading ? <NotificationInboxSkeleton /> : null}
