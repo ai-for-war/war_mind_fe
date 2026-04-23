@@ -19,6 +19,7 @@ import {
   getStockResearchStatusBadgeClassName,
   getStockResearchStatusLabel,
 } from "@/features/stock-research/components/stock-research-page.utils"
+import { StockResearchRuntimeBadges } from "@/features/stock-research/components/stock-research-runtime-badges"
 import type { StockResearchReportSummary } from "@/features/stock-research/types"
 
 type StockResearchHistoryRailProps = {
@@ -228,6 +229,10 @@ export const StockResearchHistoryRail = ({
                 <div className="flex flex-col gap-1 text-xs text-muted-foreground">
                   <div>Created {formatStockResearchDateTime(report.created_at)}</div>
                   <div>Updated {formatStockResearchDateTime(report.updated_at)}</div>
+                  <StockResearchRuntimeBadges
+                    className="pt-1"
+                    runtimeConfig={report.runtime_config}
+                  />
                 </div>
               </button>
             )

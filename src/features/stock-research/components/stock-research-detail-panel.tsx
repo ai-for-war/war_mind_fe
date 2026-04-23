@@ -27,6 +27,7 @@ import {
   getStockResearchStatusLabel,
 } from "@/features/stock-research/components/stock-research-page.utils"
 import { StockResearchCitationLink } from "@/features/stock-research/components/stock-research-citation-link"
+import { StockResearchRuntimeChip } from "@/features/stock-research/components/stock-research-runtime-chip"
 import { StockResearchSourcesSidebar } from "@/features/stock-research/components/stock-research-sources-sidebar"
 import type { StockResearchReportResponse, StockResearchReportSummary } from "@/features/stock-research/types"
 import {
@@ -173,6 +174,7 @@ export const StockResearchDetailPanel = ({
               >
                 {getStockResearchStatusLabel(activeReport.status)}
               </Badge>
+              <StockResearchRuntimeChip runtimeConfig={activeReport.runtime_config} />
             </div>
 
             <Button

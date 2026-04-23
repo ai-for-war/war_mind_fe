@@ -21,4 +21,5 @@ export type {
   StockResearchReportStatus,
   StockResearchReportSummary,
   StockResearchRuntimeConfig,
+  StockResearchRuntimeConfigResponse,
 } from "@/features/stock-research/types/stock-research.types"

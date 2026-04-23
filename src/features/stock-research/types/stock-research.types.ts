@@ -11,6 +11,12 @@ export type StockResearchRuntimeConfig = {
   reasoning?: string | null
 }
 
+export type StockResearchRuntimeConfigResponse = {
+  provider: string
+  model: string
+  reasoning: string | null
+}
+
 export type StockResearchCatalogModelResponse = {
   model: string
   reasoning_options: string[]
@@ -51,6 +57,7 @@ export type StockResearchReportSummary = {
   started_at: string | null
   completed_at: string | null
   updated_at: string
+  runtime_config: StockResearchRuntimeConfigResponse | null
 }
 
 export type StockResearchReportResponse = StockResearchReportSummary & {
