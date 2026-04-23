@@ -1,8 +1,8 @@
 ## 1. Notification data layer
 
-- [ ] 1.1 Add notification types that mirror the backend notification contract, including unread count, list response, mark-read responses, and nullable payload fields.
-- [ ] 1.2 Implement notification API functions for unread count, paginated inbox fetch, mark-one-read, and mark-all-read using the organization-aware API client.
-- [ ] 1.3 Add notification query keys, list/count hooks, and mutation helpers with cache updates or invalidation that keep REST as the source of truth.
+- [x] 1.1 Add notification types that mirror the backend notification contract, including unread count, list response, mark-read responses, and nullable payload fields.
+- [x] 1.2 Implement notification API functions for unread count, paginated inbox fetch, mark-one-read, and mark-all-read using the organization-aware API client.
+- [x] 1.3 Add notification query keys, list/count hooks, and mutation helpers with cache updates or invalidation that keep REST as the source of truth.
 
 ## 2. Notification routing and realtime behavior
 
