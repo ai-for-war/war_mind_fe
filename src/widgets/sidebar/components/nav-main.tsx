@@ -1,6 +1,7 @@
 import {
   AudioLines,
   Bookmark,
+  BrainCircuit,
   Bot,
   CircleDot,
   ImagePlus,
@@ -81,6 +82,11 @@ const navItems = [
         title: "Watchlists",
         url: "/stocks/watchlists",
         icon: Bookmark,
+      },
+      {
+        title: "AI Stock Analyst",
+        url: "/stocks/research",
+        icon: BrainCircuit,
       },
     ],
   },

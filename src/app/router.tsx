@@ -9,6 +9,7 @@ import { InterviewLabPage } from "@/features/interview-lab"
 import { MeetingRecorderPage } from "@/features/meeting-recorder"
 import { MultiAgentPage } from "@/features/multi-agent"
 import { SkillPluginsPage } from "@/features/skill-plugins"
+import { StockResearchPage } from "@/features/stock-research"
 import { SocketProvider } from "@/features/socket"
 import { StockWatchlistsPage } from "@/features/stock-watchlists"
 import { StocksPage } from "@/features/stocks"
@@ -114,6 +115,10 @@ export const router = createBrowserRouter([
           {
             path: "/stocks/watchlists",
             element: <StockWatchlistsPage />,
+          },
+          {
+            path: "/stocks/research",
+            element: <StockResearchPage />,
           },
         ],
       },
