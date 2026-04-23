@@ -80,13 +80,10 @@ export const NotificationInboxContent = ({
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex items-start justify-between gap-3 px-1 pb-4">
-        <div className="flex min-w-0 flex-col gap-1">
+        <div className="flex min-w-0 flex-col">
           <h2 className="text-sm font-semibold tracking-tight text-foreground">
             Notifications
           </h2>
-          <p className="text-xs leading-relaxed text-muted-foreground">
-            New activity for the active organization appears here in real time.
-          </p>
         </div>
         <Button
           type="button"

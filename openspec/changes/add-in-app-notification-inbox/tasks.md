@@ -18,9 +18,9 @@
 
 ## 4. Header integration
 
-- [ ] 4.1 Update the authenticated header composition so a dedicated notification trigger appears separately from the avatar dropdown.
-- [ ] 4.2 Add unread badge rendering and open/close behavior for the notification trigger without regressing existing sidebar or user-nav interactions.
-- [ ] 4.3 Reset or refetch notification state correctly when the active organization changes inside the protected shell.
+- [x] 4.1 Update the authenticated header composition so a dedicated notification trigger appears separately from the avatar dropdown.
+- [x] 4.2 Add unread badge rendering and open/close behavior for the notification trigger without regressing existing sidebar or user-nav interactions.
+- [x] 4.3 Reset or refetch notification state correctly when the active organization changes inside the protected shell.
 
 ## 5. Verification
 

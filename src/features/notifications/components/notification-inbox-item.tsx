@@ -1,4 +1,4 @@
-import { ArrowUpRight, Check, Circle } from "lucide-react"
+import { Circle } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { resolveNotificationNavigationTarget } from "@/features/notifications/notification-routing.utils"
@@ -38,14 +38,13 @@ export const NotificationInboxItem = ({
         !notification.is_read && "bg-accent/20",
       )}
       aria-label={`${notification.title}. ${getNotificationDestinationLabel(notification, hasNavigationTarget)}`}
+      aria-label={notification.title}
     >
       <div className="flex min-w-0 items-start justify-between gap-3">
         <div className="flex min-w-0 items-center gap-2">
           {!notification.is_read ? (
             <Circle className="size-2.5 fill-current text-primary" />
-          ) : (
-            <Circle className="size-2.5 text-transparent" />
-          )}
+          ) : null}
           <p
             className={cn(
               "min-w-0 truncate text-sm font-medium tracking-tight text-foreground",
@@ -72,16 +71,6 @@ export const NotificationInboxItem = ({
         ) : null}
       </div>
 
-      <div className="flex min-w-0 items-center justify-between gap-3 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-        <span className="truncate">
-          {getNotificationDestinationLabel(notification, hasNavigationTarget)}
-        </span>
-        {hasNavigationTarget ? (
-          <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-        ) : (
-          <Check className="size-3.5" />
-        )}
-      </div>
     </button>
   )
 }
