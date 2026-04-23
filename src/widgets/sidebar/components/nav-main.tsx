@@ -1,9 +1,9 @@
 import {
   AudioLines,
   Bookmark,
+  BrainCircuit,
   Bot,
   CircleDot,
-  FileSearch,
   ImagePlus,
   Lightbulb,
   Mic,
@@ -86,7 +86,7 @@ const navItems = [
       {
         title: "AI Stock Analyst",
         url: "/stocks/research",
-        icon: FileSearch,
+        icon: BrainCircuit,
       },
     ],
   },
