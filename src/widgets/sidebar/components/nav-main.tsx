@@ -84,7 +84,7 @@ const navItems = [
         icon: Bookmark,
       },
       {
-        title: "Stock Research",
+        title: "AI Stock Analyst",
         url: "/stocks/research",
         icon: FileSearch,
       },
