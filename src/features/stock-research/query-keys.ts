@@ -3,6 +3,11 @@ import {
   normalizeStockResearchReportId,
   normalizeStockResearchReportListFilters,
 } from "@/features/stock-research/types"
+import type { NormalizedStockResearchScheduleListFilters } from "@/features/stock-research/types"
+import {
+  normalizeStockResearchScheduleId,
+  normalizeStockResearchScheduleListFilters,
+} from "@/features/stock-research/stock-research-schedules.utils"
 import { getOrganizationQueryScope } from "@/lib/organization-query"
 
 const STOCK_RESEARCH_QUERY_KEY = ["stock-research"] as const
@@ -40,6 +45,29 @@ export const stockResearchQueryKeys = {
     [
       ...stockResearchQueryKeys.reportDetails(organizationId),
       normalizeStockResearchReportId(reportId),
+    ] as const,
+  scheduleLists: (organizationId?: string | null) =>
+    [...stockResearchQueryKeys.scoped(organizationId), "schedules"] as const,
+  scheduleList: (
+    organizationId: string | null | undefined,
+    filters?: NormalizedStockResearchScheduleListFilters,
+  ) => {
+    const normalizedFilters = normalizeStockResearchScheduleListFilters(filters)
+
+    return [
+      ...stockResearchQueryKeys.scheduleLists(organizationId),
+      normalizedFilters.pageSize,
+    ] as const
+  },
+  scheduleDetails: (organizationId?: string | null) =>
+    [...stockResearchQueryKeys.scoped(organizationId), "schedule-detail"] as const,
+  scheduleDetail: (
+    organizationId: string | null | undefined,
+    scheduleId?: string | null,
+  ) =>
+    [
+      ...stockResearchQueryKeys.scheduleDetails(organizationId),
+      normalizeStockResearchScheduleId(scheduleId),
     ] as const,
   mutations: () => [...stockResearchQueryKeys.all, "mutation"] as const,
   mutation: (name: string) => [...stockResearchQueryKeys.mutations(), name] as const,

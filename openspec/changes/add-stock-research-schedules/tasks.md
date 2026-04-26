@@ -1,9 +1,9 @@
 ## 1. Schedule data layer
 
-- [ ] 1.1 Add stock research schedule types for status, cadence type, weekday enum, schedule request/response definitions, list response, create payload, update payload, and delete response.
-- [ ] 1.2 Add schedule normalization and formatting utilities for schedule ids, symbols, page size, cadence labels, weekday labels, Vietnam-time hour labels, and request payload construction.
-- [ ] 1.3 Extend the stock research API client with list schedules, get schedule detail, create schedule, update schedule, pause schedule, resume schedule, and delete schedule functions.
-- [ ] 1.4 Add React Query keys and hooks for schedule list, selected schedule detail, create, update, pause, resume, and delete mutations with refetch/invalidation behavior.
+- [x] 1.1 Add stock research schedule types for status, cadence type, weekday enum, schedule request/response definitions, list response, create payload, update payload, and delete response.
+- [x] 1.2 Add schedule normalization and formatting utilities for schedule ids, symbols, page size, cadence labels, weekday labels, Vietnam-time hour labels, and request payload construction.
+- [x] 1.3 Extend the stock research API client with list schedules, get schedule detail, create schedule, update schedule, pause schedule, resume schedule, and delete schedule functions.
+- [x] 1.4 Add React Query keys and hooks for schedule list, selected schedule detail, create, update, pause, resume, and delete mutations with refetch/invalidation behavior.
 
 ## 2. Tabbed stock research workspace
 
