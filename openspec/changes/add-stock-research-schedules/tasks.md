@@ -20,11 +20,11 @@
 
 ## 4. Create and edit schedule form
 
-- [ ] 4.1 Build a dedicated schedule dialog using shadcn `Dialog`, `Field`, `Select`, and `ToggleGroup`, reusing the existing symbol picker.
-- [ ] 4.2 Load provider, model, and reasoning values from the existing stock research runtime catalog hook and require valid provider/model values for schedule submit.
-- [ ] 4.3 Implement cadence controls for `every_15_minutes`, `daily`, and `weekly`, including hour selection for daily/weekly and weekday multi-select for weekly.
-- [ ] 4.4 Add field-level validation for missing symbol, runtime provider/model, required hour, and required weekly weekdays.
-- [ ] 4.5 Wire create and edit submit behavior to backend-aligned request payloads without sending invalid `hour` or `weekdays` fields for the selected cadence type.
+- [x] 4.1 Build a dedicated schedule dialog using shadcn `Dialog`, `Field`, `Select`, and `ToggleGroup`, reusing the existing symbol picker.
+- [x] 4.2 Load provider, model, and reasoning values from the existing stock research runtime catalog hook and require valid provider/model values for schedule submit.
+- [x] 4.3 Implement cadence controls for `every_15_minutes`, `daily`, and `weekly`, including hour selection for daily/weekly and weekday multi-select for weekly.
+- [x] 4.4 Add field-level validation for missing symbol, runtime provider/model, required hour, and required weekly weekdays.
+- [x] 4.5 Wire create and edit submit behavior to backend-aligned request payloads without sending invalid `hour` or `weekdays` fields for the selected cadence type.
 
 ## 5. Schedule actions
 
