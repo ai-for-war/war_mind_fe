@@ -13,10 +13,10 @@
 
 ## 3. Schedule list and detail UI
 
-- [ ] 3.1 Build a schedules workspace component with a left schedule list/rail and right detail panel using internal `ScrollArea` chains.
-- [ ] 3.2 Render schedule list items with symbol, status, cadence label, next run timestamp, and runtime summary.
-- [ ] 3.3 Render selected schedule detail with symbol, status, cadence definition, next run, created/updated timestamps, and runtime config.
-- [ ] 3.4 Add loading skeletons, empty states, retry-oriented error states, and no-selection states for the schedules workspace.
+- [x] 3.1 Build a schedules workspace component with a left schedule list/rail and right detail panel using internal `ScrollArea` chains.
+- [x] 3.2 Render schedule list items with symbol, status, cadence label, next run timestamp, and runtime summary.
+- [x] 3.3 Render selected schedule detail with symbol, status, cadence definition, next run, created/updated timestamps, and runtime config.
+- [x] 3.4 Add loading skeletons, empty states, retry-oriented error states, and no-selection states for the schedules workspace.
 
 ## 4. Create and edit schedule form
 
