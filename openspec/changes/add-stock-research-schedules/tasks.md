@@ -7,9 +7,9 @@
 
 ## 2. Tabbed stock research workspace
 
-- [ ] 2.1 Update `StockResearchPage` to render shadcn `Tabs` with `Reports` and `Schedules` while preserving the existing reports workspace as the default tab.
-- [ ] 2.2 Keep the page shell constrained inside `MainLayout` using the established `min-h-0`, `max-h-[calc(100dvh-6rem)]`, and `overflow-hidden` pattern for both tabs.
-- [ ] 2.3 Add schedules-tab header actions for refresh and `New Schedule` without removing the existing `New Report` action from the reports workflow.
+- [x] 2.1 Update `StockResearchPage` to render shadcn `Tabs` with `Reports` and `Schedules` while preserving the existing reports workspace as the default tab.
+- [x] 2.2 Keep the page shell constrained inside `MainLayout` using the established `min-h-0`, `max-h-[calc(100dvh-6rem)]`, and `overflow-hidden` pattern for both tabs.
+- [x] 2.3 Add schedules-tab header actions for refresh and `New Schedule` without removing the existing `New Report` action from the reports workflow.
 
 ## 3. Schedule list and detail UI
 
