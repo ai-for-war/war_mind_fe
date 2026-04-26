@@ -28,10 +28,10 @@
 
 ## 5. Schedule actions
 
-- [ ] 5.1 Add edit actions from selected schedule detail and schedule list context where appropriate.
-- [ ] 5.2 Add pause and resume actions that call the dedicated lifecycle endpoints, update schedule data, and show `sonner` toast feedback.
-- [ ] 5.3 Add delete action with shadcn `AlertDialog` confirmation, backend delete call, list update, selected-schedule cleanup, and toast feedback.
-- [ ] 5.4 Ensure the UI does not expose schedule `run-now`; keep manual report creation through the existing `New Report` flow only.
+- [x] 5.1 Add edit actions from selected schedule detail and schedule list context where appropriate.
+- [x] 5.2 Add pause and resume actions that call the dedicated lifecycle endpoints, update schedule data, and show `sonner` toast feedback.
+- [x] 5.3 Add delete action with shadcn `AlertDialog` confirmation, backend delete call, list update, selected-schedule cleanup, and toast feedback.
+- [x] 5.4 Ensure the UI does not expose schedule `run-now`; keep manual report creation through the existing `New Report` flow only.
 
 ## 6. Verification
 

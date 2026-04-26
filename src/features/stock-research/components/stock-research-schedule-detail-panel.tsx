@@ -1,4 +1,13 @@
-import { AlertCircle, CalendarClock, FileSearch, RefreshCw } from "lucide-react"
+import {
+  AlertCircle,
+  CalendarClock,
+  FileSearch,
+  Pause,
+  Pencil,
+  Play,
+  RefreshCw,
+  Trash2,
+} from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -34,7 +43,11 @@ type StockResearchScheduleDetailPanelProps = {
   className?: string
   hasError?: boolean
   isLoading: boolean
+  onDeleteSchedule?: (schedule: StockResearchScheduleResponse) => void
+  onEditSchedule?: (schedule: StockResearchScheduleResponse) => void
+  onPauseSchedule?: (schedule: StockResearchScheduleResponse) => void
   onRefresh: () => void
+  onResumeSchedule?: (schedule: StockResearchScheduleResponse) => void
 }
 
 const StockResearchScheduleDetailPanelSkeleton = () => (
@@ -77,7 +90,11 @@ export const StockResearchScheduleDetailPanel = ({
   className,
   hasError = false,
   isLoading,
+  onDeleteSchedule,
+  onEditSchedule,
+  onPauseSchedule,
   onRefresh,
+  onResumeSchedule,
 }: StockResearchScheduleDetailPanelProps) => {
   if (activeScheduleSummary == null) {
     return (
@@ -170,6 +187,49 @@ export const StockResearchScheduleDetailPanel = ({
               {getStockResearchScheduleStatusLabel(activeSchedule.status)}
             </Badge>
             <StockResearchRuntimeChip runtimeConfig={activeSchedule.runtime_config} />
+          </div>
+
+          <div className="flex items-center gap-2">
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => onEditSchedule?.(activeSchedule)}
+            >
+              <Pencil data-icon="inline-start" />
+              Edit
+            </Button>
+            {activeSchedule.status === "active" ? (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => onPauseSchedule?.(activeSchedule)}
+              >
+                <Pause data-icon="inline-start" />
+                Pause
+              </Button>
+            ) : null}
+            {activeSchedule.status === "paused" ? (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => onResumeSchedule?.(activeSchedule)}
+              >
+                <Play data-icon="inline-start" />
+                Resume
+              </Button>
+            ) : null}
+            <Button
+              type="button"
+              variant="destructive"
+              size="sm"
+              onClick={() => onDeleteSchedule?.(activeSchedule)}
+            >
+              <Trash2 data-icon="inline-start" />
+              Delete
+            </Button>
           </div>
         </div>
       </div>

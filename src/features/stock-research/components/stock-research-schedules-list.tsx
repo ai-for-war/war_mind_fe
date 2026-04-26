@@ -1,7 +1,24 @@
-import { AlertCircle, CalendarClock, RefreshCw } from "lucide-react"
+import {
+  AlertCircle,
+  CalendarClock,
+  MoreHorizontal,
+  Pause,
+  Pencil,
+  Play,
+  RefreshCw,
+  Trash2,
+} from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 import {
   Empty,
   EmptyDescription,
@@ -31,8 +48,12 @@ type StockResearchSchedulesListProps = {
   isFetchingNextPage?: boolean
   isLoading: boolean
   items: StockResearchScheduleSummary[]
+  onDeleteSchedule?: (schedule: StockResearchScheduleSummary) => void
+  onEditSchedule?: (schedule: StockResearchScheduleSummary) => void
   onLoadMore?: () => void
+  onPauseSchedule?: (schedule: StockResearchScheduleSummary) => void
   onRefresh: () => void
+  onResumeSchedule?: (schedule: StockResearchScheduleSummary) => void
   onSelectSchedule: (scheduleId: string) => void
   selectedScheduleId?: string | null
   total?: number
@@ -70,8 +91,12 @@ export const StockResearchSchedulesList = ({
   isFetchingNextPage = false,
   isLoading,
   items,
+  onDeleteSchedule,
+  onEditSchedule,
   onLoadMore,
+  onPauseSchedule,
   onRefresh,
+  onResumeSchedule,
   onSelectSchedule,
   selectedScheduleId,
   total,
@@ -174,38 +199,84 @@ export const StockResearchSchedulesList = ({
             const isSelected = schedule.id === selectedScheduleId
 
             return (
-              <button
+              <div
                 key={schedule.id}
-                type="button"
-                onClick={() => onSelectSchedule(schedule.id)}
                 className={cn(
-                  "flex flex-col gap-3 rounded-2xl border px-4 py-4 text-left transition-colors",
+                  "flex items-start gap-2 rounded-2xl border px-4 py-4 transition-colors",
                   isSelected
                     ? "border-cyan-400/50 bg-cyan-400/10"
                     : "border-border/50 bg-background/30 hover:border-border hover:bg-background/55",
                 )}
               >
-                <div className="flex items-center justify-between gap-3">
-                  <div className="text-base font-semibold tracking-wide text-foreground">
-                    {schedule.symbol}
+                <button
+                  type="button"
+                  onClick={() => onSelectSchedule(schedule.id)}
+                  className="flex min-w-0 flex-1 flex-col gap-3 text-left"
+                >
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="text-base font-semibold tracking-wide text-foreground">
+                      {schedule.symbol}
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className={getStockResearchScheduleStatusBadgeClassName(schedule.status)}
+                    >
+                      {getStockResearchScheduleStatusLabel(schedule.status)}
+                    </Badge>
                   </div>
-                  <Badge
-                    variant="outline"
-                    className={getStockResearchScheduleStatusBadgeClassName(schedule.status)}
-                  >
-                    {getStockResearchScheduleStatusLabel(schedule.status)}
-                  </Badge>
-                </div>
 
-                <div className="flex flex-col gap-1 text-xs text-muted-foreground">
-                  <div>{formatStockResearchScheduleCadence(schedule.schedule)}</div>
-                  <div>Next {formatAbsoluteDateTime(schedule.next_run_at)}</div>
-                  <StockResearchRuntimeBadges
-                    className="pt-1"
-                    runtimeConfig={schedule.runtime_config}
-                  />
-                </div>
-              </button>
+                  <div className="flex flex-col gap-1 text-xs text-muted-foreground">
+                    <div>{formatStockResearchScheduleCadence(schedule.schedule)}</div>
+                    <div>Next {formatAbsoluteDateTime(schedule.next_run_at)}</div>
+                    <StockResearchRuntimeBadges
+                      className="pt-1"
+                      runtimeConfig={schedule.runtime_config}
+                    />
+                  </div>
+                </button>
+
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      aria-label={`Open actions for ${schedule.symbol} schedule`}
+                      className="size-8 shrink-0"
+                    >
+                      <MoreHorizontal />
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-44">
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem onSelect={() => onEditSchedule?.(schedule)}>
+                        <Pencil />
+                        Edit
+                      </DropdownMenuItem>
+                      {schedule.status === "active" ? (
+                        <DropdownMenuItem onSelect={() => onPauseSchedule?.(schedule)}>
+                          <Pause />
+                          Pause
+                        </DropdownMenuItem>
+                      ) : null}
+                      {schedule.status === "paused" ? (
+                        <DropdownMenuItem onSelect={() => onResumeSchedule?.(schedule)}>
+                          <Play />
+                          Resume
+                        </DropdownMenuItem>
+                      ) : null}
+                    </DropdownMenuGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                      variant="destructive"
+                      onSelect={() => onDeleteSchedule?.(schedule)}
+                    >
+                      <Trash2 />
+                      Delete
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
             )
           })}
 
