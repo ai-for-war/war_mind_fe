@@ -1,5 +1,6 @@
 export { StockResearchCreateReportDialog } from "@/features/stock-research/components/stock-research-create-report-dialog"
 export { StockResearchDetailPanel } from "@/features/stock-research/components/stock-research-detail-panel"
 export { StockResearchHistoryRail } from "@/features/stock-research/components/stock-research-history-rail"
+export { StockResearchScheduleDialog } from "@/features/stock-research/components/stock-research-schedule-dialog"
 export { StockResearchPage } from "@/features/stock-research/components/stock-research-page"
 export { StockResearchSourcesSidebar } from "@/features/stock-research/components/stock-research-sources-sidebar"

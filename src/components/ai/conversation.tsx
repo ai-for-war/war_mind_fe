@@ -1,8 +1,10 @@
 import { ArrowDownIcon } from "lucide-react"
-import type { ComponentProps } from "react"
+import { ScrollArea as ScrollAreaPrimitive } from "radix-ui"
+import type { ComponentProps, ReactNode } from "react"
 import { useCallback } from "react"
 import { StickToBottom, useStickToBottomContext } from "use-stick-to-bottom"
 import { Button } from "@/components/ui/button"
+import { ScrollBar } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 import { Message, MessageContent } from "@/components/ai/message"
 
@@ -18,11 +20,51 @@ export const Conversation = ({ className, ...props }: ConversationProps) => (
   />
 )
 
-export type ConversationContentProps = ComponentProps<typeof StickToBottom.Content>
+export type ConversationContentProps = Omit<
+  ComponentProps<typeof StickToBottom.Content>,
+  "children"
+> & {
+  children?: ReactNode
+}
 
-export const ConversationContent = ({ className, ...props }: ConversationContentProps) => (
-  <StickToBottom.Content className={cn("flex flex-col gap-8 p-4", className)} {...props} />
-)
+export const ConversationContent = ({
+  children,
+  className,
+  scrollClassName,
+  ...props
+}: ConversationContentProps) => {
+  const { contentRef, scrollRef } = useStickToBottomContext()
+  const handleScrollRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      scrollRef(node)
+    },
+    [scrollRef],
+  )
+  const handleContentRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      contentRef(node)
+    },
+    [contentRef],
+  )
+
+  return (
+    <ScrollAreaPrimitive.Root className="size-full rounded-[inherit]">
+      <ScrollAreaPrimitive.Viewport
+        ref={handleScrollRef}
+        className={cn(
+          "size-full rounded-[inherit] transition-[color,box-shadow] outline-none focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-1",
+          scrollClassName,
+        )}
+      >
+        <div className={cn("flex flex-col gap-8 p-4", className)} ref={handleContentRef} {...props}>
+          {children}
+        </div>
+      </ScrollAreaPrimitive.Viewport>
+      <ScrollBar />
+      <ScrollAreaPrimitive.Corner />
+    </ScrollAreaPrimitive.Root>
+  )
+}
 
 export type ConversationEmptyStateProps = ComponentProps<"div"> & {
   title?: string
