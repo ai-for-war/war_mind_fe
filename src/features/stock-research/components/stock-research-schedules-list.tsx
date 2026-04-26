@@ -3,6 +3,7 @@ import {
   CalendarClock,
   MoreHorizontal,
   Pause,
+  PanelLeft,
   Pencil,
   Play,
   RefreshCw,
@@ -55,6 +56,7 @@ type StockResearchSchedulesListProps = {
   onRefresh: () => void
   onResumeSchedule?: (schedule: StockResearchScheduleSummary) => void
   onSelectSchedule: (scheduleId: string) => void
+  onToggleCollapse?: () => void
   selectedScheduleId?: string | null
   total?: number
 }
@@ -77,10 +79,28 @@ const StockResearchSchedulesListSkeleton = () => (
   </div>
 )
 
-const StockResearchSchedulesListHeader = ({ description }: { description: string }) => (
-  <div className="flex flex-col gap-1 border-b border-border/60 px-4 py-4">
-    <div className="text-sm font-medium text-foreground">Schedules</div>
-    <div className="text-xs text-muted-foreground">{description}</div>
+const StockResearchSchedulesListHeader = ({
+  description,
+  onToggleCollapse,
+}: {
+  description: string
+  onToggleCollapse?: () => void
+}) => (
+  <div className="flex items-center justify-between gap-3 border-b border-border/60 px-4 py-4">
+    <div className="flex flex-col gap-1">
+      <div className="text-sm font-medium text-foreground">Schedules</div>
+      <div className="text-xs text-muted-foreground">{description}</div>
+    </div>
+    <Button
+      type="button"
+      variant="outline"
+      size="icon"
+      aria-label="Hide schedules"
+      className="hidden h-9 w-9 rounded-full border-border/70 bg-background/80 backdrop-blur-sm lg:inline-flex"
+      onClick={onToggleCollapse}
+    >
+      <PanelLeft />
+    </Button>
   </div>
 )
 
@@ -98,6 +118,7 @@ export const StockResearchSchedulesList = ({
   onRefresh,
   onResumeSchedule,
   onSelectSchedule,
+  onToggleCollapse,
   selectedScheduleId,
   total,
 }: StockResearchSchedulesListProps) => {
@@ -118,7 +139,10 @@ export const StockResearchSchedulesList = ({
           className,
         )}
       >
-        <StockResearchSchedulesListHeader description="Loading schedule summaries" />
+        <StockResearchSchedulesListHeader
+          description="Loading schedule summaries"
+          onToggleCollapse={onToggleCollapse}
+        />
         <ScrollArea className="min-h-0 flex-1">
           <StockResearchSchedulesListSkeleton />
         </ScrollArea>
@@ -134,7 +158,10 @@ export const StockResearchSchedulesList = ({
           className,
         )}
       >
-        <StockResearchSchedulesListHeader description="Schedules are temporarily unavailable" />
+        <StockResearchSchedulesListHeader
+          description="Schedules are temporarily unavailable"
+          onToggleCollapse={onToggleCollapse}
+        />
         <div className="p-4">
           <Empty className="border-destructive/30 bg-destructive/5">
             <EmptyHeader>
@@ -164,7 +191,10 @@ export const StockResearchSchedulesList = ({
           className,
         )}
       >
-        <StockResearchSchedulesListHeader description="No recurring jobs yet" />
+        <StockResearchSchedulesListHeader
+          description="No recurring jobs yet"
+          onToggleCollapse={onToggleCollapse}
+        />
         <div className="p-4">
           <Empty className="border-border/60 bg-background/20">
             <EmptyHeader>
@@ -191,6 +221,7 @@ export const StockResearchSchedulesList = ({
     >
       <StockResearchSchedulesListHeader
         description={`${total ?? items.length} schedule${(total ?? items.length) === 1 ? "" : "s"}`}
+        onToggleCollapse={onToggleCollapse}
       />
 
       <ScrollArea ref={scrollAreaRef} className="min-h-0 flex-1">

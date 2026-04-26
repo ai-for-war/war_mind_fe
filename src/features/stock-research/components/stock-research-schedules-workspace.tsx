@@ -1,4 +1,4 @@
-import { Plus, RefreshCw, Trash2 } from "lucide-react"
+import { PanelLeft, Plus, RefreshCw, Trash2 } from "lucide-react"
 import { useMemo, useState } from "react"
 import { toast } from "sonner"
 
@@ -27,6 +27,7 @@ import {
 } from "@/features/stock-research/hooks"
 import { getStockResearchApiErrorMessage } from "@/features/stock-research/stock-research.utils"
 import type { StockResearchScheduleResponse } from "@/features/stock-research/types"
+import { cn } from "@/lib/utils"
 
 type StockResearchSchedulesWorkspaceProps = {
   onCreateSchedule: () => void
@@ -40,6 +41,7 @@ export const StockResearchSchedulesWorkspace = ({
     useState<StockResearchScheduleResponse | null>(null)
   const [pendingDeleteSchedule, setPendingDeleteSchedule] =
     useState<StockResearchScheduleResponse | null>(null)
+  const [isSchedulesCollapsed, setIsSchedulesCollapsed] = useState(false)
   const schedulesQuery = useStockResearchSchedules()
   const pauseScheduleMutation = usePauseStockResearchSchedule()
   const resumeScheduleMutation = useResumeStockResearchSchedule()
@@ -155,24 +157,67 @@ export const StockResearchSchedulesWorkspace = ({
         </header>
 
         <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/60 bg-background/45 lg:flex-row">
-          <div className="min-h-0 max-h-[18rem] overflow-hidden lg:max-h-none lg:basis-[20rem] lg:shrink-0 xl:basis-[22rem]">
-            <StockResearchSchedulesList
-              className="rounded-none border-0 border-b border-border/60 bg-transparent lg:border-b-0 lg:border-r"
-              hasNextPage={schedulesQuery.hasNextPage}
-              hasError={schedulesQuery.isError}
-              isFetchingNextPage={schedulesQuery.isFetchingNextPage}
-              isLoading={schedulesQuery.isLoading}
-              items={schedulesQuery.items}
-              onDeleteSchedule={setPendingDeleteSchedule}
-              onEditSchedule={setEditingSchedule}
-              onLoadMore={() => void schedulesQuery.fetchNextPage()}
-              onPauseSchedule={(schedule) => void handlePauseSchedule(schedule)}
-              onRefresh={() => void handleRefresh()}
-              onResumeSchedule={(schedule) => void handleResumeSchedule(schedule)}
-              onSelectSchedule={setSelectedScheduleId}
-              selectedScheduleId={activeScheduleSummary?.id ?? null}
-              total={schedulesQuery.total}
-            />
+          <div
+            className={cn(
+              "min-h-0 overflow-hidden lg:shrink-0 lg:will-change-[flex-basis,max-width] lg:transition-[flex-basis,max-width] lg:duration-300 lg:ease-[cubic-bezier(0.22,1,0.36,1)]",
+              isSchedulesCollapsed
+                ? "max-h-[18rem] lg:max-h-none lg:basis-[3.75rem] lg:max-w-[3.75rem]"
+                : "max-h-[18rem] lg:max-h-none lg:basis-[20rem] lg:max-w-[20rem] xl:basis-[22rem] xl:max-w-[22rem]",
+            )}
+          >
+            <div className="relative flex h-full min-h-0 min-w-0">
+              <div
+                className={cn(
+                  "hidden h-full min-h-0 w-full flex-col items-center border-r border-border/60 bg-background/20 transition-[opacity,transform] duration-200 ease-out lg:flex",
+                  isSchedulesCollapsed
+                    ? "translate-x-0 opacity-100"
+                    : "pointer-events-none absolute inset-0 -translate-x-3 opacity-0",
+                )}
+              >
+                <div className="flex h-full min-h-0 w-full flex-col items-center gap-4 py-4">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    aria-label="Show schedules"
+                    aria-expanded={false}
+                    className="h-9 w-9 rounded-full border-border/70 bg-background/80 backdrop-blur-sm"
+                    onClick={() => setIsSchedulesCollapsed(false)}
+                  >
+                    <PanelLeft className="rotate-180" />
+                  </Button>
+                  <div className="flex flex-1 items-center">
+                    <span className="[writing-mode:vertical-rl] rotate-180 text-[11px] font-medium uppercase tracking-[0.28em] text-muted-foreground">
+                      Schedules
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <StockResearchSchedulesList
+                className={cn(
+                  "rounded-none border-0 border-b border-border/60 bg-transparent transition-[opacity,transform] duration-200 ease-out lg:border-b-0 lg:border-r",
+                  isSchedulesCollapsed
+                    ? "pointer-events-none translate-x-3 opacity-0"
+                    : "translate-x-0 opacity-100",
+                )}
+                hasNextPage={schedulesQuery.hasNextPage}
+                hasError={schedulesQuery.isError}
+                isFetchingNextPage={schedulesQuery.isFetchingNextPage}
+                isLoading={schedulesQuery.isLoading}
+                items={schedulesQuery.items}
+                onDeleteSchedule={setPendingDeleteSchedule}
+                onEditSchedule={setEditingSchedule}
+                onLoadMore={() => void schedulesQuery.fetchNextPage()}
+                onPauseSchedule={(schedule) => void handlePauseSchedule(schedule)}
+                onRefresh={() => void handleRefresh()}
+                onResumeSchedule={(schedule) => void handleResumeSchedule(schedule)}
+                onSelectSchedule={setSelectedScheduleId}
+                onToggleCollapse={() => setIsSchedulesCollapsed(true)}
+                selectedScheduleId={activeScheduleSummary?.id ?? null}
+                total={schedulesQuery.total}
+              />
+            </div>
           </div>
 
           <StockResearchScheduleDetailPanel
