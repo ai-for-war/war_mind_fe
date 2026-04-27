@@ -150,7 +150,7 @@ export const getStockResearchDefaultRuntimeSelection = (
   }
 }
 
-export const buildStockResearchRuntimeOverride = ({
+export const buildStockResearchRuntimeConfig = ({
   catalog,
   selection,
 }: {
@@ -158,16 +158,6 @@ export const buildStockResearchRuntimeOverride = ({
   selection: StockResearchRuntimeSelection
 }): StockResearchRuntimeConfig | null => {
   if (!catalog || !selection.provider || !selection.model) {
-    return null
-  }
-
-  const defaultSelection = getStockResearchDefaultRuntimeSelection(catalog)
-
-  if (
-    selection.provider === defaultSelection.provider &&
-    selection.model === defaultSelection.model &&
-    selection.reasoning === defaultSelection.reasoning
-  ) {
     return null
   }
 

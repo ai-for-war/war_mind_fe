@@ -31,7 +31,7 @@ import { StockResearchSymbolPickerDialog } from "@/features/stock-research/compo
 import { useCreateStockResearchReport } from "@/features/stock-research/hooks/use-create-stock-research-report"
 import { useStockResearchCatalog } from "@/features/stock-research/hooks/use-stock-research-catalog"
 import {
-  buildStockResearchRuntimeOverride,
+  buildStockResearchRuntimeConfig,
   getStockResearchApiErrorMessage,
   getStockResearchDefaultAvailableProvider,
   getStockResearchDefaultModel,
@@ -128,9 +128,9 @@ const StockResearchCreateReportDialogForm = ({
     ? selectedReasoningValue ?? "No reasoning override"
     : "Select reasoning"
   const normalizedSymbol = normalizeStockResearchSymbol(symbolValue)
-  const runtimeOverride = useMemo(
+  const runtimeConfig = useMemo(
     () =>
-      buildStockResearchRuntimeOverride({
+      buildStockResearchRuntimeConfig({
         catalog: catalogQuery.data,
         selection: {
           model: selectedModelValue,
@@ -185,7 +185,7 @@ const StockResearchCreateReportDialogForm = ({
     try {
       const createdReport = await createReportMutation.mutateAsync({
         symbol: normalizedSymbol,
-        ...(runtimeOverride ? { runtime_config: runtimeOverride } : {}),
+        ...(runtimeConfig ? { runtime_config: runtimeConfig } : {}),
       })
 
       toast.success(`Queued research report for ${createdReport.symbol}.`)
