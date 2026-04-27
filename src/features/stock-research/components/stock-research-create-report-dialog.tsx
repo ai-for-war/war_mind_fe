@@ -26,7 +26,6 @@ import {
   SelectItem,
   SelectLabel,
   SelectTrigger,
-  SelectValue,
 } from "@/components/ui/select"
 import { StockResearchSymbolPickerDialog } from "@/features/stock-research/components/stock-research-symbol-picker-dialog"
 import { useCreateStockResearchReport } from "@/features/stock-research/hooks/use-create-stock-research-report"
@@ -81,9 +80,13 @@ const StockResearchCreateReportDialogForm = ({
   const [symbolValue, setSymbolValue] = useState(normalizedInitialSymbol)
   const [symbolError, setSymbolError] = useState<string | null>(null)
   const [isSymbolPickerOpen, setIsSymbolPickerOpen] = useState(false)
-  const [providerDraftValue, setProviderDraftValue] = useState<string | null>(null)
-  const [modelDraftValue, setModelDraftValue] = useState<string | null>(null)
-  const [reasoningDraftValue, setReasoningDraftValue] = useState<string | null>(null)
+  const [providerDraftValue, setProviderDraftValue] = useState<string | undefined>(
+    undefined,
+  )
+  const [modelDraftValue, setModelDraftValue] = useState<string | undefined>(undefined)
+  const [reasoningDraftValue, setReasoningDraftValue] = useState<
+    string | null | undefined
+  >(undefined)
 
   const defaultRuntimeSelection = useMemo(
     () => getStockResearchDefaultRuntimeSelection(catalogQuery.data),
@@ -109,12 +112,21 @@ const StockResearchCreateReportDialogForm = ({
   )
   const selectedModelValue = selectedModel?.model ?? null
   const selectedReasoningValue =
-    reasoningDraftValue ??
-    getStockResearchDefaultReasoning({
-      catalog: catalogQuery.data,
-      model: selectedModel,
-      provider: selectedProvider,
-    })
+    reasoningDraftValue !== undefined
+      ? reasoningDraftValue
+      : getStockResearchDefaultReasoning({
+          catalog: catalogQuery.data,
+          model: selectedModel,
+          provider: selectedProvider,
+        })
+  const selectedReasoningSelectValue = selectedModel
+    ? toReasoningSelectValue(selectedReasoningValue)
+    : undefined
+  const selectedProviderLabel = selectedProvider?.display_name ?? "Select provider"
+  const selectedModelLabel = selectedModelValue ?? "Select model"
+  const selectedReasoningLabel = selectedModel
+    ? selectedReasoningValue ?? "No reasoning override"
+    : "Select reasoning"
   const normalizedSymbol = normalizeStockResearchSymbol(symbolValue)
   const runtimeOverride = useMemo(
     () =>
@@ -134,6 +146,7 @@ const StockResearchCreateReportDialogForm = ({
     ],
   )
   const providerHasSelectableModels = (selectedProvider?.models.length ?? 0) > 0
+  const isRuntimeCatalogReady = catalogQuery.data != null
   const hasIncompleteRuntimeSelection =
     catalogQuery.data != null &&
     selectedProviderValue != null &&
@@ -142,13 +155,13 @@ const StockResearchCreateReportDialogForm = ({
 
   const handleProviderChange = (nextProviderValue: string) => {
     setProviderDraftValue(nextProviderValue)
-    setModelDraftValue(null)
-    setReasoningDraftValue(null)
+    setModelDraftValue(undefined)
+    setReasoningDraftValue(undefined)
   }
 
   const handleModelChange = (nextModelValue: string) => {
     setModelDraftValue(nextModelValue)
-    setReasoningDraftValue(null)
+    setReasoningDraftValue(undefined)
   }
 
   const handleSelectSymbol = (symbol: string) => {
@@ -252,103 +265,175 @@ const StockResearchCreateReportDialogForm = ({
             </Alert>
           ) : null}
 
-          <FieldGroup>
-            <Field>
-              <FieldLabel htmlFor="stock-research-provider">Provider</FieldLabel>
-              <FieldContent>
-                <Select
-                  value={selectedProviderValue ?? undefined}
-                  onValueChange={handleProviderChange}
-                  disabled={catalogQuery.isLoading || catalogQuery.providers.length === 0}
-                >
-                  <SelectTrigger id="stock-research-provider" className="w-full">
-                    <SelectValue placeholder="Select provider" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Providers</SelectLabel>
-                      {catalogQuery.providers.map((provider) => (
-                        <SelectItem
-                          key={provider.provider}
-                          value={provider.provider}
-                          disabled={provider.models.length === 0}
-                        >
-                          {provider.display_name}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                <FieldError>
-                  {defaultAvailableProvider == null && catalogQuery.providers.length > 0
-                    ? "No provider currently exposes a selectable model."
-                    : null}
-                </FieldError>
-              </FieldContent>
-            </Field>
+          {isRuntimeCatalogReady ? (
+            <FieldGroup>
+              <Field>
+                <FieldLabel htmlFor="stock-research-provider">Provider</FieldLabel>
+                <FieldContent>
+                  <Select
+                    value={selectedProviderValue ?? undefined}
+                    onValueChange={handleProviderChange}
+                    disabled={catalogQuery.isLoading || catalogQuery.providers.length === 0}
+                  >
+                    <SelectTrigger id="stock-research-provider" className="w-full">
+                      <span
+                        data-slot="select-value"
+                        className={cn(
+                          "truncate",
+                          !selectedProvider && "text-muted-foreground",
+                        )}
+                      >
+                        {selectedProviderLabel}
+                      </span>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Providers</SelectLabel>
+                        {catalogQuery.providers.map((provider) => (
+                          <SelectItem
+                            key={provider.provider}
+                            value={provider.provider}
+                            disabled={provider.models.length === 0}
+                          >
+                            {provider.display_name}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <FieldError>
+                    {defaultAvailableProvider == null && catalogQuery.providers.length > 0
+                      ? "No provider currently exposes a selectable model."
+                      : null}
+                  </FieldError>
+                </FieldContent>
+              </Field>
 
-            <Field>
-              <FieldLabel htmlFor="stock-research-model">Model</FieldLabel>
-              <FieldContent>
-                <Select
-                  value={selectedModelValue ?? undefined}
-                  onValueChange={handleModelChange}
-                  disabled={
-                    catalogQuery.isLoading ||
-                    selectedProvider == null ||
-                    selectedProvider.models.length === 0
-                  }
-                >
-                  <SelectTrigger id="stock-research-model" className="w-full">
-                    <SelectValue placeholder="Select model" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Models</SelectLabel>
-                      {(selectedProvider?.models ?? []).map((model) => (
-                        <SelectItem key={model.model} value={model.model}>
-                          {model.model}
-                        </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-                <FieldError>
-                  {hasIncompleteRuntimeSelection
-                    ? "The selected provider does not currently expose a valid model."
-                    : null}
-                </FieldError>
-              </FieldContent>
-            </Field>
+              <Field>
+                <FieldLabel htmlFor="stock-research-model">Model</FieldLabel>
+                <FieldContent>
+                  <Select
+                    value={selectedModelValue ?? undefined}
+                    onValueChange={handleModelChange}
+                    disabled={
+                      catalogQuery.isLoading ||
+                      selectedProvider == null ||
+                      selectedProvider.models.length === 0
+                    }
+                  >
+                    <SelectTrigger id="stock-research-model" className="w-full">
+                      <span
+                        data-slot="select-value"
+                        className={cn(
+                          "truncate",
+                          !selectedModelValue && "text-muted-foreground",
+                        )}
+                      >
+                        {selectedModelLabel}
+                      </span>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Models</SelectLabel>
+                        {(selectedProvider?.models ?? []).map((model) => (
+                          <SelectItem key={model.model} value={model.model}>
+                            {model.model}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <FieldError>
+                    {hasIncompleteRuntimeSelection
+                      ? "The selected provider does not currently expose a valid model."
+                      : null}
+                  </FieldError>
+                </FieldContent>
+              </Field>
 
-            <Field>
-              <FieldLabel htmlFor="stock-research-reasoning">Reasoning</FieldLabel>
-              <FieldContent>
-                <Select
-                  value={toReasoningSelectValue(selectedReasoningValue)}
-                  onValueChange={(nextValue) =>
-                    setReasoningDraftValue(fromReasoningSelectValue(nextValue))
-                  }
-                  disabled={catalogQuery.isLoading || selectedModel == null}
-                >
-                  <SelectTrigger id="stock-research-reasoning" className="w-full">
-                    <SelectValue placeholder="Select reasoning" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectGroup>
-                      <SelectLabel>Reasoning</SelectLabel>
-                      <SelectItem value={NO_REASONING_VALUE}>No reasoning override</SelectItem>
-                      {(selectedModel?.reasoning_options ?? []).map((reasoningOption) => (
-                        <SelectItem key={reasoningOption} value={reasoningOption}>
-                          {reasoningOption}
+              <Field>
+                <FieldLabel htmlFor="stock-research-reasoning">Reasoning</FieldLabel>
+                <FieldContent>
+                  <Select
+                    value={selectedReasoningSelectValue}
+                    onValueChange={(nextValue) =>
+                      setReasoningDraftValue(fromReasoningSelectValue(nextValue))
+                    }
+                    disabled={catalogQuery.isLoading || selectedModel == null}
+                  >
+                    <SelectTrigger id="stock-research-reasoning" className="w-full">
+                      <span
+                        data-slot="select-value"
+                        className={cn(
+                          "truncate",
+                          !selectedModel && "text-muted-foreground",
+                        )}
+                      >
+                        {selectedReasoningLabel}
+                      </span>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectLabel>Reasoning</SelectLabel>
+                        <SelectItem value={NO_REASONING_VALUE}>
+                          No reasoning override
                         </SelectItem>
-                      ))}
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              </FieldContent>
-            </Field>
-          </FieldGroup>
+                        {(selectedModel?.reasoning_options ?? []).map((reasoningOption) => (
+                          <SelectItem key={reasoningOption} value={reasoningOption}>
+                            {reasoningOption}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FieldContent>
+              </Field>
+            </FieldGroup>
+          ) : (
+            <FieldGroup>
+              <Field>
+                <FieldLabel>Provider</FieldLabel>
+                <FieldContent>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full justify-start text-muted-foreground"
+                    disabled
+                  >
+                    {catalogQuery.isLoading ? "Loading providers..." : "Select provider"}
+                  </Button>
+                </FieldContent>
+              </Field>
+
+              <Field>
+                <FieldLabel>Model</FieldLabel>
+                <FieldContent>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full justify-start text-muted-foreground"
+                    disabled
+                  >
+                    {catalogQuery.isLoading ? "Loading models..." : "Select model"}
+                  </Button>
+                </FieldContent>
+              </Field>
+
+              <Field>
+                <FieldLabel>Reasoning</FieldLabel>
+                <FieldContent>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full justify-start text-muted-foreground"
+                    disabled
+                  >
+                    {catalogQuery.isLoading ? "Loading reasoning..." : "Select reasoning"}
+                  </Button>
+                </FieldContent>
+              </Field>
+            </FieldGroup>
+          )}
         </FieldGroup>
 
         <DialogFooter>
