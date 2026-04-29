@@ -63,7 +63,9 @@ import { normalizeStockResearchSymbol } from "@/features/stock-research/types"
 import { cn } from "@/lib/utils"
 
 type StockResearchScheduleDialogProps = {
+  description?: string
   initialSchedule?: StockResearchScheduleResponse | null
+  initialSymbol?: string | null
   onOpenChange: (open: boolean) => void
   onSaved?: (savedSchedule: StockResearchScheduleResponse) => void
   open: boolean
@@ -93,7 +95,9 @@ const getInitialScheduleHour = (schedule?: StockResearchScheduleResponse | null)
   schedule?.schedule.hour ?? DEFAULT_SCHEDULE_HOUR
 
 const StockResearchScheduleDialogForm = ({
+  description,
   initialSchedule,
+  initialSymbol,
   onOpenChange,
   onSaved,
 }: StockResearchScheduleDialogFormProps) => {
@@ -101,7 +105,8 @@ const StockResearchScheduleDialogForm = ({
   const catalogQuery = useStockResearchCatalog()
   const createScheduleMutation = useCreateStockResearchSchedule()
   const updateScheduleMutation = useUpdateStockResearchSchedule()
-  const normalizedInitialSymbol = normalizeStockResearchSymbol(initialSchedule?.symbol) ?? ""
+  const normalizedInitialSymbol =
+    normalizeStockResearchSymbol(initialSchedule?.symbol ?? initialSymbol) ?? ""
   const [symbolValue, setSymbolValue] = useState(normalizedInitialSymbol)
   const [isSymbolPickerOpen, setIsSymbolPickerOpen] = useState(false)
   const [formErrors, setFormErrors] = useState<StockResearchScheduleFormErrors>({})
@@ -289,7 +294,8 @@ const StockResearchScheduleDialogForm = ({
           {isEditing ? "Edit research schedule" : "Create research schedule"}
         </DialogTitle>
         <DialogDescription>
-          Schedule recurring stock research for one symbol using Vietnam-time cadence.
+          {description ??
+            "Schedule recurring stock research for one symbol using Vietnam-time cadence."}
         </DialogDescription>
       </DialogHeader>
 

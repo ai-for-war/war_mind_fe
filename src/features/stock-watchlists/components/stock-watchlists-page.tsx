@@ -25,7 +25,10 @@ import {
 } from "@/components/ui/empty"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { BacktestDialog } from "@/features/backtests"
-import { StockResearchCreateReportDialog } from "@/features/stock-research"
+import {
+  StockResearchCreateReportDialog,
+  StockResearchScheduleDialog,
+} from "@/features/stock-research"
 import { StockCompanyOverviewDialog } from "@/features/stocks/components"
 import type { StockListItem } from "@/features/stocks/types"
 import {
@@ -105,6 +108,7 @@ export const StockWatchlistsPage = () => {
   const [isCompanyOverviewOpen, setIsCompanyOverviewOpen] = useState(false)
   const [backtestDialogSymbol, setBacktestDialogSymbol] = useState<string | null>(null)
   const [researchDialogSymbol, setResearchDialogSymbol] = useState<string | null>(null)
+  const [scheduleDialogSymbol, setScheduleDialogSymbol] = useState<string | null>(null)
   const [selectedStock, setSelectedStock] = useState<StockListItem | null>(null)
 
   const openCreateDialog = () => {
@@ -363,6 +367,18 @@ export const StockWatchlistsPage = () => {
 
   const handleWatchlistItemResearch = (item: StockWatchlistItemResponse) => {
     setResearchDialogSymbol(item.symbol)
+  }
+
+  const handleScheduleDialogOpenChange = (open: boolean) => {
+    if (open) {
+      return
+    }
+
+    setScheduleDialogSymbol(null)
+  }
+
+  const handleWatchlistItemScheduleResearch = (item: StockWatchlistItemResponse) => {
+    setScheduleDialogSymbol(item.symbol)
   }
 
   const handleOpenBacktestFromCompany = (item: StockListItem) => {
@@ -643,6 +659,7 @@ export const StockWatchlistsPage = () => {
                           onBacktest={handleWatchlistItemBacktest}
                           onResearch={handleWatchlistItemResearch}
                           onRemoveItem={setRemoveItemTarget}
+                          onScheduleResearch={handleWatchlistItemScheduleResearch}
                           onSelectItem={handleWatchlistItemSelect}
                           selectedSymbol={isCompanyOverviewOpen ? selectedStock?.symbol ?? null : null}
                         />
@@ -741,6 +758,12 @@ export const StockWatchlistsPage = () => {
         onOpenChange={handleResearchDialogOpenChange}
         initialSymbol={researchDialogSymbol}
         description="Queue a research report for the selected watchlist symbol without leaving the current watchlist."
+      />
+      <StockResearchScheduleDialog
+        open={scheduleDialogSymbol != null}
+        onOpenChange={handleScheduleDialogOpenChange}
+        initialSymbol={scheduleDialogSymbol}
+        description="Schedule recurring AI stock research for the selected watchlist symbol without leaving the current watchlist."
       />
     </>
   )
