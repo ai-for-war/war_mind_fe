@@ -18,13 +18,14 @@ import {
 import type { StockWatchlistItemResponse } from "@/features/stock-watchlists/types"
 import { formatStockWatchlistValue } from "@/features/stock-watchlists/stock-watchlists.utils"
 import { cn } from "@/lib/utils"
-import { FileSearch, LineChart, MoreHorizontal, Trash2 } from "lucide-react"
+import { CalendarClock, FileSearch, LineChart, MoreHorizontal, Trash2 } from "lucide-react"
 
 type StockWatchlistItemsTableProps = {
   items: StockWatchlistItemResponse[]
   onBacktest?: ((item: StockWatchlistItemResponse) => void) | undefined
   onResearch?: ((item: StockWatchlistItemResponse) => void) | undefined
   onRemoveItem: (item: StockWatchlistItemResponse) => void
+  onScheduleResearch?: ((item: StockWatchlistItemResponse) => void) | undefined
   onSelectItem?: ((item: StockWatchlistItemResponse) => void) | undefined
   selectedSymbol?: string | null
 }
@@ -52,6 +53,7 @@ export const StockWatchlistItemsTable = ({
   onBacktest,
   onResearch,
   onRemoveItem,
+  onScheduleResearch,
   onSelectItem,
   selectedSymbol,
 }: StockWatchlistItemsTableProps) => {
@@ -188,6 +190,16 @@ export const StockWatchlistItemsTable = ({
                       >
                         <FileSearch className="size-4" />
                         Research
+                      </DropdownMenuItem>
+                    ) : null}
+                    {onScheduleResearch ? (
+                      <DropdownMenuItem
+                        onClick={() => {
+                          onScheduleResearch(item)
+                        }}
+                      >
+                        <CalendarClock className="size-4" />
+                        Schedule AI research
                       </DropdownMenuItem>
                     ) : null}
                     {onBacktest ? (

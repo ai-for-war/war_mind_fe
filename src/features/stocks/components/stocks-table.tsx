@@ -4,7 +4,7 @@ import {
   useReactTable,
   type ColumnDef,
 } from "@tanstack/react-table"
-import { BookmarkPlus, FileSearch, LineChart, MoreHorizontal } from "lucide-react"
+import { BookmarkPlus, CalendarClock, FileSearch, LineChart, MoreHorizontal } from "lucide-react"
 import { useCallback, useMemo } from "react"
 
 import { Badge } from "@/components/ui/badge"
@@ -38,6 +38,7 @@ type StocksTableProps = {
   onAddToWatchlist?: ((item: StockListItem) => void) | undefined
   onBacktest?: ((item: StockListItem) => void) | undefined
   onResearch?: ((item: StockListItem) => void) | undefined
+  onScheduleResearch?: ((item: StockListItem) => void) | undefined
   onRowSelect?: ((item: StockListItem) => void) | undefined
   selectedSymbol?: string | null
 }
@@ -153,11 +154,12 @@ export const StocksTable = ({
   onAddToWatchlist,
   onBacktest,
   onResearch,
+  onScheduleResearch,
   onRowSelect,
   selectedSymbol,
 }: StocksTableProps) => {
   const columns = useMemo<ColumnDef<StockListItem>[]>(() => {
-    if (!onAddToWatchlist && !onBacktest && !onResearch) {
+    if (!onAddToWatchlist && !onBacktest && !onResearch && !onScheduleResearch) {
       return baseColumns
     }
 
@@ -202,6 +204,16 @@ export const StocksTable = ({
                     Research
                   </DropdownMenuItem>
                 ) : null}
+                {onScheduleResearch ? (
+                  <DropdownMenuItem
+                    onClick={() => {
+                      onScheduleResearch(row.original)
+                    }}
+                  >
+                    <CalendarClock className="size-4" />
+                    Schedule AI research
+                  </DropdownMenuItem>
+                ) : null}
                 {onBacktest ? (
                   <DropdownMenuItem
                     onClick={() => {
@@ -228,7 +240,7 @@ export const StocksTable = ({
         ),
       },
     ]
-  }, [onAddToWatchlist, onBacktest, onResearch])
+  }, [onAddToWatchlist, onBacktest, onResearch, onScheduleResearch])
 
   const table = useReactTable({
     columns,
