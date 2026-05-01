@@ -1,4 +1,3 @@
-import { Crosshair } from "lucide-react"
 import { Link } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
@@ -46,11 +45,8 @@ export const LandingCtaFooterWrapper = ({ cta }: LandingCtaFooterWrapperProps) =
       <footer className="mt-24 border-t border-[hsl(var(--landing-border))]/30 pt-12">
         <div className="grid gap-10 md:grid-cols-5">
           <div className="md:col-span-2">
-            <Link aria-label="War Mind home" className="inline-flex items-center gap-3" to="/">
-              <span className="flex size-9 items-center justify-center rounded-xl bg-gradient-to-b from-[hsl(var(--landing-secondary))] to-[hsl(var(--landing-muted))] text-[hsl(var(--landing-primary))]">
-                <Crosshair aria-hidden="true" className="size-5" />
-              </span>
-              <span className="text-xl font-semibold text-hero-heading">WARMIND</span>
+            <Link aria-label="Recap.ai home" className="inline-flex items-center" to="/">
+              <span className="text-xl font-semibold text-hero-heading">Recap.ai</span>
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-6 text-hero-sub opacity-60">
               A stock research and Super-Agent surface for teams that need market context to
@@ -78,7 +74,7 @@ export const LandingCtaFooterWrapper = ({ cta }: LandingCtaFooterWrapperProps) =
         </div>
 
         <div className="mt-12 flex flex-col gap-4 border-t border-[hsl(var(--landing-border))]/30 pt-6 text-sm text-hero-sub opacity-55 sm:flex-row sm:items-center sm:justify-between">
-          <p>2026 War Mind Inc.</p>
+          <p>2026 Recap.ai Inc.</p>
           <div className="flex gap-5">
             <a className="transition-opacity hover:opacity-100" href="#footer">
               Privacy

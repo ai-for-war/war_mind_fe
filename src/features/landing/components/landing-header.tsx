@@ -1,4 +1,5 @@
-import { ChevronDown, Crosshair } from "lucide-react"
+import { ChevronDown } from "lucide-react"
+import type { MouseEvent } from "react"
 import { Link } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
@@ -15,19 +16,35 @@ const navItems = [
   { hasMenu: true, label: "Learning", target: "#footer" },
 ]
 
+const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, target: string) => {
+  const targetElement = document.querySelector(target)
+
+  if (!targetElement) {
+    return
+  }
+
+  event.preventDefault()
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+
+  targetElement.scrollIntoView({
+    behavior: prefersReducedMotion ? "auto" : "smooth",
+    block: "start",
+  })
+
+  window.history.pushState(null, "", target)
+}
+
 export const LandingHeader = ({ cta }: LandingHeaderProps) => (
   <header className="relative z-20 px-4 pt-5 sm:px-6">
     <div className="liquid-glass mx-auto flex min-h-14 w-full max-w-[850px] items-center justify-between gap-3 rounded-3xl px-3 py-2">
       <Link
-        aria-label="War Mind landing page"
-        className="flex min-w-0 items-center gap-2.5"
+        aria-label="Recap.ai landing page"
+        className="flex min-w-0 items-center"
         to="/"
       >
-        <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-gradient-to-b from-[hsl(var(--landing-secondary))] to-[hsl(var(--landing-muted))] text-[hsl(var(--landing-primary))] shadow-[inset_0_1px_0_rgba(255,255,255,0.18)]">
-          <Crosshair aria-hidden="true" className="size-4" />
-        </span>
         <span className="truncate text-xl font-semibold tracking-normal text-[hsl(var(--landing-hero-heading))]">
-          WARMIND
+          Recap.ai
         </span>
       </Link>
 
@@ -40,6 +57,7 @@ export const LandingHeader = ({ cta }: LandingHeaderProps) => (
             className="inline-flex items-center gap-1 transition-colors hover:text-[hsl(var(--landing-hero-heading))]"
             href={item.target}
             key={item.label}
+            onClick={(event) => handleNavClick(event, item.target)}
           >
             {item.label}
             {item.hasMenu ? <ChevronDown aria-hidden="true" className="size-3.5" /> : null}
