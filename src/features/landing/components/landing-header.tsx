@@ -38,7 +38,10 @@ const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, target: string) =>
 
 export const LandingHeader = ({ cta }: LandingHeaderProps) => (
   <header className="relative z-20 px-4 pt-5 sm:px-6">
-    <div className="liquid-glass mx-auto flex min-h-14 w-full max-w-[850px] items-center justify-between gap-3 rounded-3xl px-3 py-2">
+    <div
+      className="liquid-glass mx-auto flex min-h-14 w-full max-w-[850px] items-center justify-between gap-3 rounded-3xl px-3 py-2"
+      data-landing-nav
+    >
       <Link
         aria-label="Recap.ai landing page"
         className="flex min-w-0 items-center"

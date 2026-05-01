@@ -18,6 +18,7 @@ export const LandingCtaFooterWrapper = () => (
     <div className="relative z-10 mx-auto max-w-6xl py-32">
       <div
         className="liquid-glass scroll-mt-8 rounded-[2rem] p-8 sm:p-12 lg:p-16"
+        data-landing-reveal
         id="request-access"
       >
         <div className="grid gap-10 lg:grid-cols-[0.86fr_1.14fr] lg:items-start">
@@ -49,7 +50,10 @@ export const LandingCtaFooterWrapper = () => (
         </div>
       </div>
 
-      <footer className="mt-24 border-t border-[hsl(var(--landing-border))]/30 pt-12">
+      <footer
+        className="mt-24 border-t border-[hsl(var(--landing-border))]/30 pt-12"
+        data-landing-reveal
+      >
         <div className="grid gap-10 md:grid-cols-5">
           <div className="md:col-span-2">
             <Link aria-label="Recap.ai home" className="inline-flex items-center" to="/">

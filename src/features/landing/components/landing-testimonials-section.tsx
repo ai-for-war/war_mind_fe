@@ -4,7 +4,7 @@ import { landingTestimonials } from "@/features/landing/landing.utils"
 export const LandingTestimonialsSection = () => (
   <section className="px-4 py-32 sm:px-6">
     <div className="mx-auto flex max-w-6xl flex-col gap-16">
-      <div className="mx-auto max-w-3xl text-center">
+      <div className="mx-auto max-w-3xl text-center" data-landing-reveal>
         <h2 className="text-3xl font-semibold leading-[1.06] tracking-normal text-hero-heading sm:text-5xl">
           <span className="block">Designed for Research</span>
           <span className="block">Leaders Everywhere</span>
@@ -14,13 +14,14 @@ export const LandingTestimonialsSection = () => (
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-3" data-landing-card-group>
         {landingTestimonials.map((testimonial, index) => (
           <article
             className={cn(
               "liquid-glass rounded-3xl p-8",
               index === 1 ? "md:-translate-y-6" : "",
             )}
+            data-landing-card
             key={testimonial.name}
           >
             <p className="text-base leading-7 text-hero-sub opacity-85">"{testimonial.quote}"</p>

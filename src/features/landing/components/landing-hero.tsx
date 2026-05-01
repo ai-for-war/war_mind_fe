@@ -42,19 +42,30 @@ export const LandingHero = ({ cta }: LandingHeroProps) => {
         <LandingHeader cta={cta} />
 
         <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col items-center justify-center px-4 py-20 text-center sm:px-6">
-          <LandingSectionBadge label="Research Schedules Live" value="Explore" />
+          <div data-landing-hero="badge">
+            <LandingSectionBadge label="Research Schedules Live" value="Explore" />
+          </div>
 
-          <h1 className="mt-7 max-w-5xl text-4xl font-semibold leading-[1.05] tracking-normal text-hero-heading sm:text-6xl lg:text-7xl">
+          <h1
+            className="mt-7 max-w-5xl text-4xl font-semibold leading-[1.05] tracking-normal text-hero-heading sm:text-6xl lg:text-7xl"
+            data-landing-hero="title"
+          >
             <span className="block">Accelerate Your</span>
             <span className="block">Market Research Now</span>
           </h1>
 
-          <p className="mt-4 max-w-md text-lg leading-7 text-hero-sub opacity-80">
+          <p
+            className="mt-4 max-w-md text-lg leading-7 text-hero-sub opacity-80"
+            data-landing-hero="copy"
+          >
             Drive your stock workflow forward with clever schedules, sourced analytics, and
             plan-driven Super-Agent management.
           </p>
 
-          <div className="mt-8 flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row">
+          <div
+            className="mt-8 flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row"
+            data-landing-hero="actions"
+          >
             <Button asChild className="h-12 w-full sm:w-auto" size="lg" variant="hero">
               <LandingCtaLink to={cta.primaryHref}>Start Research Right Now</LandingCtaLink>
             </Button>
@@ -69,7 +80,10 @@ export const LandingHero = ({ cta }: LandingHeroProps) => {
           </div>
         </div>
 
-        <div className="mx-auto grid w-full max-w-6xl gap-5 px-4 pb-8 sm:px-6 lg:grid-cols-[14rem_minmax(0,1fr)] lg:items-center">
+        <div
+          className="mx-auto grid w-full max-w-6xl gap-5 px-4 pb-8 sm:px-6 lg:grid-cols-[14rem_minmax(0,1fr)] lg:items-center"
+          data-landing-hero="marquee"
+        >
           <p className="max-w-52 text-sm leading-5 text-[hsl(var(--landing-foreground))]/50">
             Designed for analysts tracking moving markets
           </p>

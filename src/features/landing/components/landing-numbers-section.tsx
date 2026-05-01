@@ -12,7 +12,7 @@ export const LandingNumbersSection = () => (
     <div aria-hidden="true" className="absolute inset-0" style={{ background: numbersOverlay }} />
 
     <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center py-32 text-center">
-      <div className="mb-24">
+      <div className="mb-24" data-landing-reveal>
         <p className="text-7xl font-semibold tracking-normal text-hero-heading sm:text-[8rem] lg:text-[10rem]">
           15m
         </p>
@@ -23,12 +23,18 @@ export const LandingNumbersSection = () => (
         </p>
       </div>
 
-      <div className="liquid-glass grid w-full max-w-4xl rounded-3xl p-8 text-left sm:p-12 md:grid-cols-2">
-        <div className="border-b border-[hsl(var(--landing-border))]/50 pb-8 md:border-b-0 md:border-r md:pb-0 md:pr-12">
+      <div
+        className="liquid-glass grid w-full max-w-4xl rounded-3xl p-8 text-left sm:p-12 md:grid-cols-2"
+        data-landing-card-group
+      >
+        <div
+          className="border-b border-[hsl(var(--landing-border))]/50 pb-8 md:border-b-0 md:border-r md:pb-0 md:pr-12"
+          data-landing-card
+        >
           <p className="text-5xl font-semibold text-hero-heading">5+</p>
           <p className="mt-3 text-base text-hero-sub opacity-70">Stock workflow surfaces connected</p>
         </div>
-        <div className="pt-8 md:pl-12 md:pt-0">
+        <div className="pt-8 md:pl-12 md:pt-0" data-landing-card>
           <p className="text-5xl font-semibold text-hero-heading">Plan-first</p>
           <p className="mt-3 text-base text-hero-sub opacity-70">Super-Agent execution model</p>
         </div>

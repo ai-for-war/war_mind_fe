@@ -21,11 +21,11 @@ type LandingChessSectionProps = {
 export const LandingChessSection = ({ cta }: LandingChessSectionProps) => (
   <section className="px-4 py-32 sm:px-6" id="routing">
     <div className="mx-auto grid max-w-6xl items-center gap-20 lg:grid-cols-2">
-      <div className="liquid-glass aspect-[4/3] overflow-hidden rounded-3xl">
+      <div className="liquid-glass aspect-[4/3] overflow-hidden rounded-3xl" data-landing-panel>
         <LandingHlsVideo src={routingVideoUrl} />
       </div>
 
-      <div className="flex flex-col items-start">
+      <div className="flex flex-col items-start" data-landing-reveal>
         <LandingSectionBadge label="Smart Routing" value="New" />
         <h2 className="mt-6 text-3xl font-semibold leading-[1.06] tracking-normal text-hero-heading sm:text-5xl">
           <span className="block">Every Signal Finds</span>
@@ -61,7 +61,7 @@ export const LandingChessSection = ({ cta }: LandingChessSectionProps) => (
 export const LandingReverseChessSection = ({ cta }: LandingChessSectionProps) => (
   <section className="px-4 py-32 sm:px-6" id="pipeline">
     <div className="mx-auto grid max-w-6xl items-center gap-20 lg:grid-cols-2">
-      <div className="order-2 flex flex-col items-start lg:order-1">
+      <div className="order-2 flex flex-col items-start lg:order-1" data-landing-reveal>
         <LandingSectionBadge label="Pipeline Studio" value="Beta" />
         <h2 className="mt-6 text-3xl font-semibold leading-[1.06] tracking-normal text-hero-heading sm:text-5xl">
           <span className="block">Design Research Loops</span>
@@ -72,9 +72,9 @@ export const LandingReverseChessSection = ({ cta }: LandingChessSectionProps) =>
           checklists so every trade idea has a visible research trail.
         </p>
 
-        <div className="mt-8 grid w-full max-w-xl grid-cols-2 gap-4">
+        <div className="mt-8 grid w-full max-w-xl grid-cols-2 gap-4" data-landing-card-group>
           {landingPipelineStats.map((stat) => (
-            <div className="liquid-glass rounded-2xl p-4" key={stat.label}>
+            <div className="liquid-glass rounded-2xl p-4" data-landing-card key={stat.label}>
               <p className="text-2xl font-semibold text-hero-heading">{stat.metric}</p>
               <p className="mt-1 text-sm leading-5 text-hero-sub opacity-60">{stat.label}</p>
             </div>
@@ -86,7 +86,10 @@ export const LandingReverseChessSection = ({ cta }: LandingChessSectionProps) =>
         </Button>
       </div>
 
-      <div className="liquid-glass order-1 aspect-[4/3] overflow-hidden rounded-3xl lg:order-2">
+      <div
+        className="liquid-glass order-1 aspect-[4/3] overflow-hidden rounded-3xl lg:order-2"
+        data-landing-panel
+      >
         <LandingHlsVideo src={pipelineVideoUrl} />
       </div>
     </div>

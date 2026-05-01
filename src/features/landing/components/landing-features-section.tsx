@@ -19,7 +19,10 @@ export const LandingFeaturesSection = () => (
     />
 
     <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-14">
-      <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
+      <div
+        className="mx-auto flex max-w-3xl flex-col items-center text-center"
+        data-landing-reveal
+      >
         <LandingSectionBadge label="Core Platform" value="Overview" />
         <h2 className="mt-6 text-3xl font-semibold leading-[1.05] tracking-normal text-hero-heading sm:text-5xl">
           <span className="block">Built for Analysts That</span>
@@ -31,10 +34,11 @@ export const LandingFeaturesSection = () => (
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3" data-landing-card-group>
         {landingFeatureCards.map((feature) => (
           <article
             className="liquid-glass flex min-h-[408px] flex-col rounded-3xl p-8 transition-colors hover:bg-white/[0.03]"
+            data-landing-card
             key={feature.title}
           >
             <p className="text-sm font-medium text-[hsl(var(--landing-primary))]">

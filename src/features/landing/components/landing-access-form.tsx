@@ -87,10 +87,14 @@ export const LandingAccessForm = () => {
   }
 
   return (
-    <form className="mx-auto w-full max-w-xl text-left" onSubmit={handleSubmit}>
+    <form
+      className="mx-auto w-full max-w-xl text-left"
+      data-landing-card-group
+      onSubmit={handleSubmit}
+    >
       <FieldGroup className="gap-4">
         <div className="grid gap-4 sm:grid-cols-2">
-          <Field data-invalid={Boolean(errors.name)}>
+          <Field data-invalid={Boolean(errors.name)} data-landing-card>
             <FieldLabel className="text-hero-heading" htmlFor="access-name">
               Name
             </FieldLabel>
@@ -106,7 +110,7 @@ export const LandingAccessForm = () => {
             <FieldError>{errors.name}</FieldError>
           </Field>
 
-          <Field data-invalid={Boolean(errors.email)}>
+          <Field data-invalid={Boolean(errors.email)} data-landing-card>
             <FieldLabel className="text-hero-heading" htmlFor="access-email">
               Work email
             </FieldLabel>
@@ -125,7 +129,7 @@ export const LandingAccessForm = () => {
           </Field>
         </div>
 
-        <Field>
+        <Field data-landing-card>
           <FieldLabel className="text-hero-heading" htmlFor="access-company">
             Company or role
           </FieldLabel>
@@ -142,7 +146,7 @@ export const LandingAccessForm = () => {
           </FieldDescription>
         </Field>
 
-        <Field data-invalid={Boolean(errors.useCase)}>
+        <Field data-invalid={Boolean(errors.useCase)} data-landing-card>
           <FieldLabel className="text-hero-heading" htmlFor="access-use-case">
             What should Recap.ai help you track?
           </FieldLabel>
@@ -157,7 +161,7 @@ export const LandingAccessForm = () => {
           <FieldError>{errors.useCase}</FieldError>
         </Field>
 
-        <Button className="h-12 w-full" type="submit" variant="hero">
+        <Button className="h-12 w-full" data-landing-card type="submit" variant="hero">
           Request early access
         </Button>
       </FieldGroup>
