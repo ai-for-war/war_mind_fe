@@ -11,6 +11,10 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        hero:
+          "rounded-full bg-[hsl(var(--landing-primary))] px-6 py-3 text-base font-medium text-[hsl(var(--landing-primary-foreground))] shadow-none hover:bg-[hsl(var(--landing-primary)/0.9)] active:scale-[0.98]",
+        heroSecondary:
+          "liquid-glass rounded-full px-6 py-3 text-base font-normal text-[hsl(var(--landing-foreground))] shadow-none hover:bg-white/[0.05] active:scale-[0.98]",
         destructive:
           "bg-destructive text-white hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:bg-destructive/60 dark:focus-visible:ring-destructive/40",
         outline:

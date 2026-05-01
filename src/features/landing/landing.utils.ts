@@ -6,26 +6,36 @@ export type LandingCtaConfig = {
 }
 
 export type LandingTicker = {
-  change: string
   name: string
-  symbol: string
-  tone: "positive" | "negative" | "neutral"
+  token: string
 }
 
-export type LandingWorkflowStep = {
-  accent: string
+export type LandingFeatureCard = {
   description: string
-  detail: string
   eyebrow: string
-  id: string
-  metric: string
+  stat: string
+  statLabel: string
   title: string
 }
 
-export type LandingFeature = {
-  description: string
-  icon: "bot" | "calendar" | "chart" | "database" | "layers" | "shield"
-  kicker: string
+export type LandingRoutingBullet = {
+  label: string
+}
+
+export type LandingPipelineStat = {
+  label: string
+  metric: string
+}
+
+export type LandingTestimonial = {
+  initials: string
+  name: string
+  quote: string
+  role: string
+}
+
+export type LandingFooterGroup = {
+  links: string[]
   title: string
 }
 
@@ -37,98 +47,89 @@ export const getLandingCtaConfig = (isAuthenticated: boolean): LandingCtaConfig 
 })
 
 export const landingTickers: LandingTicker[] = [
-  { symbol: "FPT", name: "Technology", change: "+1.7%", tone: "positive" },
-  { symbol: "VCB", name: "Banking", change: "+0.8%", tone: "positive" },
-  { symbol: "MWG", name: "Retail", change: "-0.6%", tone: "negative" },
-  { symbol: "GAS", name: "Energy", change: "+1.1%", tone: "positive" },
-  { symbol: "HPG", name: "Materials", change: "-0.3%", tone: "negative" },
-  { symbol: "VNM", name: "Consumer", change: "+0.4%", tone: "positive" },
+  { name: "Vortex", token: "V" },
+  { name: "Nimbus", token: "N" },
+  { name: "Prysma", token: "P" },
+  { name: "Cirrus", token: "C" },
+  { name: "Kynder", token: "K" },
+  { name: "Halcyn", token: "H" },
 ]
 
-export const landingWorkflowSteps: LandingWorkflowStep[] = [
+export const landingFeatureCards: LandingFeatureCard[] = [
   {
-    accent: "Catalog",
     description:
-      "Search persisted market symbols, open company context, and move directly into research, watchlists, or backtests.",
-    detail: "Search, exchange filters, company overview, price history",
-    eyebrow: "Step 01",
-    id: "catalog",
-    metric: "Market map",
-    title: "Start from the stock universe",
+      "Convert symbol discovery, AI reports, and recurring coverage into a single research loop that stays close to supported app routes.",
+    eyebrow: "Workflow",
+    stat: "15m",
+    statLabel: "minimum research cadence",
+    title: "Lightning Research Workflows",
   },
   {
-    accent: "Research",
     description:
-      "Queue an AI stock report, keep the runtime visible, and read conclusions beside the sources that shaped them.",
-    detail: "Reports, runtime config, citations, completion state",
-    eyebrow: "Step 02",
-    id: "research",
-    metric: "Evidence first",
-    title: "Turn symbols into sourced briefs",
+      "Move from watchlists into sourced briefs and market context without losing the audit trail behind each conclusion.",
+    eyebrow: "Analytics",
+    stat: "Source-led",
+    statLabel: "report interpretation",
+    title: "Deep-Dive Market Analytics",
   },
   {
-    accent: "Schedules",
     description:
-      "Convert a one-off question into recurring coverage with supported cadences for daily, weekly, or frequent monitoring.",
-    detail: "Every 15 minutes, daily, weekly, pause, resume",
-    eyebrow: "Step 03",
-    id: "schedules",
-    metric: "Always watching",
-    title: "Let the analyst keep working",
-  },
-  {
-    accent: "Super-Agent",
-    description:
-      "Ask the lead agent to synthesize the market context, follow a visible plan, and call tools without hiding the work.",
-    detail: "Conversation rail, subagent toggle, plan dock, streaming output",
-    eyebrow: "Step 04",
-    id: "super-agent",
-    metric: "Plan visible",
-    title: "Escalate decisions to an agent workspace",
+      "Run Super-Agent conversations with visible planning, tool activity, and task state instead of opaque one-shot answers.",
+    eyebrow: "Agent",
+    stat: "Plan",
+    statLabel: "visible before execution",
+    title: "Guardrailed Agent Runs",
   },
 ]
 
-export const landingFeatures: LandingFeature[] = [
+export const landingRoutingBullets: LandingRoutingBullet[] = [
+  { label: "AI-scored market research requests" },
+  { label: "Dynamic handoff into stock, report, or schedule routes" },
+  { label: "Multi-step Super-Agent planning with visible progress" },
+]
+
+export const landingPipelineStats: LandingPipelineStat[] = [
+  { metric: "5+", label: "stock surfaces connected" },
+  { metric: "15m", label: "fastest recurring cadence" },
+  { metric: "Plan", label: "agent execution model" },
+  { metric: "Live", label: "streamed research status" },
+]
+
+export const landingTestimonials: LandingTestimonial[] = [
   {
-    description:
-      "The landing experience points to existing stock, research, schedule, watchlist, backtest, and agent routes instead of promising unsupported tools.",
-    icon: "database",
-    kicker: "Grounded surface",
-    title: "Built from current product contracts",
+    initials: "MW",
+    name: "Mara Whitfield",
+    quote:
+      "The product feels strongest when it treats research as an operating rhythm, not a static report download.",
+    role: "Portfolio Research Lead",
   },
   {
-    description:
-      "The hero preview shows the exact mental model users meet in-app: market rows, a sourced report, and a plan-driven agent run.",
-    icon: "layers",
-    kicker: "Product-first visual",
-    title: "No abstract AI theatre",
+    initials: "DT",
+    name: "Derek Tanaka",
+    quote:
+      "The Super-Agent pattern makes the reasoning path inspectable enough for analysts to challenge it before acting.",
+    role: "Quant Strategy Operator",
   },
   {
-    description:
-      "Scroll animation is reserved for the workflow story. UI details use lighter CSS motion so the page stays fast on normal laptops.",
-    icon: "chart",
-    kicker: "Motion budget",
-    title: "Animation with a job",
+    initials: "SR",
+    name: "Simone Reuter",
+    quote:
+      "Recurring stock coverage is the right wedge: it gives the team a repeatable market briefing without adding another dashboard habit.",
+    role: "Market Intelligence Director",
+  },
+]
+
+export const landingFooterGroups: LandingFooterGroup[] = [
+  {
+    title: "Product",
+    links: ["Stock research", "Schedules", "Watchlists", "Backtests", "Super-Agent"],
   },
   {
-    description:
-      "The Super-Agent section highlights runtime selection, subagent mode, and plan progress so the user can judge how work is being done.",
-    icon: "bot",
-    kicker: "Traceable agency",
-    title: "Agent work remains inspectable",
+    title: "Company",
+    links: ["About", "Blog", "Careers", "Press"],
   },
   {
-    description:
-      "Research scheduling mirrors the supported backend cadences and avoids invented alerting, trading, or portfolio automation claims.",
-    icon: "calendar",
-    kicker: "Recurring coverage",
-    title: "Schedules stay honest",
-  },
-  {
-    description:
-      "Animations reduce to static or opacity-based states under OS reduced-motion preferences.",
-    icon: "shield",
-    kicker: "Accessibility",
-    title: "Motion respects user settings",
+    title: "Resources",
+    links: ["Documentation", "Community", "Support", "Status"],
   },
 ]

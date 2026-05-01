@@ -6,6 +6,10 @@ import { RouterProvider } from "react-router-dom"
 import { ThemeProvider } from "@/app/providers/theme-provider"
 import { router } from "@/app/router"
 import { Toaster } from "@/components/ui/sonner"
+import "@fontsource/geist-sans/400.css"
+import "@fontsource/geist-sans/500.css"
+import "@fontsource/geist-sans/600.css"
+import "@fontsource/geist-sans/700.css"
 import "./index.css"
 
 const queryClient = new QueryClient()
