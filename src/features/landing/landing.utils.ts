@@ -27,6 +27,13 @@ export type LandingPipelineStat = {
   metric: string
 }
 
+export type LandingStep = {
+  description: string
+  eyebrow: string
+  metric: string
+  title: string
+}
+
 export type LandingTestimonial = {
   initials: string
   name: string
@@ -108,7 +115,7 @@ export const landingFeatureCards: LandingFeatureCard[] = [
 
 export const landingRoutingBullets: LandingRoutingBullet[] = [
   { label: "AI-scored Vietnam stock research requests" },
-  { label: "Trade-idea drafts with entry context and invalidation notes" },
+  { label: "Risk-reviewed market notes with source context" },
   { label: "Dynamic handoff into stock, report, or schedule routes" },
   { label: "Multi-step Super-Agent planning with visible progress" },
 ]
@@ -117,9 +124,47 @@ export const landingPipelineStats: LandingPipelineStat[] = [
   { metric: "5+", label: "stock surfaces connected" },
   { metric: "15m", label: "fastest recurring cadence" },
   { metric: "VN", label: "market research focus" },
-  { metric: "Plan", label: "agent trade-idea model" },
+  { metric: "Plan", label: "agent research model" },
   { metric: "Live", label: "streamed research status" },
   { metric: "Risk", label: "thesis checklist" },
+]
+
+export const landingSteps: LandingStep[] = [
+  {
+    description:
+      "Start with Vietnam tickers, sectors, exchange filters, and the specific market question the analyst wants answered.",
+    eyebrow: "Step 01",
+    metric: "VN scan",
+    title: "Map the market surface",
+  },
+  {
+    description:
+      "Generate a sourced recap that separates price movement, company context, catalyst notes, and unresolved assumptions.",
+    eyebrow: "Step 02",
+    metric: "Sources",
+    title: "Build the research brief",
+  },
+  {
+    description:
+      "Pin important symbols into watchlists and turn one-off coverage into daily, weekly, or high-frequency monitoring.",
+    eyebrow: "Step 03",
+    metric: "15m",
+    title: "Schedule recurring coverage",
+  },
+  {
+    description:
+      "Ask Super-Agent to form a visible plan, choose the next route, and keep the work traceable while it runs.",
+    eyebrow: "Step 04",
+    metric: "Plan",
+    title: "Escalate to agent workflow",
+  },
+  {
+    description:
+      "Close every research loop with a risk note: liquidity, confidence, time horizon, downside level, and follow-up trigger.",
+    eyebrow: "Step 05",
+    metric: "Risk",
+    title: "Review before acting",
+  },
 ]
 
 export const landingTestimonials: LandingTestimonial[] = [

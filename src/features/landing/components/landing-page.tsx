@@ -7,6 +7,7 @@ import { LandingFeaturesSection } from "@/features/landing/components/landing-fe
 import { LandingGsapEffects } from "@/features/landing/components/landing-gsap-effects"
 import { LandingHero } from "@/features/landing/components/landing-hero"
 import { LandingNumbersSection } from "@/features/landing/components/landing-numbers-section"
+import { LandingStepRailSection } from "@/features/landing/components/landing-step-rail-section"
 import { LandingTestimonialsSection } from "@/features/landing/components/landing-testimonials-section"
 import { getLandingCtaConfig } from "@/features/landing/landing.utils"
 import { useAuthStore } from "@/stores/use-auth-store"
@@ -21,6 +22,7 @@ export const LandingPage = () => {
       <LandingHero cta={cta} />
       <main>
         <LandingFeaturesSection />
+        <LandingStepRailSection />
         <LandingChessSection cta={cta} />
         <LandingReverseChessSection cta={cta} />
         <LandingNumbersSection />

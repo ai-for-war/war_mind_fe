@@ -33,7 +33,7 @@ export const LandingChessSection = ({ cta }: LandingChessSectionProps) => (
         </h2>
         <p className="mt-5 max-w-xl text-base leading-7 text-hero-sub opacity-75">
           Intelligent request shaping meets adaptive routing. Each Vietnam stock question can
-          move toward a report, schedule, backtest context, or Super-Agent trade-idea run.
+          move toward a report, schedule, backtest context, or Super-Agent research run.
         </p>
 
         <ul className="mt-8 flex flex-col gap-4">

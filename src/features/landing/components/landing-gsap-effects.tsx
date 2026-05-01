@@ -72,6 +72,45 @@ export const LandingGsapEffects = () => {
         })
       })
 
+      gsap.utils.toArray<HTMLElement>("[data-landing-step-rail]").forEach((rail) => {
+        const line = rail.querySelector("[data-landing-step-line]")
+        const steps = rail.querySelectorAll("[data-landing-step]")
+
+        if (line) {
+          gsap.fromTo(
+            line,
+            { scaleY: 0 },
+            {
+              ease: "none",
+              scaleY: 1,
+              scrollTrigger: {
+                end: "bottom 42%",
+                scrub: 0.35,
+                start: "top 68%",
+                trigger: rail,
+              },
+            },
+          )
+        }
+
+        if (steps.length === 0) {
+          return
+        }
+
+        gsap.from(steps, {
+          autoAlpha: 0,
+          duration: 0.72,
+          ease: "power3.out",
+          scrollTrigger: {
+            once: true,
+            start: "top 74%",
+            trigger: rail,
+          },
+          stagger: 0.12,
+          x: 32,
+        })
+      })
+
       gsap.utils.toArray<HTMLElement>("[data-landing-panel]").forEach((panel) => {
         gsap.fromTo(
           panel,
