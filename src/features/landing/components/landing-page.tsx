@@ -18,7 +18,7 @@ export const LandingPage = () => {
   const cta = getLandingCtaConfig(isAuthenticated)
 
   return (
-    <div className="landing-apex relative min-h-[100dvh] overflow-x-hidden bg-[hsl(var(--landing-background))] text-[hsl(var(--landing-foreground))]">
+    <div className="landing-recap relative min-h-[100dvh] overflow-x-hidden bg-[hsl(var(--landing-background))] text-[hsl(var(--landing-foreground))]">
       <LandingGsapEffects />
       <LandingHero cta={cta} />
       <main>

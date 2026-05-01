@@ -49,7 +49,7 @@ export const LoginForm = () => {
           id="email"
           type="email"
           autoComplete="email"
-          placeholder="agent@warmind.ai"
+          placeholder="analyst@recap.ai"
           disabled={isPending}
           aria-invalid={form.formState.errors.email ? "true" : "false"}
           {...form.register("email", {
