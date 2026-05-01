@@ -3,7 +3,7 @@ import { motion } from "motion/react"
 
 import { cn } from "@/lib/utils"
 
-type BeamAnchor = "center" | "edge"
+type BeamAnchor = "bottom" | "center" | "edge" | "left" | "right" | "top"
 
 export interface AnimatedBeamProps {
   className?: string
@@ -99,6 +99,34 @@ export const AnimatedBeam: React.FC<AnimatedBeamProps> = ({
         ) => {
           if (anchor === "center") {
             return center
+          }
+
+          if (anchor === "left") {
+            return {
+              x: center.x - rect.width / 2,
+              y: center.y,
+            }
+          }
+
+          if (anchor === "right") {
+            return {
+              x: center.x + rect.width / 2,
+              y: center.y,
+            }
+          }
+
+          if (anchor === "top") {
+            return {
+              x: center.x,
+              y: center.y - rect.height / 2,
+            }
+          }
+
+          if (anchor === "bottom") {
+            return {
+              x: center.x,
+              y: center.y + rect.height / 2,
+            }
           }
 
           const dx = target.x - center.x

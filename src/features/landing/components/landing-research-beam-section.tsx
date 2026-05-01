@@ -21,20 +21,20 @@ import { cn } from "@/lib/utils"
 const beamColor = "hsl(var(--landing-primary))"
 const passiveBeamColor = "hsl(var(--landing-border))"
 const edgeBeamProps = {
-  fromAnchor: "edge",
-  toAnchor: "edge",
+  fromAnchor: "right",
+  toAnchor: "left",
 } as const
-const beamSequenceDuration = 1.05
-const beamSequenceRepeatDelay = 4.9
+const beamSequenceDuration = 1.65
+const beamSequenceRepeatDelay = 6.8
 const beamSequenceDelays = {
   userToMarket: 0,
-  marketToOpenAi: 0.75,
-  marketToGlm: 1.35,
-  marketToMinimax: 1.95,
-  openAiToResearch: 2.65,
-  glmToResearch: 3.25,
-  minimaxToResearch: 3.85,
-  researchToDecision: 4.65,
+  marketToOpenAi: 1.05,
+  marketToGlm: 1.75,
+  marketToMinimax: 2.45,
+  openAiToResearch: 3.45,
+  glmToResearch: 4.15,
+  minimaxToResearch: 4.85,
+  researchToDecision: 6.05,
 } as const
 
 type BeamNodeProps = {
@@ -253,7 +253,7 @@ export const LandingResearchBeamSection = () => {
               />
               <AnimatedBeam
                 containerRef={containerRef}
-                curvature={-140}
+                curvature={170}
                 delay={beamSequenceDelays.marketToOpenAi}
                 duration={beamSequenceDuration}
                 fromRef={marketRef}
@@ -281,7 +281,7 @@ export const LandingResearchBeamSection = () => {
               />
               <AnimatedBeam
                 containerRef={containerRef}
-                curvature={140}
+                curvature={-170}
                 delay={beamSequenceDelays.marketToMinimax}
                 duration={beamSequenceDuration}
                 fromRef={marketRef}
@@ -295,7 +295,7 @@ export const LandingResearchBeamSection = () => {
               />
               <AnimatedBeam
                 containerRef={containerRef}
-                curvature={140}
+                curvature={-170}
                 delay={beamSequenceDelays.openAiToResearch}
                 duration={beamSequenceDuration}
                 fromRef={openAiRef}
@@ -323,7 +323,7 @@ export const LandingResearchBeamSection = () => {
               />
               <AnimatedBeam
                 containerRef={containerRef}
-                curvature={-140}
+                curvature={170}
                 delay={beamSequenceDelays.minimaxToResearch}
                 duration={beamSequenceDuration}
                 fromRef={minimaxRef}
@@ -353,7 +353,7 @@ export const LandingResearchBeamSection = () => {
           ) : null}
 
           <BeamNode
-            className="left-6 top-[42%]"
+            className="left-[2%] top-[42%]"
             description="Question, ticker set, or watchlist."
             eyebrow="Input"
             icon={UserRound}
@@ -361,22 +361,22 @@ export const LandingResearchBeamSection = () => {
             title="User"
           />
           <BeamNode
-            className="left-[22%] top-[42%]"
+            className="left-[23%] top-[42%]"
             description="Vietnam equities, sectors, and market context."
             eyebrow="Market"
             icon={ChartCandlestick}
             nodeRef={marketRef}
             title="Vietnam stocks"
           />
-          <ModelNode className="left-[44%] top-8" nodeRef={openAiRef} provider={openAiProvider} />
-          <ModelNode className="left-[44%] top-[39%]" nodeRef={glmRef} provider={glmProvider} />
+          <ModelNode className="left-[45%] top-[7%]" nodeRef={openAiRef} provider={openAiProvider} />
+          <ModelNode className="left-[45%] top-[39%]" nodeRef={glmRef} provider={glmProvider} />
           <ModelNode
-            className="bottom-8 left-[44%]"
+            className="bottom-[7%] left-[45%]"
             nodeRef={minimaxRef}
             provider={minimaxProvider}
           />
           <BeamNode
-            className="left-[66%] top-[42%] w-40 xl:w-44"
+            className="left-[67%] top-[42%] w-40 xl:w-44"
             description="Recap, sources, risk assumptions, and follow-up questions."
             eyebrow="Research"
             icon={FileSearch}
@@ -384,7 +384,7 @@ export const LandingResearchBeamSection = () => {
             title="Research brief"
           />
           <BeamNode
-            className="right-6 top-[42%] w-40 xl:w-44"
+            className="right-[2%] top-[42%] w-40 xl:w-44"
             description="User reviews the thesis and acts manually outside Recap.ai."
             eyebrow="Review"
             icon={MousePointer2}
