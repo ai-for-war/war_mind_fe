@@ -31,6 +31,7 @@ export const LandingHero = ({ cta }: LandingHeroProps) => {
         loop
         muted
         playsInline
+        preload="auto"
       >
         <source src={heroVideoUrl} type="video/mp4" />
       </video>
