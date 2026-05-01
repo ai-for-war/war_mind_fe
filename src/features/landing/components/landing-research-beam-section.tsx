@@ -24,17 +24,13 @@ const edgeBeamProps = {
   fromAnchor: "right",
   toAnchor: "left",
 } as const
-const beamSequenceDuration = 1.65
-const beamSequenceRepeatDelay = 6.8
+const beamSequenceDuration = 2.6
+const beamSequenceRepeatDelay = 1.6
 const beamSequenceDelays = {
   userToMarket: 0,
-  marketToOpenAi: 1.05,
-  marketToGlm: 1.75,
-  marketToMinimax: 2.45,
-  openAiToResearch: 3.45,
-  glmToResearch: 4.15,
-  minimaxToResearch: 4.85,
-  researchToDecision: 6.05,
+  marketToModels: 0.8,
+  modelsToResearch: 1.65,
+  researchToDecision: 2.45,
 } as const
 
 type BeamNodeProps = {
@@ -254,7 +250,7 @@ export const LandingResearchBeamSection = () => {
               <AnimatedBeam
                 containerRef={containerRef}
                 curvature={170}
-                delay={beamSequenceDelays.marketToOpenAi}
+                delay={beamSequenceDelays.marketToModels}
                 duration={beamSequenceDuration}
                 fromRef={marketRef}
                 {...edgeBeamProps}
@@ -268,7 +264,7 @@ export const LandingResearchBeamSection = () => {
               <AnimatedBeam
                 containerRef={containerRef}
                 curvature={0}
-                delay={beamSequenceDelays.marketToGlm}
+                delay={beamSequenceDelays.marketToModels}
                 duration={beamSequenceDuration}
                 fromRef={marketRef}
                 {...edgeBeamProps}
@@ -282,7 +278,7 @@ export const LandingResearchBeamSection = () => {
               <AnimatedBeam
                 containerRef={containerRef}
                 curvature={-170}
-                delay={beamSequenceDelays.marketToMinimax}
+                delay={beamSequenceDelays.marketToModels}
                 duration={beamSequenceDuration}
                 fromRef={marketRef}
                 {...edgeBeamProps}
@@ -296,7 +292,7 @@ export const LandingResearchBeamSection = () => {
               <AnimatedBeam
                 containerRef={containerRef}
                 curvature={-170}
-                delay={beamSequenceDelays.openAiToResearch}
+                delay={beamSequenceDelays.modelsToResearch}
                 duration={beamSequenceDuration}
                 fromRef={openAiRef}
                 {...edgeBeamProps}
@@ -310,7 +306,7 @@ export const LandingResearchBeamSection = () => {
               <AnimatedBeam
                 containerRef={containerRef}
                 curvature={0}
-                delay={beamSequenceDelays.glmToResearch}
+                delay={beamSequenceDelays.modelsToResearch}
                 duration={beamSequenceDuration}
                 fromRef={glmRef}
                 {...edgeBeamProps}
@@ -324,7 +320,7 @@ export const LandingResearchBeamSection = () => {
               <AnimatedBeam
                 containerRef={containerRef}
                 curvature={170}
-                delay={beamSequenceDelays.minimaxToResearch}
+                delay={beamSequenceDelays.modelsToResearch}
                 duration={beamSequenceDuration}
                 fromRef={minimaxRef}
                 {...edgeBeamProps}
