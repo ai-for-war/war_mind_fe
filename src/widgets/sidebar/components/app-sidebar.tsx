@@ -1,5 +1,5 @@
 import sidebarBackgroundImage from "@/assets/images/bg.jpg";
-import darkLogo from "@/assets/images/darklogopng.png";
+import lightLogo from "@/assets/images/lightlogopng.png";
 
 import {
   Sidebar,
@@ -31,7 +31,7 @@ export const AppSidebar = () => {
                 <div className="flex aspect-square size-14 items-center justify-center rounded-lg">
                   {/* <BrainCircuit className="size-4" /> */}
                   <img
-                    src={darkLogo}
+                    src={lightLogo}
                     alt="Recap.ai logo"
                     className="h-14 w-14 object-contain"
                   />
