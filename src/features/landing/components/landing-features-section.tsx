@@ -29,7 +29,7 @@ export const LandingFeaturesSection = () => (
           <span className="block">Ship Relentlessly</span>
         </h2>
         <p className="mt-4 max-w-xl text-base leading-7 text-hero-sub opacity-75">
-          Five operating modes for Vietnam stock research, watchlists, risk notes, and
+          Six operating modes for Vietnam stock research, watchlists, risk notes, and
           plan-driven Super-Agent work.
         </p>
       </div>

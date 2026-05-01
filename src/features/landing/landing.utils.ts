@@ -34,6 +34,16 @@ export type LandingStep = {
   title: string
 }
 
+export type LandingBeamProvider = {
+  description: string
+  name: string
+  token: string
+}
+
+export type LandingBeamPoint = {
+  label: string
+}
+
 export type LandingTestimonial = {
   initials: string
   name: string
@@ -165,6 +175,31 @@ export const landingSteps: LandingStep[] = [
     metric: "Risk",
     title: "Review before acting",
   },
+]
+
+export const landingBeamProviders = [
+  {
+    description: "Sourced recap reasoning.",
+    name: "OpenAI",
+    token: "OA",
+  },
+  {
+    description: "Vietnamese market interpretation.",
+    name: "GLM",
+    token: "GL",
+  },
+  {
+    description: "Fast checklist planning.",
+    name: "MiniMax",
+    token: "MM",
+  },
+] as const satisfies readonly LandingBeamProvider[]
+
+export const landingBeamPoints: LandingBeamPoint[] = [
+  { label: "Vietnam ticker and sector context" },
+  { label: "Multi-model research synthesis" },
+  { label: "Sourced recap with risk assumptions" },
+  { label: "Manual buy/sell review outside Recap.ai" },
 ]
 
 export const landingTestimonials: LandingTestimonial[] = [
