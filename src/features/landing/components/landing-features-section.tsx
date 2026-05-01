@@ -34,19 +34,19 @@ export const LandingFeaturesSection = () => (
       <div className="grid gap-6 md:grid-cols-3">
         {landingFeatureCards.map((feature) => (
           <article
-            className="liquid-glass rounded-3xl p-8 transition-colors hover:bg-white/[0.03]"
+            className="liquid-glass flex min-h-[408px] flex-col rounded-3xl p-8 transition-colors hover:bg-white/[0.03]"
             key={feature.title}
           >
             <p className="text-sm font-medium text-[hsl(var(--landing-primary))]">
               {feature.eyebrow}
             </p>
-            <h3 className="mt-5 text-2xl font-semibold leading-tight text-hero-heading">
+            <h3 className="mt-5 min-h-16 text-2xl font-semibold leading-tight text-hero-heading">
               {feature.title}
             </h3>
-            <p className="mt-4 min-h-28 text-sm leading-6 text-hero-sub opacity-75">
+            <p className="mt-4 text-sm leading-6 text-hero-sub opacity-75">
               {feature.description}
             </p>
-            <div className="mt-8 border-t border-[hsl(var(--landing-border))]/50 pt-6">
+            <div className="mt-auto border-t border-[hsl(var(--landing-border))]/50 pt-6">
               <p className="text-3xl font-semibold text-hero-heading">{feature.stat}</p>
               <p className="mt-1 text-sm text-hero-sub opacity-60">{feature.statLabel}</p>
             </div>
