@@ -22,7 +22,7 @@ type LandingHeroProps = {
 
 export const LandingHero = ({ cta }: LandingHeroProps) => {
   return (
-    <section className="relative min-h-[100dvh] overflow-hidden">
+    <section className="relative min-h-[100dvh] overflow-hidden" id="hero">
       <video
         aria-hidden="true"
         autoPlay
