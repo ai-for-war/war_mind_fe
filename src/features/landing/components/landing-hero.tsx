@@ -1,7 +1,7 @@
 import { ChevronRight } from "lucide-react"
-import { Link } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
+import { LandingCtaLink } from "@/features/landing/components/landing-cta-link"
 import { LandingHeader } from "@/features/landing/components/landing-header"
 import { LandingSectionBadge } from "@/features/landing/components/landing-section-badge"
 import {
@@ -56,7 +56,7 @@ export const LandingHero = ({ cta }: LandingHeroProps) => {
 
           <div className="mt-8 flex w-full flex-col items-center justify-center gap-4 sm:w-auto sm:flex-row">
             <Button asChild className="h-12 w-full sm:w-auto" size="lg" variant="hero">
-              <Link to={cta.primaryHref}>Start Research Right Now</Link>
+              <LandingCtaLink to={cta.primaryHref}>Start Research Right Now</LandingCtaLink>
             </Button>
             <Button
               asChild
@@ -64,7 +64,7 @@ export const LandingHero = ({ cta }: LandingHeroProps) => {
               size="lg"
               variant="heroSecondary"
             >
-              <Link to={cta.secondaryHref}>Ask Super-Agent</Link>
+              <LandingCtaLink to={cta.secondaryHref}>Ask Super-Agent</LandingCtaLink>
             </Button>
           </div>
         </div>

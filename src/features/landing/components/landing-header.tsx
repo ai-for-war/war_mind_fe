@@ -3,6 +3,7 @@ import type { MouseEvent } from "react"
 import { Link } from "react-router-dom"
 
 import { Button } from "@/components/ui/button"
+import { LandingCtaLink } from "@/features/landing/components/landing-cta-link"
 import type { LandingCtaConfig } from "@/features/landing/landing.utils"
 
 type LandingHeaderProps = {
@@ -66,7 +67,7 @@ export const LandingHeader = ({ cta }: LandingHeaderProps) => (
       </nav>
 
       <Button asChild className="h-9 px-4 text-sm" size="sm" variant="hero">
-        <Link to={cta.primaryHref}>{cta.primaryLabel}</Link>
+        <LandingCtaLink to={cta.primaryHref}>{cta.primaryLabel}</LandingCtaLink>
       </Button>
     </div>
   </header>

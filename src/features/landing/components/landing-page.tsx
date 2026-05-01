@@ -23,7 +23,7 @@ export const LandingPage = () => {
         <LandingReverseChessSection cta={cta} />
         <LandingNumbersSection />
         <LandingTestimonialsSection />
-        <LandingCtaFooterWrapper cta={cta} />
+        <LandingCtaFooterWrapper />
       </main>
     </div>
   )

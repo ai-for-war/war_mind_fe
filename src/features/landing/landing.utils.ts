@@ -40,10 +40,10 @@ export type LandingFooterGroup = {
 }
 
 export const getLandingCtaConfig = (isAuthenticated: boolean): LandingCtaConfig => ({
-  primaryHref: isAuthenticated ? "/stocks/research" : "/login",
-  primaryLabel: isAuthenticated ? "Open AI Stock Analyst" : "Enter workspace",
-  secondaryHref: isAuthenticated ? "/super-agent" : "/login",
-  secondaryLabel: isAuthenticated ? "Ask Super-Agent" : "View product flow",
+  primaryHref: isAuthenticated ? "/stocks/research" : "#request-access",
+  primaryLabel: isAuthenticated ? "Open AI Stock Analyst" : "Request access",
+  secondaryHref: isAuthenticated ? "/super-agent" : "#request-access",
+  secondaryLabel: isAuthenticated ? "Ask Super-Agent" : "Request access",
 })
 
 export const landingTickers: LandingTicker[] = [

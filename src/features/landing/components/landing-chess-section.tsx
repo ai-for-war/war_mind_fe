@@ -1,6 +1,5 @@
-import { Link } from "react-router-dom"
-
 import { Button } from "@/components/ui/button"
+import { LandingCtaLink } from "@/features/landing/components/landing-cta-link"
 import { LandingSectionBadge } from "@/features/landing/components/landing-section-badge"
 import { LandingHlsVideo } from "@/features/landing/components/landing-video"
 import {
@@ -48,10 +47,10 @@ export const LandingChessSection = ({ cta }: LandingChessSectionProps) => (
 
         <div className="mt-9 flex w-full flex-col gap-4 sm:w-auto sm:flex-row">
           <Button asChild className="h-12" size="lg" variant="hero">
-            <Link to={cta.primaryHref}>See It in Action</Link>
+            <LandingCtaLink to={cta.primaryHref}>See It in Action</LandingCtaLink>
           </Button>
           <Button asChild className="h-12" size="lg" variant="heroSecondary">
-            <Link to={cta.secondaryHref}>Read the Flow</Link>
+            <LandingCtaLink to={cta.secondaryHref}>Read the Flow</LandingCtaLink>
           </Button>
         </div>
       </div>
@@ -83,7 +82,7 @@ export const LandingReverseChessSection = ({ cta }: LandingChessSectionProps) =>
         </div>
 
         <Button asChild className="mt-9 h-12" size="lg" variant="hero">
-          <Link to={cta.primaryHref}>Try Research Studio</Link>
+          <LandingCtaLink to={cta.primaryHref}>Try Research Studio</LandingCtaLink>
         </Button>
       </div>
 

@@ -1,11 +1,8 @@
 import { Link } from "react-router-dom"
 
-import { Button } from "@/components/ui/button"
+import { LandingAccessForm } from "@/features/landing/components/landing-access-form"
 import { LandingHlsVideo } from "@/features/landing/components/landing-video"
-import {
-  landingFooterGroups,
-  type LandingCtaConfig,
-} from "@/features/landing/landing.utils"
+import { landingFooterGroups } from "@/features/landing/landing.utils"
 
 const footerVideoUrl =
   "https://stream.mux.com/tLkHO1qZoaaQOUeVWo8hEBeGQfySP02EPS02BmnNFyXys.m3u8"
@@ -13,32 +10,42 @@ const footerVideoUrl =
 const footerOverlay =
   "linear-gradient(to bottom, hsl(260 87% 3%) 0%, hsl(260 87% 3% / 0.85) 15%, hsl(260 87% 3% / 0.4) 40%, hsl(260 87% 3% / 0.15) 60%, hsl(260 87% 3% / 0.3) 100%)"
 
-type LandingCtaFooterWrapperProps = {
-  cta: LandingCtaConfig
-}
-
-export const LandingCtaFooterWrapper = ({ cta }: LandingCtaFooterWrapperProps) => (
+export const LandingCtaFooterWrapper = () => (
   <section className="relative overflow-hidden px-4 sm:px-6" id="footer">
     <LandingHlsVideo className="absolute inset-0 size-full object-cover" src={footerVideoUrl} />
     <div aria-hidden="true" className="absolute inset-0" style={{ background: footerOverlay }} />
 
     <div className="relative z-10 mx-auto max-w-6xl py-32">
-      <div className="liquid-glass rounded-[2rem] p-10 text-center sm:p-20">
-        <h2 className="text-3xl font-semibold leading-[1.06] tracking-normal text-hero-heading sm:text-5xl">
-          <span className="block">Ready to Outpace</span>
-          <span className="block">Your Research Targets?</span>
-        </h2>
-        <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-hero-sub opacity-75">
-          Bring recurring stock coverage, sourced reports, and Super-Agent planning into one
-          premium market workspace.
-        </p>
-        <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-          <Button asChild className="h-12" size="lg" variant="hero">
-            <Link to={cta.primaryHref}>Start Research Today</Link>
-          </Button>
-          <Button asChild className="h-12" size="lg" variant="heroSecondary">
-            <Link to={cta.secondaryHref}>Talk to Super-Agent</Link>
-          </Button>
+      <div
+        className="liquid-glass scroll-mt-8 rounded-[2rem] p-8 sm:p-12 lg:p-16"
+        id="request-access"
+      >
+        <div className="grid gap-10 lg:grid-cols-[0.86fr_1.14fr] lg:items-start">
+          <div className="text-left">
+            <p className="text-sm font-medium text-[hsl(var(--landing-primary))]">
+              Request access
+            </p>
+            <h2 className="mt-5 text-3xl font-semibold leading-[1.06] tracking-normal text-hero-heading sm:text-5xl">
+              <span className="block">Get Early Access</span>
+              <span className="block">to Recap.ai</span>
+            </h2>
+            <p className="mt-5 max-w-md text-base leading-7 text-hero-sub opacity-75">
+              Tell us what you want Recap.ai to track first. We will use this to shape the
+              early-access workflow before wiring the production intake endpoint.
+            </p>
+            <div className="mt-8 grid max-w-md grid-cols-2 gap-4 border-t border-[hsl(var(--landing-border))]/50 pt-6">
+              <div>
+                <p className="text-2xl font-semibold text-hero-heading">15m</p>
+                <p className="mt-1 text-sm text-hero-sub opacity-55">research cadence</p>
+              </div>
+              <div>
+                <p className="text-2xl font-semibold text-hero-heading">Plan</p>
+                <p className="mt-1 text-sm text-hero-sub opacity-55">visible agent runs</p>
+              </div>
+            </div>
+          </div>
+
+          <LandingAccessForm />
         </div>
       </div>
 
