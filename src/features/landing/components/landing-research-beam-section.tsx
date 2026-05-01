@@ -24,6 +24,18 @@ const edgeBeamProps = {
   fromAnchor: "edge",
   toAnchor: "edge",
 } as const
+const beamSequenceDuration = 1.05
+const beamSequenceRepeatDelay = 4.9
+const beamSequenceDelays = {
+  userToMarket: 0,
+  marketToOpenAi: 0.75,
+  marketToGlm: 1.35,
+  marketToMinimax: 1.95,
+  openAiToResearch: 2.65,
+  glmToResearch: 3.25,
+  minimaxToResearch: 3.85,
+  researchToDecision: 4.65,
+} as const
 
 type BeamNodeProps = {
   className?: string
@@ -228,104 +240,113 @@ export const LandingResearchBeamSection = () => {
               <AnimatedBeam
                 containerRef={containerRef}
                 curvature={0}
-                duration={4.6}
+                delay={beamSequenceDelays.userToMarket}
+                duration={beamSequenceDuration}
                 fromRef={userRef}
                 {...edgeBeamProps}
                 gradientStartColor={beamColor}
                 gradientStopColor={beamColor}
                 pathColor={passiveBeamColor}
                 pathOpacity={0.22}
+                repeatDelay={beamSequenceRepeatDelay}
                 toRef={marketRef}
               />
               <AnimatedBeam
                 containerRef={containerRef}
                 curvature={-140}
-                delay={0.2}
-                duration={4.8}
+                delay={beamSequenceDelays.marketToOpenAi}
+                duration={beamSequenceDuration}
                 fromRef={marketRef}
                 {...edgeBeamProps}
                 gradientStartColor={beamColor}
                 gradientStopColor={beamColor}
                 pathColor={passiveBeamColor}
                 pathOpacity={0.18}
+                repeatDelay={beamSequenceRepeatDelay}
                 toRef={openAiRef}
               />
               <AnimatedBeam
                 containerRef={containerRef}
                 curvature={0}
-                delay={0.45}
-                duration={4.9}
+                delay={beamSequenceDelays.marketToGlm}
+                duration={beamSequenceDuration}
                 fromRef={marketRef}
                 {...edgeBeamProps}
                 gradientStartColor={beamColor}
                 gradientStopColor={beamColor}
                 pathColor={passiveBeamColor}
                 pathOpacity={0.18}
+                repeatDelay={beamSequenceRepeatDelay}
                 toRef={glmRef}
               />
               <AnimatedBeam
                 containerRef={containerRef}
                 curvature={140}
-                delay={0.7}
-                duration={5}
+                delay={beamSequenceDelays.marketToMinimax}
+                duration={beamSequenceDuration}
                 fromRef={marketRef}
                 {...edgeBeamProps}
                 gradientStartColor={beamColor}
                 gradientStopColor={beamColor}
                 pathColor={passiveBeamColor}
                 pathOpacity={0.18}
+                repeatDelay={beamSequenceRepeatDelay}
                 toRef={minimaxRef}
               />
               <AnimatedBeam
                 containerRef={containerRef}
                 curvature={140}
-                delay={0.4}
-                duration={4.6}
+                delay={beamSequenceDelays.openAiToResearch}
+                duration={beamSequenceDuration}
                 fromRef={openAiRef}
                 {...edgeBeamProps}
                 gradientStartColor={beamColor}
                 gradientStopColor={beamColor}
                 pathColor={passiveBeamColor}
                 pathOpacity={0.16}
+                repeatDelay={beamSequenceRepeatDelay}
                 toRef={researchRef}
               />
               <AnimatedBeam
                 containerRef={containerRef}
                 curvature={0}
-                delay={0.65}
-                duration={4.7}
+                delay={beamSequenceDelays.glmToResearch}
+                duration={beamSequenceDuration}
                 fromRef={glmRef}
                 {...edgeBeamProps}
                 gradientStartColor={beamColor}
                 gradientStopColor={beamColor}
                 pathColor={passiveBeamColor}
                 pathOpacity={0.16}
+                repeatDelay={beamSequenceRepeatDelay}
                 toRef={researchRef}
               />
               <AnimatedBeam
                 containerRef={containerRef}
                 curvature={-140}
-                delay={0.9}
-                duration={4.9}
+                delay={beamSequenceDelays.minimaxToResearch}
+                duration={beamSequenceDuration}
                 fromRef={minimaxRef}
                 {...edgeBeamProps}
                 gradientStartColor={beamColor}
                 gradientStopColor={beamColor}
                 pathColor={passiveBeamColor}
                 pathOpacity={0.16}
+                repeatDelay={beamSequenceRepeatDelay}
                 toRef={researchRef}
               />
               <AnimatedBeam
                 containerRef={containerRef}
                 curvature={0}
-                delay={1.05}
-                duration={4.8}
+                delay={beamSequenceDelays.researchToDecision}
+                duration={beamSequenceDuration}
                 fromRef={researchRef}
                 {...edgeBeamProps}
                 gradientStartColor={beamColor}
                 gradientStopColor={beamColor}
                 pathColor={passiveBeamColor}
                 pathOpacity={0.2}
+                repeatDelay={beamSequenceRepeatDelay}
                 toRef={decisionRef}
               />
             </>
