@@ -32,8 +32,8 @@ export const LandingChessSection = ({ cta }: LandingChessSectionProps) => (
           <span className="block">Its Perfect Path</span>
         </h2>
         <p className="mt-5 max-w-xl text-base leading-7 text-hero-sub opacity-75">
-          Intelligent request shaping meets adaptive routing. Each stock question can move
-          toward the route, report, schedule, or Super-Agent run most likely to answer it.
+          Intelligent request shaping meets adaptive routing. Each Vietnam stock question can
+          move toward a report, schedule, backtest context, or Super-Agent trade-idea run.
         </p>
 
         <ul className="mt-8 flex flex-col gap-4">
@@ -68,8 +68,8 @@ export const LandingReverseChessSection = ({ cta }: LandingChessSectionProps) =>
           <span className="block">That Actually Compound</span>
         </h2>
         <p className="mt-5 max-w-xl text-base leading-7 text-hero-sub opacity-75">
-          Pair watchlists, AI reports, recurring schedules, and agent conversations so the
-          research desk can see exactly where market questions stand.
+          Pair watchlists, AI reports, recurring schedules, backtest context, and risk
+          checklists so every trade idea has a visible research trail.
         </p>
 
         <div className="mt-8 grid w-full max-w-xl grid-cols-2 gap-4">

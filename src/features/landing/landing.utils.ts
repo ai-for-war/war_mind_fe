@@ -66,11 +66,27 @@ export const landingFeatureCards: LandingFeatureCard[] = [
   },
   {
     description:
+      "Screen Vietnamese equities by ticker, sector, exchange, and research intent before sending the best candidates into an agent run.",
+    eyebrow: "Vietnam Market",
+    stat: "VN",
+    statLabel: "equity coverage focus",
+    title: "Vietnam Stock Radar",
+  },
+  {
+    description:
       "Move from watchlists into sourced briefs and market context without losing the audit trail behind each conclusion.",
     eyebrow: "Analytics",
     stat: "Source-led",
     statLabel: "report interpretation",
     title: "Deep-Dive Market Analytics",
+  },
+  {
+    description:
+      "Turn important symbols into watchlists, then keep recurring briefs close to backtest context and market movement.",
+    eyebrow: "Watchlists",
+    stat: "Loop",
+    statLabel: "watch, brief, backtest",
+    title: "Watchlist-to-Backtest Loop",
   },
   {
     description:
@@ -80,10 +96,19 @@ export const landingFeatureCards: LandingFeatureCard[] = [
     statLabel: "visible before execution",
     title: "Guardrailed Agent Runs",
   },
+  {
+    description:
+      "Force every thesis through risk prompts: liquidity, catalyst quality, time horizon, downside level, and source confidence.",
+    eyebrow: "Risk",
+    stat: "Checklist",
+    statLabel: "before every thesis",
+    title: "Risk-Aware Decision Notes",
+  },
 ]
 
 export const landingRoutingBullets: LandingRoutingBullet[] = [
-  { label: "AI-scored market research requests" },
+  { label: "AI-scored Vietnam stock research requests" },
+  { label: "Trade-idea drafts with entry context and invalidation notes" },
   { label: "Dynamic handoff into stock, report, or schedule routes" },
   { label: "Multi-step Super-Agent planning with visible progress" },
 ]
@@ -91,8 +116,10 @@ export const landingRoutingBullets: LandingRoutingBullet[] = [
 export const landingPipelineStats: LandingPipelineStat[] = [
   { metric: "5+", label: "stock surfaces connected" },
   { metric: "15m", label: "fastest recurring cadence" },
-  { metric: "Plan", label: "agent execution model" },
+  { metric: "VN", label: "market research focus" },
+  { metric: "Plan", label: "agent trade-idea model" },
   { metric: "Live", label: "streamed research status" },
+  { metric: "Risk", label: "thesis checklist" },
 ]
 
 export const landingTestimonials: LandingTestimonial[] = [
@@ -122,7 +149,13 @@ export const landingTestimonials: LandingTestimonial[] = [
 export const landingFooterGroups: LandingFooterGroup[] = [
   {
     title: "Product",
-    links: ["Stock research", "Schedules", "Watchlists", "Backtests", "Super-Agent"],
+    links: [
+      "Vietnam stock radar",
+      "Schedules",
+      "Watchlists",
+      "Backtests",
+      "Super-Agent",
+    ],
   },
   {
     title: "Company",

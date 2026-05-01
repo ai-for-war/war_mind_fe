@@ -26,12 +26,12 @@ export const LandingFeaturesSection = () => (
           <span className="block">Ship Relentlessly</span>
         </h2>
         <p className="mt-4 max-w-xl text-base leading-7 text-hero-sub opacity-75">
-          Three pillars that keep your market intelligence loop moving without the
-          operational drag.
+          Five operating modes for Vietnam stock research, watchlists, risk notes, and
+          plan-driven Super-Agent work.
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
         {landingFeatureCards.map((feature) => (
           <article
             className="liquid-glass flex min-h-[408px] flex-col rounded-3xl p-8 transition-colors hover:bg-white/[0.03]"
