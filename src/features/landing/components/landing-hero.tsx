@@ -1,6 +1,7 @@
 import { ChevronRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { Marquee } from "@/components/ui/marquee"
 import { LandingCtaLink } from "@/features/landing/components/landing-cta-link"
 import { LandingHeader } from "@/features/landing/components/landing-header"
 import { LandingSectionBadge } from "@/features/landing/components/landing-section-badge"
@@ -20,8 +21,6 @@ type LandingHeroProps = {
 }
 
 export const LandingHero = ({ cta }: LandingHeroProps) => {
-  const marqueeItems = [...landingTickers, ...landingTickers]
-
   return (
     <section className="relative min-h-[100dvh] overflow-hidden">
       <video
@@ -88,22 +87,24 @@ export const LandingHero = ({ cta }: LandingHeroProps) => {
             Designed for analysts tracking moving markets
           </p>
 
-          <div className="overflow-hidden">
-            <div className="animate-marquee flex w-max items-center gap-4">
-              {marqueeItems.map((ticker, index) => (
-                <div
-                  className="flex min-w-36 items-center gap-2 text-sm text-[hsl(var(--landing-foreground))]/65"
-                  key={`${ticker.name}-${index}`}
-                >
-                  <span className="liquid-glass flex size-6 items-center justify-center rounded-lg text-xs font-semibold text-[hsl(var(--landing-primary))]">
-                    {ticker.token}
-                  </span>
-                  <span>{ticker.name}</span>
-                  <ChevronRight aria-hidden="true" className="size-3 opacity-35" />
-                </div>
-              ))}
-            </div>
-          </div>
+          <Marquee
+            className="p-0 [--duration:22s] [--gap:1rem] [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]"
+            pauseOnHover
+            repeat={3}
+          >
+            {landingTickers.map((ticker) => (
+              <div
+                className="flex min-w-36 items-center gap-2 text-sm text-[hsl(var(--landing-foreground))]/65"
+                key={ticker.name}
+              >
+                <span className="liquid-glass flex size-6 items-center justify-center rounded-lg text-xs font-semibold text-[hsl(var(--landing-primary))]">
+                  {ticker.token}
+                </span>
+                <span>{ticker.name}</span>
+                <ChevronRight aria-hidden="true" className="size-3 opacity-35" />
+              </div>
+            ))}
+          </Marquee>
         </div>
       </div>
     </section>
