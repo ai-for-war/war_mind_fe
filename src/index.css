@@ -321,3 +321,46 @@
     animation: none;
     mix-blend-mode: normal;
 }
+
+@layer utilities {
+  @keyframes landing-market-marquee {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(-50%, 0, 0);
+    }
+  }
+
+  @keyframes landing-chart-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  .landing-market-marquee {
+    animation: landing-market-marquee 28s linear infinite;
+  }
+
+  .landing-chart-line {
+    color: rgb(165 243 252);
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: landing-chart-draw 2.4s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .landing-market-marquee {
+      animation: none;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .landing-chart-line {
+      animation: none;
+      stroke-dashoffset: 0;
+    }
+  }
+}

@@ -6,6 +6,7 @@ import { Spinner } from "@/components/ui/spinner"
 import { LoginPage } from "@/features/auth/components/login-page"
 import { BacktestTerminalPage } from "@/features/backtests"
 import { InterviewLabPage } from "@/features/interview-lab"
+import { LandingPage } from "@/features/landing"
 import { MeetingRecorderPage } from "@/features/meeting-recorder"
 import { MultiAgentPage } from "@/features/multi-agent"
 import { SkillPluginsPage } from "@/features/skill-plugins"
@@ -54,10 +55,14 @@ const ProtectedRoute = () => {
 const CatchAllRedirect = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
 
-  return <Navigate to={isAuthenticated ? "/voice-cloning" : "/login"} replace />
+  return <Navigate to={isAuthenticated ? "/stocks/research" : "/"} replace />
 }
 
 export const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <LandingPage />,
+  },
   {
     path: "/login",
     element: <LoginPage />,
@@ -69,8 +74,8 @@ export const router = createBrowserRouter([
         element: <MainLayout />,
         children: [
           {
-            path: "/",
-            element: <Navigate to="/voice-cloning" replace />,
+            path: "/app",
+            element: <Navigate to="/stocks/research" replace />,
           },
           {
             path: "/voice-cloning",
