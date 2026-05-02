@@ -1,18 +1,12 @@
 import { Button } from "@/components/ui/button"
 import { LandingCtaLink } from "@/features/landing/components/landing-cta-link"
 import { LandingSectionBadge } from "@/features/landing/components/landing-section-badge"
-import { LandingHlsVideo } from "@/features/landing/components/landing-video"
+import { LandingLocalVideo } from "@/features/landing/components/landing-video"
 import {
   landingPipelineStats,
   landingRoutingBullets,
   type LandingCtaConfig,
 } from "@/features/landing/landing.utils"
-
-const routingVideoUrl =
-  "https://stream.mux.com/1CCfG6mPC7LbMOAs6iBOfPeNd3WaKlZuHuKHp00G62j8.m3u8"
-
-const pipelineVideoUrl =
-  "https://stream.mux.com/f0001qPDy00mvqP023lqK3lWx31uHvxirFCHK1yNLczzqxY.m3u8"
 
 type LandingChessSectionProps = {
   cta: LandingCtaConfig
@@ -22,7 +16,10 @@ export const LandingChessSection = ({ cta }: LandingChessSectionProps) => (
   <section className="px-4 py-32 sm:px-6" id="routing">
     <div className="mx-auto grid max-w-6xl items-center gap-20 lg:grid-cols-2">
       <div className="liquid-glass aspect-[4/3] overflow-hidden rounded-3xl" data-landing-panel>
-        <LandingHlsVideo src={routingVideoUrl} />
+        <LandingLocalVideo
+          mp4Src="/videos/routing.mp4"
+          webmSrc="/videos/routing.webm"
+        />
       </div>
 
       <div className="flex flex-col items-start" data-landing-reveal>
@@ -90,7 +87,10 @@ export const LandingReverseChessSection = ({ cta }: LandingChessSectionProps) =>
         className="liquid-glass order-1 aspect-[4/3] overflow-hidden rounded-3xl lg:order-2"
         data-landing-panel
       >
-        <LandingHlsVideo src={pipelineVideoUrl} />
+        <LandingLocalVideo
+          mp4Src="/videos/pipeline.mp4"
+          webmSrc="/videos/pipeline.webm"
+        />
       </div>
     </div>
   </section>

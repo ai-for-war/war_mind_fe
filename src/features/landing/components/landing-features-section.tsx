@@ -1,13 +1,14 @@
-import { LandingHlsVideo } from "@/features/landing/components/landing-video"
 import { LandingSectionBadge } from "@/features/landing/components/landing-section-badge"
+import { LandingLocalVideo } from "@/features/landing/components/landing-video"
 import { landingFeatureCards } from "@/features/landing/landing.utils"
-
-const featuresVideoUrl =
-  "https://stream.mux.com/Jwr2RhmsNrd6GEspBNgm02vJsRZAGlaoQIh4AucGdASw.m3u8"
 
 export const LandingFeaturesSection = () => (
   <section className="relative overflow-hidden px-4 py-32 sm:px-6" id="features">
-    <LandingHlsVideo className="absolute inset-0 size-full object-cover" src={featuresVideoUrl} />
+    <LandingLocalVideo
+      className="absolute inset-0 size-full object-cover"
+      mp4Src="/videos/features.mp4"
+      webmSrc="/videos/features.webm"
+    />
     <div aria-hidden="true" className="absolute inset-0 bg-[hsl(var(--landing-background))]/40" />
     <div
       aria-hidden="true"

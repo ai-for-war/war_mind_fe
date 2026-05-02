@@ -1,14 +1,15 @@
-import { LandingHlsVideo } from "@/features/landing/components/landing-video"
-
-const numbersVideoUrl =
-  "https://stream.mux.com/Kec29dVyJgiPdtWaQtPuEiiGHkJIYQAVUJcNiIHUYeo.m3u8"
+import { LandingLocalVideo } from "@/features/landing/components/landing-video"
 
 const numbersOverlay =
   "linear-gradient(to top, hsl(260 87% 3%) 0%, hsl(260 87% 3% / 0.85) 15%, hsl(260 87% 3% / 0.4) 40%, hsl(260 87% 3% / 0.15) 60%, hsl(260 87% 3% / 0.3) 100%)"
 
 export const LandingNumbersSection = () => (
   <section className="relative overflow-hidden px-4 sm:px-6" id="numbers">
-    <LandingHlsVideo className="absolute inset-0 size-full object-cover" src={numbersVideoUrl} />
+    <LandingLocalVideo
+      className="absolute inset-0 size-full object-cover"
+      mp4Src="/videos/numbers.mp4"
+      webmSrc="/videos/numbers.webm"
+    />
     <div aria-hidden="true" className="absolute inset-0" style={{ background: numbersOverlay }} />
 
     <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center py-32 text-center">

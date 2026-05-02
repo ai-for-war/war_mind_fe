@@ -1,25 +1,24 @@
-import Hls from "hls.js"
 import { useEffect, useRef, useState } from "react"
 
 import { cn } from "@/lib/utils"
 
-type LandingHlsVideoProps = {
+type LandingLocalVideoProps = {
   className?: string
-  loadStrategy?: "eager" | "lazy"
+  loadStrategy?: VideoLoadStrategy
+  mp4Src: string
   rootMargin?: string
-  src: string
+  webmSrc: string
 }
+
+type VideoLoadStrategy = "eager" | "lazy"
 
 const DEFAULT_ROOT_MARGIN = "900px 0px"
 
-export const LandingHlsVideo = ({
-  className,
-  loadStrategy = "lazy",
-  rootMargin = DEFAULT_ROOT_MARGIN,
-  src,
-}: LandingHlsVideoProps) => {
+const useDeferredVideoLoad = (
+  loadStrategy: VideoLoadStrategy,
+  rootMargin: string,
+) => {
   const containerRef = useRef<HTMLDivElement>(null)
-  const videoRef = useRef<HTMLVideoElement>(null)
   const [shouldLoad, setShouldLoad] = useState(loadStrategy === "eager")
 
   useEffect(() => {
@@ -58,6 +57,19 @@ export const LandingHlsVideo = ({
     }
   }, [loadStrategy, rootMargin, shouldLoad])
 
+  return { containerRef, shouldLoad }
+}
+
+export const LandingLocalVideo = ({
+  className,
+  loadStrategy = "lazy",
+  mp4Src,
+  rootMargin = DEFAULT_ROOT_MARGIN,
+  webmSrc,
+}: LandingLocalVideoProps) => {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const { containerRef, shouldLoad } = useDeferredVideoLoad(loadStrategy, rootMargin)
+
   useEffect(() => {
     if (!shouldLoad) {
       return
@@ -77,42 +89,14 @@ export const LandingHlsVideo = ({
       }
     }
 
-    if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      video.src = src
-      video.addEventListener("loadedmetadata", playVideo, { once: true })
-
-      return () => {
-        video.removeEventListener("loadedmetadata", playVideo)
-        video.removeAttribute("src")
-        video.load()
-      }
-    }
-
-    if (!Hls.isSupported()) {
-      return
-    }
-
-    const hls = new Hls({
-      autoStartLoad: true,
-      backBufferLength: 0,
-      capLevelToPlayerSize: true,
-      enableWorker: true,
-      lowLatencyMode: false,
-      maxBufferLength: 8,
-      maxMaxBufferLength: 16,
-      startLevel: 0,
-    })
-
-    hls.loadSource(src)
-    hls.attachMedia(video)
-    hls.on(Hls.Events.MANIFEST_PARSED, playVideo)
+    video.load()
+    video.addEventListener("loadedmetadata", playVideo, { once: true })
+    playVideo()
 
     return () => {
-      hls.destroy()
-      video.removeAttribute("src")
-      video.load()
+      video.removeEventListener("loadedmetadata", playVideo)
     }
-  }, [shouldLoad, src])
+  }, [shouldLoad])
 
   return (
     <div
@@ -130,9 +114,16 @@ export const LandingHlsVideo = ({
         loop
         muted
         playsInline
-        preload={shouldLoad ? "auto" : "none"}
+        preload={shouldLoad ? "metadata" : "none"}
         ref={videoRef}
-      />
+      >
+        {shouldLoad ? (
+          <>
+            <source src={webmSrc} type="video/webm" />
+            <source src={mp4Src} type="video/mp4" />
+          </>
+        ) : null}
+      </video>
     </div>
   )
 }
