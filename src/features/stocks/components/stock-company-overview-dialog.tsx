@@ -14,6 +14,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { StockAddToWatchlistDialog } from "@/features/stock-watchlists"
 import { StockCompanyAffiliatePanel } from "@/features/stocks/components/stock-company-affiliate-panel"
 import { StockCompanyEventsPanel } from "@/features/stocks/components/stock-company-events-panel"
+import { StockCompanyFinancialsPanel } from "@/features/stocks/components/stock-company-financials-panel"
 import { StockCompanyNewsPanel } from "@/features/stocks/components/stock-company-news-panel"
 import { StockCompanyOfficersPanel } from "@/features/stocks/components/stock-company-officers-panel"
 import { StockCompanyOverviewPanel } from "@/features/stocks/components/stock-company-overview-panel"
@@ -40,6 +41,7 @@ type CompanyDetailTab =
   | "affiliate"
   | "events"
   | "news"
+  | "financials"
   | "reports"
   | "ratio-summary"
   | "prices"
@@ -52,7 +54,8 @@ const COMPANY_DETAIL_TABS = [
   { value: "affiliate", label: "Affiliate", isDisabled: false },
   { value: "events", label: "Events", isDisabled: false },
   { value: "news", label: "News", isDisabled: false },
-  { value: "reports", label: "Reports", isDisabled: false },
+  { value: "financials", label: "Financials", isDisabled: false },
+  { value: "reports", label: "Company Reports", isDisabled: false },
   { value: "ratio-summary", label: "Ratio Summary", isDisabled: false },
   { value: "prices", label: "Prices", isDisabled: false },
 ] as const
@@ -106,6 +109,7 @@ const StockCompanyOverviewDialogBody = ({
       value !== "affiliate" &&
       value !== "events" &&
       value !== "news" &&
+      value !== "financials" &&
       value !== "reports" &&
       value !== "ratio-summary" &&
       value !== "overview"
@@ -195,73 +199,82 @@ const StockCompanyOverviewDialogBody = ({
           </ScrollArea>
         </div>
 
-        <ScrollArea className="min-h-0 flex-1">
-          <div className="flex min-h-full flex-col gap-5 px-6 py-5">
-            {activeTab === "overview" ? (
-              <StockCompanyOverviewPanel isActive={activeTab === "overview"} selectedStock={selectedStock} />
-            ) : null}
-
-            {activeTab === "shareholders" ? (
-              <StockCompanyShareholdersPanel
-                isActive={activeTab === "shareholders"}
-                selectedStock={selectedStock}
-              />
-            ) : null}
-
-            {activeTab === "officers" ? (
-              <StockCompanyOfficersPanel
-                isActive={activeTab === "officers"}
-                selectedStock={selectedStock}
-              />
-            ) : null}
-
-            {activeTab === "subsidiaries" ? (
-              <StockCompanySubsidiariesPanel
-                isActive={activeTab === "subsidiaries"}
-                selectedStock={selectedStock}
-              />
-            ) : null}
-
-            {activeTab === "affiliate" ? (
-              <StockCompanyAffiliatePanel
-                isActive={activeTab === "affiliate"}
-                selectedStock={selectedStock}
-              />
-            ) : null}
-
-            {activeTab === "events" ? (
-              <StockCompanyEventsPanel
-                isActive={activeTab === "events"}
-                selectedStock={selectedStock}
-              />
-            ) : null}
-
-            {activeTab === "news" ? (
-              <StockCompanyNewsPanel
-                isActive={activeTab === "news"}
-                selectedStock={selectedStock}
-              />
-            ) : null}
-
-            {activeTab === "reports" ? (
-              <StockCompanyReportsPanel
-                isActive={activeTab === "reports"}
-                selectedStock={selectedStock}
-              />
-            ) : null}
-
-            {activeTab === "ratio-summary" ? (
-              <StockCompanyRatioSummaryPanel
-                isActive={activeTab === "ratio-summary"}
-                selectedStock={selectedStock}
-              />
-            ) : null}
-
-            {activeTab === "prices" ? (
-              <StockCompanyPricesPanel isActive={activeTab === "prices"} selectedStock={selectedStock} />
-            ) : null}
+        {activeTab === "financials" ? (
+          <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden px-6 py-5">
+            <StockCompanyFinancialsPanel
+              isActive={activeTab === "financials"}
+              selectedStock={selectedStock}
+            />
           </div>
-        </ScrollArea>
+        ) : (
+          <ScrollArea className="min-h-0 flex-1">
+            <div className="flex min-h-full flex-col gap-5 px-6 py-5">
+              {activeTab === "overview" ? (
+                <StockCompanyOverviewPanel isActive={activeTab === "overview"} selectedStock={selectedStock} />
+              ) : null}
+
+              {activeTab === "shareholders" ? (
+                <StockCompanyShareholdersPanel
+                  isActive={activeTab === "shareholders"}
+                  selectedStock={selectedStock}
+                />
+              ) : null}
+
+              {activeTab === "officers" ? (
+                <StockCompanyOfficersPanel
+                  isActive={activeTab === "officers"}
+                  selectedStock={selectedStock}
+                />
+              ) : null}
+
+              {activeTab === "subsidiaries" ? (
+                <StockCompanySubsidiariesPanel
+                  isActive={activeTab === "subsidiaries"}
+                  selectedStock={selectedStock}
+                />
+              ) : null}
+
+              {activeTab === "affiliate" ? (
+                <StockCompanyAffiliatePanel
+                  isActive={activeTab === "affiliate"}
+                  selectedStock={selectedStock}
+                />
+              ) : null}
+
+              {activeTab === "events" ? (
+                <StockCompanyEventsPanel
+                  isActive={activeTab === "events"}
+                  selectedStock={selectedStock}
+                />
+              ) : null}
+
+              {activeTab === "news" ? (
+                <StockCompanyNewsPanel
+                  isActive={activeTab === "news"}
+                  selectedStock={selectedStock}
+                />
+              ) : null}
+
+              {activeTab === "reports" ? (
+                <StockCompanyReportsPanel
+                  isActive={activeTab === "reports"}
+                  selectedStock={selectedStock}
+                />
+              ) : null}
+
+              {activeTab === "ratio-summary" ? (
+                <StockCompanyRatioSummaryPanel
+                  isActive={activeTab === "ratio-summary"}
+                  selectedStock={selectedStock}
+                />
+              ) : null}
+
+              {activeTab === "prices" ? (
+                <StockCompanyPricesPanel isActive={activeTab === "prices"} selectedStock={selectedStock} />
+              ) : null}
+            </div>
+          </ScrollArea>
+        )}
       </Tabs>
 
       <StockAddToWatchlistDialog

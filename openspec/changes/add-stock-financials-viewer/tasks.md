@@ -23,10 +23,10 @@
 
 ## 4. Company Detail Dialog Integration
 
-- [ ] 4.1 Add `financials` to the company detail tab type and tab list
-- [ ] 4.2 Rename the existing `Reports` tab label to `Company Reports` while preserving the existing company reports panel behavior
-- [ ] 4.3 Render `StockCompanyFinancialsPanel` only when the `Financials` tab is active and pass the selected stock symbol context into it
-- [ ] 4.4 Adjust the dialog content layout so `Financials` can use an internal full-height viewport while the other existing panels keep their current scrolling behavior
+- [x] 4.1 Add `financials` to the company detail tab type and tab list
+- [x] 4.2 Rename the existing `Reports` tab label to `Company Reports` while preserving the existing company reports panel behavior
+- [x] 4.3 Render `StockCompanyFinancialsPanel` only when the `Financials` tab is active and pass the selected stock symbol context into it
+- [x] 4.4 Adjust the dialog content layout so `Financials` can use an internal full-height viewport while the other existing panels keep their current scrolling behavior
 
 ## 5. Verification
 
