@@ -18,6 +18,7 @@ import {
   InputGroupButton,
   InputGroupInput,
 } from "@/components/ui/input-group"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Skeleton } from "@/components/ui/skeleton"
 import {
   Table,
@@ -321,7 +322,10 @@ export const StockCompanyFinancialsPanel = ({
     }
 
     return (
-      <div className="min-h-0 flex-1 overflow-hidden rounded-md border border-border/60 bg-background/20 [&>[data-slot=table-container]]:h-full [&>[data-slot=table-container]]:overflow-auto">
+      <ScrollArea
+        scrollbars="both"
+        className="min-h-0 flex-1 overflow-hidden rounded-md border border-border/60 bg-background/20 [&_[data-slot=table-container]]:overflow-visible"
+      >
         <Table className="min-w-full">
           <TableHeader>
             <TableRow className="hover:bg-transparent">
@@ -371,7 +375,7 @@ export const StockCompanyFinancialsPanel = ({
             )}
           </TableBody>
         </Table>
-      </div>
+      </ScrollArea>
     )
   }
 
