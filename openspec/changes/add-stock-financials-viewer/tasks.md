@@ -8,9 +8,9 @@
 
 ## 2. Financials Table Utilities
 
-- [ ] 2.1 Add nearby utility functions for financial report labels, search normalization, row filtering, and conservative cell formatting
-- [ ] 2.2 Ensure `periods` drives column order directly and no utility sorts, slices, or limits period columns
-- [ ] 2.3 Ensure `number`, `string`, and `null` cells render according to the financial report contract without currency or percentage assumptions
+- [x] 2.1 Add nearby utility functions for financial report labels, search normalization, row filtering, and conservative cell formatting
+- [x] 2.2 Ensure `periods` drives column order directly and no utility sorts, slices, or limits period columns
+- [x] 2.3 Ensure `number`, `string`, and `null` cells render according to the financial report contract without currency or percentage assumptions
 
 ## 3. Financials Panel UI
 
