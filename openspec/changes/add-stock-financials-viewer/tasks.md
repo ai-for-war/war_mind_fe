@@ -14,12 +14,12 @@
 
 ## 3. Financials Panel UI
 
-- [ ] 3.1 Create `StockCompanyFinancialsPanel` under the stocks components area with local state for `reportType`, `period`, and row search
-- [ ] 3.2 Build the panel toolbar using existing shadcn `ToggleGroup`, `InputGroup`, `Badge`, and `Button` primitives
-- [ ] 3.3 Render a status row showing active source, row count, and period count from the active response
-- [ ] 3.4 Render the financial statement table with shadcn `Table`, all backend periods, sticky period headers, sticky `Item` column, and right-aligned numeric cells
-- [ ] 3.5 Give the financials table its own internal scroll viewport so long rows and many periods scroll inside the dialog
-- [ ] 3.6 Add table-shaped loading skeletons, no-data empty states, error empty states, retry actions, and sonner toast feedback for failed requests
+- [x] 3.1 Create `StockCompanyFinancialsPanel` under the stocks components area with local state for `reportType`, `period`, and row search
+- [x] 3.2 Build the panel toolbar using existing shadcn `ToggleGroup`, `InputGroup`, `Badge`, and `Button` primitives
+- [x] 3.3 Render a status row showing active source, row count, and period count from the active response
+- [x] 3.4 Render the financial statement table with shadcn `Table`, all backend periods, sticky period headers, sticky `Item` column, and right-aligned numeric cells
+- [x] 3.5 Give the financials table its own internal scroll viewport so long rows and many periods scroll inside the dialog
+- [x] 3.6 Add table-shaped loading skeletons, no-data empty states, error empty states, retry actions, and sonner toast feedback for failed requests
 
 ## 4. Company Detail Dialog Integration
 
