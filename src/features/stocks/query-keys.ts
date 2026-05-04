@@ -1,5 +1,7 @@
 import type { NormalizedStockCatalogFilters } from "@/features/stocks/types"
 import {
+  normalizeStockFinancialReportPeriod,
+  normalizeStockFinancialReportType,
   normalizeStockPriceHistoryInterval,
   normalizeStockPriceIntradayPageSize,
   normalizeStockPriceLookbackLength,
@@ -94,6 +96,19 @@ export const stocksQueryKeys = {
       ...stocksQueryKeys.companyDetails(organizationId),
       "ratio-summary",
       normalizeStockCompanySymbol(symbol),
+    ] as const,
+  companyFinancialReport: (
+    organizationId: string | null | undefined,
+    symbol?: string | null,
+    reportType?: string | null,
+    period?: string | null,
+  ) =>
+    [
+      ...stocksQueryKeys.companyDetails(organizationId),
+      "financial-report",
+      normalizeStockCompanySymbol(symbol),
+      normalizeStockFinancialReportType(reportType),
+      normalizeStockFinancialReportPeriod(period),
     ] as const,
   priceDetails: (organizationId?: string | null) =>
     [...stocksQueryKeys.scoped(organizationId), "prices"] as const,
