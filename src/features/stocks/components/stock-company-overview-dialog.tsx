@@ -47,17 +47,17 @@ type CompanyDetailTab =
   | "prices"
 
 const COMPANY_DETAIL_TABS = [
+  { value: "prices", label: "Prices", isDisabled: false },
   { value: "overview", label: "Overview", isDisabled: false },
+  { value: "financials", label: "Financials", isDisabled: false },
   { value: "shareholders", label: "Shareholders", isDisabled: false },
   { value: "officers", label: "Officers", isDisabled: false },
   { value: "subsidiaries", label: "Subsidiaries", isDisabled: false },
   { value: "affiliate", label: "Affiliate", isDisabled: false },
   { value: "events", label: "Events", isDisabled: false },
   { value: "news", label: "News", isDisabled: false },
-  { value: "financials", label: "Financials", isDisabled: false },
   { value: "reports", label: "Company Reports", isDisabled: false },
   { value: "ratio-summary", label: "Ratio Summary", isDisabled: false },
-  { value: "prices", label: "Prices", isDisabled: false },
 ] as const
 
 export const StockCompanyOverviewDialog = ({
