@@ -2,7 +2,6 @@ import { AlertCircle, BarChart3, RefreshCw, Search, X } from "lucide-react"
 import { useEffect, useMemo, useRef, useState } from "react"
 import { toast } from "sonner"
 
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Empty,
@@ -34,8 +33,6 @@ import {
   formatStockFinancialReportCellValue,
   getStockFinancialReportCellValue,
   getStockFinancialReportPeriodColumns,
-  getStockFinancialReportPeriodLabel,
-  getStockFinancialReportTypeLabel,
   STOCK_FINANCIAL_REPORT_PERIOD_LABELS,
   STOCK_FINANCIAL_REPORT_TYPE_LABELS,
 } from "@/features/stocks/components/stock-company-financials-panel.utils"
@@ -211,9 +208,6 @@ export const StockCompanyFinancialsPanel = ({
   )
   const hasRowSearch = rowSearch.trim().length > 0
   const selectedSymbol = financialReportQuery.symbol ?? selectedStock?.symbol ?? null
-  const activeSource = financialReportQuery.data?.source ?? "KBS"
-  const activeReportLabel = getStockFinancialReportTypeLabel(reportType)
-  const activePeriodLabel = getStockFinancialReportPeriodLabel(period)
 
   useEffect(() => {
     if (!financialReportQuery.isError) {
@@ -444,15 +438,6 @@ export const StockCompanyFinancialsPanel = ({
           </InputGroup>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge variant="secondary">Source {activeSource}</Badge>
-          <Badge variant="outline">{activeReportLabel}</Badge>
-          <Badge variant="outline">{activePeriodLabel}</Badge>
-          <Badge variant="outline">
-            {hasRowSearch ? `${filteredReportItems.length}/${reportItems.length}` : reportItems.length} rows
-          </Badge>
-          <Badge variant="outline">{periodColumns.length} periods</Badge>
-        </div>
       </div>
 
       {renderTableContent()}
