@@ -2,6 +2,9 @@ import { apiClient } from "@/lib/api-client"
 
 import type {
   NormalizedStockCatalogFilters,
+  StockFinancialReportPeriod,
+  StockFinancialReportResponse,
+  StockFinancialReportType,
   StockCompanyAffiliateResponse,
   StockCompanyEventsResponse,
   StockCompanyNewsResponse,
@@ -26,6 +29,8 @@ import {
   normalizeStockCompanyOfficersFilter,
   normalizeStockCompanySubsidiariesFilter,
   normalizeStockCompanySymbol,
+  normalizeStockFinancialReportPeriod,
+  normalizeStockFinancialReportType,
 } from "@/features/stocks/types"
 
 const STOCKS_ENDPOINT = "/stocks"
@@ -210,6 +215,31 @@ const getStockCompanyRatioSummary = async (
   return response.data
 }
 
+const getStockFinancialReport = async (
+  symbol: string,
+  reportType: StockFinancialReportType,
+  period: StockFinancialReportPeriod,
+): Promise<StockFinancialReportResponse> => {
+  const normalizedSymbol = normalizeStockCompanySymbol(symbol)
+  const normalizedReportType = normalizeStockFinancialReportType(reportType)
+  const normalizedPeriod = normalizeStockFinancialReportPeriod(period)
+
+  if (!normalizedSymbol) {
+    throw new Error("Stock financial report requires a non-empty symbol")
+  }
+
+  const response = await apiClient.get<StockFinancialReportResponse>(
+    `${STOCKS_ENDPOINT}/${normalizedSymbol}/financial-reports/${normalizedReportType}`,
+    {
+      params: {
+        period: normalizedPeriod,
+      },
+    },
+  )
+
+  return response.data
+}
+
 const getStockPriceHistory = async (
   symbol: string,
   query: StockPriceHistoryQuery,
@@ -283,6 +313,7 @@ export const stocksApi = {
   getStockCompanyOverview,
   getStockCompanyShareholders,
   getStockCompanySubsidiaries,
+  getStockFinancialReport,
   getStockPriceHistory,
   getStockPriceIntraday,
 }

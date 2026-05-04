@@ -9,5 +9,6 @@ export { useStockCompanyRatioSummary } from "@/features/stocks/hooks/use-stock-c
 export { useStockCompanyReports } from "@/features/stocks/hooks/use-stock-company-reports"
 export { useStockCompanyShareholders } from "@/features/stocks/hooks/use-stock-company-shareholders"
 export { useStockCompanySubsidiaries } from "@/features/stocks/hooks/use-stock-company-subsidiaries"
+export { useStockFinancialReport } from "@/features/stocks/hooks/use-stock-financial-report"
 export { useStockPriceHistory } from "@/features/stocks/hooks/use-stock-price-history"
 export { useStockPriceIntraday } from "@/features/stocks/hooks/use-stock-price-intraday"

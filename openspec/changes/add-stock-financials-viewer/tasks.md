@@ -1,10 +1,10 @@
 ## 1. Financial Report Data Layer
 
-- [ ] 1.1 Add financial report response, item, cell value, report type, and period types under the existing `stocks` feature
-- [ ] 1.2 Add report type and period normalization helpers that accept only the documented v1 values
-- [ ] 1.3 Extend the stocks API adapter with `getStockFinancialReport(symbol, reportType, period)` for `GET /api/v1/stocks/{symbol}/financial-reports/{report_type}`
-- [ ] 1.4 Add a financial report query key scoped by organization id, normalized symbol, report type, and period
-- [ ] 1.5 Add `useStockFinancialReport` that enables fetching only when the `Financials` tab is active and a valid symbol exists
+- [x] 1.1 Add financial report response, item, cell value, report type, and period types under the existing `stocks` feature
+- [x] 1.2 Add report type and period normalization helpers that accept only the documented v1 values
+- [x] 1.3 Extend the stocks API adapter with `getStockFinancialReport(symbol, reportType, period)` for `GET /api/v1/stocks/{symbol}/financial-reports/{report_type}`
+- [x] 1.4 Add a financial report query key scoped by organization id, normalized symbol, report type, and period
+- [x] 1.5 Add `useStockFinancialReport` that enables fetching only when the `Financials` tab is active and a valid symbol exists
 
 ## 2. Financials Table Utilities
 
