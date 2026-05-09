@@ -4,7 +4,6 @@ import { useState } from "react"
 
 import {
   ChainOfThought,
-  ChainOfThoughtContent,
   ChainOfThoughtHeader,
   ChainOfThoughtStep,
 } from "@/components/ai/chain-of-thought"
@@ -27,6 +26,11 @@ type StockAgentActivityStepProps = {
   isLastStep: boolean
   step: StockAgentActivityStep
 }
+
+const ACTIVITY_TRANSITION = {
+  duration: 0.24,
+  ease: [0.22, 1, 0.36, 1],
+} as const
 
 const toActivityTitle = (activity: StockAgentActivityLineState): string => {
   if (activity.status === "failed") {
@@ -59,33 +63,51 @@ const StockAgentActivitySummary = ({
     <div className="flex min-w-0 flex-1 items-center gap-3 self-center">
       <span className="shrink-0">{toActivityTitle(activity)}</span>
 
-      {!isOpen ? (
-        <div className="flex min-w-0 flex-1 items-center gap-2">
-          {isLatestStepActive ? (
-            <Spinner className="size-3.5 shrink-0 text-primary" variant="infinite" />
-          ) : isLatestStepFailed ? (
-            <CircleAlert className="size-3.5 shrink-0 text-destructive" />
+      <div className="relative min-w-0 flex-1 overflow-hidden">
+        <AnimatePresence mode="wait" initial={false}>
+          {!isOpen ? (
+            <motion.div
+              animate={{ opacity: 1, y: 0 }}
+              className="flex min-w-0 items-center gap-2"
+              exit={{ opacity: 0, y: -4 }}
+              initial={{ opacity: 0, y: 4 }}
+              key="collapsed-summary"
+              transition={ACTIVITY_TRANSITION}
+            >
+              {isLatestStepActive ? (
+                <Spinner className="size-3.5 shrink-0 text-primary" variant="infinite" />
+              ) : isLatestStepFailed ? (
+                <CircleAlert className="size-3.5 shrink-0 text-destructive" />
+              ) : (
+                <CheckCircle2 className="size-3.5 shrink-0 text-emerald-500" />
+              )}
+              <div className="relative min-w-0 flex-1 overflow-hidden">
+                <AnimatePresence mode="wait" initial={false}>
+                  <motion.p
+                    animate={{ opacity: 1, y: 0 }}
+                    className="truncate text-muted-foreground"
+                    exit={{ opacity: 0, y: -6 }}
+                    initial={{ opacity: 0, y: 6 }}
+                    key={`${activity.latestAction}:${activity.updatedAt}`}
+                    transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    {activity.latestAction}
+                  </motion.p>
+                </AnimatePresence>
+              </div>
+            </motion.div>
           ) : (
-            <CheckCircle2 className="size-3.5 shrink-0 text-emerald-500" />
+            <motion.div
+              animate={{ opacity: 1 }}
+              className="h-4"
+              exit={{ opacity: 0 }}
+              initial={{ opacity: 0 }}
+              key="expanded-spacer"
+              transition={{ duration: 0.14 }}
+            />
           )}
-          <div className="relative min-w-0 flex-1 overflow-hidden">
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.p
-                animate={{ opacity: 1, y: 0 }}
-                className="truncate text-muted-foreground"
-                exit={{ opacity: 0, y: -6 }}
-                initial={{ opacity: 0, y: 6 }}
-                key={`${activity.latestAction}:${activity.updatedAt}`}
-                transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
-              >
-                {activity.latestAction}
-              </motion.p>
-            </AnimatePresence>
-          </div>
-        </div>
-      ) : (
-        <div className="min-w-0 flex-1" />
-      )}
+        </AnimatePresence>
+      </div>
 
       <AnimatePresence mode="wait" initial={false}>
         <motion.div
@@ -93,7 +115,7 @@ const StockAgentActivitySummary = ({
           exit={{ opacity: 0, scale: 0.96 }}
           initial={{ opacity: 0, scale: 0.96 }}
           key={activity.actionCount}
-          transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
+          transition={ACTIVITY_TRANSITION}
         >
           <Badge
             className="shrink-0 rounded-full border border-border/70 bg-background/80 px-2 py-0 text-[10px] uppercase tracking-[0.18em] text-muted-foreground"
@@ -178,17 +200,28 @@ export const StockAgentActivityLine = ({
         <StockAgentActivitySummary activity={activity} isOpen={isOpen} />
       </ChainOfThoughtHeader>
 
-      {isOpen ? (
-        <ChainOfThoughtContent className="mt-0 space-y-3">
-          {activity.steps.map((step, index) => (
-            <StockAgentActivityStepRow
-              isLastStep={index === activity.steps.length - 1}
-              key={step.toolCallId}
-              step={step}
-            />
-          ))}
-        </ChainOfThoughtContent>
-      ) : null}
+      <AnimatePresence initial={false}>
+        {isOpen ? (
+          <motion.div
+            animate={{ height: "auto", opacity: 1, y: 0 }}
+            className="overflow-hidden"
+            exit={{ height: 0, opacity: 0, y: -4 }}
+            initial={{ height: 0, opacity: 0, y: -4 }}
+            key="activity-content"
+            transition={ACTIVITY_TRANSITION}
+          >
+            <div className="space-y-3 pt-2">
+              {activity.steps.map((step, index) => (
+                <StockAgentActivityStepRow
+                  isLastStep={index === activity.steps.length - 1}
+                  key={step.toolCallId}
+                  step={step}
+                />
+              ))}
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </ChainOfThought>
   )
 }
