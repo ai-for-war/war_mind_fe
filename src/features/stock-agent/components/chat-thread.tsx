@@ -54,10 +54,7 @@ export const StockAgentChatThread = ({
 }: StockAgentChatThreadProps) => {
   const orderedMessages = [...messages].sort(byChronologicalOrder)
   const hasStreamingAssistant = Boolean(streamingAssistant)
-  const visibleActivity =
-    activity && !streamingAssistant?.content && activity.status !== "completed"
-      ? activity
-      : null
+  const visibleActivity = activity
   const placeholderStage =
     streamingAssistant && !streamingAssistant.content
       ? "streaming"
@@ -105,7 +102,7 @@ export const StockAgentChatThread = ({
 
             {visibleActivity ? (
               <Message from="assistant" key={`activity-${conversationId}`}>
-                <MessageContent className="rounded-lg bg-primary/10 p-3">
+                <MessageContent className="w-full rounded-lg bg-transparent p-0">
                   <StockAgentActivityLine activity={visibleActivity} />
                 </MessageContent>
               </Message>

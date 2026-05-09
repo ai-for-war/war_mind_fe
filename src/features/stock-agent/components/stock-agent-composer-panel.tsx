@@ -74,7 +74,7 @@ export const StockAgentComposerPanel = ({
   }
 
   return (
-    <div className={cn("shrink-0 border-t bg-background/80 p-3 backdrop-blur", className)}>
+    <div className={cn("shrink-0 border-t bg-background/80 backdrop-blur", className)}>
       <PromptInput onSubmit={() => handleSubmit()}>
         <PromptInputBody>
           <PromptInputTextarea

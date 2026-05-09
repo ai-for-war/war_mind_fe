@@ -35,6 +35,8 @@ export type {
   NormalizeStockAgentRuntimeSelectionResult,
   StockAgentActivityLineState,
   StockAgentActivityLineStatus,
+  StockAgentActivityStep,
+  StockAgentActivityStepStatus,
   StockAgentChatMessageCompletedPayload,
   StockAgentChatMessageFailedPayload,
   StockAgentChatMessageStartedPayload,

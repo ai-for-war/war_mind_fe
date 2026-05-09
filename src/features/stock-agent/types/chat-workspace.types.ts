@@ -86,7 +86,20 @@ export type StockAgentSocketLifecyclePayload =
 
 export type StockAgentRunStatus = "idle" | "submitting" | "streaming" | "completed" | "failed"
 
+export type StockAgentActivityStepStatus = "active" | "complete" | "failed"
+
 export type StockAgentActivityLineStatus = "streaming" | "completed" | "failed"
+
+export interface StockAgentActivityStep {
+  arguments: Record<string, unknown>
+  completedAt: string | null
+  label: string
+  result: string | null
+  startedAt: string
+  status: StockAgentActivityStepStatus
+  toolCallId: string
+  toolName: string
+}
 
 export interface StockAgentActivityLineState {
   actionCount: number
@@ -96,6 +109,7 @@ export interface StockAgentActivityLineState {
   latestToolName: string | null
   startedAt: string
   status: StockAgentActivityLineStatus
+  steps: StockAgentActivityStep[]
   updatedAt: string
 }
 

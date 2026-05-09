@@ -89,13 +89,14 @@ export const useStockAgentChatLifecycleSubscriptions = ({
 
   useSocketSubscription<StockAgentChatMessageToolStartPayload>(
     "chat:message:tool_start",
-    ({ conversation_id, tool_call_id, tool_name }) => {
+    ({ arguments: toolArguments, conversation_id, tool_call_id, tool_name }) => {
       if (!isActiveConversationEvent(conversation_id)) {
         return
       }
 
       setRunStatus(conversation_id, "streaming")
       recordActivityLineAction(conversation_id, {
+        arguments: toolArguments,
         label: formatStockAgentActivityLabel(tool_name),
         toolCallId: tool_call_id,
         toolName: tool_name,
@@ -106,12 +107,12 @@ export const useStockAgentChatLifecycleSubscriptions = ({
 
   useSocketSubscription<StockAgentChatMessageToolEndPayload>(
     "chat:message:tool_end",
-    ({ conversation_id, tool_call_id }) => {
+    ({ conversation_id, result, tool_call_id }) => {
       if (!isActiveConversationEvent(conversation_id)) {
         return
       }
 
-      touchActivityLineToolEnd(conversation_id, tool_call_id)
+      touchActivityLineToolEnd(conversation_id, tool_call_id, result)
     },
     { organizationScoped: true },
   )

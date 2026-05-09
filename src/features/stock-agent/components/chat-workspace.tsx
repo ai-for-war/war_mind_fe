@@ -325,7 +325,7 @@ export const StockAgentChatWorkspace = ({
   const activeRuntimeSelection = composerRuntimeSelectionByConversation[conversationKey] ?? null
   const isSubagentEnabled = composerSubagentEnabledByConversation[conversationKey] ?? false
   const runStatus = (runStatusByConversation[conversationKey] ?? "idle") satisfies StockAgentRunStatus
-  const isSubmitting = runStatus === "submitting"
+  const isComposerLocked = runStatus === "submitting" || runStatus === "streaming"
   const activeStreamingAssistant = activeConversationId
     ? streamingAssistantByConversation[activeConversationId] ?? null
     : null
@@ -540,7 +540,7 @@ export const StockAgentChatWorkspace = ({
         isRuntimeLoading={runtimeCatalogQuery.isPending}
         isRuntimeReady={isRuntimeReady}
         isRuntimeRetrying={runtimeCatalogQuery.isRefetching}
-        isSubmitting={isSubmitting}
+        isSubmitting={isComposerLocked}
         isSubagentEnabled={isSubagentEnabled}
         onDraftChange={(value) => setComposerDraft(activeConversationId, value)}
         onRetryRuntime={() => void runtimeCatalogQuery.refetchCatalog()}

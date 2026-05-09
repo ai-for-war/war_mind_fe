@@ -3,6 +3,8 @@ import { create } from "zustand"
 import type {
   StockAgentActivityLineState,
   StockAgentActivityLineStatus,
+  StockAgentActivityStep,
+  StockAgentActivityStepStatus,
   StockAgentRunStatus,
   StockAgentStreamingAssistantState,
 } from "@/features/stock-agent/types/chat-workspace.types"
@@ -52,6 +54,7 @@ type StockAgentChatWorkspaceActions = {
   recordActivityLineAction: (
     conversationId: string,
     action: {
+      arguments: Record<string, unknown>
       label: string
       toolCallId?: string | null
       toolName?: string | null
@@ -72,7 +75,11 @@ type StockAgentChatWorkspaceActions = {
     status: StockAgentActivityLineStatus,
     latestAction?: string,
   ) => void
-  touchActivityLineToolEnd: (conversationId: string, toolCallId: string) => void
+  touchActivityLineToolEnd: (
+    conversationId: string,
+    toolCallId: string,
+    result: string | null,
+  ) => void
   setComposerDraft: (conversationId: string | null, draft: string) => void
   setComposerRuntimeModel: (
     conversationId: string | null,
@@ -99,6 +106,24 @@ type StockAgentChatWorkspaceActions = {
   ) => void
   setThreadError: (conversationId: string, error: string | null) => void
 }
+
+const toUpdatedActivitySteps = (
+  steps: StockAgentActivityStep[],
+  toolCallId: string,
+  status: StockAgentActivityStepStatus,
+  completedAt: string | null,
+  result?: string | null,
+): StockAgentActivityStep[] =>
+  steps.map((step) =>
+    step.toolCallId === toolCallId
+      ? {
+          ...step,
+          completedAt,
+          result: result ?? step.result,
+          status,
+        }
+      : step,
+  )
 
 const initialState: StockAgentChatWorkspaceState = {
   activityLineByConversation: {},
@@ -201,18 +226,38 @@ export const useStockAgentChatWorkspaceStore = create<
     set((state) => {
       const currentActivity = state.activityLineByConversation[conversationId]
       const now = new Date().toISOString()
+      const resolvedToolCallId = action.toolCallId ?? `stock-agent-step-${now}`
+      const existingStep = currentActivity?.steps.find(
+        (step) => step.toolCallId === resolvedToolCallId,
+      )
+      const nextStep: StockAgentActivityStep = {
+        arguments: action.arguments,
+        completedAt: null,
+        label: action.label,
+        result: null,
+        startedAt: existingStep?.startedAt ?? now,
+        status: "active",
+        toolCallId: resolvedToolCallId,
+        toolName: action.toolName ?? "",
+      }
+      const nextSteps = existingStep
+        ? (currentActivity?.steps ?? []).map((step) =>
+            step.toolCallId === existingStep.toolCallId ? nextStep : step,
+          )
+        : [...(currentActivity?.steps ?? []), nextStep]
 
       return {
         activityLineByConversation: {
           ...state.activityLineByConversation,
           [conversationId]: {
-            actionCount: (currentActivity?.actionCount ?? 0) + 1,
+            actionCount: nextSteps.length,
             completedAt: null,
             latestAction: action.label,
-            latestToolCallId: action.toolCallId ?? null,
+            latestToolCallId: resolvedToolCallId,
             latestToolName: action.toolName ?? null,
             startedAt: currentActivity?.startedAt ?? now,
             status: "streaming",
+            steps: nextSteps,
             updatedAt: now,
           },
         },
@@ -309,6 +354,15 @@ export const useStockAgentChatWorkspaceStore = create<
                 : null,
             latestAction: latestAction ?? currentActivity.latestAction,
             status,
+            steps:
+              status === "failed" && currentActivity.latestToolCallId
+                ? toUpdatedActivitySteps(
+                    currentActivity.steps,
+                    currentActivity.latestToolCallId,
+                    "failed",
+                    now,
+                  )
+                : currentActivity.steps,
             updatedAt: now,
           },
         },
@@ -440,20 +494,23 @@ export const useStockAgentChatWorkspaceStore = create<
         [conversationId]: error,
       },
     })),
-  touchActivityLineToolEnd: (conversationId, toolCallId) =>
+  touchActivityLineToolEnd: (conversationId, toolCallId, result) =>
     set((state) => {
       const currentActivity = state.activityLineByConversation[conversationId]
 
-      if (!currentActivity || currentActivity.latestToolCallId !== toolCallId) {
+      if (!currentActivity) {
         return state
       }
+
+      const now = new Date().toISOString()
 
       return {
         activityLineByConversation: {
           ...state.activityLineByConversation,
           [conversationId]: {
             ...currentActivity,
-            updatedAt: new Date().toISOString(),
+            steps: toUpdatedActivitySteps(currentActivity.steps, toolCallId, "complete", now, result),
+            updatedAt: now,
           },
         },
       }

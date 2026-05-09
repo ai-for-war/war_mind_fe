@@ -9,6 +9,8 @@ export type {
 export type {
   StockAgentActivityLineState,
   StockAgentActivityLineStatus,
+  StockAgentActivityStep,
+  StockAgentActivityStepStatus,
   StockAgentChatMessageCompletedPayload,
   StockAgentChatMessageFailedPayload,
   StockAgentChatMessageStartedPayload,
