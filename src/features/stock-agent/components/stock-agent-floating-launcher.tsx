@@ -127,7 +127,7 @@ export const StockAgentFloatingLauncher = () => {
       </div>
 
       {isPanelOpen && !isMobile ? (
-        <div className="fixed right-6 bottom-24 z-30 flex" ref={panelRef}>
+        <div className="fixed right-6 bottom-[5rem] z-30 flex" ref={panelRef}>
           <StockAgentPanel />
         </div>
       ) : null}
