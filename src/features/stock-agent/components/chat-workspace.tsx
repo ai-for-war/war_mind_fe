@@ -1,7 +1,8 @@
-import { Menu, RefreshCw, Sparkles } from "lucide-react"
+import { Menu, RefreshCw, Sparkles, X } from "lucide-react"
 import { useEffect, useState } from "react"
 
 import { Suggestion } from "@/components/ai/suggestion"
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import {
   Empty,
@@ -124,6 +125,26 @@ const createOptimisticFreshMessage = (content: string): StockAgentMessageRecord 
   role: "user",
 })
 
+const resolvePanelStatus = (
+  statuses: Record<string, StockAgentRunStatus>,
+): { label: string; variant: "default" | "secondary" | "destructive" | "outline" } => {
+  const values = Object.values(statuses)
+
+  if (values.includes("failed")) {
+    return { label: "Failed", variant: "destructive" }
+  }
+
+  if (values.includes("streaming")) {
+    return { label: "Streaming", variant: "default" }
+  }
+
+  if (values.includes("submitting")) {
+    return { label: "Thinking", variant: "default" }
+  }
+
+  return { label: "Idle", variant: "secondary" }
+}
+
 export const StockAgentChatWorkspace = ({
   className,
   isMobile = false,
@@ -136,6 +157,7 @@ export const StockAgentChatWorkspace = ({
   const setMobileConversationListOpen = useStockAgentRailStore(
     (state) => state.setMobileConversationListOpen,
   )
+  const setPanelOpen = useStockAgentRailStore((state) => state.setPanelOpen)
   const clearActivityLine = useStockAgentChatWorkspaceStore((state) => state.clearActivityLine)
   const clearComposerDraft = useStockAgentChatWorkspaceStore((state) => state.clearComposerDraft)
   const clearComposerRuntimeNotice = useStockAgentChatWorkspaceStore(
@@ -211,6 +233,7 @@ export const StockAgentChatWorkspace = ({
   const activeActivityLine = activeConversationId
     ? activityLineByConversation[activeConversationId] ?? null
     : null
+  const panelStatus = resolvePanelStatus(runStatusByConversation)
 
   const resolvedRuntime = runtimeCatalogQuery.catalog
     ? resolveStockAgentRuntimeSelection(runtimeCatalogQuery.catalog, activeRuntimeSelection)
@@ -349,11 +372,23 @@ export const StockAgentChatWorkspace = ({
             <p className="truncate text-xs text-muted-foreground">Stock Agent</p>
           </div>
         </div>
-        {runtimeNotice ? (
-          <p className="hidden max-w-[20rem] truncate text-xs text-muted-foreground lg:block">
-            {runtimeNotice}
-          </p>
-        ) : null}
+        <div className="flex min-w-0 shrink-0 items-center gap-2">
+          {runtimeNotice ? (
+            <p className="hidden max-w-[20rem] truncate text-xs text-muted-foreground lg:block">
+              {runtimeNotice}
+            </p>
+          ) : null}
+          <Badge variant={panelStatus.variant}>{panelStatus.label}</Badge>
+          <Button
+            aria-label="Minimize Stock Agent"
+            onClick={() => setPanelOpen(false)}
+            size="icon-sm"
+            type="button"
+            variant="ghost"
+          >
+            <X className="size-4" />
+          </Button>
+        </div>
       </header>
 
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
