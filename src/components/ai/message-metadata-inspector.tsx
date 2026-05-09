@@ -42,6 +42,7 @@ import { cn } from "@/lib/utils"
 type AiMessageMetadataInspectorProps = {
   className?: string
   description?: string
+  hideHeader?: boolean
   metadata: NormalizedAssistantMessageMetadata | null
   title?: string
 }
@@ -116,6 +117,7 @@ const PlanTodoStatusDot = ({ status }: { status: PlanTodoStatus }) => {
 export const AiMessageMetadataInspector = ({
   className,
   description = "Model, skill, and tools used for this response.",
+  hideHeader = false,
   metadata,
   title = "Response metadata",
 }: AiMessageMetadataInspectorProps) => {
@@ -154,10 +156,12 @@ export const AiMessageMetadataInspector = ({
 
   return (
     <Card className={cn("h-full gap-0 overflow-hidden", className)}>
-      <CardHeader className="border-b pb-4">
-        <CardTitle>{title}</CardTitle>
-        <CardDescription className="text-xs">{description}</CardDescription>
-      </CardHeader>
+      {!hideHeader ? (
+        <CardHeader className="border-b pb-4">
+          <CardTitle>{title}</CardTitle>
+          <CardDescription className="text-xs">{description}</CardDescription>
+        </CardHeader>
+      ) : null}
 
       <ScrollArea className="min-h-0 flex-1">
         <CardContent className="space-y-5 py-5">

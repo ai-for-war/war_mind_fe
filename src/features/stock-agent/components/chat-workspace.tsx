@@ -9,8 +9,10 @@ import {
   Sparkles,
   X,
 } from "lucide-react"
+import { motion } from "motion/react"
 import { useEffect, useState } from "react"
 
+import { AiMessageMetadataInspector } from "@/components/ai/message-metadata-inspector"
 import { Suggestion } from "@/components/ai/suggestion"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -44,6 +46,7 @@ import {
 } from "@/features/stock-agent/stores/use-stock-agent-chat-workspace-store"
 import { useStockAgentRailStore } from "@/features/stock-agent/stores/use-stock-agent-rail-store"
 import type { StockAgentMessageRecord, StockAgentRunStatus } from "@/features/stock-agent/types"
+import { normalizeAssistantMessageMetadata } from "@/lib/ai-message-metadata"
 import { resolveStockAgentRuntimeSelection } from "@/features/stock-agent/utils/runtime-catalog"
 import { cn } from "@/lib/utils"
 
@@ -53,6 +56,8 @@ const FRESH_CHAT_SUGGESTIONS = [
   "Explain banking stock risks",
   "Create a stock entry checklist",
 ]
+
+const DESKTOP_METADATA_INSPECTOR_WIDTH = "clamp(17rem, 30vw, 20rem)"
 
 type StockAgentChatWorkspaceProps = {
   className?: string
@@ -314,6 +319,9 @@ export const StockAgentChatWorkspace = ({
 
   const [freshChatOptimisticMessage, setFreshChatOptimisticMessage] =
     useState<StockAgentMessageRecord | null>(null)
+  const [isMetadataSheetOpen, setMetadataSheetOpen] = useState(false)
+  const [selectedMetadataMessage, setSelectedMetadataMessage] =
+    useState<StockAgentMessageRecord | null>(null)
   const messagesQuery = useStockAgentConversationMessages(activeConversationId)
   const runtimeCatalogQuery = useStockAgentRuntimeCatalog()
   const sendMessageMutation = useStockAgentSendMessage()
@@ -395,11 +403,17 @@ export const StockAgentChatWorkspace = ({
 
   const handleConversationRailToggle = () => {
     if (isMobile) {
+      setSelectedMetadataMessage(null)
+      setMetadataSheetOpen(false)
       setMobileConversationListOpen(true)
       return
     }
 
-    setConversationRailOpen(!isConversationRailOpen)
+    const nextIsOpen = !isConversationRailOpen
+    if (nextIsOpen) {
+      setSelectedMetadataMessage(null)
+    }
+    setConversationRailOpen(nextIsOpen)
   }
 
   const handleSubmitPrompt = async (inputText: string) => {
@@ -458,6 +472,27 @@ export const StockAgentChatWorkspace = ({
       : freshChatOptimisticMessage
         ? [freshChatOptimisticMessage]
         : []
+  const activeThreadMessageIds = new Set(threadMessages.map((message) => message.id))
+  const activeSelectedMetadataMessage =
+    selectedMetadataMessage && activeThreadMessageIds.has(selectedMetadataMessage.id)
+      ? selectedMetadataMessage
+      : null
+  const selectedMetadata = activeSelectedMetadataMessage
+    ? normalizeAssistantMessageMetadata(activeSelectedMetadataMessage.metadata)
+    : null
+
+  const handleOpenMetadata = (message: StockAgentMessageRecord) => {
+    const isSameMessage = activeSelectedMetadataMessage?.id === message.id
+    const nextMessage = isSameMessage ? null : message
+
+    setSelectedMetadataMessage(nextMessage)
+    setMetadataSheetOpen(!isSameMessage)
+
+    if (!isSameMessage) {
+      setConversationRailOpen(false)
+      setMobileConversationListOpen(false)
+    }
+  }
 
   return (
     <main className={cn("flex min-h-0 min-w-0 flex-1 flex-col", className)}>
@@ -514,24 +549,53 @@ export const StockAgentChatWorkspace = ({
         </div>
       </header>
 
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
-        {!activeConversationId && !freshChatOptimisticMessage ? (
-          <StockAgentFreshChatState onSuggestionClick={handleSuggestionClick} />
-        ) : activeConversationId && messagesQuery.isPending ? (
-          <StockAgentChatLoading />
-        ) : activeConversationId && messagesQuery.isError ? (
-          <StockAgentChatError onRetry={() => void messagesQuery.refetch()} />
-        ) : (
-          <StockAgentChatThread
-            activity={activeActivityLine}
-            className="min-h-0 flex-1"
-            conversationId={activeConversationId ?? STOCK_AGENT_FRESH_CHAT_KEY}
-            messages={threadMessages}
-            runStatus={runStatus}
-            streamingAssistant={activeStreamingAssistant}
-            threadError={activeThreadError}
-          />
-        )}
+      <div className="flex min-h-0 flex-1 overflow-hidden">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden">
+          {!activeConversationId && !freshChatOptimisticMessage ? (
+            <StockAgentFreshChatState onSuggestionClick={handleSuggestionClick} />
+          ) : activeConversationId && messagesQuery.isPending ? (
+            <StockAgentChatLoading />
+          ) : activeConversationId && messagesQuery.isError ? (
+            <StockAgentChatError onRetry={() => void messagesQuery.refetch()} />
+          ) : (
+            <StockAgentChatThread
+              activity={activeActivityLine}
+              className="min-h-0 flex-1"
+              conversationId={activeConversationId ?? STOCK_AGENT_FRESH_CHAT_KEY}
+              messages={threadMessages}
+              onOpenMetadata={handleOpenMetadata}
+              runStatus={runStatus}
+              streamingAssistant={activeStreamingAssistant}
+              threadError={activeThreadError}
+            />
+          )}
+        </div>
+
+        {!isMobile ? (
+          <motion.div
+            animate={{
+              opacity: selectedMetadata ? 1 : 0,
+              width: selectedMetadata ? DESKTOP_METADATA_INSPECTOR_WIDTH : 0,
+              x: selectedMetadata ? 0 : 24,
+            }}
+            className="min-h-0 shrink-0 overflow-hidden"
+            initial={false}
+            transition={{ type: "tween", duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <div
+              className="h-full border-l"
+              style={{ width: DESKTOP_METADATA_INSPECTOR_WIDTH }}
+            >
+              {selectedMetadata ? (
+                <AiMessageMetadataInspector
+                  className="h-full rounded-none border-0 shadow-none"
+                  hideHeader
+                  metadata={selectedMetadata}
+                />
+              ) : null}
+            </div>
+          </motion.div>
+        ) : null}
       </div>
 
       <StockAgentComposerPanel
@@ -569,22 +633,43 @@ export const StockAgentChatWorkspace = ({
       />
 
       {isMobile ? (
-        <Sheet
-          onOpenChange={setMobileConversationListOpen}
-          open={isMobileConversationListOpen}
-        >
-          <SheetContent className="w-full max-w-[22rem] p-0" side="left">
-            <SheetTitle className="sr-only">Stock Agent conversations</SheetTitle>
-            <SheetDescription className="sr-only">
-              Browse and switch Stock Agent conversations.
-            </SheetDescription>
-            <StockAgentConversationRail
-              className="h-full"
-              onConversationSelected={() => setMobileConversationListOpen(false)}
-              onNewChat={() => setMobileConversationListOpen(false)}
-            />
-          </SheetContent>
-        </Sheet>
+        <>
+          <Sheet
+            onOpenChange={setMobileConversationListOpen}
+            open={isMobileConversationListOpen}
+          >
+            <SheetContent className="w-full max-w-[22rem] p-0" side="left">
+              <SheetTitle className="sr-only">Stock Agent conversations</SheetTitle>
+              <SheetDescription className="sr-only">
+                Browse and switch Stock Agent conversations.
+              </SheetDescription>
+              <StockAgentConversationRail
+                className="h-full"
+                onConversationSelected={() => setMobileConversationListOpen(false)}
+                onNewChat={() => setMobileConversationListOpen(false)}
+              />
+            </SheetContent>
+          </Sheet>
+
+          <Sheet
+            onOpenChange={setMetadataSheetOpen}
+            open={Boolean(selectedMetadata) && isMetadataSheetOpen}
+          >
+            <SheetContent className="w-full max-w-[24rem] p-0" side="right">
+              <SheetTitle className="sr-only">Stock response metadata</SheetTitle>
+              <SheetDescription className="sr-only">
+                Inspect the model, skill, and tools used for the selected Stock Agent response.
+              </SheetDescription>
+              {selectedMetadata ? (
+                <AiMessageMetadataInspector
+                  className="h-full rounded-none border-0 shadow-none"
+                  hideHeader
+                  metadata={selectedMetadata}
+                />
+              ) : null}
+            </SheetContent>
+          </Sheet>
+        </>
       ) : null}
     </main>
   )

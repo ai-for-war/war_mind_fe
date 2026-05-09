@@ -5,7 +5,7 @@ import {
   ConversationScrollButton,
 } from "@/components/ai/conversation"
 import { AssistantMessagePlaceholder } from "@/components/ai/assistant-message-placeholder"
-import { Actions, CopyAction } from "@/components/ai/actions"
+import { Actions, CopyAction, MetadataAction } from "@/components/ai/actions"
 import { Message, MessageContent, MessageResponse } from "@/components/ai/message"
 import { StockAgentActivityLine } from "@/features/stock-agent/components/stock-agent-activity-line"
 import type {
@@ -14,6 +14,7 @@ import type {
   StockAgentRunStatus,
   StockAgentStreamingAssistantState,
 } from "@/features/stock-agent/types"
+import { hasDisplayableAssistantMessageMetadata } from "@/lib/ai-message-metadata"
 import { cn } from "@/lib/utils"
 
 type StockAgentChatThreadProps = {
@@ -21,6 +22,7 @@ type StockAgentChatThreadProps = {
   className?: string
   conversationId: string
   messages: StockAgentMessageRecord[]
+  onOpenMetadata?: (message: StockAgentMessageRecord) => void
   runStatus: StockAgentRunStatus
   streamingAssistant: StockAgentStreamingAssistantState | null
   threadError: string | null
@@ -48,6 +50,7 @@ export const StockAgentChatThread = ({
   className,
   conversationId,
   messages,
+  onOpenMetadata,
   runStatus,
   streamingAssistant,
   threadError,
@@ -95,6 +98,10 @@ export const StockAgentChatThread = ({
                     toMessageAuthor(message.role) === "user" ? "ml-auto" : undefined,
                   )}
                 >
+                  {toMessageAuthor(message.role) === "assistant" &&
+                  hasDisplayableAssistantMessageMetadata(message.metadata) ? (
+                    <MetadataAction onClick={() => onOpenMetadata?.(message)} />
+                  ) : null}
                   <CopyAction text={message.content} />
                 </Actions>
               </Message>
