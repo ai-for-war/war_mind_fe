@@ -3,6 +3,8 @@ import {
   CheckCircle2,
   Menu,
   MessageSquareDashed,
+  PanelLeftClose,
+  PanelLeftOpen,
   RefreshCw,
   Sparkles,
   X,
@@ -245,7 +247,13 @@ export const StockAgentChatWorkspace = ({
   const isMobileConversationListOpen = useStockAgentRailStore(
     (state) => state.isMobileConversationListOpen,
   )
+  const isConversationRailOpen = useStockAgentRailStore(
+    (state) => state.isConversationRailOpen,
+  )
   const setActiveConversationId = useStockAgentRailStore((state) => state.setActiveConversationId)
+  const setConversationRailOpen = useStockAgentRailStore(
+    (state) => state.setConversationRailOpen,
+  )
   const setMobileConversationListOpen = useStockAgentRailStore(
     (state) => state.setMobileConversationListOpen,
   )
@@ -385,6 +393,15 @@ export const StockAgentChatWorkspace = ({
     setComposerDraft(null, value)
   }
 
+  const handleConversationRailToggle = () => {
+    if (isMobile) {
+      setMobileConversationListOpen(true)
+      return
+    }
+
+    setConversationRailOpen(!isConversationRailOpen)
+  }
+
   const handleSubmitPrompt = async (inputText: string) => {
     const prompt = inputText.trim()
     if (prompt.length === 0) {
@@ -446,17 +463,28 @@ export const StockAgentChatWorkspace = ({
     <main className={cn("flex min-h-0 min-w-0 flex-1 flex-col", className)}>
       <header className="flex h-14 shrink-0 items-center justify-between gap-3 border-b px-4">
         <div className="flex min-w-0 items-center gap-2">
-          {isMobile ? (
-            <Button
-              aria-label="Open stock-agent conversations"
-              onClick={() => setMobileConversationListOpen(true)}
-              size="icon-sm"
-              type="button"
-              variant="ghost"
-            >
+          <Button
+            aria-label={
+              isMobile
+                ? "Open stock-agent conversations"
+                : isConversationRailOpen
+                  ? "Hide stock-agent conversations"
+                  : "Show stock-agent conversations"
+            }
+            aria-expanded={isMobile ? isMobileConversationListOpen : isConversationRailOpen}
+            onClick={handleConversationRailToggle}
+            size="icon-sm"
+            type="button"
+            variant="ghost"
+          >
+            {isMobile ? (
               <Menu className="size-4" />
-            </Button>
-          ) : null}
+            ) : isConversationRailOpen ? (
+              <PanelLeftClose className="size-4" />
+            ) : (
+              <PanelLeftOpen className="size-4" />
+            )}
+          </Button>
           <div className="min-w-0">
             <h3 className="truncate text-sm font-semibold">
               {activeConversationId ? "Stock conversation" : "New stock chat"}

@@ -1,4 +1,5 @@
 import { useEffect } from "react"
+import { motion } from "motion/react"
 
 import { Separator } from "@/components/ui/separator"
 import { StockAgentChatWorkspace } from "@/features/stock-agent/components/chat-workspace"
@@ -12,6 +13,9 @@ type StockAgentPanelProps = {
 }
 
 export const StockAgentPanel = ({ className, isMobile = false }: StockAgentPanelProps) => {
+  const isConversationRailOpen = useStockAgentRailStore(
+    (state) => state.isConversationRailOpen,
+  )
   const setPanelOpen = useStockAgentRailStore((state) => state.setPanelOpen)
 
   useEffect(() => {
@@ -39,10 +43,19 @@ export const StockAgentPanel = ({ className, isMobile = false }: StockAgentPanel
       <div className="flex h-full min-h-0 min-w-0 flex-1 flex-col">
         <div className="flex min-h-0 flex-1 overflow-hidden">
           {!isMobile ? (
-            <>
+            <motion.div
+              aria-hidden={!isConversationRailOpen}
+              animate={{
+                opacity: isConversationRailOpen ? 1 : 0,
+                width: isConversationRailOpen ? 241 : 0,
+              }}
+              className="flex min-h-0 shrink-0 overflow-hidden"
+              initial={false}
+              transition={{ type: "tween", duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            >
               <StockAgentConversationRail className="w-[15rem] shrink-0" />
               <Separator orientation="vertical" />
-            </>
+            </motion.div>
           ) : null}
           <StockAgentChatWorkspace className="min-w-0 flex-1" isMobile={isMobile} />
         </div>

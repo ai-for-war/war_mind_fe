@@ -27,6 +27,7 @@ export interface StockAgentConversationListResponse {
 
 export interface StockAgentConversationRailState {
   activeConversationId: string | null
+  isConversationRailOpen: boolean
   isPanelOpen: boolean
   isMobileConversationListOpen: boolean
   searchDraft: string
