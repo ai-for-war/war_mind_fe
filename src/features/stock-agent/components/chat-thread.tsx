@@ -7,7 +7,9 @@ import {
 import { AssistantMessagePlaceholder } from "@/components/ai/assistant-message-placeholder"
 import { Actions, CopyAction } from "@/components/ai/actions"
 import { Message, MessageContent, MessageResponse } from "@/components/ai/message"
+import { StockAgentActivityLine } from "@/features/stock-agent/components/stock-agent-activity-line"
 import type {
+  StockAgentActivityLineState,
   StockAgentMessageRecord,
   StockAgentRunStatus,
   StockAgentStreamingAssistantState,
@@ -15,6 +17,7 @@ import type {
 import { cn } from "@/lib/utils"
 
 type StockAgentChatThreadProps = {
+  activity: StockAgentActivityLineState | null
   className?: string
   conversationId: string
   messages: StockAgentMessageRecord[]
@@ -41,6 +44,7 @@ const byChronologicalOrder = (
 }
 
 export const StockAgentChatThread = ({
+  activity,
   className,
   conversationId,
   messages,
@@ -50,13 +54,17 @@ export const StockAgentChatThread = ({
 }: StockAgentChatThreadProps) => {
   const orderedMessages = [...messages].sort(byChronologicalOrder)
   const hasStreamingAssistant = Boolean(streamingAssistant)
+  const visibleActivity =
+    activity && !streamingAssistant?.content && activity.status !== "completed"
+      ? activity
+      : null
   const placeholderStage =
     streamingAssistant && !streamingAssistant.content
       ? "streaming"
       : !streamingAssistant && runStatus === "submitting"
         ? "submitting"
         : null
-  const hasMessages = orderedMessages.length > 0 || hasStreamingAssistant
+  const hasMessages = orderedMessages.length > 0 || hasStreamingAssistant || Boolean(visibleActivity)
 
   return (
     <Conversation
@@ -94,6 +102,14 @@ export const StockAgentChatThread = ({
                 </Actions>
               </Message>
             ))}
+
+            {visibleActivity ? (
+              <Message from="assistant" key={`activity-${conversationId}`}>
+                <MessageContent className="rounded-lg bg-primary/10 p-3">
+                  <StockAgentActivityLine activity={visibleActivity} />
+                </MessageContent>
+              </Message>
+            ) : null}
 
             {streamingAssistant ? (
               <Message from="assistant" key={`streaming-${conversationId}`}>

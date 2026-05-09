@@ -1,7 +1,8 @@
-import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react"
+import { AlertCircle, CheckCircle2 } from "lucide-react"
 import { AnimatePresence, motion } from "motion/react"
 
 import { Badge } from "@/components/ui/badge"
+import { Spinner } from "@/components/ui/spinner"
 import type { StockAgentActivityLineState } from "@/features/stock-agent/types"
 import { cn } from "@/lib/utils"
 
@@ -12,17 +13,14 @@ type StockAgentActivityLineProps = {
 
 const statusPresentation = {
   completed: {
-    icon: CheckCircle2,
     label: "Completed",
     tone: "text-emerald-500",
   },
   failed: {
-    icon: AlertCircle,
     label: "Failed",
     tone: "text-destructive",
   },
   streaming: {
-    icon: Loader2,
     label: "Running",
     tone: "text-primary",
   },
@@ -37,24 +35,22 @@ export const StockAgentActivityLine = ({
   }
 
   const presentation = statusPresentation[activity.status]
-  const Icon = presentation.icon
+  const Icon = activity.status === "failed" ? AlertCircle : CheckCircle2
   const stepLabel = activity.actionCount === 1 ? "step" : "steps"
 
   return (
     <div
       className={cn(
-        "flex min-h-10 items-center justify-between gap-3 border-t bg-background/70 px-4 py-2 text-xs backdrop-blur",
+        "flex min-h-8 items-center justify-between gap-3 text-xs",
         className,
       )}
     >
       <div className="flex min-w-0 items-center gap-2">
-        <Icon
-          className={cn(
-            "size-3.5 shrink-0",
-            presentation.tone,
-            activity.status === "streaming" && "animate-spin",
-          )}
-        />
+        {activity.status === "streaming" ? (
+          <Spinner className={cn("size-3.5 shrink-0", presentation.tone)} variant="infinite" />
+        ) : (
+          <Icon className={cn("size-3.5 shrink-0", presentation.tone)} />
+        )}
         <span className="sr-only">{presentation.label}</span>
         <div className="relative min-w-0 flex-1 overflow-hidden">
           <AnimatePresence mode="wait" initial={false}>

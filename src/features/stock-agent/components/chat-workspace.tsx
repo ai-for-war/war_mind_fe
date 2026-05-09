@@ -1,4 +1,12 @@
-import { Menu, RefreshCw, Sparkles, X } from "lucide-react"
+import {
+  AlertCircle,
+  CheckCircle2,
+  Menu,
+  MessageSquareDashed,
+  RefreshCw,
+  Sparkles,
+  X,
+} from "lucide-react"
 import { useEffect, useState } from "react"
 
 import { Suggestion } from "@/components/ai/suggestion"
@@ -19,10 +27,10 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet"
 import { Skeleton } from "@/components/ui/skeleton"
+import { Spinner } from "@/components/ui/spinner"
 import { StockAgentChatThread } from "@/features/stock-agent/components/chat-thread"
 import { StockAgentComposerPanel } from "@/features/stock-agent/components/stock-agent-composer-panel"
 import { StockAgentConversationRail } from "@/features/stock-agent/components/conversation-rail"
-import { StockAgentActivityLine } from "@/features/stock-agent/components/stock-agent-activity-line"
 import { useStockAgentChatLifecycleSubscriptions } from "@/features/stock-agent/hooks/use-chat-lifecycle-subscriptions"
 import { useStockAgentConversationMessages } from "@/features/stock-agent/hooks/use-conversation-messages"
 import { useStockAgentRuntimeCatalog } from "@/features/stock-agent/hooks/use-stock-agent-runtime-catalog"
@@ -125,24 +133,108 @@ const createOptimisticFreshMessage = (content: string): StockAgentMessageRecord 
   role: "user",
 })
 
-const resolvePanelStatus = (
-  statuses: Record<string, StockAgentRunStatus>,
-): { label: string; variant: "default" | "secondary" | "destructive" | "outline" } => {
-  const values = Object.values(statuses)
+type StockAgentHeaderStatusTone = "fresh" | "pending" | "streaming" | "success" | "danger"
 
-  if (values.includes("failed")) {
-    return { label: "Failed", variant: "destructive" }
+type StockAgentHeaderStatusState = {
+  icon: typeof Sparkles
+  label: string
+  tone: StockAgentHeaderStatusTone
+}
+
+const statusToneClassName: Record<StockAgentHeaderStatusTone, string> = {
+  danger:
+    "border-red-200 bg-red-50 text-red-700 dark:border-red-400/20 dark:bg-red-500/8 dark:text-red-100",
+  fresh:
+    "border-sky-200 bg-sky-50 text-sky-700 dark:border-sky-400/20 dark:bg-sky-500/8 dark:text-sky-100",
+  pending:
+    "border-amber-200 bg-amber-50 text-amber-700 dark:border-amber-400/20 dark:bg-amber-500/8 dark:text-amber-100",
+  streaming:
+    "border-violet-200 bg-violet-50 text-violet-700 dark:border-violet-400/20 dark:bg-violet-500/8 dark:text-violet-100",
+  success:
+    "border-emerald-200 bg-emerald-50 text-emerald-700 dark:border-emerald-400/20 dark:bg-emerald-500/8 dark:text-emerald-100",
+}
+
+const resolveHeaderStatus = ({
+  activeConversationId,
+  runStatus,
+}: {
+  activeConversationId: string | null
+  runStatus: StockAgentRunStatus
+}): StockAgentHeaderStatusState => {
+  if (!activeConversationId && runStatus === "idle") {
+    return {
+      icon: MessageSquareDashed,
+      label: "Fresh chat",
+      tone: "fresh",
+    }
   }
 
-  if (values.includes("streaming")) {
-    return { label: "Streaming", variant: "default" }
+  switch (runStatus) {
+    case "submitting":
+      return {
+        icon: Sparkles,
+        label: "Submitting",
+        tone: "pending",
+      }
+    case "streaming":
+      return {
+        icon: Sparkles,
+        label: "Streaming",
+        tone: "streaming",
+      }
+    case "completed":
+      return {
+        icon: CheckCircle2,
+        label: "Completed",
+        tone: "success",
+      }
+    case "failed":
+      return {
+        icon: AlertCircle,
+        label: "Failed",
+        tone: "danger",
+      }
+    case "idle":
+    default:
+      return {
+        icon: Sparkles,
+        label: "Ready",
+        tone: "fresh",
+      }
   }
+}
 
-  if (values.includes("submitting")) {
-    return { label: "Thinking", variant: "default" }
-  }
+type StockAgentHeaderStatusProps = {
+  activeConversationId: string | null
+  runStatus: StockAgentRunStatus
+}
 
-  return { label: "Idle", variant: "secondary" }
+const StockAgentHeaderStatus = ({
+  activeConversationId,
+  runStatus,
+}: StockAgentHeaderStatusProps) => {
+  const status = resolveHeaderStatus({ activeConversationId, runStatus })
+  const Icon = status.icon
+  const isAnimated = runStatus === "submitting"
+
+  return (
+    <Badge
+      className={cn(
+        "h-8 rounded-full px-2.5 pr-3 font-medium text-xs",
+        statusToneClassName[status.tone],
+      )}
+      variant="outline"
+    >
+      <span className="flex size-5 shrink-0 items-center justify-center rounded-full border border-current/12 bg-white/70 dark:bg-white/7">
+        {runStatus === "streaming" ? (
+          <Spinner className="size-3.5 text-current" variant="infinite" />
+        ) : (
+          <Icon className={cn("size-3.5 text-current", isAnimated && "animate-pulse")} />
+        )}
+      </span>
+      <span>{status.label}</span>
+    </Badge>
+  )
 }
 
 export const StockAgentChatWorkspace = ({
@@ -233,7 +325,7 @@ export const StockAgentChatWorkspace = ({
   const activeActivityLine = activeConversationId
     ? activityLineByConversation[activeConversationId] ?? null
     : null
-  const panelStatus = resolvePanelStatus(runStatusByConversation)
+  const headerStatusRunStatus = runStatus
 
   const resolvedRuntime = runtimeCatalogQuery.catalog
     ? resolveStockAgentRuntimeSelection(runtimeCatalogQuery.catalog, activeRuntimeSelection)
@@ -378,7 +470,10 @@ export const StockAgentChatWorkspace = ({
               {runtimeNotice}
             </p>
           ) : null}
-          <Badge variant={panelStatus.variant}>{panelStatus.label}</Badge>
+          <StockAgentHeaderStatus
+            activeConversationId={activeConversationId}
+            runStatus={headerStatusRunStatus}
+          />
           <Button
             aria-label="Minimize Stock Agent"
             onClick={() => setPanelOpen(false)}
@@ -400,6 +495,7 @@ export const StockAgentChatWorkspace = ({
           <StockAgentChatError onRetry={() => void messagesQuery.refetch()} />
         ) : (
           <StockAgentChatThread
+            activity={activeActivityLine}
             className="min-h-0 flex-1"
             conversationId={activeConversationId ?? STOCK_AGENT_FRESH_CHAT_KEY}
             messages={threadMessages}
@@ -409,8 +505,6 @@ export const StockAgentChatWorkspace = ({
           />
         )}
       </div>
-
-      <StockAgentActivityLine activity={activeActivityLine} />
 
       <StockAgentComposerPanel
         catalog={runtimeCatalogQuery.catalog}
