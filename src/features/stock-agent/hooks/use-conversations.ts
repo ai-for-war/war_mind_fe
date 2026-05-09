@@ -1,0 +1,92 @@
+import {
+  useInfiniteQuery,
+  type InfiniteData,
+  type UseInfiniteQueryResult,
+} from "@tanstack/react-query"
+
+import { stockAgentConversationsApi } from "@/features/stock-agent/api/conversations-api"
+import { stockAgentQueryKeys } from "@/features/stock-agent/query-keys"
+import type {
+  StockAgentConversationListItem,
+  StockAgentConversationListParams,
+  StockAgentConversationListResponse,
+} from "@/features/stock-agent/types/conversation.types"
+import { useActiveOrganizationId } from "@/hooks/use-active-organization-id"
+
+const DEFAULT_SKIP = 0
+const DEFAULT_LIMIT = 20
+
+const normalizeParams = (
+  params: StockAgentConversationListParams,
+): Required<Pick<StockAgentConversationListParams, "limit" | "search" | "skip">> &
+  Pick<StockAgentConversationListParams, "status"> => ({
+  limit: params.limit ?? DEFAULT_LIMIT,
+  search: params.search ?? "",
+  skip: params.skip ?? DEFAULT_SKIP,
+  status: params.status,
+})
+
+type StockAgentConversationListQueryResult = UseInfiniteQueryResult<
+  InfiniteData<StockAgentConversationListResponse>,
+  Error
+>
+
+type UseStockAgentConversationsQueryResult = StockAgentConversationListQueryResult & {
+  conversations: StockAgentConversationListItem[]
+  hasNextPage: boolean
+  isEmpty: boolean
+  isFetchingNextPage: boolean
+}
+
+export const useStockAgentConversations = (
+  params: StockAgentConversationListParams = {},
+): UseStockAgentConversationsQueryResult => {
+  const activeOrganizationId = useActiveOrganizationId()
+  const normalizedParams = normalizeParams(params)
+  const { skip: initialSkip, ...baseParams } = normalizedParams
+
+  const query = useInfiniteQuery<
+    StockAgentConversationListResponse,
+    Error,
+    InfiniteData<StockAgentConversationListResponse>,
+    ReturnType<typeof stockAgentQueryKeys.conversationsList>,
+    number
+  >({
+    getNextPageParam: (lastPage) => {
+      const nextSkip = lastPage.skip + lastPage.items.length
+      return nextSkip < lastPage.total ? nextSkip : undefined
+    },
+    initialPageParam: initialSkip,
+    queryFn: ({ pageParam }) =>
+      stockAgentConversationsApi.listConversations({
+        ...baseParams,
+        skip: pageParam,
+      }),
+    queryKey: stockAgentQueryKeys.conversationsList(
+      activeOrganizationId,
+      normalizedParams,
+    ),
+  })
+
+  const seenConversationIds = new Set<string>()
+  const conversations =
+    query.data?.pages.flatMap((page) =>
+      page.items.filter((conversation) => {
+        if (seenConversationIds.has(conversation.id)) {
+          return false
+        }
+
+        seenConversationIds.add(conversation.id)
+        return true
+      }),
+    ) ?? []
+  const isEmpty = !query.isPending && !query.isError && conversations.length === 0
+
+  return {
+    ...query,
+    conversations,
+    hasNextPage: query.hasNextPage ?? false,
+    isEmpty,
+    isFetchingNextPage: query.isFetchingNextPage,
+  }
+}

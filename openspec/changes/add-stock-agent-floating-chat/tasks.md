@@ -1,10 +1,10 @@
 ## 1. Stock Agent Data Layer
 
-- [ ] 1.1 Create `src/features/stock-agent/` exports, query keys, and TypeScript types for conversations, messages, runtime catalog, run status, streaming assistant state, and one-line activity state
-- [ ] 1.2 Add Stock Agent conversation and message API modules using `/stock-agent/conversations`, `/stock-agent/conversations/{conversation_id}/messages`, `/stock-agent/catalog`, and `/stock-agent/messages`
-- [ ] 1.3 Add TanStack Query hooks for conversation list, message history, runtime catalog, and message submission with Stock Agent query keys separated from Super-Agent
-- [ ] 1.4 Add Stock Agent rail and chat workspace Zustand stores for active conversation, search draft, panel open state, drafts, runtime selection, run status, streaming assistant state, thread errors, and activity line state
-- [ ] 1.5 Reuse or copy the Super-Agent runtime selection helpers into Stock Agent scope without adding speculative request field aliases
+- [x] 1.1 Create `src/features/stock-agent/` exports, query keys, and TypeScript types for conversations, messages, runtime catalog, run status, streaming assistant state, and one-line activity state
+- [x] 1.2 Add Stock Agent conversation and message API modules using `/stock-agent/conversations`, `/stock-agent/conversations/{conversation_id}/messages`, `/stock-agent/catalog`, and `/stock-agent/messages`
+- [x] 1.3 Add TanStack Query hooks for conversation list, message history, runtime catalog, and message submission with Stock Agent query keys separated from Super-Agent
+- [x] 1.4 Add Stock Agent rail and chat workspace Zustand stores for active conversation, search draft, panel open state, drafts, runtime selection, run status, streaming assistant state, thread errors, and activity line state
+- [x] 1.5 Reuse or copy the Super-Agent runtime selection helpers into Stock Agent scope without adding speculative request field aliases
 
 ## 2. Socket Lifecycle And Runtime Behavior
 
