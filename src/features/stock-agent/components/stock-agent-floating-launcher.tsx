@@ -1,4 +1,4 @@
-import { BrainCircuit } from "lucide-react"
+import { Bot } from "lucide-react"
 import { useEffect, useRef } from "react"
 import { useLocation } from "react-router-dom"
 
@@ -113,7 +113,7 @@ export const StockAgentFloatingLauncher = () => {
                 type="button"
                 variant="outline"
               >
-                <BrainCircuit className="size-5" />
+                <Bot className="size-5" />
                 {isRunning && !isPanelOpen ? (
                   <span className="absolute top-1.5 right-1.5 size-2.5 rounded-full bg-primary ring-2 ring-background" />
                 ) : null}
