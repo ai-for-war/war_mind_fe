@@ -8,10 +8,10 @@
 
 ## 2. Socket Lifecycle And Runtime Behavior
 
-- [ ] 2.1 Implement a Stock Agent lifecycle subscription hook for started, token, tool start, tool end, completed, and failed chat events
-- [ ] 2.2 Wire lifecycle events to Stock Agent run status, streaming assistant text, activity-line label/count, thread errors, and Stock Agent query invalidation
-- [ ] 2.3 Ensure failed runs stop streaming, mark the latest activity as failed, preserve retryable user state, and surface request failures through `sonner`
-- [ ] 2.4 Ensure completed runs clear streaming assistant state and refresh Stock Agent message history plus conversation list
+- [x] 2.1 Implement a Stock Agent lifecycle subscription hook for started, token, tool start, tool end, completed, and failed chat events
+- [x] 2.2 Wire lifecycle events to Stock Agent run status, streaming assistant text, activity-line label/count, thread errors, and Stock Agent query invalidation
+- [x] 2.3 Ensure failed runs stop streaming, mark the latest activity as failed, preserve retryable user state, and surface request failures through `sonner`
+- [x] 2.4 Ensure completed runs clear streaming assistant state and refresh Stock Agent message history plus conversation list
 
 ## 3. Floating Panel UI
 

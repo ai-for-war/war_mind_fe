@@ -72,6 +72,7 @@ type StockAgentChatWorkspaceActions = {
     status: StockAgentActivityLineStatus,
     latestAction?: string,
   ) => void
+  touchActivityLineToolEnd: (conversationId: string, toolCallId: string) => void
   setComposerDraft: (conversationId: string | null, draft: string) => void
   setComposerRuntimeModel: (
     conversationId: string | null,
@@ -439,4 +440,22 @@ export const useStockAgentChatWorkspaceStore = create<
         [conversationId]: error,
       },
     })),
+  touchActivityLineToolEnd: (conversationId, toolCallId) =>
+    set((state) => {
+      const currentActivity = state.activityLineByConversation[conversationId]
+
+      if (!currentActivity || currentActivity.latestToolCallId !== toolCallId) {
+        return state
+      }
+
+      return {
+        activityLineByConversation: {
+          ...state.activityLineByConversation,
+          [conversationId]: {
+            ...currentActivity,
+            updatedAt: new Date().toISOString(),
+          },
+        },
+      }
+    }),
 }))
