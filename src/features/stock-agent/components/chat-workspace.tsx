@@ -21,6 +21,7 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { StockAgentChatThread } from "@/features/stock-agent/components/chat-thread"
 import { StockAgentComposerPanel } from "@/features/stock-agent/components/stock-agent-composer-panel"
 import { StockAgentConversationRail } from "@/features/stock-agent/components/conversation-rail"
+import { StockAgentActivityLine } from "@/features/stock-agent/components/stock-agent-activity-line"
 import { useStockAgentChatLifecycleSubscriptions } from "@/features/stock-agent/hooks/use-chat-lifecycle-subscriptions"
 import { useStockAgentConversationMessages } from "@/features/stock-agent/hooks/use-conversation-messages"
 import { useStockAgentRuntimeCatalog } from "@/features/stock-agent/hooks/use-stock-agent-runtime-catalog"
@@ -152,6 +153,9 @@ export const StockAgentChatWorkspace = ({
   const composerSubagentEnabledByConversation = useStockAgentChatWorkspaceStore(
     (state) => state.composerSubagentEnabledByConversation,
   )
+  const activityLineByConversation = useStockAgentChatWorkspaceStore(
+    (state) => state.activityLineByConversation,
+  )
   const rekeyComposerRuntimeSelection = useStockAgentChatWorkspaceStore(
     (state) => state.rekeyComposerRuntimeSelection,
   )
@@ -204,6 +208,9 @@ export const StockAgentChatWorkspace = ({
     ? streamingAssistantByConversation[activeConversationId] ?? null
     : null
   const activeThreadError = threadErrorByConversation[conversationKey] ?? null
+  const activeActivityLine = activeConversationId
+    ? activityLineByConversation[activeConversationId] ?? null
+    : null
 
   const resolvedRuntime = runtimeCatalogQuery.catalog
     ? resolveStockAgentRuntimeSelection(runtimeCatalogQuery.catalog, activeRuntimeSelection)
@@ -367,6 +374,8 @@ export const StockAgentChatWorkspace = ({
           />
         )}
       </div>
+
+      <StockAgentActivityLine activity={activeActivityLine} />
 
       <StockAgentComposerPanel
         catalog={runtimeCatalogQuery.catalog}

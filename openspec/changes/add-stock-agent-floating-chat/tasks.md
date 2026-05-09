@@ -24,10 +24,10 @@
 
 ## 4. One-Line Activity UX
 
-- [ ] 4.1 Create `StockAgentActivityLine` that renders the latest action label, a step-count `Badge`, active/completed/failed states, and compact status iconography
-- [ ] 4.2 Animate activity label replacement with `motion/react` opacity and transform transitions without repeated height animation
-- [ ] 4.3 Update activity state on tool start/tool end/completed/failed lifecycle events so new actions replace previous actions and the badge count increments
-- [ ] 4.4 Verify the activity line never expands into a multi-step timeline in the floating panel
+- [x] 4.1 Create `StockAgentActivityLine` that renders the latest action label, a step-count `Badge`, active/completed/failed states, and compact status iconography
+- [x] 4.2 Animate activity label replacement with `motion/react` opacity and transform transitions without repeated height animation
+- [x] 4.3 Update activity state on tool start/tool end/completed/failed lifecycle events so new actions replace previous actions and the badge count increments
+- [x] 4.4 Verify the activity line never expands into a multi-step timeline in the floating panel
 
 ## 5. Shell Integration
 

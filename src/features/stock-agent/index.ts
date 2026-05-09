@@ -1,5 +1,6 @@
 export { stockAgentConversationsApi } from "@/features/stock-agent/api/conversations-api"
 export { stockAgentMessagesApi } from "@/features/stock-agent/api/messages-api"
+export { StockAgentActivityLine } from "@/features/stock-agent/components/stock-agent-activity-line"
 export { StockAgentChatThread } from "@/features/stock-agent/components/chat-thread"
 export { StockAgentChatWorkspace } from "@/features/stock-agent/components/chat-workspace"
 export { StockAgentComposerPanel } from "@/features/stock-agent/components/stock-agent-composer-panel"
