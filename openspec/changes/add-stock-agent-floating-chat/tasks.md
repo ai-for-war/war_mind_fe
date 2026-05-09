@@ -31,10 +31,10 @@
 
 ## 5. Shell Integration
 
-- [ ] 5.1 Mount the Stock Agent floating launcher from `MainLayout` after routed content so it is shell-level and page-independent
-- [ ] 5.2 Reset Stock Agent rail and workspace stores when the active organization changes in `MainLayout`
-- [ ] 5.3 Ensure minimizing or closing the panel preserves Stock Agent active conversation, draft, rail search, runtime selection, streaming state, and activity state
-- [ ] 5.4 Ensure Stock Agent request payloads never include current page context such as selected symbol, watchlist id, report id, backtest id, route state, or table state
+- [x] 5.1 Mount the Stock Agent floating launcher from `MainLayout` after routed content so it is shell-level and page-independent
+- [x] 5.2 Reset Stock Agent rail and workspace stores when the active organization changes in `MainLayout`
+- [x] 5.3 Ensure minimizing or closing the panel preserves Stock Agent active conversation, draft, rail search, runtime selection, streaming state, and activity state
+- [x] 5.4 Ensure Stock Agent request payloads never include current page context such as selected symbol, watchlist id, report id, backtest id, route state, or table state
 
 ## 6. Verification
 

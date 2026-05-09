@@ -8,6 +8,11 @@ import { useMeetingSessionStore } from "@/features/meeting-recorder/stores"
 import { useMultiAgentChatWorkspaceStore } from "@/features/multi-agent/stores"
 import { useMultiAgentRailStore } from "@/features/multi-agent/stores/use-multi-agent-rail-store"
 import { useNotificationCreatedSubscription } from "@/features/notifications"
+import {
+  StockAgentFloatingLauncher,
+  useStockAgentChatWorkspaceStore,
+  useStockAgentRailStore,
+} from "@/features/stock-agent"
 import { useSuperAgentChatWorkspaceStore } from "@/features/super-agent/stores"
 import { useSuperAgentRailStore } from "@/features/super-agent/stores/use-super-agent-rail-store"
 import { useActiveOrganizationId } from "@/hooks/use-active-organization-id"
@@ -38,6 +43,8 @@ export const MainLayout = () => {
     useMultiAgentChatWorkspaceStore.getState().resetWorkspaceState()
     useSuperAgentRailStore.getState().resetRailState()
     useSuperAgentChatWorkspaceStore.getState().resetWorkspaceState()
+    useStockAgentRailStore.getState().resetRailState()
+    useStockAgentChatWorkspaceStore.getState().resetWorkspaceState()
     useMeetingSessionStore.getState().resetSession()
     useInterviewSessionStore.getState().resetSession()
   }, [activeOrganizationId])
@@ -69,6 +76,7 @@ export const MainLayout = () => {
         >
           <Outlet />
         </div>
+        <StockAgentFloatingLauncher />
       </SidebarInset>
     </SidebarProvider>
   )
