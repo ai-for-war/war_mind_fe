@@ -15,12 +15,12 @@
 
 ## 3. Floating Panel UI
 
-- [ ] 3.1 Implement `StockAgentFloatingLauncher` with route visibility gating for Markets route prefixes and a bottom-right launcher button
-- [ ] 3.2 Implement the desktop floating panel shell with fixed bottom-right positioning, bounded viewport height, two-column layout, and no page-content reflow
-- [ ] 3.3 Implement a simple Stock Agent conversation rail with search, new chat, conversation rows, active-row styling, loading skeletons, empty state, retry state, and internal scrolling
-- [ ] 3.4 Implement the Stock Agent chat surface using shared `Conversation`, `Message`, `MessageResponse`, `ConversationScrollButton`, and `Suggestion` primitives
-- [ ] 3.5 Implement a compact Stock Agent composer using shared `PromptInput` primitives, runtime controls, subagent toggle, validation feedback, and submit state
-- [ ] 3.6 Implement the mobile single-column overlay with accessible conversation-list access and internally scrolling thread content
+- [x] 3.1 Implement `StockAgentFloatingLauncher` with route visibility gating for Markets route prefixes and a bottom-right launcher button
+- [x] 3.2 Implement the desktop floating panel shell with fixed bottom-right positioning, bounded viewport height, two-column layout, and no page-content reflow
+- [x] 3.3 Implement a simple Stock Agent conversation rail with search, new chat, conversation rows, active-row styling, loading skeletons, empty state, retry state, and internal scrolling
+- [x] 3.4 Implement the Stock Agent chat surface using shared `Conversation`, `Message`, `MessageResponse`, `ConversationScrollButton`, and `Suggestion` primitives
+- [x] 3.5 Implement a compact Stock Agent composer using shared `PromptInput` primitives, runtime controls, subagent toggle, validation feedback, and submit state
+- [x] 3.6 Implement the mobile single-column overlay with accessible conversation-list access and internally scrolling thread content
 
 ## 4. One-Line Activity UX
 
