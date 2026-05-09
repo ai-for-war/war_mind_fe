@@ -55,7 +55,7 @@ export const MainLayout = () => {
     <SidebarProvider
       open={isSidebarOpen}
       onOpenChange={setSidebarOpen}
-      className="relative min-h-svh overflow-hidden bg-background text-foreground"
+      className="relative h-svh max-h-svh min-h-0 overflow-hidden bg-background text-foreground"
     >
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
@@ -68,7 +68,7 @@ export const MainLayout = () => {
         <div className="glass-scene-vignette absolute inset-0" />
       </div>
       <AppSidebar />
-      <SidebarInset className="min-h-svh overflow-hidden bg-transparent">
+      <SidebarInset className="h-svh max-h-svh min-h-0 overflow-hidden bg-transparent">
         <AppHeader />
         <div
           key={organizationScopeKey}
