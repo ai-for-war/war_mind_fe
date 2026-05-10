@@ -1,7 +1,7 @@
 import type { FileUIPart, UIMessage } from "ai"
 import { ChevronLeftIcon, ChevronRightIcon, PaperclipIcon, XIcon } from "lucide-react"
 import type { ComponentProps, HTMLAttributes, ReactElement } from "react"
-import { createContext, memo, useContext, useEffect, useState } from "react"
+import { createContext, memo, useContext, useEffect, useMemo, useState } from "react"
 import { Streamdown } from "streamdown"
 import { Button } from "@/components/ui/button"
 import { ButtonGroup, ButtonGroupText } from "@/components/ui/button-group"
@@ -153,7 +153,7 @@ export type MessageBranchContentProps = HTMLAttributes<HTMLDivElement>
 
 export const MessageBranchContent = ({ children, ...props }: MessageBranchContentProps) => {
   const { currentBranch, setBranches, branches } = useMessageBranch()
-  const childrenArray = Array.isArray(children) ? children : [children]
+  const childrenArray = useMemo(() => (Array.isArray(children) ? children : [children]), [children])
 
   // Use useEffect to update branches when they change
   useEffect(() => {
@@ -194,7 +194,11 @@ export const MessageBranchSelector = ({
 
   return (
     <ButtonGroup
-      className="[&>*:not(:first-child)]:rounded-l-md [&>*:not(:last-child)]:rounded-r-md"
+      className={cn(
+        "[&>*:not(:first-child)]:rounded-l-md [&>*:not(:last-child)]:rounded-r-md",
+        className,
+      )}
+      data-from={from}
       orientation="horizontal"
       {...props}
     />
@@ -229,6 +233,7 @@ export const MessageBranchNext = ({ children, className, ...props }: MessageBran
   return (
     <Button
       aria-label="Next branch"
+      className={className}
       disabled={totalBranches <= 1}
       onClick={goToNext}
       size="icon-sm"
@@ -261,7 +266,13 @@ export type MessageResponseProps = ComponentProps<typeof Streamdown>
 export const MessageResponse = memo(
   ({ className, ...props }: MessageResponseProps) => (
     <Streamdown
-      className={cn("size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0", className)}
+      className={cn(
+        "size-full [&>*:first-child]:mt-0 [&>*:last-child]:mb-0",
+        "[&_ol]:my-3 [&_ol]:list-decimal [&_ol]:space-y-2 [&_ol]:pl-5",
+        "[&_ul]:my-3 [&_ul]:list-disc [&_ul]:space-y-2 [&_ul]:pl-5",
+        "[&_li]:pl-1 [&_li>p]:my-0",
+        className,
+      )}
       {...props}
     />
   ),

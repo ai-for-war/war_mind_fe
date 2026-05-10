@@ -8,6 +8,11 @@ import { useMeetingSessionStore } from "@/features/meeting-recorder/stores"
 import { useMultiAgentChatWorkspaceStore } from "@/features/multi-agent/stores"
 import { useMultiAgentRailStore } from "@/features/multi-agent/stores/use-multi-agent-rail-store"
 import { useNotificationCreatedSubscription } from "@/features/notifications"
+import {
+  StockAgentFloatingLauncher,
+  useStockAgentChatWorkspaceStore,
+  useStockAgentRailStore,
+} from "@/features/stock-agent"
 import { useSuperAgentChatWorkspaceStore } from "@/features/super-agent/stores"
 import { useSuperAgentRailStore } from "@/features/super-agent/stores/use-super-agent-rail-store"
 import { useActiveOrganizationId } from "@/hooks/use-active-organization-id"
@@ -38,6 +43,8 @@ export const MainLayout = () => {
     useMultiAgentChatWorkspaceStore.getState().resetWorkspaceState()
     useSuperAgentRailStore.getState().resetRailState()
     useSuperAgentChatWorkspaceStore.getState().resetWorkspaceState()
+    useStockAgentRailStore.getState().resetRailState()
+    useStockAgentChatWorkspaceStore.getState().resetWorkspaceState()
     useMeetingSessionStore.getState().resetSession()
     useInterviewSessionStore.getState().resetSession()
   }, [activeOrganizationId])
@@ -48,7 +55,7 @@ export const MainLayout = () => {
     <SidebarProvider
       open={isSidebarOpen}
       onOpenChange={setSidebarOpen}
-      className="relative min-h-svh overflow-hidden bg-background text-foreground"
+      className="relative h-svh max-h-svh min-h-0 overflow-hidden bg-background text-foreground"
     >
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
         <div
@@ -61,7 +68,7 @@ export const MainLayout = () => {
         <div className="glass-scene-vignette absolute inset-0" />
       </div>
       <AppSidebar />
-      <SidebarInset className="min-h-svh overflow-hidden bg-transparent">
+      <SidebarInset className="h-svh max-h-svh min-h-0 overflow-hidden bg-transparent">
         <AppHeader />
         <div
           key={organizationScopeKey}
@@ -69,6 +76,7 @@ export const MainLayout = () => {
         >
           <Outlet />
         </div>
+        <StockAgentFloatingLauncher />
       </SidebarInset>
     </SidebarProvider>
   )
