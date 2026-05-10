@@ -57,18 +57,18 @@ export const BacktestResultPanel = ({
   }
 
   return (
-    <div className="flex min-w-0 flex-col gap-4">
+    <div className="flex w-full min-w-0 flex-col gap-4 overflow-hidden">
       <BacktestKpiStrip result={result} />
       <BacktestEquityChart result={result} />
-      <Tabs defaultValue="overview" className="min-w-0">
+      <Tabs defaultValue="overview" className="w-full min-w-0 overflow-hidden">
         <TabsList variant="line">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="trades">Trades</TabsTrigger>
         </TabsList>
-        <TabsContent value="overview" className="min-w-0">
+        <TabsContent value="overview" className="w-full min-w-0">
           <BacktestOverviewPanel result={result} />
         </TabsContent>
-        <TabsContent value="trades" className="min-w-0">
+        <TabsContent value="trades" className="w-full min-w-0 overflow-hidden">
           <BacktestTradesTable result={result} />
         </TabsContent>
       </Tabs>

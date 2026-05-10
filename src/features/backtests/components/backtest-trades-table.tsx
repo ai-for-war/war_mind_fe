@@ -7,6 +7,7 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   TableBody,
   TableCell,
@@ -46,9 +47,13 @@ export const BacktestTradesTable = ({ result }: BacktestTradesTableProps) => {
   }
 
   return (
-    <div className="min-w-0 overflow-x-auto rounded-xl border border-border/60 bg-card/70">
-      <div className="min-w-full w-max">
-        <table data-slot="table" className="w-full caption-bottom text-sm">
+    <ScrollArea
+      aria-label="Backtest trades"
+      className="w-0 min-w-full rounded-xl border border-border/60 bg-card/70"
+      role="region"
+      scrollbars="horizontal"
+    >
+      <table data-slot="table" className="w-full min-w-[80rem] caption-bottom text-sm">
         <TableHeader>
           <TableRow>
             <TableHead className="min-w-[13rem] whitespace-nowrap">Entry</TableHead>
@@ -91,8 +96,7 @@ export const BacktestTradesTable = ({ result }: BacktestTradesTableProps) => {
             </TableRow>
           ))}
         </TableBody>
-        </table>
-      </div>
-    </div>
+      </table>
+    </ScrollArea>
   )
 }
