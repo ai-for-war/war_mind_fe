@@ -57,14 +57,19 @@ export const StockAgentChatThread = ({
 }: StockAgentChatThreadProps) => {
   const orderedMessages = [...messages].sort(byChronologicalOrder)
   const hasStreamingAssistant = Boolean(streamingAssistant)
-  const visibleActivity = activity
+  const hasActivity = Boolean(activity && activity.steps.length > 0)
   const placeholderStage =
     streamingAssistant && !streamingAssistant.content
       ? "streaming"
       : !streamingAssistant && runStatus === "submitting"
         ? "submitting"
         : null
-  const hasMessages = orderedMessages.length > 0 || hasStreamingAssistant || Boolean(visibleActivity)
+  const lastAssistantMessageId =
+    [...orderedMessages].reverse().find((message) => toMessageAuthor(message.role) === "assistant")?.id ??
+    null
+  const shouldRenderActivityPlaceholder = hasActivity && !hasStreamingAssistant && !lastAssistantMessageId
+  const hasMessages =
+    orderedMessages.length > 0 || hasStreamingAssistant || shouldRenderActivityPlaceholder
 
   return (
     <Conversation
@@ -90,6 +95,13 @@ export const StockAgentChatThread = ({
                       : "bg-secondary",
                   )}
                 >
+                  {!hasStreamingAssistant &&
+                  hasActivity &&
+                  activity &&
+                  message.id === lastAssistantMessageId &&
+                  toMessageAuthor(message.role) === "assistant" ? (
+                    <StockAgentActivityLine activity={activity} className="mb-3" />
+                  ) : null}
                   <MessageResponse>{message.content}</MessageResponse>
                 </MessageContent>
                 <Actions
@@ -107,10 +119,10 @@ export const StockAgentChatThread = ({
               </Message>
             ))}
 
-            {visibleActivity ? (
-              <Message from="assistant" key={`activity-${conversationId}`}>
-                <MessageContent className="w-full rounded-lg bg-transparent p-0">
-                  <StockAgentActivityLine activity={visibleActivity} />
+            {shouldRenderActivityPlaceholder && activity ? (
+              <Message from="assistant" key={`activity-placeholder-${conversationId}`}>
+                <MessageContent className="rounded-lg bg-primary/10 p-4">
+                  <StockAgentActivityLine activity={activity} />
                 </MessageContent>
               </Message>
             ) : null}
@@ -118,6 +130,9 @@ export const StockAgentChatThread = ({
             {streamingAssistant ? (
               <Message from="assistant" key={`streaming-${conversationId}`}>
                 <MessageContent className="rounded-lg bg-primary/10 p-4">
+                  {hasActivity && activity ? (
+                    <StockAgentActivityLine activity={activity} className="mb-3" />
+                  ) : null}
                   {streamingAssistant.content ? (
                     <MessageResponse>{streamingAssistant.content}</MessageResponse>
                   ) : (
@@ -135,6 +150,9 @@ export const StockAgentChatThread = ({
             {placeholderStage === "submitting" ? (
               <Message from="assistant" key={`pending-${conversationId}`}>
                 <MessageContent className="rounded-lg bg-primary/10 p-4">
+                  {hasActivity && activity ? (
+                    <StockAgentActivityLine activity={activity} className="mb-3" />
+                  ) : null}
                   <AssistantMessagePlaceholder />
                 </MessageContent>
               </Message>
