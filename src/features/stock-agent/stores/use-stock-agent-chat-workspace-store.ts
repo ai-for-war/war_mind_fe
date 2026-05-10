@@ -1,10 +1,14 @@
 import { create } from "zustand"
 
+import { summarizePlanTodos } from "@/common/plan-todo"
 import type {
   StockAgentActivityLineState,
   StockAgentActivityLineStatus,
   StockAgentActivityStep,
   StockAgentActivityStepStatus,
+  StockAgentPlanSnapshot,
+  StockAgentPlanSummary,
+  StockAgentPlanTodo,
   StockAgentRunStatus,
   StockAgentStreamingAssistantState,
 } from "@/features/stock-agent/types/chat-workspace.types"
@@ -37,6 +41,7 @@ type StockAgentChatWorkspaceState = {
   composerRuntimeNoticeByConversation: Record<string, string | null>
   composerRuntimeSelectionByConversation: Record<string, StockAgentRuntimeSelection>
   composerSubagentEnabledByConversation: Record<string, boolean>
+  planByConversation: Record<string, StockAgentPlanSnapshot>
   runStatusByConversation: Record<string, StockAgentRunStatus>
   streamingAssistantByConversation: Record<string, StockAgentStreamingAssistantState>
   threadErrorByConversation: Record<string, string | null>
@@ -49,6 +54,7 @@ type StockAgentChatWorkspaceActions = {
   clearComposerRuntimeNotice: (conversationId: string | null) => void
   clearComposerRuntimeSelection: (conversationId: string | null) => void
   clearComposerSubagentEnabled: (conversationId: string | null) => void
+  clearPlan: (conversationId: string | null) => void
   clearStreamingAssistant: (conversationId: string) => void
   clearThreadError: (conversationId: string) => void
   recordActivityLineAction: (
@@ -74,6 +80,13 @@ type StockAgentChatWorkspaceActions = {
     conversationId: string,
     status: StockAgentActivityLineStatus,
     latestAction?: string,
+  ) => void
+  setPlan: (
+    conversationId: string | null,
+    plan: {
+      summary?: Partial<StockAgentPlanSummary> | null
+      todos: StockAgentPlanTodo[]
+    },
   ) => void
   touchActivityLineToolEnd: (
     conversationId: string,
@@ -131,6 +144,7 @@ const initialState: StockAgentChatWorkspaceState = {
   composerRuntimeNoticeByConversation: {},
   composerRuntimeSelectionByConversation: {},
   composerSubagentEnabledByConversation: {},
+  planByConversation: {},
   runStatusByConversation: {},
   streamingAssistantByConversation: {},
   threadErrorByConversation: {},
@@ -209,6 +223,14 @@ export const useStockAgentChatWorkspaceStore = create<
           state.composerSubagentEnabledByConversation,
           conversationKey,
         ),
+      }
+    }),
+  clearPlan: (conversationId) =>
+    set((state) => {
+      const conversationKey = toConversationKey(conversationId)
+
+      return {
+        planByConversation: omitKey(state.planByConversation, conversationKey),
       }
     }),
   clearStreamingAssistant: (conversationId) =>
@@ -325,6 +347,7 @@ export const useStockAgentChatWorkspaceStore = create<
           state.composerSubagentEnabledByConversation,
           conversationKey,
         ),
+        planByConversation: omitKey(state.planByConversation, conversationKey),
         runStatusByConversation: omitKey(state.runStatusByConversation, conversationKey),
         streamingAssistantByConversation: omitKey(
           state.streamingAssistantByConversation,
@@ -364,6 +387,34 @@ export const useStockAgentChatWorkspaceStore = create<
                   )
                 : currentActivity.steps,
             updatedAt: now,
+          },
+        },
+      }
+    }),
+  setPlan: (conversationId, plan) =>
+    set((state) => {
+      const conversationKey = toConversationKey(conversationId)
+      if (plan.todos.length === 0) {
+        return {
+          planByConversation: omitKey(state.planByConversation, conversationKey),
+        }
+      }
+
+      const normalizedSummary = summarizePlanTodos(plan.todos)
+      const nextSummary: StockAgentPlanSummary = {
+        completed: plan.summary?.completed ?? normalizedSummary.completed,
+        in_progress: plan.summary?.in_progress ?? normalizedSummary.in_progress,
+        pending: plan.summary?.pending ?? normalizedSummary.pending,
+        total: plan.summary?.total ?? normalizedSummary.total,
+      }
+
+      return {
+        planByConversation: {
+          ...state.planByConversation,
+          [conversationKey]: {
+            summary: nextSummary,
+            todos: plan.todos,
+            updatedAt: new Date().toISOString(),
           },
         },
       }

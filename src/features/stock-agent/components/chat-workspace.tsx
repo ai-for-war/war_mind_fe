@@ -35,6 +35,7 @@ import { Spinner } from "@/components/ui/spinner"
 import { StockAgentChatThread } from "@/features/stock-agent/components/chat-thread"
 import { StockAgentComposerPanel } from "@/features/stock-agent/components/stock-agent-composer-panel"
 import { StockAgentConversationRail } from "@/features/stock-agent/components/conversation-rail"
+import { StockAgentPlanDock } from "@/features/stock-agent/components/stock-agent-plan-dock"
 import { useStockAgentChatLifecycleSubscriptions } from "@/features/stock-agent/hooks/use-chat-lifecycle-subscriptions"
 import { useStockAgentConversationMessages } from "@/features/stock-agent/hooks/use-conversation-messages"
 import { useStockAgentRuntimeCatalog } from "@/features/stock-agent/hooks/use-stock-agent-runtime-catalog"
@@ -265,6 +266,7 @@ export const StockAgentChatWorkspace = ({
   const setPanelOpen = useStockAgentRailStore((state) => state.setPanelOpen)
   const clearActivityLine = useStockAgentChatWorkspaceStore((state) => state.clearActivityLine)
   const clearComposerDraft = useStockAgentChatWorkspaceStore((state) => state.clearComposerDraft)
+  const clearPlan = useStockAgentChatWorkspaceStore((state) => state.clearPlan)
   const clearComposerRuntimeNotice = useStockAgentChatWorkspaceStore(
     (state) => state.clearComposerRuntimeNotice,
   )
@@ -283,6 +285,7 @@ export const StockAgentChatWorkspace = ({
   const activityLineByConversation = useStockAgentChatWorkspaceStore(
     (state) => state.activityLineByConversation,
   )
+  const planByConversation = useStockAgentChatWorkspaceStore((state) => state.planByConversation)
   const rekeyComposerRuntimeSelection = useStockAgentChatWorkspaceStore(
     (state) => state.rekeyComposerRuntimeSelection,
   )
@@ -340,6 +343,9 @@ export const StockAgentChatWorkspace = ({
   const activeThreadError = threadErrorByConversation[conversationKey] ?? null
   const activeActivityLine = activeConversationId
     ? activityLineByConversation[activeConversationId] ?? null
+    : null
+  const activePlan = activeConversationId
+    ? planByConversation[activeConversationId] ?? null
     : null
   const headerStatusRunStatus = runStatus
 
@@ -430,6 +436,7 @@ export const StockAgentChatWorkspace = ({
     }
 
     clearActivityLine(submitKey)
+    clearPlan(submitKey)
     setRunStatus(submitKey, "submitting")
     setThreadError(submitKey, null)
 
@@ -597,6 +604,12 @@ export const StockAgentChatWorkspace = ({
           </motion.div>
         ) : null}
       </div>
+
+      {activePlan ? (
+        <div className="shrink-0 px-3 pb-2">
+          <StockAgentPlanDock plan={activePlan} runStatus={runStatus} />
+        </div>
+      ) : null}
 
       <StockAgentComposerPanel
         catalog={runtimeCatalogQuery.catalog}

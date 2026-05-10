@@ -7,6 +7,7 @@ import { useStockAgentChatWorkspaceStore } from "@/features/stock-agent/stores/u
 import type {
   StockAgentChatMessageCompletedPayload,
   StockAgentChatMessageFailedPayload,
+  StockAgentChatMessagePlanUpdatedPayload,
   StockAgentChatMessageStartedPayload,
   StockAgentChatMessageTokenPayload,
   StockAgentChatMessageToolEndPayload,
@@ -40,6 +41,7 @@ export const useStockAgentChatLifecycleSubscriptions = ({
   const setActivityLineStatus = useStockAgentChatWorkspaceStore(
     (state) => state.setActivityLineStatus,
   )
+  const setPlan = useStockAgentChatWorkspaceStore((state) => state.setPlan)
   const setRunStatus = useStockAgentChatWorkspaceStore((state) => state.setRunStatus)
   const setStreamingAssistant = useStockAgentChatWorkspaceStore(
     (state) => state.setStreamingAssistant,
@@ -83,6 +85,21 @@ export const useStockAgentChatLifecycleSubscriptions = ({
 
       setRunStatus(conversation_id, "streaming")
       appendStreamingAssistantToken(conversation_id, token)
+    },
+    { organizationScoped: true },
+  )
+
+  useSocketSubscription<StockAgentChatMessagePlanUpdatedPayload>(
+    "chat:message:plan_updated",
+    ({ conversation_id, summary, todos }) => {
+      if (!isActiveConversationEvent(conversation_id)) {
+        return
+      }
+
+      setPlan(conversation_id, {
+        summary,
+        todos,
+      })
     },
     { organizationScoped: true },
   )

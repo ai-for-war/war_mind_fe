@@ -9,6 +9,7 @@ export { StockAgentConversationListItemRow } from "@/features/stock-agent/compon
 export { StockAgentConversationRail } from "@/features/stock-agent/components/conversation-rail"
 export { StockAgentFloatingLauncher } from "@/features/stock-agent/components/stock-agent-floating-launcher"
 export { StockAgentPanel } from "@/features/stock-agent/components/stock-agent-panel"
+export { StockAgentPlanDock } from "@/features/stock-agent/components/stock-agent-plan-dock"
 export { StockAgentRuntimePicker } from "@/features/stock-agent/components/stock-agent-runtime-picker"
 export { useStockAgentChatLifecycleSubscriptions } from "@/features/stock-agent/hooks/use-chat-lifecycle-subscriptions"
 export { useStockAgentConversationMessages } from "@/features/stock-agent/hooks/use-conversation-messages"
@@ -39,6 +40,7 @@ export type {
   StockAgentActivityStepStatus,
   StockAgentChatMessageCompletedPayload,
   StockAgentChatMessageFailedPayload,
+  StockAgentChatMessagePlanUpdatedPayload,
   StockAgentChatMessageStartedPayload,
   StockAgentChatMessageTokenPayload,
   StockAgentChatMessageToolEndPayload,
@@ -52,6 +54,9 @@ export type {
   StockAgentMessageRecord,
   StockAgentMessageRole,
   StockAgentMessageRuntimeMetadata,
+  StockAgentPlanSnapshot,
+  StockAgentPlanSummary,
+  StockAgentPlanTodo,
   StockAgentReasoningOption,
   StockAgentRunStatus,
   StockAgentRuntimeCatalogModelEntry,

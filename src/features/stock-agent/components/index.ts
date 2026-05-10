@@ -7,4 +7,5 @@ export { StockAgentConversationListItemRow } from "@/features/stock-agent/compon
 export { StockAgentConversationRail } from "@/features/stock-agent/components/conversation-rail"
 export { StockAgentFloatingLauncher } from "@/features/stock-agent/components/stock-agent-floating-launcher"
 export { StockAgentPanel } from "@/features/stock-agent/components/stock-agent-panel"
+export { StockAgentPlanDock } from "@/features/stock-agent/components/stock-agent-plan-dock"
 export { StockAgentRuntimePicker } from "@/features/stock-agent/components/stock-agent-runtime-picker"

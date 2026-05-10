@@ -76,9 +76,35 @@ export interface StockAgentChatMessageFailedPayload {
   organization_id?: string
 }
 
+export interface StockAgentPlanTodo {
+  content: string
+  status: string
+}
+
+export interface StockAgentPlanSummary {
+  completed: number
+  in_progress: number
+  pending: number
+  total: number
+}
+
+export interface StockAgentPlanSnapshot {
+  summary: StockAgentPlanSummary
+  todos: StockAgentPlanTodo[]
+  updatedAt: string
+}
+
+export interface StockAgentChatMessagePlanUpdatedPayload {
+  conversation_id: string
+  organization_id?: string
+  summary?: Partial<StockAgentPlanSummary> | null
+  todos: StockAgentPlanTodo[]
+}
+
 export type StockAgentSocketLifecyclePayload =
   | StockAgentChatMessageStartedPayload
   | StockAgentChatMessageTokenPayload
+  | StockAgentChatMessagePlanUpdatedPayload
   | StockAgentChatMessageToolStartPayload
   | StockAgentChatMessageToolEndPayload
   | StockAgentChatMessageCompletedPayload
