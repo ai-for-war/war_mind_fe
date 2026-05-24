@@ -1,5 +1,5 @@
 import sidebarBackgroundImage from "@/assets/images/bg.jpg";
-import darkLogo from "@/assets/images/darklogopng.png";
+import lightLogo from "@/assets/images/lightlogopng.png";
 
 import {
   Sidebar,
@@ -31,16 +31,12 @@ export const AppSidebar = () => {
                 <div className="flex aspect-square size-14 items-center justify-center rounded-lg">
                   {/* <BrainCircuit className="size-4" /> */}
                   <img
-                    src={darkLogo}
-                    alt="RecapAI Logo"
+                    src={lightLogo}
+                    alt="Recap.ai logo"
                     className="h-14 w-14 object-contain"
                   />
                 </div>
-                <h2 className={cn(textColor, "text-[25px] font-bold bg-clip-text text-transparent")}>RecapAI</h2>
-                {/* <div className="flex flex-col gap-0.5 leading-none">
-                  <span className="font-bold">WARMIND</span>
-                  <span className="">v1.0.0</span>
-                </div> */}
+                <h2 className={cn(textColor, "text-[25px] font-bold bg-clip-text text-transparent")}>Recap.ai</h2>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>

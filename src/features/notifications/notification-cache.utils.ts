@@ -45,7 +45,7 @@ export const hasUnreadNotificationInList = (
   list?.items.some((item) => item.id === notificationId && !item.is_read) ?? false
 
 export const updateUnreadCount = (
-  unreadCount: NotificationUnreadCountResponse | undefined,
+  _unreadCount: NotificationUnreadCountResponse | undefined,
   nextUnreadCount: number,
 ): NotificationUnreadCountResponse => ({
   unread_count: Math.max(0, nextUnreadCount),

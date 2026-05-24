@@ -15,16 +15,16 @@ export const LoginPage = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated)
 
   if (isAuthenticated) {
-    return <Navigate to="/" replace />
+    return <Navigate to="/stocks/research" replace />
   }
 
   return (
     <AuthLayout>
       <Card className="w-full max-w-md border-border/70 bg-card/80 shadow-2xl backdrop-blur-xl">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-3xl font-semibold tracking-tight">War Mind</CardTitle>
+          <CardTitle className="text-3xl font-semibold tracking-tight">Recap.ai</CardTitle>
           <CardDescription>
-            Sign in to access your tactical intelligence dashboard.
+            Sign in to access your Vietnam market intelligence workspace.
           </CardDescription>
         </CardHeader>
         <CardContent>
